@@ -1,0 +1,40 @@
+﻿	<Color name="Comment" foreground="Green" />
+  <Color name="Tag" foreground="Purple" />
+  <Color name="Table" foreground="Peru" />
+  <Color name="DocString" foreground="Peru" />
+  <Color name="String" foreground="Peru" />
+  <Color name="Column" foreground="Peru" />
+  <Color name="Keyword" fontWeight="bold" foreground="Blue" />
+  <Color name="StepWord" fontStyle="italic" foreground="DarkCyan" />
+
+<!-- This is the main ruleset. -->
+	<RuleSet>
+		<Span color="Comment" begin="#" />
+		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+
+    <Span color="Tag" begin="@" />
+    <Span color="Table" begin="\|" />
+    <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
+
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Span color="Column" begin="&lt;" end="&gt;" />
+
+    <Keywords foreground="Green">
+      <Word>[[mock]]</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="Peru">
+      [xX][0-9a-fA-F]+  # hex number
+      |(\d+(\.[0-9]+)?   #number with optional floating point
+      |\.[0-9]+         #or just starting with floating point
+      )
+    </Rule>

@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{27820C8B-FACB-4AE2-86EC-6C8BEC70CE6D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gherkin</RootNamespace>
+    <AssemblyName>GherkinEditor</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Gherkin.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\GherkinDialectProviderExtention.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlCssParser.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlFromXamlConverter.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlLexicalAnalyzer.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlParser.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlSchema.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlTokenType.cs" />
+    <Compile Include="Model\HtmlConverter\HtmlToXamlConverter.cs" />
+    <Compile Include="Util\CurrentGherkinLanguageArg.cs" />
+    <Compile Include="Util\EditorViewInitializationCompleted.cs" />
+    <Compile Include="Util\FailedToFindEditorControlArg.cs" />
+    <Compile Include="Util\FileSavedAsArg.cs" />
+    <Compile Include="Util\GherkinHighlightingXSHDBuilder.cs" />
+    <Compile Include="Model\GherkinUtil.cs" />
+    <Compile Include="Util\GherkinKeywordGenerator.cs" />
+    <Compile Include="Util\HideScenarioIndexArg.cs" />
+    <Compile Include="Util\ProcessInterop.cs" />
+    <Compile Include="Util\IndentationCompletedArg.cs" />
+    <Compile Include="Util\StatusChangedArg.cs" />
+    <Compile Include="ViewModel\AboutControlViewModel.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\FontViewModel.cs" />
+    <Compile Include="ViewModel\GherkinSettings.cs" />
+    <Compile Include="ViewModel\HiddenableColumnDefinition.cs" />
+    <Compile Include="ViewModel\HiddenableRowDefinition.cs" />
+    <Compile Include="ViewModel\IOpenNewEditor.cs" />
+    <Compile Include="ViewModel\MultiFileOpener.cs" />
+    <Compile Include="ViewModel\ScenarioIndex.cs" />
+    <Compile Include="View\AboutControlView.xaml.cs">
+      <DependentUpon>AboutControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AutoGreyableImage.cs" />
+    <Compile Include="View\InteropMessageReceiver.xaml.cs">
+      <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PrintPreviewDocumentViewer.cs" />
+    <Compile Include="View\PrintPreview.xaml.cs">
+      <DependentUpon>PrintPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RichTextBlockHtml\HtmlRichTextBoxBehavior.cs" />
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AboutControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\FindReplaceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InteropMessageReceiver.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\BDD\BDDAbstractBuilder.cs" />
+    <Compile Include="Model\BDD\BDDAbstrctScenarioBuilder.cs" />
+    <Compile Include="Model\BDD\BDDASTVisitor.cs" />
+    <Compile Include="Model\BDD\BDDBackgroundBuilder.cs" />
+    <Compile Include="Model\BDD\BDDCucumber.cs" />
+    <Compile Include="Model\BDD\BDDFeatureBuilder.cs" />
+    <Compile Include="Model\BDD\BDDGherkinTableBuilder.cs" />
+    <Compile Include="Model\BDD\BDDInstantiatedTestClassBuilder.cs" />
+    <Compile Include="Model\BDD\BDDScenarioBuilder.cs" />
+    <Compile Include="Model\BDD\BDDScenarioOutlineBuilder.cs" />
+    <Compile Include="Model\BDD\BDDStepArg.cs" />
+    <Compile Include="Model\BDD\BDDStepBuilder.cs" />
+    <Compile Include="Model\BDD\BDDStepImplBuilderContext.cs" />
+    <Compile Include="Model\BDD\BDDStepImplBuilderManager.cs" />
+    <Compile Include="Model\BDD\BDDStepImplCppBuilder.cs" />
+    <Compile Include="Model\BDD\BDDUtil.cs" />
+    <Compile Include="Model\GherkinFoldingBuilder.cs" />
+    <Compile Include="Util\AdjustMaxWidthOfEditorTabArg.cs" />
+    <Compile Include="Util\ConfigReader.cs" />
+    <Compile Include="Util\EventAggregator.cs" />
+    <Compile Include="Util\ShowCodeGenMessageWindowArg.cs" />
+    <Compile Include="Util\StringBuilderExtension.cs" />
+    <Compile Include="ViewModel\DeleteEditorTabRequested.cs" />
+    <Compile Include="ViewModel\DocumentPaginatorWrapper.cs" />
+    <Compile Include="ViewModel\Printing.cs" />
+    <Compile Include="ViewModel\GherkinEditor.cs" />
+    <Compile Include="Model\GherkinFoldingStrategy.cs" />
+    <Compile Include="Model\GherkinFormatUtil.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy.cs" />
+    <Compile Include="Model\GherkinTable.cs" />
+    <Compile Include="Model\GherkinTableBuilder.cs" />
+    <Compile Include="Model\GherkinSimpleParser.cs" />
+    <Compile Include="Util\AppSettings.cs" />
+    <Compile Include="ContainerBootstrapper.cs" />
+    <Compile Include="Util\ContainerExtension4Util.cs" />
+    <Compile Include="Util\EnumUtil.cs" />
+    <Compile Include="Util\GherkinDefinitions.cs" />
+    <Compile Include="Util\IAppSettings.cs" />
+    <Compile Include="Util\Util.cs" />
+    <Compile Include="ViewModel\DelegateCommand.cs" />
+    <Compile Include="ViewModel\DelegateCommandNoArg.cs" />
+    <Compile Include="ViewModel\GherkinViewModel.cs" />
+    <Compile Include="ViewModel\NotifyPropertyChangedBase.cs" />
+    <Compile Include="ViewModel\EditorTab.cs" />
+    <Compile Include="ViewModel\EditorView.cs" />
+    <Compile Include="View\FindReplaceDialog.xaml.cs">
+      <DependentUpon>FindReplaceDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\FindVisualChildren.cs" />
+    <Compile Include="View\FontFamilyToNameConverter.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\PrintPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ja-JP.resx" />
+    <EmbeddedResource Include="Properties\Resources.zh-CN.resx" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en.xshd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_zh-CN.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ja.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_template.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_af.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_am.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ar.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ast.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_az.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_bg.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_bm.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_bs.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ca.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_cs.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_cy-GB.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_da.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_de.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_el.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_em.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en-au.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en-lol.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en-old.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en-pirate.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_en-Scouse.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_eo.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_es.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_et.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_fa.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_fi.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_fr.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ga.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_gj.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_gl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_he.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_hi.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_hr.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ht.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_hu.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_id.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_is.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_it.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_jv.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ka.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_kn.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ko.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_lt.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_lu.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_lv.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_mk-Cyrl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_mk-Latn.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_mn.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_nl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_no.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_pa.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_pl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_pt.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ro.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ru.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_sk.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_sl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_sr-Cyrl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_sr-Latn.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_sv.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ta.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_th.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_tl.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_tlh.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_tr.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_tt.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_uk.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_ur.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_uz.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_vi.xshd" />
+    <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_zh-TW.xshd" />
+    <Resource Include="View\Images\Gherkin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Gherkin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Copy.png" />
+    <Resource Include="View\Images\Cut.png" />
+    <Resource Include="View\Images\Delete.png" />
+    <Resource Include="View\Images\Open.png" />
+    <Resource Include="View\Images\Paste.png" />
+    <Resource Include="View\Images\Redo.png" />
+    <Resource Include="View\Images\Save.png" />
+    <Resource Include="View\Images\Undo.png" />
+    <Resource Include="View\Images\WordWrap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GherkinParser\Gherkin\Gherkin.csproj">
+      <Project>{370982b4-9938-4533-8ea1-6f9044b84130}</Project>
+      <Name>Gherkin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\FindReplace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Trim.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\HSplit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\NewFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Gencode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Unicode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\MessageWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\DeleteTab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\CreateHighlightingFiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\FindReplace.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Keywords.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\WordIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Index.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\HideScenarioIndex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Print.png" />
+    <Resource Include="View\Images\PrintPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\WindowsIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\SaveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Scenario.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\OpenAllFoldings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\OpenExplorer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\en.png" />
+    <Resource Include="View\Images\ja.png" />
+    <Resource Include="View\Images\zh-hans.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\LanguageChange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Recent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Highlight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="View\Images\Gherkin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\SaveAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\SelectAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Feature.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\ReleaseNote.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

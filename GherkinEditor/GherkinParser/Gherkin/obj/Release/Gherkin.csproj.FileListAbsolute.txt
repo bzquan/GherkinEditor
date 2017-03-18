@@ -1,0 +1,10 @@
+D:\Program\GherkinEditor\GherkinParser\Gherkin\bin\Release\Gherkin.dll
+D:\Program\GherkinEditor\GherkinParser\Gherkin\bin\Release\Gherkin.pdb
+D:\Program\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.csprojResolveAssemblyReference.cache
+D:\Program\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.dll
+D:\Program\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.pdb
+C:\Work\GherkinEditor\GherkinParser\Gherkin\bin\Release\Gherkin.dll
+C:\Work\GherkinEditor\GherkinParser\Gherkin\bin\Release\Gherkin.pdb
+C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.csprojResolveAssemblyReference.cache
+C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.dll
+C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Release\Gherkin.pdb

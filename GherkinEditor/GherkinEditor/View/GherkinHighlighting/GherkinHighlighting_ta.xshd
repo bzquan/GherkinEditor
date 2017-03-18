@@ -1,0 +1,61 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="GherkinHighlighting_ta" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Comment" foreground="Green" />
+  <Color name="Tag" foreground="Purple" />
+  <Color name="Table" foreground="Peru" />
+  <Color name="DocString" foreground="Peru" />
+  <Color name="Keyword" fontWeight="bold" foreground="Blue" />
+  <Color name="StepWord" fontStyle="italic" foreground="DarkCyan" />
+  <Color name="Mock" foreground="Green" />
+  <Color name="Constants" foreground="Peru" />
+
+<!-- This is the main ruleset. -->
+	<RuleSet>
+		<Span color="Comment" begin="#" />
+		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+
+    <Span color="Tag" begin="@" />
+    <Span color="Table" begin="\|" />
+    <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
+
+    <Keywords color="Mock">
+      <Word>[[mock]]</Word>
+    </Keywords>
+    
+    <!-- String -->
+    <Span color="Constants">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- Table cell -->
+    <Span color="Constants" begin="&lt;" end="&gt;" />
+
+    <!-- Digits -->
+    <Rule color="Constants">
+      [xX][0-9a-fA-F]+  # hex number
+      |(\d+(\.[0-9]+)?   #number with optional floating point
+      |\.[0-9]+         #or just starting with floating point
+      )
+    </Rule>
+
+    <Rule color="Keyword">
+      \s*(அம்சம்|வணிக\s+தேவை|திறன்|பின்னணி|காட்சி|காட்சி\s+சுருக்கம்|காட்சி\s+வார்ப்புரு|எடுத்துக்காட்டுகள்|காட்சிகள்|நிலைமைகளில்)\s*:
+    </Rule>
+
+
+    <Keywords color="StepWord">
+      <Word>  கொடுக்கப்பட்ட </Word>
+      <Word>  எப்போது </Word>
+      <Word>  அப்பொழுது </Word>
+      <Word>  மேலும் </Word>
+      <Word>  மற்றும் </Word>
+      <Word>  ஆனால் </Word>
+    </Keywords>
+
+  </RuleSet>
+</SyntaxDefinition>

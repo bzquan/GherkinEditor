@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DlgFind_Find" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="DlgFind_FindNext" xml:space="preserve">
+    <value>次の検索</value>
+  </data>
+  <data name="DlgFind_MachCase" xml:space="preserve">
+    <value>大小文字の区別</value>
+  </data>
+  <data name="DlgFind_MachWholdWord" xml:space="preserve">
+    <value>単語の検索</value>
+  </data>
+  <data name="DlgFind_RegularExpression" xml:space="preserve">
+    <value>正規表現</value>
+  </data>
+  <data name="DlgFind_Replace" xml:space="preserve">
+    <value>置換</value>
+  </data>
+  <data name="DlgFind_ReplaceAll" xml:space="preserve">
+    <value>全置換</value>
+  </data>
+  <data name="DlgFind_ReplaceWith" xml:space="preserve">
+    <value>置換テキスト：</value>
+  </data>
+  <data name="DlgFind_SearchUp" xml:space="preserve">
+    <value>上検索</value>
+  </data>
+  <data name="DlgFind_TextToFind" xml:space="preserve">
+    <value>検索テキスト：</value>
+  </data>
+  <data name="DlgFind_Wildcards" xml:space="preserve">
+    <value>あいまい検索</value>
+  </data>
+  <data name="MenuCompile_Comple" xml:space="preserve">
+    <value>コンパイル(_C)</value>
+  </data>
+  <data name="MenuCompile_GenCpp" xml:space="preserve">
+    <value>C++テストコード生成</value>
+  </data>
+  <data name="MenuCompile_SupportUnicode" xml:space="preserve">
+    <value>C++でUnicode名称を使用</value>
+  </data>
+  <data name="MenuEdit_Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="MenuEdit_Cut" xml:space="preserve">
+    <value>切り取り</value>
+  </data>
+  <data name="MenuEdit_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="MenuEdit_Edit" xml:space="preserve">
+    <value>編集(_E)</value>
+  </data>
+  <data name="MenuEdit_Indentation" xml:space="preserve">
+    <value>整形</value>
+  </data>
+  <data name="MenuEdit_Paste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="MenuEdit_Redo" xml:space="preserve">
+    <value>やり直し</value>
+  </data>
+  <data name="MenuEdit_SelectAll" xml:space="preserve">
+    <value>すべてを選択(_S)</value>
+  </data>
+  <data name="MenuEdit_Undo" xml:space="preserve">
+    <value>元に戻す</value>
+  </data>
+  <data name="MenuFile_File" xml:space="preserve">
+    <value>ファイル(_F)</value>
+  </data>
+  <data name="MenuFile_New" xml:space="preserve">
+    <value>新規作成(_N)</value>
+  </data>
+  <data name="MenuFile_Open" xml:space="preserve">
+    <value>開く(_O)</value>
+  </data>
+  <data name="MenuFile_OpenFolder" xml:space="preserve">
+    <value>ファイルのフォルダーを開く</value>
+  </data>
+  <data name="MenuFile_OpenNewWindow" xml:space="preserve">
+    <value>新規画面で開く(_W)</value>
+  </data>
+  <data name="MenuFile_Print" xml:space="preserve">
+    <value>印刷</value>
+  </data>
+  <data name="MenuFile_PrintPreview" xml:space="preserve">
+    <value>印刷プレビュー</value>
+  </data>
+  <data name="MenuFile_RecentFiles" xml:space="preserve">
+    <value>最近使用したファイル</value>
+  </data>
+  <data name="MenuFile_Save" xml:space="preserve">
+    <value>保存(_S)</value>
+  </data>
+  <data name="MenuFile_SaveAll" xml:space="preserve">
+    <value>すべて保存</value>
+  </data>
+  <data name="MenuFile_SaveAs" xml:space="preserve">
+    <value>名前を付けて保存(_A)</value>
+  </data>
+  <data name="MenuFind_FindReplace" xml:space="preserve">
+    <value>検索 &amp; 置換</value>
+  </data>
+  <data name="MenuFind_Search" xml:space="preserve">
+    <value>検索(_S)</value>
+  </data>
+  <data name="MenuHelp_About" xml:space="preserve">
+    <value>Gherkin Editorについて</value>
+  </data>
+  <data name="MenuHelp_Help" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
+    <value>言語設定</value>
+  </data>
+  <data name="MenuSetting_ColorPickerAvailableColorsHeader" xml:space="preserve">
+    <value>利用可能な色</value>
+  </data>
+  <data name="MenuSetting_ColorPickerRecentColorsHeader" xml:space="preserve">
+    <value>最近選択した色</value>
+  </data>
+  <data name="MenuSetting_ColorPickerStandardColorsHeader" xml:space="preserve">
+    <value>標準色</value>
+  </data>
+  <data name="MenuSetting_ConstantsColor" xml:space="preserve">
+    <value>定数の色</value>
+  </data>
+  <data name="MenuSetting_DefaultScenarioFolding" xml:space="preserve">
+    <value>デフォルトはシナリオを折り畳む</value>
+  </data>
+  <data name="MenuSetting_DefaultTableFolding" xml:space="preserve">
+    <value>デフォルトはテーブルを折り畳む</value>
+  </data>
+  <data name="MenuSetting_DocStringColor" xml:space="preserve">
+    <value>Doc string色</value>
+  </data>
+  <data name="MenuSetting_FoldTextColor" xml:space="preserve">
+    <value>折畳み色</value>
+  </data>
+  <data name="MenuSetting_GherkinFolding" xml:space="preserve">
+    <value>Gherkin折畳み</value>
+  </data>
+  <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
+    <value>Gherkin強調色</value>
+  </data>
+  <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
+    <value>カレント行のハイライト</value>
+  </data>
+  <data name="MenuSetting_KeywordColor" xml:space="preserve">
+    <value>キーワード色</value>
+  </data>
+  <data name="MenuSetting_MockColor" xml:space="preserve">
+    <value>Mock属性色</value>
+  </data>
+  <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
+    <value>ディフォルト強調色</value>
+  </data>
+  <data name="MenuSetting_Setting" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="MenuSetting_ShowCurrentLineBorder" xml:space="preserve">
+    <value>カレント行枠線の表示</value>
+  </data>
+  <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
+    <value>デフォルトはシナリオ目次を表示</value>
+  </data>
+  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
+    <value>デフォルトはウインドウズを分割</value>
+  </data>
+  <data name="MenuSetting_StepWordColor" xml:space="preserve">
+    <value>手順色</value>
+  </data>
+  <data name="MenuSetting_TableColor" xml:space="preserve">
+    <value>テーブルの色</value>
+  </data>
+  <data name="MenuSetting_TagColor" xml:space="preserve">
+    <value>タグ色</value>
+  </data>
+  <data name="MenuView_FoldOpenAll" xml:space="preserve">
+    <value>折り畳みの全展開</value>
+  </data>
+  <data name="MenuView_FoldScenario" xml:space="preserve">
+    <value>シナリオの折り畳み</value>
+  </data>
+  <data name="MenuView_FoldTables" xml:space="preserve">
+    <value>テーブルの折り畳み</value>
+  </data>
+  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
+    <value>コード生成画面の表示</value>
+  </data>
+  <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
+    <value>シナリオ目次の表示</value>
+  </data>
+  <data name="MenuView_SplitEditor" xml:space="preserve">
+    <value>ウインドウズ分割</value>
+  </data>
+  <data name="MenuView_View" xml:space="preserve">
+    <value>表示(_V)</value>
+  </data>
+  <data name="Message_AboutGherkinAdditionalInfo" xml:space="preserve">
+    <value>追加情報</value>
+  </data>
+  <data name="Message_AboutGherkinDescription" xml:space="preserve">
+    <value>GherkinEditorはGherkinテキストエディタである。
+また、GoogleTestに基づくC++テストコードの作成が可能である。</value>
+  </data>
+  <data name="Message_AboutGherkinTitle" xml:space="preserve">
+    <value>Gherkinエディタ</value>
+  </data>
+  <data name="Message_ConfirmRestartApp" xml:space="preserve">
+    <value>言語切り替え後、再起動が必要です</value>
+  </data>
+  <data name="Message_ConfirmRestartAppTitle" xml:space="preserve">
+    <value>言語切り替え</value>
+  </data>
+  <data name="Message_ConfirmSave" xml:space="preserve">
+    <value>編集中のファイル({0})を保存しますか?</value>
+  </data>
+  <data name="Message_ConfirmSaveTile" xml:space="preserve">
+    <value>保存確認</value>
+  </data>
+  <data name="Message_CppTestCodeGeneration" xml:space="preserve">
+    <value>C++テストコードを生成しました。</value>
+  </data>
+  <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
+    <value>試験コードの生成時、下記エラーが発生しました。</value>
+  </data>
+  <data name="Message_PrettyFormatCompleted" xml:space="preserve">
+    <value>整形完了</value>
+  </data>
+  <data name="Message_ReplaceAllConfirm" xml:space="preserve">
+    <value>本当にすべての"{0}"を"{1}"に置き換えますか？</value>
+  </data>
+  <data name="Message_ReplaceAllResult" xml:space="preserve">
+    <value>{0}件置換されました。</value>
+  </data>
+  <data name="Message_ReplaceAllTitle" xml:space="preserve">
+    <value>全置換</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCode" xml:space="preserve">
+    <value>ファイルの保存後、試験コード生成を行ってください</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCodeTitle" xml:space="preserve">
+    <value>試験コードの生成エラー</value>
+  </data>
+  <data name="Message_ScenarioIndex" xml:space="preserve">
+    <value>ー 目次 ー</value>
+  </data>
+  <data name="Message_UnknownFileName" xml:space="preserve">
+    <value>(無題)</value>
+  </data>
+  <data name="PrintButton_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Tooltip_NewFile" xml:space="preserve">
+    <value>新規作成</value>
+  </data>
+  <data name="Tooltip_OpenFile" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="Tooltip_SaveFile" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
+    <value>シナリオ目次の表示</value>
+  </data>
+  <data name="Tooltip_SplitEditor" xml:space="preserve">
+    <value>ウインドウズ分割</value>
+  </data>
+</root>

@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DlgFind_Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="DlgFind_FindNext" xml:space="preserve">
+    <value>Find Next</value>
+  </data>
+  <data name="DlgFind_MachCase" xml:space="preserve">
+    <value>Match case</value>
+  </data>
+  <data name="DlgFind_MachWholdWord" xml:space="preserve">
+    <value>Match whole word</value>
+  </data>
+  <data name="DlgFind_RegularExpression" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="DlgFind_Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="DlgFind_ReplaceAll" xml:space="preserve">
+    <value>Replace All</value>
+  </data>
+  <data name="DlgFind_ReplaceWith" xml:space="preserve">
+    <value>Replace with:</value>
+  </data>
+  <data name="DlgFind_SearchUp" xml:space="preserve">
+    <value>Search up</value>
+  </data>
+  <data name="DlgFind_TextToFind" xml:space="preserve">
+    <value>Text to Find:</value>
+  </data>
+  <data name="DlgFind_Wildcards" xml:space="preserve">
+    <value>Wildcards</value>
+  </data>
+  <data name="MenuCompile_Comple" xml:space="preserve">
+    <value>_Compile</value>
+  </data>
+  <data name="MenuCompile_GenCpp" xml:space="preserve">
+    <value>Generate C++ test code</value>
+  </data>
+  <data name="MenuCompile_SupportUnicode" xml:space="preserve">
+    <value>Using unicode name in C++</value>
+  </data>
+  <data name="MenuEdit_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="MenuEdit_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="MenuEdit_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="MenuEdit_Edit" xml:space="preserve">
+    <value>_Edit</value>
+  </data>
+  <data name="MenuEdit_Indentation" xml:space="preserve">
+    <value>Trimming</value>
+  </data>
+  <data name="MenuEdit_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="MenuEdit_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MenuEdit_SelectAll" xml:space="preserve">
+    <value>_Select all</value>
+  </data>
+  <data name="MenuEdit_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MenuFile_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="MenuFile_New" xml:space="preserve">
+    <value>_New</value>
+  </data>
+  <data name="MenuFile_Open" xml:space="preserve">
+    <value>_Open</value>
+  </data>
+  <data name="MenuFile_OpenFolder" xml:space="preserve">
+    <value>Open containing folder</value>
+  </data>
+  <data name="MenuFile_OpenNewWindow" xml:space="preserve">
+    <value>Open in new _Window </value>
+  </data>
+  <data name="MenuFile_Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="MenuFile_PrintPreview" xml:space="preserve">
+    <value>Print preview</value>
+  </data>
+  <data name="MenuFile_RecentFiles" xml:space="preserve">
+    <value>Recent files</value>
+  </data>
+  <data name="MenuFile_Save" xml:space="preserve">
+    <value>_Save</value>
+  </data>
+  <data name="MenuFile_SaveAll" xml:space="preserve">
+    <value>Save all</value>
+  </data>
+  <data name="MenuFile_SaveAs" xml:space="preserve">
+    <value>Save_As</value>
+  </data>
+  <data name="MenuFind_FindReplace" xml:space="preserve">
+    <value>Find &amp; Replace</value>
+  </data>
+  <data name="MenuFind_Search" xml:space="preserve">
+    <value>_Search</value>
+  </data>
+  <data name="MenuHelp_About" xml:space="preserve">
+    <value>About Gherkin Editor</value>
+  </data>
+  <data name="MenuHelp_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
+    <value>Change language</value>
+  </data>
+  <data name="MenuSetting_ColorPickerAvailableColorsHeader" xml:space="preserve">
+    <value>Available Colors</value>
+  </data>
+  <data name="MenuSetting_ColorPickerRecentColorsHeader" xml:space="preserve">
+    <value>Recent Colors</value>
+  </data>
+  <data name="MenuSetting_ColorPickerStandardColorsHeader" xml:space="preserve">
+    <value>Standard Colors</value>
+  </data>
+  <data name="MenuSetting_ConstantsColor" xml:space="preserve">
+    <value>Constants color</value>
+  </data>
+  <data name="MenuSetting_DefaultScenarioFolding" xml:space="preserve">
+    <value>Folding scenarios by default</value>
+  </data>
+  <data name="MenuSetting_DefaultTableFolding" xml:space="preserve">
+    <value>Folding tables by default</value>
+  </data>
+  <data name="MenuSetting_DocStringColor" xml:space="preserve">
+    <value>Doc string color</value>
+  </data>
+  <data name="MenuSetting_FoldTextColor" xml:space="preserve">
+    <value>Folding color</value>
+  </data>
+  <data name="MenuSetting_GherkinFolding" xml:space="preserve">
+    <value>Gherkin folding</value>
+  </data>
+  <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
+    <value>Gherkin highlighting</value>
+  </data>
+  <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
+    <value>Highlight current line</value>
+  </data>
+  <data name="MenuSetting_KeywordColor" xml:space="preserve">
+    <value>Keyword color</value>
+  </data>
+  <data name="MenuSetting_MockColor" xml:space="preserve">
+    <value>Mock color</value>
+  </data>
+  <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
+    <value>Reset highlighting colors</value>
+  </data>
+  <data name="MenuSetting_Setting" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="MenuSetting_ShowCurrentLineBorder" xml:space="preserve">
+    <value>Show current line border</value>
+  </data>
+  <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
+    <value>Show scenario index by default</value>
+  </data>
+  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
+    <value>Split editor by default</value>
+  </data>
+  <data name="MenuSetting_StepWordColor" xml:space="preserve">
+    <value>Step word color</value>
+  </data>
+  <data name="MenuSetting_TableColor" xml:space="preserve">
+    <value>Table color</value>
+  </data>
+  <data name="MenuSetting_TagColor" xml:space="preserve">
+    <value>Tag color</value>
+  </data>
+  <data name="MenuView_FoldOpenAll" xml:space="preserve">
+    <value>Open all foldings</value>
+  </data>
+  <data name="MenuView_FoldScenario" xml:space="preserve">
+    <value>Folding scenario</value>
+  </data>
+  <data name="MenuView_FoldTables" xml:space="preserve">
+    <value>Folding table sections</value>
+  </data>
+  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
+    <value>Show code generation message window</value>
+  </data>
+  <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
+    <value>Show scenario index</value>
+  </data>
+  <data name="MenuView_SplitEditor" xml:space="preserve">
+    <value>Split editor</value>
+  </data>
+  <data name="MenuView_View" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="Message_AboutGherkinAdditionalInfo" xml:space="preserve">
+    <value>Additional Information</value>
+  </data>
+  <data name="Message_AboutGherkinDescription" xml:space="preserve">
+    <value>GherkinEditor is a text editor for Gherkin feature.
+It can generate C++ test code based on GoogleTest.</value>
+  </data>
+  <data name="Message_AboutGherkinTitle" xml:space="preserve">
+    <value>Gherkin Editor</value>
+  </data>
+  <data name="Message_ConfirmRestartApp" xml:space="preserve">
+    <value>You need to restart the application to make new language effective</value>
+  </data>
+  <data name="Message_ConfirmRestartAppTitle" xml:space="preserve">
+    <value>Change language</value>
+  </data>
+  <data name="Message_ConfirmSave" xml:space="preserve">
+    <value>Do you save modified file({0})?</value>
+  </data>
+  <data name="Message_ConfirmSaveTile" xml:space="preserve">
+    <value>Confirm save</value>
+  </data>
+  <data name="Message_CppTestCodeGeneration" xml:space="preserve">
+    <value>C++ test codes are generated.</value>
+  </data>
+  <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
+    <value>There is following error when generating C++ test code.</value>
+  </data>
+  <data name="Message_PrettyFormatCompleted" xml:space="preserve">
+    <value>Pretty format completed.</value>
+  </data>
+  <data name="Message_ReplaceAllConfirm" xml:space="preserve">
+    <value>Are you sure you want to Replace All occurences of "{0}" with "{1}"?</value>
+  </data>
+  <data name="Message_ReplaceAllResult" xml:space="preserve">
+    <value>{0} items are replaced.</value>
+  </data>
+  <data name="Message_ReplaceAllTitle" xml:space="preserve">
+    <value>Replace All</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCode" xml:space="preserve">
+    <value>Generate C++ test code after saving current file.</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCodeTitle" xml:space="preserve">
+    <value>Test code generation error</value>
+  </data>
+  <data name="Message_ScenarioIndex" xml:space="preserve">
+    <value>ー Index ー</value>
+  </data>
+  <data name="Message_UnknownFileName" xml:space="preserve">
+    <value>(Untitled)</value>
+  </data>
+  <data name="PrintButton_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Tooltip_NewFile" xml:space="preserve">
+    <value>New file</value>
+  </data>
+  <data name="Tooltip_OpenFile" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="Tooltip_SaveFile" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
+    <value>Show scenario index</value>
+  </data>
+  <data name="Tooltip_SplitEditor" xml:space="preserve">
+    <value>Split editor</value>
+  </data>
+</root>

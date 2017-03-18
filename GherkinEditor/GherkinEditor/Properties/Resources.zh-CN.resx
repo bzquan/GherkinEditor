@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DlgFind_Find" xml:space="preserve">
+    <value>检索</value>
+  </data>
+  <data name="DlgFind_FindNext" xml:space="preserve">
+    <value>继续检索</value>
+  </data>
+  <data name="DlgFind_MachCase" xml:space="preserve">
+    <value>区别大小写</value>
+  </data>
+  <data name="DlgFind_MachWholdWord" xml:space="preserve">
+    <value>单词检索</value>
+  </data>
+  <data name="DlgFind_RegularExpression" xml:space="preserve">
+    <value>正则表达式</value>
+  </data>
+  <data name="DlgFind_Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="DlgFind_ReplaceAll" xml:space="preserve">
+    <value>全部替换</value>
+  </data>
+  <data name="DlgFind_ReplaceWith" xml:space="preserve">
+    <value>替换文字：</value>
+  </data>
+  <data name="DlgFind_SearchUp" xml:space="preserve">
+    <value>向上检索</value>
+  </data>
+  <data name="DlgFind_TextToFind" xml:space="preserve">
+    <value>检索文字：</value>
+  </data>
+  <data name="DlgFind_Wildcards" xml:space="preserve">
+    <value>通配符检索</value>
+  </data>
+  <data name="MenuCompile_Comple" xml:space="preserve">
+    <value>编译(_C)</value>
+  </data>
+  <data name="MenuCompile_GenCpp" xml:space="preserve">
+    <value>生成C++测试代码</value>
+  </data>
+  <data name="MenuCompile_SupportUnicode" xml:space="preserve">
+    <value>C++中使用Unicode名称</value>
+  </data>
+  <data name="MenuEdit_Copy" xml:space="preserve">
+    <value>拷贝</value>
+  </data>
+  <data name="MenuEdit_Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="MenuEdit_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="MenuEdit_Edit" xml:space="preserve">
+    <value>编辑(_E)</value>
+  </data>
+  <data name="MenuEdit_Indentation" xml:space="preserve">
+    <value>整形</value>
+  </data>
+  <data name="MenuEdit_Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="MenuEdit_Redo" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="MenuEdit_SelectAll" xml:space="preserve">
+    <value>选择全部(_S)</value>
+  </data>
+  <data name="MenuEdit_Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="MenuFile_File" xml:space="preserve">
+    <value>文件(_F)</value>
+  </data>
+  <data name="MenuFile_New" xml:space="preserve">
+    <value>新建(_N)</value>
+  </data>
+  <data name="MenuFile_Open" xml:space="preserve">
+    <value>打开(_O)</value>
+  </data>
+  <data name="MenuFile_OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="MenuFile_OpenNewWindow" xml:space="preserve">
+    <value>用新窗口打开(_W)</value>
+  </data>
+  <data name="MenuFile_Print" xml:space="preserve">
+    <value>打印</value>
+  </data>
+  <data name="MenuFile_PrintPreview" xml:space="preserve">
+    <value>打印预览</value>
+  </data>
+  <data name="MenuFile_RecentFiles" xml:space="preserve">
+    <value>最近使用的文件</value>
+  </data>
+  <data name="MenuFile_Save" xml:space="preserve">
+    <value>保存(_S)</value>
+  </data>
+  <data name="MenuFile_SaveAll" xml:space="preserve">
+    <value>全部保存</value>
+  </data>
+  <data name="MenuFile_SaveAs" xml:space="preserve">
+    <value>取名保存(_A)</value>
+  </data>
+  <data name="MenuFind_FindReplace" xml:space="preserve">
+    <value>检索 &amp; 替换</value>
+  </data>
+  <data name="MenuFind_Search" xml:space="preserve">
+    <value>检索(_S)</value>
+  </data>
+  <data name="MenuHelp_About" xml:space="preserve">
+    <value>关于Gherkin Editor</value>
+  </data>
+  <data name="MenuHelp_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
+    <value>切换语言</value>
+  </data>
+  <data name="MenuSetting_ColorPickerAvailableColorsHeader" xml:space="preserve">
+    <value>可用颜色</value>
+  </data>
+  <data name="MenuSetting_ColorPickerRecentColorsHeader" xml:space="preserve">
+    <value>最近所选颜色</value>
+  </data>
+  <data name="MenuSetting_ColorPickerStandardColorsHeader" xml:space="preserve">
+    <value>标准颜色</value>
+  </data>
+  <data name="MenuSetting_ConstantsColor" xml:space="preserve">
+    <value>常量颜色</value>
+  </data>
+  <data name="MenuSetting_DefaultScenarioFolding" xml:space="preserve">
+    <value>缺省折叠场景(Scenario)</value>
+  </data>
+  <data name="MenuSetting_DefaultTableFolding" xml:space="preserve">
+    <value>缺省折叠表格</value>
+  </data>
+  <data name="MenuSetting_DocStringColor" xml:space="preserve">
+    <value>Doc string颜色</value>
+  </data>
+  <data name="MenuSetting_FoldTextColor" xml:space="preserve">
+    <value>折叠颜色</value>
+  </data>
+  <data name="MenuSetting_GherkinFolding" xml:space="preserve">
+    <value>Gherkin折叠</value>
+  </data>
+  <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
+    <value>Gherkin显示</value>
+  </data>
+  <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
+    <value>亮显当前行</value>
+  </data>
+  <data name="MenuSetting_KeywordColor" xml:space="preserve">
+    <value>关键字颜色</value>
+  </data>
+  <data name="MenuSetting_MockColor" xml:space="preserve">
+    <value>Mock属性颜色</value>
+  </data>
+  <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
+    <value>缺省亮显颜色</value>
+  </data>
+  <data name="MenuSetting_Setting" xml:space="preserve">
+    <value>设定</value>
+  </data>
+  <data name="MenuSetting_ShowCurrentLineBorder" xml:space="preserve">
+    <value>显示当前行的轮廓</value>
+  </data>
+  <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
+    <value>缺省显示场景目录</value>
+  </data>
+  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
+    <value>缺省分割窗口</value>
+  </data>
+  <data name="MenuSetting_StepWordColor" xml:space="preserve">
+    <value>步骤关键字颜色</value>
+  </data>
+  <data name="MenuSetting_TableColor" xml:space="preserve">
+    <value>表格颜色</value>
+  </data>
+  <data name="MenuSetting_TagColor" xml:space="preserve">
+    <value>Tag颜色</value>
+  </data>
+  <data name="MenuView_FoldOpenAll" xml:space="preserve">
+    <value>展开全部折叠</value>
+  </data>
+  <data name="MenuView_FoldScenario" xml:space="preserve">
+    <value>折叠场景(Scenario)</value>
+  </data>
+  <data name="MenuView_FoldTables" xml:space="preserve">
+    <value>折叠表格</value>
+  </data>
+  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
+    <value>显示代码生成界面</value>
+  </data>
+  <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
+    <value>显示场景目录</value>
+  </data>
+  <data name="MenuView_SplitEditor" xml:space="preserve">
+    <value>分割窗口</value>
+  </data>
+  <data name="MenuView_View" xml:space="preserve">
+    <value>显示(_V)</value>
+  </data>
+  <data name="Message_AboutGherkinAdditionalInfo" xml:space="preserve">
+    <value>补充信息</value>
+  </data>
+  <data name="Message_AboutGherkinDescription" xml:space="preserve">
+    <value>GherkinEditor是Gherkin feature的文本编辑器。
+它还可用于生成基于GoogleTest的C++测试代码。</value>
+  </data>
+  <data name="Message_AboutGherkinTitle" xml:space="preserve">
+    <value>Gherkin编辑器</value>
+  </data>
+  <data name="Message_ConfirmRestartApp" xml:space="preserve">
+    <value>切换语言后，需要重新启动</value>
+  </data>
+  <data name="Message_ConfirmRestartAppTitle" xml:space="preserve">
+    <value>语言切换</value>
+  </data>
+  <data name="Message_ConfirmSave" xml:space="preserve">
+    <value>是否保存文件({0})?</value>
+  </data>
+  <data name="Message_ConfirmSaveTile" xml:space="preserve">
+    <value>确认保存</value>
+  </data>
+  <data name="Message_CppTestCodeGeneration" xml:space="preserve">
+    <value>生成了如下C++测试代码。</value>
+  </data>
+  <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
+    <value>生成C++测试代码时，发生了如下错误。</value>
+  </data>
+  <data name="Message_PrettyFormatCompleted" xml:space="preserve">
+    <value>整形完毕</value>
+  </data>
+  <data name="Message_ReplaceAllConfirm" xml:space="preserve">
+    <value>确实用"{1}"替换所有"{0}"吗？</value>
+  </data>
+  <data name="Message_ReplaceAllResult" xml:space="preserve">
+    <value>共替换了{0}个条目。</value>
+  </data>
+  <data name="Message_ReplaceAllTitle" xml:space="preserve">
+    <value>全部替换</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCode" xml:space="preserve">
+    <value>请保存文件后生成测试代码</value>
+  </data>
+  <data name="Message_SaveFileBeforeGenCodeTitle" xml:space="preserve">
+    <value>生成测试代码错误</value>
+  </data>
+  <data name="Message_ScenarioIndex" xml:space="preserve">
+    <value>ー 目录 ー</value>
+  </data>
+  <data name="Message_UnknownFileName" xml:space="preserve">
+    <value>(无名)</value>
+  </data>
+  <data name="PrintButton_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Tooltip_NewFile" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="Tooltip_OpenFile" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="Tooltip_SaveFile" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
+    <value>显示场景目录</value>
+  </data>
+  <data name="Tooltip_SplitEditor" xml:space="preserve">
+    <value>分割窗口</value>
+  </data>
+</root>
