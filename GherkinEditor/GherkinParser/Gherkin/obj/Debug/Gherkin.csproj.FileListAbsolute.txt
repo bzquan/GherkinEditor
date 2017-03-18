@@ -1,9 +1,0 @@
-C:\Work\GherkinEditor\GherkinParser\Gherkin\bin\Debug\Gherkin.dll
-C:\Work\GherkinEditor\GherkinParser\Gherkin\bin\Debug\Gherkin.pdb
-C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Debug\Gherkin.dll
-C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Debug\Gherkin.pdb
-C:\Work\GherkinEditor\GherkinParser\Gherkin\obj\Debug\Gherkin.csprojResolveAssemblyReference.cache
-D:\Program\GherkinEditor\GherkinParser\Gherkin\bin\Debug\Gherkin.dll
-D:\Program\GherkinEditor\GherkinParser\Gherkin\bin\Debug\Gherkin.pdb
-D:\Program\GherkinEditor\GherkinParser\Gherkin\obj\Debug\Gherkin.dll
-D:\Program\GherkinEditor\GherkinParser\Gherkin\obj\Debug\Gherkin.pdb
