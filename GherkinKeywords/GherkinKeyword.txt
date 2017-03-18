@@ -1,0 +1,1095 @@
+﻿======================================
+#language: af
+Language: Afrikaans, Afrikaans
+======================================
+Feature: Funksie, Besigheid Behoefte, Vermoë
+Background: Agtergrond
+Scenario: Situasie
+Scenario Outline: Situasie Uiteensetting
+Examples: Voorbeelde
+Given: Gegewe
+When: Wanneer
+Then: Dan
+And: En
+But: Maar
+
+======================================
+#language: ar
+Language: Arabic, العربية
+======================================
+Feature: خاصية
+Background: الخلفية
+Scenario: سيناريو
+Scenario Outline: سيناريو مخطط
+Examples: امثلة
+Given: بفرض
+When: متى, عندما
+Then: اذاً, ثم
+And: و
+But: لكن
+
+======================================
+#language: am
+Language: Armenian, հայերեն
+======================================
+Feature: Ֆունկցիոնալություն, Հատկություն
+Background: Կոնտեքստ
+Scenario: Սցենար
+Scenario Outline: Սցենարի կառուցվացքը
+Examples: Օրինակներ
+Given: Դիցուք
+When: Եթե, Երբ
+Then: Ապա
+And: Եվ
+But: Բայց
+
+======================================
+#language: ast
+Language: Asturian, asturianu
+======================================
+Feature: Carauterística
+Background: Antecedentes
+Scenario: Casu
+Scenario Outline: Esbozu del casu
+Examples: Exemplos
+Given: Dáu, Dada, Daos, Daes
+When: Cuando
+Then: Entós
+And: Y, Ya
+But: Peru
+
+======================================
+#language: en-au
+Language: Australian, Australian
+======================================
+Feature: Pretty much
+Background: First off
+Scenario: Awww, look mate
+Scenario Outline: Reckon it's like
+Examples: You'll wanna
+Given: Y'know
+When: It's just unbelievable
+Then: But at the end of the day I reckon
+And: Too right
+But: Yeah nah
+
+======================================
+#language: az
+Language: Azerbaijani, Azərbaycanca
+======================================
+Feature: Özəllik
+Background: Keçmiş, Kontekst
+Scenario: Ssenari
+Scenario Outline: Ssenarinin strukturu
+Examples: Nümunələr
+Given: Tutaq ki, Verilir
+When: Əgər, Nə vaxt ki
+Then: O halda
+And: Və, Həm
+But: Amma, Ancaq
+
+======================================
+#language: bs
+Language: Bosnian, Bosanski
+======================================
+Feature: Karakteristika
+Background: Pozadina
+Scenario: Scenariju, Scenario
+Scenario Outline: Scenariju-obris, Scenario-outline
+Examples: Primjeri
+Given: Dato
+When: Kada
+Then: Zatim
+And: I, A
+But: Ali
+
+======================================
+#language: bg
+Language: Bulgarian, български
+======================================
+Feature: Функционалност
+Background: Предистория
+Scenario: Сценарий
+Scenario Outline: Рамка на сценарий
+Examples: Примери
+Given: Дадено
+When: Когато
+Then: То
+And: И
+But: Но
+
+======================================
+#language: ca
+Language: Catalan, català
+======================================
+Feature: Característica, Funcionalitat
+Background: Rerefons, Antecedents
+Scenario: Escenari
+Scenario Outline: Esquema de l'escenari
+Examples: Exemples
+Given: Donat, Donada, Atès, Atesa
+When: Quan
+Then: Aleshores, Cal
+And: I
+But: Però
+
+======================================
+#language: zh-CN
+Language: Chinese simplified, 简体中文
+======================================
+Feature: 功能
+Background: 背景
+Scenario: 场景, 剧本
+Scenario Outline: 场景大纲, 剧本大纲
+Examples: 例子
+Given: 假如, 假设, 假定
+When: 当
+Then: 那么
+And: 而且, 并且, 同时
+But: 但是
+
+======================================
+#language: zh-TW
+Language: Chinese traditional, 繁體中文
+======================================
+Feature: 功能
+Background: 背景
+Scenario: 場景, 劇本
+Scenario Outline: 場景大綱, 劇本大綱
+Examples: 例子
+Given: 假如, 假設, 假定
+When: 當
+Then: 那麼
+And: 而且, 並且, 同時
+But: 但是
+
+======================================
+#language: ht
+Language: Creole, kreyòl
+======================================
+Feature: Karakteristik, Mak, Fonksyonalite
+Background: Kontèks, Istorik
+Scenario: Senaryo
+Scenario Outline: Plan senaryo, Plan Senaryo, Senaryo deskripsyon, Senaryo Deskripsyon, Dyagram senaryo, Dyagram Senaryo
+Examples: Egzanp
+Given: Sipoze, Sipoze ke, Sipoze Ke
+When: Lè, Le
+Then: Lè sa a, Le sa a
+And: Ak, Epi, E
+But: Men
+
+======================================
+#language: hr
+Language: Croatian, hrvatski
+======================================
+Feature: Osobina, Mogućnost, Mogucnost
+Background: Pozadina
+Scenario: Scenarij
+Scenario Outline: Skica, Koncept
+Examples: Primjeri, Scenariji
+Given: Zadan, Zadani, Zadano
+When: Kada, Kad
+Then: Onda
+And: I
+But: Ali
+
+======================================
+#language: cs
+Language: Czech, Česky
+======================================
+Feature: Požadavek
+Background: Pozadí, Kontext
+Scenario: Scénář
+Scenario Outline: Náčrt Scénáře, Osnova scénáře
+Examples: Příklady
+Given: Pokud, Za předpokladu
+When: Když
+Then: Pak
+And: A také, A
+But: Ale
+
+======================================
+#language: da
+Language: Danish, dansk
+======================================
+Feature: Egenskab
+Background: Baggrund
+Scenario: Scenarie
+Scenario Outline: Abstrakt Scenario
+Examples: Eksempler
+Given: Givet
+When: Når
+Then: Så
+And: Og
+But: Men
+
+======================================
+#language: nl
+Language: Dutch, Nederlands
+======================================
+Feature: Functionaliteit
+Background: Achtergrond
+Scenario: Scenario
+Scenario Outline: Abstract Scenario
+Examples: Voorbeelden
+Given: Gegeven, Stel
+When: Als, Wanneer
+Then: Dan
+And: En
+But: Maar
+
+======================================
+#language: em
+Language: Emoji, 😀
+======================================
+Feature: 📚
+Background: 💤
+Scenario: 📕
+Scenario Outline: 📖
+Examples: 📓
+Given: 😐
+When: 🎬
+Then: 🙏
+And: 😂
+But: 😔
+
+======================================
+#language: en
+Language: English, English
+======================================
+Feature: Feature, Business Need, Ability
+Background: Background
+Scenario: Scenario
+Scenario Outline: Scenario Outline, Scenario Template
+Examples: Examples, Scenarios
+Given: Given
+When: When
+Then: Then
+And: And
+But: But
+
+======================================
+#language: eo
+Language: Esperanto, Esperanto
+======================================
+Feature: Trajto
+Background: Fono
+Scenario: Scenaro, Kazo
+Scenario Outline: Konturo de la scenaro, Skizo, Kazo-skizo
+Examples: Ekzemploj
+Given: Donitaĵo, Komence
+When: Se
+Then: Do
+And: Kaj
+But: Sed
+
+======================================
+#language: et
+Language: Estonian, eesti keel
+======================================
+Feature: Omadus
+Background: Taust
+Scenario: Stsenaarium
+Scenario Outline: Raamstsenaarium
+Examples: Juhtumid
+Given: Eeldades
+When: Kui
+Then: Siis
+And: Ja
+But: Kuid
+
+======================================
+#language: fi
+Language: Finnish, suomi
+======================================
+Feature: Ominaisuus
+Background: Tausta
+Scenario: Tapaus
+Scenario Outline: Tapausaihio
+Examples: Tapaukset
+Given: Oletetaan
+When: Kun
+Then: Niin
+And: Ja
+But: Mutta
+
+======================================
+#language: fr
+Language: French, français
+======================================
+Feature: Fonctionnalité
+Background: Contexte
+Scenario: Scénario
+Scenario Outline: Plan du scénario, Plan du Scénario
+Examples: Exemples
+Given: Soit, Etant donné que, Etant donné qu', Etant donné, Etant donnée, Etant donnés, Etant données, Étant donné que, Étant donné qu', Étant donné, Étant donnée, Étant donnés, Étant données
+When: Quand, Lorsque, Lorsqu'
+Then: Alors
+And: Et que, Et qu', Et
+But: Mais que, Mais qu', Mais
+
+======================================
+#language: gl
+Language: Galician, galego
+======================================
+Feature: Característica
+Background: Contexto
+Scenario: Escenario
+Scenario Outline: Esbozo do escenario
+Examples: Exemplos
+Given: Dado, Dada, Dados, Dadas
+When: Cando
+Then: Entón, Logo
+And: E
+But: Mais, Pero
+
+======================================
+#language: ka
+Language: Georgian, ქართველი
+======================================
+Feature: თვისება
+Background: კონტექსტი
+Scenario: სცენარის
+Scenario Outline: სცენარის ნიმუში
+Examples: მაგალითები
+Given: მოცემული
+When: როდესაც
+Then: მაშინ
+And: და
+But: მაგ­რამ
+
+======================================
+#language: de
+Language: German, Deutsch
+======================================
+Feature: Funktionalität
+Background: Grundlage
+Scenario: Szenario
+Scenario Outline: Szenariogrundriss
+Examples: Beispiele
+Given: Angenommen, Gegeben sei, Gegeben seien
+When: Wenn
+Then: Dann
+And: Und
+But: Aber
+
+======================================
+#language: el
+Language: Greek, Ελληνικά
+======================================
+Feature: Δυνατότητα, Λειτουργία
+Background: Υπόβαθρο
+Scenario: Σενάριο
+Scenario Outline: Περιγραφή Σεναρίου
+Examples: Παραδείγματα, Σενάρια
+Given: Δεδομένου
+When: Όταν
+Then: Τότε
+And: Και
+But: Αλλά
+
+======================================
+#language: gj
+Language: Gujarati, ગુજરાતી
+======================================
+Feature: લક્ષણ, વ્યાપાર જરૂર, ક્ષમતા
+Background: બેકગ્રાઉન્ડ
+Scenario: સ્થિતિ
+Scenario Outline: પરિદ્દશ્ય રૂપરેખા, પરિદ્દશ્ય ઢાંચો
+Examples: ઉદાહરણો
+Given: આપેલ છે
+When: ક્યારે
+Then: પછી
+And: અને
+But: પણ
+
+======================================
+#language: he
+Language: Hebrew, עברית
+======================================
+Feature: תכונה
+Background: רקע
+Scenario: תרחיש
+Scenario Outline: תבנית תרחיש
+Examples: דוגמאות
+Given: בהינתן
+When: כאשר
+Then: אז, אזי
+And: וגם
+But: אבל
+
+======================================
+#language: hi
+Language: Hindi, हिंदी
+======================================
+Feature: रूप लेख
+Background: पृष्ठभूमि
+Scenario: परिदृश्य
+Scenario Outline: परिदृश्य रूपरेखा
+Examples: उदाहरण
+Given: अगर, यदि, चूंकि
+When: जब, कदा
+Then: तब, तदा
+And: और, तथा
+But: पर, परन्तु, किन्तु
+
+======================================
+#language: hu
+Language: Hungarian, magyar
+======================================
+Feature: Jellemző
+Background: Háttér
+Scenario: Forgatókönyv
+Scenario Outline: Forgatókönyv vázlat
+Examples: Példák
+Given: Amennyiben, Adott
+When: Majd, Ha, Amikor
+Then: Akkor
+And: És
+But: De
+
+======================================
+#language: is
+Language: Icelandic, Íslenska
+======================================
+Feature: Eiginleiki
+Background: Bakgrunnur
+Scenario: Atburðarás
+Scenario Outline: Lýsing Atburðarásar, Lýsing Dæma
+Examples: Dæmi, Atburðarásir
+Given: Ef
+When: Þegar
+Then: Þá
+And: Og
+But: En
+
+======================================
+#language: id
+Language: Indonesian, Bahasa Indonesia
+======================================
+Feature: Fitur
+Background: Dasar
+Scenario: Skenario
+Scenario Outline: Skenario konsep
+Examples: Contoh
+Given: Dengan
+When: Ketika
+Then: Maka
+And: Dan
+But: Tapi
+
+======================================
+#language: ga
+Language: Irish, Gaeilge
+======================================
+Feature: Gné
+Background: Cúlra
+Scenario: Cás
+Scenario Outline: Cás Achomair
+Examples: Samplaí
+Given: Cuir i gcás go, Cuir i gcás nach, Cuir i gcás gur, Cuir i gcás nár
+When: Nuair a, Nuair nach, Nuair ba, Nuair nár
+Then: Ansin
+And: Agus
+But: Ach
+
+======================================
+#language: it
+Language: Italian, italiano
+======================================
+Feature: Funzionalità
+Background: Contesto
+Scenario: Scenario
+Scenario Outline: Schema dello scenario
+Examples: Esempi
+Given: Dato, Data, Dati, Date
+When: Quando
+Then: Allora
+And: E
+But: Ma
+
+======================================
+#language: ja
+Language: Japanese, 日本語
+======================================
+Feature: フィーチャ, 機能
+Background: 背景
+Scenario: シナリオ
+Scenario Outline: シナリオアウトライン, シナリオテンプレート, テンプレ, シナリオテンプレ
+Examples: 例, サンプル
+Given: 前提
+When: もし
+Then: ならば
+And: かつ
+But: しかし, 但し, ただし
+
+======================================
+#language: jv
+Language: Javanese, Basa Jawa
+======================================
+Feature: Fitur
+Background: Dasar
+Scenario: Skenario
+Scenario Outline: Konsep skenario
+Examples: Conto, Contone
+Given: Nalika, Nalikaning
+When: Manawa, Menawa
+Then: Njuk, Banjur
+And: Lan
+But: Tapi, Nanging, Ananging
+
+======================================
+#language: kn
+Language: Kannada, ಕನ್ನಡ
+======================================
+Feature: ಹೆಚ್ಚಳ
+Background: ಹಿನ್ನೆಲೆ
+Scenario: ಕಥಾಸಾರಾಂಶ
+Scenario Outline: ವಿವರಣೆ
+Examples: ಉದಾಹರಣೆಗಳು
+Given: ನೀಡಿದ
+When: ಸ್ಥಿತಿಯನ್ನು
+Then: ನಂತರ
+And: ಮತ್ತು
+But: ಆದರೆ
+
+======================================
+#language: tlh
+Language: Klingon, tlhIngan
+======================================
+Feature: Qap, Qu'meH 'ut, perbogh, poQbogh malja', laH
+Background: mo'
+Scenario: lut
+Scenario Outline: lut chovnatlh
+Examples: ghantoH, lutmey
+Given: ghu' noblu', DaH ghu' bejlu'
+When: qaSDI'
+Then: vaj
+And: 'ej, latlh
+But: 'ach, 'a
+
+======================================
+#language: ko
+Language: Korean, 한국어
+======================================
+Feature: 기능
+Background: 배경
+Scenario: 시나리오
+Scenario Outline: 시나리오 개요
+Examples: 예
+Given: 조건, 먼저
+When: 만일, 만약
+Then: 그러면
+And: 그리고
+But: 하지만, 단
+
+======================================
+#language: lv
+Language: Latvian, latviešu
+======================================
+Feature: Funkcionalitāte, Fīča
+Background: Konteksts, Situācija
+Scenario: Scenārijs
+Scenario Outline: Scenārijs pēc parauga
+Examples: Piemēri, Paraugs
+Given: Kad
+When: Ja
+Then: Tad
+And: Un
+But: Bet
+
+======================================
+#language: lt
+Language: Lithuanian, lietuvių kalba
+======================================
+Feature: Savybė
+Background: Kontekstas
+Scenario: Scenarijus
+Scenario Outline: Scenarijaus šablonas
+Examples: Pavyzdžiai, Scenarijai, Variantai
+Given: Duota
+When: Kai
+Then: Tada
+And: Ir
+But: Bet
+
+======================================
+#language: en-lol
+Language: LOLCAT, LOLCAT
+======================================
+Feature: OH HAI
+Background: B4
+Scenario: MISHUN
+Scenario Outline: MISHUN SRSLY
+Examples: EXAMPLZ
+Given: I CAN HAZ
+When: WEN
+Then: DEN
+And: AN
+But: BUT
+
+======================================
+#language: lu
+Language: Luxemburgish, Lëtzebuergesch
+======================================
+Feature: Funktionalitéit
+Background: Hannergrond
+Scenario: Szenario
+Scenario Outline: Plang vum Szenario
+Examples: Beispiller
+Given: ugeholl
+When: wann
+Then: dann
+And: an, a
+But: awer, mä
+
+======================================
+#language: mk-Cyrl
+Language: Macedonian, Македонски
+======================================
+Feature: Функционалност, Бизнис потреба, Можност
+Background: Контекст, Содржина
+Scenario: Сценарио, На пример
+Scenario Outline: Преглед на сценарија, Скица, Концепт
+Examples: Примери, Сценарија
+Given: Дадено, Дадена
+When: Кога
+Then: Тогаш
+And: И
+But: Но
+
+======================================
+#language: mk-Latn
+Language: Macedonian (Latin), Makedonski (Latinica)
+======================================
+Feature: Funkcionalnost, Biznis potreba, Mozhnost
+Background: Kontekst, Sodrzhina
+Scenario: Scenario, Na primer
+Scenario Outline: Pregled na scenarija, Skica, Koncept
+Examples: Primeri, Scenaria
+Given: Dadeno, Dadena
+When: Koga
+Then: Togash
+And: I
+But: No
+
+======================================
+#language: bm
+Language: Malay, Bahasa Melayu
+======================================
+Feature: Fungsi
+Background: Latar Belakang
+Scenario: Senario, Situasi, Keadaan
+Scenario Outline: Kerangka Senario, Kerangka Situasi, Kerangka Keadaan, Garis Panduan Senario
+Examples: Contoh
+Given: Diberi, Bagi
+When: Apabila
+Then: Maka, Kemudian
+And: Dan
+But: Tetapi, Tapi
+
+======================================
+#language: mn
+Language: Mongolian, монгол
+======================================
+Feature: Функц, Функционал
+Background: Агуулга
+Scenario: Сценар
+Scenario Outline: Сценарын төлөвлөгөө
+Examples: Тухайлбал
+Given: Өгөгдсөн нь, Анх
+When: Хэрэв
+Then: Тэгэхэд, Үүний дараа
+And: Мөн, Тэгээд
+But: Гэхдээ, Харин
+
+======================================
+#language: no
+Language: Norwegian, norsk
+======================================
+Feature: Egenskap
+Background: Bakgrunn
+Scenario: Scenario
+Scenario Outline: Scenariomal, Abstrakt Scenario
+Examples: Eksempler
+Given: Gitt
+When: Når
+Then: Så
+And: Og
+But: Men
+
+======================================
+#language: en-old
+Language: Old English, Englisc
+======================================
+Feature: Hwaet, Hwæt
+Background: Aer, Ær
+Scenario: Swa
+Scenario Outline: Swa hwaer swa, Swa hwær swa
+Examples: Se the, Se þe, Se ðe
+Given: Thurh, Þurh, Ðurh
+When: Tha, Þa, Ða
+Then: Tha, Þa, Ða, Tha the, Þa þe, Ða ðe
+And: Ond, 7
+But: Ac
+
+======================================
+#language: pa
+Language: Panjabi, ਪੰਜਾਬੀ
+======================================
+Feature: ਖਾਸੀਅਤ, ਮੁਹਾਂਦਰਾ, ਨਕਸ਼ ਨੁਹਾਰ
+Background: ਪਿਛੋਕੜ
+Scenario: ਪਟਕਥਾ
+Scenario Outline: ਪਟਕਥਾ ਢਾਂਚਾ, ਪਟਕਥਾ ਰੂਪ ਰੇਖਾ
+Examples: ਉਦਾਹਰਨਾਂ
+Given: ਜੇਕਰ, ਜਿਵੇਂ ਕਿ
+When: ਜਦੋਂ
+Then: ਤਦ
+And: ਅਤੇ
+But: ਪਰ
+
+======================================
+#language: fa
+Language: Persian, فارسی
+======================================
+Feature: وِیژگی
+Background: زمینه
+Scenario: سناریو
+Scenario Outline: الگوی سناریو
+Examples: نمونه ها
+Given: با فرض
+When: هنگامی
+Then: آنگاه
+And: و
+But: اما
+
+======================================
+#language: en-pirate
+Language: Pirate, Pirate
+======================================
+Feature: Ahoy matey!
+Background: Yo-ho-ho
+Scenario: Heave to
+Scenario Outline: Shiver me timbers
+Examples: Dead men tell no tales
+Given: Gangway!
+When: Blimey!
+Then: Let go and haul
+And: Aye
+But: Avast!
+
+======================================
+#language: pl
+Language: Polish, polski
+======================================
+Feature: Właściwość, Funkcja, Aspekt, Potrzeba biznesowa
+Background: Założenia
+Scenario: Scenariusz
+Scenario Outline: Szablon scenariusza
+Examples: Przykłady
+Given: Zakładając, Mając, Zakładając, że
+When: Jeżeli, Jeśli, Gdy, Kiedy
+Then: Wtedy
+And: Oraz, I
+But: Ale
+
+======================================
+#language: pt
+Language: Portuguese, português
+======================================
+Feature: Funcionalidade, Característica, Caracteristica
+Background: Contexto, Cenário de Fundo, Cenario de Fundo, Fundo
+Scenario: Cenário, Cenario
+Scenario Outline: Esquema do Cenário, Esquema do Cenario, Delineação do Cenário, Delineacao do Cenario
+Examples: Exemplos, Cenários, Cenarios
+Given: Dado, Dada, Dados, Dadas
+When: Quando
+Then: Então, Entao
+And: E
+But: Mas
+
+======================================
+#language: ro
+Language: Romanian, română
+======================================
+Feature: Functionalitate, Funcționalitate, Funcţionalitate
+Background: Context
+Scenario: Scenariu
+Scenario Outline: Structura scenariu, Structură scenariu
+Examples: Exemple
+Given: Date fiind, Dat fiind, Dati fiind, Dați fiind, Daţi fiind
+When: Cand, Când
+Then: Atunci
+And: Si, Și, Şi
+But: Dar
+
+======================================
+#language: ru
+Language: Russian, русский
+======================================
+Feature: Функция, Функциональность, Функционал, Свойство
+Background: Предыстория, Контекст
+Scenario: Сценарий
+Scenario Outline: Структура сценария
+Examples: Примеры
+Given: Допустим, Дано, Пусть, Если
+When: Когда
+Then: То, Затем, Тогда
+And: И, К тому же, Также
+But: Но, А
+
+======================================
+#language: en-Scouse
+Language: Scouse, Scouse
+======================================
+Feature: Feature
+Background: Dis is what went down
+Scenario: The thing of it is
+Scenario Outline: Wharrimean is
+Examples: Examples
+Given: Givun, Youse know when youse got
+When: Wun, Youse know like when
+Then: Dun, Den youse gotta
+And: An
+But: Buh
+
+======================================
+#language: sr-Cyrl
+Language: Serbian, Српски
+======================================
+Feature: Функционалност, Могућност, Особина
+Background: Контекст, Основа, Позадина
+Scenario: Сценарио, Пример
+Scenario Outline: Структура сценарија, Скица, Концепт
+Examples: Примери, Сценарији
+Given: За дато, За дате, За дати
+When: Када, Кад
+Then: Онда
+And: И
+But: Али
+
+======================================
+#language: sr-Latn
+Language: Serbian (Latin), Srpski (Latinica)
+======================================
+Feature: Funkcionalnost, Mogućnost, Mogucnost, Osobina
+Background: Kontekst, Osnova, Pozadina
+Scenario: Scenario, Primer
+Scenario Outline: Struktura scenarija, Skica, Koncept
+Examples: Primeri, Scenariji
+Given: Za dato, Za date, Za dati
+When: Kada, Kad
+Then: Onda
+And: I
+But: Ali
+
+======================================
+#language: sk
+Language: Slovak, Slovensky
+======================================
+Feature: Požiadavka, Funkcia, Vlastnosť
+Background: Pozadie
+Scenario: Scenár
+Scenario Outline: Náčrt Scenáru, Náčrt Scenára, Osnova Scenára
+Examples: Príklady
+Given: Pokiaľ, Za predpokladu
+When: Keď, Ak
+Then: Tak, Potom
+And: A, A tiež, A taktiež, A zároveň
+But: Ale
+
+======================================
+#language: sl
+Language: Slovenian, Slovenski
+======================================
+Feature: Funkcionalnost, Funkcija, Možnosti, Moznosti, Lastnost, Značilnost
+Background: Kontekst, Osnova, Ozadje
+Scenario: Scenarij, Primer
+Scenario Outline: Struktura scenarija, Skica, Koncept, Oris scenarija, Osnutek
+Examples: Primeri, Scenariji
+Given: Dano, Podano, Zaradi, Privzeto
+When: Ko, Ce, Če, Kadar
+Then: Nato, Potem, Takrat
+And: In, Ter
+But: Toda, Ampak, Vendar
+
+======================================
+#language: es
+Language: Spanish, español
+======================================
+Feature: Característica
+Background: Antecedentes
+Scenario: Escenario
+Scenario Outline: Esquema del escenario
+Examples: Ejemplos
+Given: Dado, Dada, Dados, Dadas
+When: Cuando
+Then: Entonces
+And: Y, E
+But: Pero
+
+======================================
+#language: sv
+Language: Swedish, Svenska
+======================================
+Feature: Egenskap
+Background: Bakgrund
+Scenario: Scenario
+Scenario Outline: Abstrakt Scenario, Scenariomall
+Examples: Exempel
+Given: Givet
+When: När
+Then: Så
+And: Och
+But: Men
+
+======================================
+#language: ta
+Language: Tamil, தமிழ்
+======================================
+Feature: அம்சம், வணிக தேவை, திறன்
+Background: பின்னணி
+Scenario: காட்சி
+Scenario Outline: காட்சி சுருக்கம், காட்சி வார்ப்புரு
+Examples: எடுத்துக்காட்டுகள், காட்சிகள், நிலைமைகளில்
+Given: கொடுக்கப்பட்ட
+When: எப்போது
+Then: அப்பொழுது
+And: மேலும், மற்றும்
+But: ஆனால்
+
+======================================
+#language: tt
+Language: Tatar, Татарча
+======================================
+Feature: Мөмкинлек, Үзенчәлеклелек
+Background: Кереш
+Scenario: Сценарий
+Scenario Outline: Сценарийның төзелеше
+Examples: Үрнәкләр, Мисаллар
+Given: Әйтик
+When: Әгәр
+Then: Нәтиҗәдә
+And: Һәм, Вә
+But: Ләкин, Әмма
+
+======================================
+#language: tl
+Language: Telugu, తెలుగు
+======================================
+Feature: గుణము
+Background: నేపథ్యం
+Scenario: సన్నివేశం
+Scenario Outline: కథనం
+Examples: ఉదాహరణలు
+Given: చెప్పబడినది
+When: ఈ పరిస్థితిలో
+Then: అప్పుడు
+And: మరియు
+But: కాని
+
+======================================
+#language: th
+Language: Thai, ไทย
+======================================
+Feature: โครงหลัก, ความต้องการทางธุรกิจ, ความสามารถ
+Background: แนวคิด
+Scenario: เหตุการณ์
+Scenario Outline: สรุปเหตุการณ์, โครงสร้างของเหตุการณ์
+Examples: ชุดของตัวอย่าง, ชุดของเหตุการณ์
+Given: กำหนดให้
+When: เมื่อ
+Then: ดังนั้น
+And: และ
+But: แต่
+
+======================================
+#language: tr
+Language: Turkish, Türkçe
+======================================
+Feature: Özellik
+Background: Geçmiş
+Scenario: Senaryo
+Scenario Outline: Senaryo taslağı
+Examples: Örnekler
+Given: Diyelim ki
+When: Eğer ki
+Then: O zaman
+And: Ve
+But: Fakat, Ama
+
+======================================
+#language: uk
+Language: Ukrainian, Українська
+======================================
+Feature: Функціонал
+Background: Передумова
+Scenario: Сценарій
+Scenario Outline: Структура сценарію
+Examples: Приклади
+Given: Припустимо, Припустимо, що, Нехай, Дано
+When: Якщо, Коли
+Then: То, Тоді
+And: І, А також, Та
+But: Але
+
+======================================
+#language: ur
+Language: Urdu, اردو
+======================================
+Feature: صلاحیت, کاروبار کی ضرورت, خصوصیت
+Background: پس منظر
+Scenario: منظرنامہ
+Scenario Outline: منظر نامے کا خاکہ
+Examples: مثالیں
+Given: اگر, بالفرض, فرض کیا
+When: جب
+Then: پھر, تب
+And: اور
+But: لیکن
+
+======================================
+#language: uz
+Language: Uzbek, Узбекча
+======================================
+Feature: Функционал
+Background: Тарих
+Scenario: Сценарий
+Scenario Outline: Сценарий структураси
+Examples: Мисоллар
+Given: Агар
+When: Агар
+Then: Унда
+And: Ва
+But: Лекин, Бирок, Аммо
+
+======================================
+#language: vi
+Language: Vietnamese, Tiếng Việt
+======================================
+Feature: Tính năng
+Background: Bối cảnh
+Scenario: Tình huống, Kịch bản
+Scenario Outline: Khung tình huống, Khung kịch bản
+Examples: Dữ liệu
+Given: Biết, Cho
+When: Khi
+Then: Thì
+And: Và
+But: Nhưng
+
+======================================
+#language: cy-GB
+Language: Welsh, Cymraeg
+======================================
+Feature: Arwedd
+Background: Cefndir
+Scenario: Scenario
+Scenario Outline: Scenario Amlinellol
+Examples: Enghreifftiau
+Given: Anrhegedig a
+When: Pryd
+Then: Yna
+And: A
+But: Ond
+
