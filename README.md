@@ -1,6 +1,7 @@
 # Gherkin Editor
 
 An editor for specification by example in Gherkin.
+It is a WPF application in C#.
 
 # Features
 1. Keywords highlighting
