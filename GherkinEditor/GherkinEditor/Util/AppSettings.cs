@@ -80,7 +80,7 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("KaiTi")]
+        [DefaultSettingValueAttribute("Fangsong")]
         public string FontFamilyName
         {
             get { return (string)this["FontFamilyName"]; }
@@ -88,7 +88,7 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("10")]
+        [DefaultSettingValueAttribute("11")]
         public string FontSize
         {
             get { return (string)this["FontSize"]; }
@@ -160,12 +160,21 @@ namespace Gherkin.Util
             get { return (bool)this["HighlightCurrentLine"]; }
             set { this["HighlightCurrentLine"] = value; }
         }
+
         [UserScopedSetting()]
         [DefaultSettingValueAttribute("True")]
         public bool ShowCurrentLineBorder
         {
             get { return (bool)this["ShowCurrentLineBorder"]; }
             set { this["ShowCurrentLineBorder"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("True")]
+        public bool GenerateGUIDforScenario
+        {
+            get { return (bool)this["GenerateGUIDforScenario"]; }
+            set { this["GenerateGUIDforScenario"] = value; }
         }
 
         [UserScopedSetting()]

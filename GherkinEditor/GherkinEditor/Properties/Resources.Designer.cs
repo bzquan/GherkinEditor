@@ -394,11 +394,29 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gherkin keywords.
+        /// </summary>
+        public static string MenuHelp_GherkinKeywords {
+            get {
+                return ResourceManager.GetString("MenuHelp_GherkinKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string MenuHelp_Help {
             get {
                 return ResourceManager.GetString("MenuHelp_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate GUID for scenarios.
+        /// </summary>
+        public static string MenuSetting_AutoGenGUID {
+            get {
+                return ResourceManager.GetString("MenuSetting_AutoGenGUID", resourceCulture);
             }
         }
         
@@ -493,7 +511,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gherkin highlighting.
+        ///   Looks up a localized string similar to Setting keywords highlighting.
         /// </summary>
         public static string MenuSetting_GherkinHighlighting {
             get {
@@ -529,7 +547,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset highlighting colors.
+        ///   Looks up a localized string similar to Reset all highlighting colors.
         /// </summary>
         public static string MenuSetting_ResetHighlightingColor {
             get {
@@ -692,6 +710,69 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Background.
+        /// </summary>
+        public static string Message_CodeCompletionBackground {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Example.
+        /// </summary>
+        public static string Message_CodeCompletionExample {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feature.
+        /// </summary>
+        public static string Message_CodeCompletionFeature {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language tag. Any language different from English should be explicitly marked with a #language: ... comment at the beginning of the feature..
+        /// </summary>
+        public static string Message_CodeCompletionLanguage {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario.
+        /// </summary>
+        public static string Message_CodeCompletionScenario {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario outline.
+        /// </summary>
+        public static string Message_CodeCompletionScenarioOutline {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionScenarioOutline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step.
+        /// </summary>
+        public static string Message_CodeCompletionStepKeyword {
+            get {
+                return ResourceManager.GetString("Message_CodeCompletionStepKeyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You need to restart the application to make new language effective.
         /// </summary>
         public static string Message_ConfirmRestartApp {
@@ -823,6 +904,33 @@ namespace Gherkin.Properties {
         public static string PrintButton_Cancel {
             get {
                 return ResourceManager.GetString("PrintButton_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use default color.
+        /// </summary>
+        public static string Tooltip_DefaultHighlighingColor {
+            get {
+                return ResourceManager.GetString("Tooltip_DefaultHighlighingColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font.
+        /// </summary>
+        public static string Tooltip_FontFamilty {
+            get {
+                return ResourceManager.GetString("Tooltip_FontFamilty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font size.
+        /// </summary>
+        public static string Tooltip_FontSize {
+            get {
+                return ResourceManager.GetString("Tooltip_FontSize", resourceCulture);
             }
         }
         

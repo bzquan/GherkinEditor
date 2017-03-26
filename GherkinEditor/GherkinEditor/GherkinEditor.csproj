@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
+    <Compile Include="Model\GherkinKeyword.cs" />
     <Compile Include="Model\HtmlConverter\HtmlCssParser.cs" />
     <Compile Include="Model\HtmlConverter\HtmlFromXamlConverter.cs" />
     <Compile Include="Model\HtmlConverter\HtmlLexicalAnalyzer.cs" />
@@ -100,16 +101,25 @@
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\FontViewModel.cs" />
-    <Compile Include="ViewModel\GherkinSettings.cs" />
+    <Compile Include="ViewModel\GherkinCodeCompletion.cs" />
+    <Compile Include="ViewModel\GherkinCodeCompletionWord.cs" />
+    <Compile Include="ViewModel\GherkinCodeCompletionWordsProvider.cs" />
+    <Compile Include="ViewModel\GherkinKeywordsCurrent.cs" />
+    <Compile Include="ViewModel\GherkinKeywordsViewModel.cs" />
+    <Compile Include="ViewModel\GherkinSettingViewModel.cs" />
     <Compile Include="ViewModel\HiddenableColumnDefinition.cs" />
     <Compile Include="ViewModel\HiddenableRowDefinition.cs" />
     <Compile Include="ViewModel\IOpenNewEditor.cs" />
     <Compile Include="ViewModel\MultiFileOpener.cs" />
+    <Compile Include="ViewModel\RichTextBoxHelper.cs" />
     <Compile Include="ViewModel\ScenarioIndex.cs" />
     <Compile Include="View\AboutControlView.xaml.cs">
       <DependentUpon>AboutControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AutoGreyableImage.cs" />
+    <Compile Include="View\GherkinKeywords.xaml.cs">
+      <DependentUpon>GherkinKeywords.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
     </Compile>
@@ -117,7 +127,11 @@
     <Compile Include="View\PrintPreview.xaml.cs">
       <DependentUpon>PrintPreview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\RichTextBlockHtml\BrowserBehavior.cs" />
     <Compile Include="View\RichTextBlockHtml\HtmlRichTextBoxBehavior.cs" />
+    <Compile Include="View\SettingControlView.xaml.cs">
+      <DependentUpon>SettingControlView.xaml</DependentUpon>
+    </Compile>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,6 +141,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\FindReplaceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GherkinKeywords.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,6 +215,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\PrintPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -430,6 +452,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ViewModel\ReleaseNote\ReleaseNote.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Tick64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Modified.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Unchanged.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Font.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\FontSize.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

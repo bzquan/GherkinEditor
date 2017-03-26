@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="Gherkin.View.SettingControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:p = "clr-namespace:Gherkin.Properties"
+             xmlns:vm="clr-namespace:Gherkin.ViewModel"
+             xmlns:local="clr-namespace:Gherkin.View"
+             mc:Ignorable="d" 
+             MouseLeftButtonDown="OnMouseLeftButtonDown"
+             d:DesignHeight="200" d:DesignWidth="230">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_KeywordColor}" Background="LightGray" Foreground="{Binding HighlightingKeywordBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="0" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingKeywordColor}"/>
+        <Button Grid.Row="0" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetKeywordColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png"  Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_StepWordColor}" Background="LightGray" Foreground="{Binding HighlightingStepWordBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="1" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingStepWordColor}"/>
+        <Button Grid.Row="1" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetStepWordColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_TableColor}" Background="LightGray" Foreground="{Binding HighlightingTableBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="2" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          HorizontalAlignment="Stretch"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingTableColor}"/>
+        <Button Grid.Row="2" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetTableColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_TagColor}" Background="LightGray" Foreground="{Binding HighlightingTagBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="3" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingTagColor}"/>
+        <Button Grid.Row="3" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetTagColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_DocStringColor}" Background="LightGray" Foreground="{Binding HighlightingDocStringBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="4" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingDocStringColor}"/>
+        <Button Grid.Row="4" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetDocStringColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_ConstantsColor}" Background="LightGray" Foreground="{Binding HighlightingConstantsBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="5" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingConstantsColor}"/>
+        <Button Grid.Row="5" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetConstantsColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3, 0, 0, 0" FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_MockColor}" Background="LightGray" Foreground="{Binding HighlightingMockAttributeBrush}"/>
+        <xctk:ColorPicker Margin="3, 0, 3, 0"
+                          Grid.Row="6" Grid.Column="1"
+                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
+                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
+                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
+                          ShowRecentColors="True"
+                          ShowAdvancedButton="False"
+                          SelectedColor="{Binding SelectedHighlightingMockAttributeColor}"/>
+        <Button Grid.Row="6" Grid.Column="2" Margin="0, 0, 3, 0" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding ResetMockAttributeColorCmd}">
+            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+        </Button>
+        <Button Grid.Row="7" Grid.ColumnSpan="3"
+                Command="{Binding ResetHighlightingColorsCmd}">
+            <StackPanel Orientation="Horizontal">
+                <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+                <TextBlock FontSize="11pt" VerticalAlignment="Center" Text="{x:Static p:Resources.MenuSetting_ResetHighlightingColor}"/>
+                <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

@@ -17,6 +17,7 @@ using Gherkin.Util;
 using Gherkin.Model;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
 namespace Gherkin.ViewModel
 {
@@ -39,19 +40,21 @@ namespace Gherkin.ViewModel
         public ICommand OpenRecentFileCmd => new DelegateCommand<string>(OnOpenRecentFile);
         public ICommand OpenCurrentFolderCmd => new DelegateCommandNoArg(OnOpenFolder);
         public ICommand OpenAllFoldingsCmd => new DelegateCommandNoArg(OnOpenAllFoldings);
+        public ICommand SetGherkinHighlightingCmd => new DelegateCommandNoArg(OnSetGherkinHighlighting);
         public ICommand GenCPPTestCodeCmd => new DelegateCommandNoArg(OnGenCPPTestCode);
 
         public FontViewModel FontViewModel { get; private set; }
-        public GherkinSettings GherkinSettings { get; private set; }
+        public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
 
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
                                 FontViewModel fontViewModel,
-                                GherkinSettings gherkinSettings,
+                                GherkinSettingViewModel gherkinSettings,
                                 AboutViewModel aboutViewModel)
         {
             m_AppSettings = appSettings;
+            GherkinFormatUtil.AppSettings = appSettings;
             m_MultiFilesOpener = multiFilesOpener;
             multiFilesOpener.Config(TabPanels, this);
 
@@ -91,8 +94,9 @@ namespace Gherkin.ViewModel
             double tab_control_width = EditorTabControl.ActualWidth;
             if (tab_control_width <= 0.00001) return;
 
-            double max_tab_width = max_tab_width = Math.Max(tab_control_width / TabPanels.Count, 15.0);
-            max_tab_width = Math.Max(tab_control_width / TabPanels.Count, 15.0);
+            const double STATUS_IMAGE_WIDTH = 16.0;
+            const double MIN = 15.0;
+            double max_tab_width = Math.Max(tab_control_width / TabPanels.Count - STATUS_IMAGE_WIDTH, MIN);
 
             foreach (EditorTab tab in TabPanels)
             {
@@ -175,6 +179,7 @@ namespace Gherkin.ViewModel
                     if (HasEditorLoaded)
                         CurrentEditor.FontFamily = new FontFamily(name);
                 }
+                base.OnPropertyChanged();
             }
         }
 
@@ -194,6 +199,7 @@ namespace Gherkin.ViewModel
                     m_AppSettings.FontSize = value;
                     if (HasEditorLoaded)
                         CurrentEditor.FontSize = value;
+                    base.OnPropertyChanged();
                 }
             }
         }
@@ -230,7 +236,18 @@ namespace Gherkin.ViewModel
                 {
                     CurrentEditor.HideScenarioIndex = !value;
                 }
+                base.OnPropertyChanged(nameof(ScenarioIndexIcon));
                 base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage ScenarioIndexIcon
+        {
+            get
+            {
+                if (ShowScenarioIndex)
+                    return Util.Util.DrawingImageByOverlapping("Index.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("Index.png");
             }
         }
 
@@ -243,7 +260,18 @@ namespace Gherkin.ViewModel
                 {
                     CurrentEditor.HideSplitView = !value;
                 }
+                base.OnPropertyChanged(nameof(HorizontalSplitIcon));
                 base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage HorizontalSplitIcon
+        {
+            get
+            {
+                if (ShowSplitView)
+                    return Util.Util.DrawingImageByOverlapping("HSplit.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("HSplit.png");
             }
         }
 
@@ -495,11 +523,23 @@ namespace Gherkin.ViewModel
             {
                 if (m_AppSettings.ShowMessageWindow == value) return;
                 m_AppSettings.ShowMessageWindow = value;
+                base.OnPropertyChanged(nameof(MessageWindowIcon));
                 base.OnPropertyChanged();
 
                 EventAggregator<ShowCodeGenMessageWindowArg>
                     .Instance
                     .Publish(this, new ShowCodeGenMessageWindowArg(value));
+            }
+        }
+
+        public DrawingImage MessageWindowIcon
+        {
+            get
+            {
+                if (ShowMessageWindow)
+                    return Util.Util.DrawingImageByOverlapping("MessageWindow.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("MessageWindow.png");
             }
         }
 
@@ -594,9 +634,12 @@ namespace Gherkin.ViewModel
 
         private void OnIndentationCompleted(object sender, IndentationCompletedArg arg)
         {
-            CurrentEditor.MainEditor.TextArea.Caret.Offset = 0;
-            CurrentEditor.MainEditor.TextArea.Caret.BringCaretToView();
             Status = Properties.Resources.Message_PrettyFormatCompleted;
+        }
+
+        private void OnSetGherkinHighlighting()
+        {
+            this.GherkinSettings.ShowGherkinHighlightSettingWindow();
         }
     }
 }

@@ -10,11 +10,15 @@ namespace Gherkin.Util
 {
     public class GherkinKeywordGenerator
     {
-        static GherkinDialectProviderExtention s_GherkinDialectcs = new GherkinDialectProviderExtention();
-
+        static Lazy<GherkinDialectProviderExtention> s_GherkinDialectcs = new Lazy<GherkinDialectProviderExtention>(() => new GherkinDialectProviderExtention());
         public static void GenerateKeywords()
         {
-            GherkinLanguage[] languages = s_GherkinDialectcs.GherkinLanguages;
+            GherkinLanguage[] languages = s_GherkinDialectcs.Value.GherkinLanguages;
+
+            Array.Sort(languages, delegate(GherkinLanguage lang1, GherkinLanguage lang2) {
+                return lang1.name.CompareTo(lang2.name);
+            });
+
             StringBuilder sb = new StringBuilder();
             foreach (var language in languages)
             {
@@ -29,7 +33,7 @@ namespace Gherkin.Util
 
         public static string GenerateKeywordsToolTip(string key)
         {
-            GherkinDialect dialect = s_GherkinDialectcs.GetCurrentDialect(key);
+            GherkinDialect dialect = s_GherkinDialectcs.Value.GetCurrentDialect(key);
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("Language: " + key)
@@ -50,6 +54,8 @@ namespace Gherkin.Util
         private static void GenerateKeywords(StringBuilder sb, GherkinLanguage language)
         {
             sb.AppendLine("======================================")
+              .Append("#language: ")
+              .AppendLine(language.key)
               .Append("Language: ")
               .AppendLine(language.name + ", " + language.native)
               .AppendLine("======================================")

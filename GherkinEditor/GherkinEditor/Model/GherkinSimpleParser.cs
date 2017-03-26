@@ -49,6 +49,7 @@ namespace Gherkin.Model
             while ((line != null) && (line.LineNumber <= endLine))
             {
                 string line_text = GetText(m_Doc, line);
+                TryUpdateLanguage(line_text);
                 Tuple<TokenType, string> result = Format(line_text);
                 switch (result.Item1)
                 {
@@ -79,6 +80,63 @@ namespace Gherkin.Model
         {
             var location = new Ast.Location(1);
             return new Token(new GherkinLine(line, 1), location);
+        }
+
+        public Token ParseToken(string line)
+        {
+            Token token = ToToken(line);
+            if (TokenMatcher.Match_FeatureLine(token) ||
+                TokenMatcher.Match_ScenarioLine(token) ||
+                TokenMatcher.Match_ScenarioOutlineLine(token) ||
+                TokenMatcher.Match_BackgroundLine(token) ||
+                TokenMatcher.Match_ExamplesLine(token) ||
+                TokenMatcher.Match_StepLine(token) ||
+                TokenMatcher.Match_TagLine(token) ||
+                TokenMatcher.Match_TableRow(token) ||
+                SimpleMatchLanguage(token))
+            {
+                return token;
+            }
+
+            return token;
+        }
+
+        /// <summary>
+        /// Parse first 6 lines to match language tag and update current Dialect
+        /// </summary>
+        public GherkinDialect CurrentDialect
+        {
+            get
+            {
+                const int MAX_TRY_COUNT = 6;
+                int tryCount = 0;
+                var lines = m_Doc.Lines;
+                foreach (var line in m_Doc.Lines)
+                {
+                    string text = GherkinFormatUtil.GetText(m_Doc, line);
+                    tryCount++;
+                    Token token = ToToken(text);
+                    if (SimpleMatchLanguage(token) || tryCount >= MAX_TRY_COUNT) break;
+                }
+
+                return TokenMatcher.CurrentDialect;
+            }
+        }
+
+        private bool SimpleMatchLanguage(Token token)
+        {
+            try
+            {
+                if (TokenMatcher.Match_Language(token))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public TokenType Parse(DocumentLine line)
@@ -113,10 +171,13 @@ namespace Gherkin.Model
 
         public void AppendMissingScenarioGUID()
         {
+            if (!GherkinFormatUtil.AppSettings.GenerateGUIDforScenario) return;
+
             DocumentLine line = m_Doc.GetLineByNumber(1);
             while (line != null)
             {
                 string line_text = GetText(m_Doc, line);
+                TryUpdateLanguage(line_text);
                 if (IsScenarioKeyWord(line_text))
                 {
                     string tag = MakeGUID(m_Doc, line.PreviousLine);
@@ -190,7 +251,7 @@ namespace Gherkin.Model
             if (TokenMatcher.Match_StepLine(token))
             {
                 string keyword = token.MatchedKeyword;
-                formatted_line = IDENT2 + keyword + token.MatchedText;
+                formatted_line = IDENT2 + keyword.Trim() + " " + token.MatchedText;
                 return true;
             }
 

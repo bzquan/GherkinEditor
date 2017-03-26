@@ -228,8 +228,14 @@
   <data name="MenuHelp_About" xml:space="preserve">
     <value>关于Gherkin Editor</value>
   </data>
+  <data name="MenuHelp_GherkinKeywords" xml:space="preserve">
+    <value>Gherkin关键字</value>
+  </data>
   <data name="MenuHelp_Help" xml:space="preserve">
     <value>帮助</value>
+  </data>
+  <data name="MenuSetting_AutoGenGUID" xml:space="preserve">
+    <value>自动为场景生成GUID</value>
   </data>
   <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
     <value>切换语言</value>
@@ -262,7 +268,7 @@
     <value>Gherkin折叠</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>Gherkin显示</value>
+    <value>设置关键字亮显</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>亮显当前行</value>
@@ -274,7 +280,7 @@
     <value>Mock属性颜色</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>缺省亮显颜色</value>
+    <value>全部缺省亮显颜色</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>设定</value>
@@ -328,6 +334,27 @@
   <data name="Message_AboutGherkinTitle" xml:space="preserve">
     <value>Gherkin编辑器</value>
   </data>
+  <data name="Message_CodeCompletionBackground" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Message_CodeCompletionExample" xml:space="preserve">
+    <value>例子</value>
+  </data>
+  <data name="Message_CodeCompletionFeature" xml:space="preserve">
+    <value>功能</value>
+  </data>
+  <data name="Message_CodeCompletionLanguage" xml:space="preserve">
+    <value>语言限定符。如指定#language: zh-CN，在功能描述中可使用中文。</value>
+  </data>
+  <data name="Message_CodeCompletionScenario" xml:space="preserve">
+    <value>场景</value>
+  </data>
+  <data name="Message_CodeCompletionScenarioOutline" xml:space="preserve">
+    <value>场景大纲</value>
+  </data>
+  <data name="Message_CodeCompletionStepKeyword" xml:space="preserve">
+    <value>步骤</value>
+  </data>
   <data name="Message_ConfirmRestartApp" xml:space="preserve">
     <value>切换语言后，需要重新启动</value>
   </data>
@@ -372,6 +399,15 @@
   </data>
   <data name="PrintButton_Cancel" xml:space="preserve">
     <value>取消</value>
+  </data>
+  <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
+    <value>缺省亮显颜色</value>
+  </data>
+  <data name="Tooltip_FontFamilty" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="Tooltip_FontSize" xml:space="preserve">
+    <value>字体大小</value>
   </data>
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>新建</value>

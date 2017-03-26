@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 
 namespace Gherkin.ViewModel
 {
-    public class GherkinSettings : NotifyPropertyChangedBase
+    public class GherkinSettingViewModel : NotifyPropertyChangedBase
     {
         private readonly Color FolderTextColorDefault = Colors.Blue;
         private readonly Color KeywordColorDefault = Colors.Blue;
@@ -44,7 +44,7 @@ namespace Gherkin.ViewModel
 
         public ObservableCollection<EditorTab> TabPanels { get; set; }
 
-        public GherkinSettings(IAppSettings appSettings)
+        public GherkinSettingViewModel(IAppSettings appSettings)
         {
             m_AppSettings = appSettings;
             GherkinUtil.RegisterGherkinHighlighting();
@@ -58,7 +58,18 @@ namespace Gherkin.ViewModel
             set
             {
                 m_AppSettings.SupportUnicode = value;
+                base.OnPropertyChanged(nameof(SupportUnicodeIcon));
                 base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage SupportUnicodeIcon
+        {
+            get
+            {
+                if (SupportUnicode)
+                    return Util.Util.DrawingImageByOverlapping("Unicode.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("Unicode.png");
             }
         }
 
@@ -78,6 +89,16 @@ namespace Gherkin.ViewModel
             set
             {
                 m_AppSettings.ShowSplitViewByDefault = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        public bool GenerateGUIDforScenario
+        {
+            get { return m_AppSettings.GenerateGUIDforScenario; }
+            set
+            {
+                m_AppSettings.GenerateGUIDforScenario = value;
                 base.OnPropertyChanged();
             }
         }
@@ -492,6 +513,32 @@ namespace Gherkin.ViewModel
         private void OnCreateKeywordsFile()
         {
             GherkinKeywordGenerator.GenerateKeywords();
+        }
+
+        Window m_SettingWindow;
+        public void ShowGherkinHighlightSettingWindow()
+        {
+            m_SettingWindow = new Window();
+            View.SettingControlView setting = new View.SettingControlView();
+            setting.DataContext = this;
+            m_SettingWindow.Content = setting;
+            m_SettingWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            m_SettingWindow.SizeToContent = SizeToContent.WidthAndHeight;
+            m_SettingWindow.Background = Brushes.LightGray;
+            m_SettingWindow.ResizeMode = ResizeMode.NoResize;
+            m_SettingWindow.WindowStyle = WindowStyle.None;
+            m_SettingWindow.BorderThickness = new Thickness(1);
+            m_SettingWindow.BorderBrush = Brushes.DarkGoldenrod;
+
+            m_SettingWindow.ShowInTaskbar = false;
+            m_SettingWindow.Title = Properties.Resources.MenuSetting_GherkinHighlighting;
+            m_SettingWindow.Deactivated += Window_Deactivated;
+            m_SettingWindow.Show();
+        }
+
+        void Window_Deactivated(object sender, System.EventArgs e)
+        {
+            m_SettingWindow.Close();
         }
     }
 }

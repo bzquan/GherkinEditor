@@ -228,8 +228,14 @@
   <data name="MenuHelp_About" xml:space="preserve">
     <value>Gherkin Editorについて</value>
   </data>
+  <data name="MenuHelp_GherkinKeywords" xml:space="preserve">
+    <value>Gherkinキーワード</value>
+  </data>
   <data name="MenuHelp_Help" xml:space="preserve">
     <value>ヘルプ</value>
+  </data>
+  <data name="MenuSetting_AutoGenGUID" xml:space="preserve">
+    <value>シナリオのGUIDを自動生成</value>
   </data>
   <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
     <value>言語設定</value>
@@ -262,7 +268,7 @@
     <value>Gherkin折畳み</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>Gherkin強調色</value>
+    <value>Gherkin強調色の設定</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>カレント行のハイライト</value>
@@ -274,7 +280,7 @@
     <value>Mock属性色</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>ディフォルト強調色</value>
+    <value>全てディフォルト強調色</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>設定</value>
@@ -328,6 +334,27 @@
   <data name="Message_AboutGherkinTitle" xml:space="preserve">
     <value>Gherkinエディタ</value>
   </data>
+  <data name="Message_CodeCompletionBackground" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Message_CodeCompletionExample" xml:space="preserve">
+    <value>例</value>
+  </data>
+  <data name="Message_CodeCompletionFeature" xml:space="preserve">
+    <value>機能</value>
+  </data>
+  <data name="Message_CodeCompletionLanguage" xml:space="preserve">
+    <value>言語タグ。#language: jaを指定することで、日本語機能記が可能。</value>
+  </data>
+  <data name="Message_CodeCompletionScenario" xml:space="preserve">
+    <value>シナリオ</value>
+  </data>
+  <data name="Message_CodeCompletionScenarioOutline" xml:space="preserve">
+    <value>シナリオアウトライン</value>
+  </data>
+  <data name="Message_CodeCompletionStepKeyword" xml:space="preserve">
+    <value>手順</value>
+  </data>
   <data name="Message_ConfirmRestartApp" xml:space="preserve">
     <value>言語切り替え後、再起動が必要です</value>
   </data>
@@ -372,6 +399,15 @@
   </data>
   <data name="PrintButton_Cancel" xml:space="preserve">
     <value>キャンセル</value>
+  </data>
+  <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
+    <value>ディフォルト強調色</value>
+  </data>
+  <data name="Tooltip_FontFamilty" xml:space="preserve">
+    <value>フォント</value>
+  </data>
+  <data name="Tooltip_FontSize" xml:space="preserve">
+    <value>フォントサイズ</value>
   </data>
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>新規作成</value>

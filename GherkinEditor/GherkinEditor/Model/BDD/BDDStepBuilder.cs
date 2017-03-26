@@ -5,6 +5,7 @@ using System.Linq;
 using Gherkin.Ast;
 
 using System.Text.RegularExpressions;
+using Gherkin.Model;
 
 namespace CucumberCpp
 {
@@ -36,15 +37,15 @@ namespace CucumberCpp
         {
             string keyword_orig = BDDUtil.RemoveAllWhiteSpaces(keyword);
 
-            if (BDDStepImplBuilderContext.GherkinDialect.GivenStepKeywords.Contains(keyword_orig))
+            if (GherkinKeyword.IsStepKeyword(keyword_orig, BDDStepImplBuilderContext.GherkinDialect.GivenStepKeywords))
                 return "Given";
-            else if (BDDStepImplBuilderContext.GherkinDialect.WhenStepKeywords.Contains(keyword_orig))
+            else if (GherkinKeyword.IsStepKeyword(keyword_orig, BDDStepImplBuilderContext.GherkinDialect.WhenStepKeywords))
                 return "When";
-            else if (BDDStepImplBuilderContext.GherkinDialect.ThenStepKeywords.Contains(keyword_orig))
+            else if (GherkinKeyword.IsStepKeyword(keyword_orig, BDDStepImplBuilderContext.GherkinDialect.ThenStepKeywords))
                 return "Then";
-            else if (BDDStepImplBuilderContext.GherkinDialect.AndStepKeywords.Contains(keyword_orig))
+            else if (GherkinKeyword.IsStepKeyword(keyword_orig, BDDStepImplBuilderContext.GherkinDialect.AndStepKeywords))
                 return "And";
-            else if (BDDStepImplBuilderContext.GherkinDialect.ButStepKeywords.Contains(keyword_orig))
+            else if (GherkinKeyword.IsStepKeyword(keyword_orig, BDDStepImplBuilderContext.GherkinDialect.ButStepKeywords))
                 return "But";
 
             return keyword_orig;

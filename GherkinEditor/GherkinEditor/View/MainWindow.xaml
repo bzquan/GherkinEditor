@@ -14,7 +14,11 @@
         AllowDrop="True"
         Drop="Window_Drop"
         PreviewDragOver="Window_PreviewDragOver"
-        Title="{Binding CurrentFilePath}" Height="900" Width="760" WindowStartupLocation="CenterScreen" ContentRendered="OnWindowContentRendered"  Closing="OnClosing">
+        Height="900" Width="760"
+        Title="{Binding CurrentFilePath}"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="OnWindowContentRendered"
+        Closing="OnClosing">
 
     <Window.CommandBindings>
         <CommandBinding Command="Find" Executed="OnFindAndReplace" CanExecute="CanExecuteEditorCommand"/>
@@ -27,6 +31,11 @@
     </Window.CommandBindings>
 
     <Window.Resources>
+        <BitmapImage x:Key="scenarioIndexImage" UriSource="Images/Index.png"/>
+        <BitmapImage x:Key="horizontalSplitImage" UriSource="Images/HSplit.png"/>
+        <BitmapImage x:Key="supportUnicodeImage" UriSource="Images/Unicode.png"/>
+        <BitmapImage x:Key="messageWindowImage" UriSource="Images/MessageWindow.png"/>
+        
         <!-- local:TabSizeConverter x:Key="tabSizeConverter" / -->
         <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
 
@@ -111,17 +120,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Style TargetType="{x:Type local:EditorTab}">
-            <Setter Property="MaxWidth">
-                <Setter.Value>
-                    <MultiBinding Converter="{StaticResource tabSizeConverter}">
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}" />
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TabControl}}" Path="ActualWidth" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-        </Style -->
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -298,9 +296,9 @@
                 <MenuItem IsCheckable="True" Header="{x:Static p:Resources.MenuSetting_ShowCurrentLineBorder}" StaysOpenOnClick="True" IsChecked="{Binding GherkinSettings.ShowCurrentLineBorder}"/>
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinFolding}">
                     <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_FoldTextColor}" Background="White" Foreground="{Binding GherkinSettings.FoldingTextBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding Path=GherkinSettings.ResetFolderTextColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
+                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_FoldTextColor}" VerticalAlignment="Center" Background="White" Foreground="{Binding GherkinSettings.FoldingTextBrush}"/>
+                        <Button DockPanel.Dock="Right" ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}" Command="{Binding Path=GherkinSettings.ResetFolderTextColorCmd}">
+                            <local:AutoGreyableImage Source="Images/Reset.png" Width ="24" Height="24"/>
                         </Button>
                         <xctk:ColorPicker Margin="6, 0, 6, 0"
                                       AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
@@ -321,106 +319,31 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinHighlighting}">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_KeywordColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingKeywordBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetKeywordColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingKeywordColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_StepWordColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingStepWordBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetStepWordColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingStepWordColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_TableColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingTableBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetTableColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingTableColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_TagColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingTagBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetTagColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingTagColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_DocStringColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingDocStringBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetDocStringColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingDocStringColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_ConstantsColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingConstantsBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetConstantsColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingConstantsColor}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{x:Static p:Resources.MenuSetting_MockColor}" Background="White" Foreground="{Binding GherkinSettings.HighlightingMockAttributeBrush}"/>
-                        <Button DockPanel.Dock="Right" Command="{Binding GherkinSettings.ResetMockAttributeColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Delete.png" Width ="16" Height="16"/>
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                      AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                      StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                      RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                      ShowRecentColors="True"
-                                      ShowAdvancedButton="False"
-                                      SelectedColor="{Binding GherkinSettings.SelectedHighlightingMockAttributeColor}"/>
-                    </DockPanel>
-                    <MenuItem Header="{x:Static p:Resources.MenuSetting_ResetHighlightingColor}"
-                              StaysOpenOnClick="True"
-                              Command="{Binding GherkinSettings.ResetHighlightingColorsCmd}">
-                        <MenuItem.Icon>
-                            <local:AutoGreyableImage Source="Images/Reset.png" Height="24"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinHighlighting}" Command="{Binding SetGherkinHighlightingCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Setting.png" Height="24"/>
+                    </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamilty}" FontFamily="{Binding CurrentFontFamily}" VerticalAlignment="Center" Margin="0, 0, 6, 0"/>
+                            <ComboBox Name="fontComboBox" Width="80"
+                                SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
+                                ItemsSource="{Binding FontViewModel.SystemFonts}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        <Image Source="Images/Font.png" Height="24"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsCheckable="True" Header="{x:Static p:Resources.MenuSetting_AutoGenGUID}" StaysOpenOnClick="True" IsChecked="{Binding GherkinSettings.GenerateGUIDforScenario}"/>
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_ChangeLanguage}">
                     <MenuItem.Icon>
                         <Image Source="Images/LanguageChange.png" Height="24"/>
@@ -443,6 +366,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuHelp_Help}">
+                <MenuItem Header="{x:Static p:Resources.MenuHelp_GherkinKeywords}" Click="OnGherkinKeywordsMenuClicked"/>
                 <MenuItem Header="{x:Static p:Resources.MenuHelp_About}" Command="{Binding AboutViewModel.AboutGherkinCmd}"/>
             </MenuItem>
         </Menu>
@@ -493,23 +417,30 @@
             </Button>
             <Separator/>
             <CheckBox ToolTip="{x:Static p:Resources.Tooltip_ShowScenarioIndex}" IsChecked="{Binding ShowScenarioIndex}">
-                <Image Source="Images/Index.png" Height="16"/>
+                <Image Source="{Binding ScenarioIndexIcon, FallbackValue={StaticResource scenarioIndexImage}}" Height="16"/>
             </CheckBox>
             <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SplitEditor}" IsChecked="{Binding ShowSplitView}">
-                <Image Source="Images/HSplit.png" Height="16"/>
+                <Image Source="{Binding HorizontalSplitIcon, FallbackValue={StaticResource horizontalSplitImage}}" Height="16"/>
             </CheckBox>
             <Button Command="{Binding GenCPPTestCodeCmd}" ToolTip="{x:Static p:Resources.MenuCompile_GenCpp}">
                 <Image Source="Images/Gencode.png" Height="16"/>
             </Button>
             <CheckBox ToolTip="{x:Static p:Resources.MenuView_GenCodeMessageWindow}" IsChecked="{Binding ShowMessageWindow}">
-                <Image Source="Images/MessageWindow.png" Height="16"/>
+                <Image Source="{Binding MessageWindowIcon, FallbackValue={StaticResource messageWindowImage}}" Height="16"/>
             </CheckBox>
             <CheckBox ToolTip="{x:Static p:Resources.MenuCompile_SupportUnicode}" IsChecked="{Binding GherkinSettings.SupportUnicode}">
-                <Image Source="Images/Unicode.png" Height="16"/>
+                <Image Source="{Binding GherkinSettings.SupportUnicodeIcon, FallbackValue={StaticResource supportUnicodeImage}}" Height="16"/>
             </CheckBox>
             <Button Name="gherkinKeywordsButton" ToolTip="{Binding GherkinSettings.GherkinKeywords}">
                 <Image Source="Images/WordIcon.png" Height="16"/>
             </Button>
+            <xctk:IntegerUpDown FormatString="N0"
+                                AllowTextInput="False"
+                                Value="{Binding CurrentFontSize, Mode=TwoWay, FallbackValue=10}"
+                                Increment="1"
+                                Minimum="10"
+                                Maximum="28"
+                                ToolTip="{x:Static p:Resources.Tooltip_FontSize}"/>
             <Button Name="createHighlightingFilesButton"  Command="{Binding GherkinSettings.CreateHighlightingFilesCmd}" ToolTip="Create Gherkin highlighting files"
                     Visibility="{Binding GherkinSettings.EnableCreateHighlightingFiles}">
                 <Image Source="Images/CreateHighlightingFiles.png" Height="16"/>
@@ -518,21 +449,6 @@
                     Visibility="{Binding GherkinSettings.EnableCreateHighlightingFiles}">
                 <Image Source="Images/Keywords.png" Height="16"/>
             </Button>
-            <Separator/>
-            <ComboBox Name="fontComboBox" Margin="10, 0, 0, 0" Width="80"
-              SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
-              ItemsSource="{Binding FontViewModel.SystemFonts}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ComboBox Name="fontSizeComboBox" MinWidth="40" Margin="2,0,0,0"
-                      ItemsSource="{Binding FontViewModel.FontSizes}"
-                      SelectedItem="{Binding CurrentFontSize, Mode=TwoWay}">
-            </ComboBox>
-            <Separator/>
         </ToolBar>
         <StatusBar Name="statusbar" DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -549,6 +465,7 @@
                     <!-- Header -->
                     <DataTemplate x:Key="TabHeader" DataType="vm:EditorTab">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Image Name="documentChangeStatus" Source="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DocumentModificationStatusIcon}"/>
                             <TextBlock Name="tabTextBlock" Text="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=Header}" />
                             <Button Name="deleteTab" Margin="5,0,0,0" Padding="0" Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DeleteTabCmd}">
                                 <Image Source="Images/DeleteTab.png" Height="12"></Image>
@@ -579,15 +496,16 @@
                                         <Image Source="Images/HideScenarioIndex.png" Height="12" Width="12"/>
                                     </Button>
                                 </Grid>
-                                <ListBox Margin="0, 0, 6, 0" Grid.Row="1" HorizontalAlignment="Stretch"
-                             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=ScenarioIndexes}"
-                             SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=SelectedScenarioIndex}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <ContentControl Content="{Binding Path=Title}">
-                                            </ContentControl>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
+                                <ListBox Margin="0, 0, 6, 0" Grid.Row="1"
+                                         HorizontalAlignment="Stretch"
+                                         ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=ScenarioIndexes}"
+                                         SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=SelectedScenarioIndex}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ContentControl Content="{Binding Path=Title}">
+                                                </ContentControl>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
                                 </ListBox>
                             </Grid>
                             <GridSplitter Name="vsplitter"

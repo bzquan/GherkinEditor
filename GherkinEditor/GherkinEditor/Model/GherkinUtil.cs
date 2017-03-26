@@ -10,6 +10,7 @@ namespace Gherkin.Model
     {
         public const string DEFAULT_LANGUAGE = "en";
         public const string GherkinHighlightingBaseName = "GherkinHighlighting";
+        public const string FEATURE_EXTENSION = ".feature";
 
         static GherkinDialectProviderExtention s_GherkinDialectcs = new GherkinDialectProviderExtention();
         static List<string> s_LoadedHighlitings = new List<string>();
@@ -77,7 +78,7 @@ namespace Gherkin.Model
                 s_LoadedHighlitings.Add(language);
 
                 // and register it in the HighlightingManager
-                HighlightingManager.Instance.RegisterHighlighting(GherkinHighlightingName(language), new string[] { ".Feature" }, gherkinHighlighting);
+                HighlightingManager.Instance.RegisterHighlighting(GherkinHighlightingName(language), new string[] { FEATURE_EXTENSION }, gherkinHighlighting);
             }
         }
 

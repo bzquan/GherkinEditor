@@ -26,6 +26,7 @@ namespace Gherkin.Util
         bool ShowSplitViewByDefault { get; set; }
         bool HighlightCurrentLine { get; set; }
         bool ShowCurrentLineBorder { get; set; }
+        bool GenerateGUIDforScenario { get; set; }
 
         string ColorOfFoldingText { get; set; }
         string ColorOfHighlightingKeyword { get; set; }

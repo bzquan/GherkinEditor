@@ -1,10 +1,4 @@
-﻿using Gherkin.Model;
-using Gherkin.Util;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Folding;
-using ICSharpCode.AvalonEdit.Highlighting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,6 +9,15 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Folding;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.CodeCompletion;
+using Gherkin.Model;
+using Gherkin.Util;
+using System.Windows.Input;
+
 namespace Gherkin.ViewModel
 {
     public class GherkinEditor
@@ -24,12 +27,26 @@ namespace Gherkin.ViewModel
         static readonly Pen s_CurrentLineBorderTransparentPen = new Pen(Brushes.Transparent, thickness: 1);
         private static FontSizeConverter s_FontSizeConv = new FontSizeConverter();
 
+        private GherkinCodeCompletion m_GherkinCodeCompletion;
         private bool m_ShowCurrentLineBorder = true;
         private bool m_HighlightCurrentLine = true;
 
         public GherkinEditor(TextEditor editor, IAppSettings appSettings)
         {
             TextEditor = editor;
+
+            ConfigTextEditor(editor, appSettings);
+            editor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(editor);
+            m_GherkinCodeCompletion = new GherkinCodeCompletion(editor, appSettings);
+
+            HighlightCurrentLine = appSettings.HighlightCurrentLine;
+            ShowCurrentLineBorder = appSettings.ShowCurrentLineBorder;
+
+            EventAggregator<IndentationCompletedArg>.Instance.Event += OnIndentationCompleted;
+        }
+
+        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings)
+        {
             editor.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             editor.ShowLineNumbers = true;
             editor.LineNumbersForeground = Brushes.DarkGray;
@@ -40,11 +57,6 @@ namespace Gherkin.ViewModel
             editor.Options.ConvertTabsToSpaces = true;
             editor.FontFamily = new FontFamily(appSettings.FontFamilyName);
             editor.FontSize = ToFontSizeByPoint(appSettings.FontSize);
-
-            editor.TextArea.IndentationStrategy = new GherkinIndentationStrategy();
-
-            HighlightCurrentLine = appSettings.HighlightCurrentLine;
-            ShowCurrentLineBorder = appSettings.ShowCurrentLineBorder;
         }
 
         public TextEditor TextEditor { get; set; }
@@ -113,7 +125,7 @@ namespace Gherkin.ViewModel
         {
             TextEditor.TextArea.Caret.Offset = offset;
             TextEditor.TextArea.Caret.BringCaretToView();
-            System.Windows.Input.Keyboard.Focus(TextEditor);     // Display Cursor by focusing the editor
+            Keyboard.Focus(TextEditor);     // Display Cursor by focusing the editor
         }
 
         public IHighlightingDefinition SyntaxHighlighting
@@ -144,6 +156,22 @@ namespace Gherkin.ViewModel
         private double ToFontSizeByPoint(string fontSize)
         {
             return (double)s_FontSizeConv.ConvertFromString(fontSize + "pt");
+        }
+
+        /// <summary>
+        /// Scroll cursor to original position if the document of this editor has been indented.
+        /// </summary>
+        /// <param name="sender">Indented document</param>
+        /// <param name="arg"></param>
+        private void OnIndentationCompleted(object sender, IndentationCompletedArg arg)
+        {
+            if (Document == sender)
+            {
+                int lineNo = Math.Min(Document.LineCount, arg.Line);
+                var line = Document.GetLineByNumber(lineNo);
+                int column = Math.Min(arg.Column, line.Length);
+                ScrollCursorTo(lineNo, column);
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ using ICSharpCode.AvalonEdit.Document;
 using System.IO;
 using System.Xml;
 using Gherkin.Util;
+using static Gherkin.Util.Util;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -25,6 +26,13 @@ namespace Gherkin.ViewModel
     {
         const string editorDataTemplate = "editorDataTemplate";
 
+        public delegate void FileNameChangedHandler(string filePath);
+        public delegate void TextEditorLoadedHandler();
+
+        public event FileNameChangedHandler FileNameChangedEvent;
+        public event TextEditorLoadedHandler TextEditorLoadedEvent;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private ObservableCollection<ScenarioIndex> m_ScenarioIndexList = new ObservableCollection<ScenarioIndex>();
 
         private bool m_IsCloseTablesFolding;
@@ -35,16 +43,10 @@ namespace Gherkin.ViewModel
         private bool m_IsSplitViewHidden;
         private int m_SelectedScenarioIndex;
 
-        private bool IsEditorViewLoaded { get; set; } = false;
         private GherkinEditor MainGherkinEditor { get; set; }
         private GherkinEditor SubGherkinEditor { get; set; }
         private IAppSettings m_AppSettings;
         private GherkinFoldingStrategy FoldingStrategy { get; set; }
-
-        public delegate void FileNameChangedHandler(string filePath);
-        public event FileNameChangedHandler FileNameChangedEvent;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public TextEditor MainEditor { get; private set; }
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
@@ -79,7 +81,6 @@ namespace Gherkin.ViewModel
         {
             if (!IsEditorViewLoaded)
             {
-                IsEditorViewLoaded = true;
                 InitializeEditorView();
             }
 
@@ -90,6 +91,8 @@ namespace Gherkin.ViewModel
             // Root cause: Microsoft bug?
             Keyboard.Focus(MainEditor);
         }
+
+        private bool IsEditorViewLoaded => MainEditor != null;
 
         private void InitializeEditorView()
         {
@@ -105,6 +108,7 @@ namespace Gherkin.ViewModel
                 Load(CurrentFilePath);
                 EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
                 EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Ready"));
+                TextEditorLoadedEvent?.Invoke();
             }
             catch (Exception ex)
             {
@@ -183,9 +187,11 @@ namespace Gherkin.ViewModel
 
         public void Load(string filePath)
         {
-            if ((MainEditor == null) || (filePath == null)) return;
-
-            if (File.Exists(filePath))
+            if (!IsEditorViewLoaded)
+            {
+                CurrentFilePath = filePath;
+            }
+            else if ((filePath != null) && File.Exists(filePath))
             {
                 MainEditor.Load(filePath);
                 UpdateEditor(filePath);
@@ -197,11 +203,11 @@ namespace Gherkin.ViewModel
         {
             SetSyntaxHighlighting(filePath);
             InstallFoldingManager();
-            bool isSavedAs = (CurrentFilePath != filePath);
             CurrentFilePath = filePath;
+            Document.FileName = filePath;
             FileNameChangedEvent?.Invoke(filePath);
 
-            if (isSavedAs)
+            if (CurrentFilePath != filePath)
             {
                 EventAggregator<FileSavedAsArg>.Instance.Publish(this, new FileSavedAsArg(CurrentFilePath));
             }
@@ -217,7 +223,7 @@ namespace Gherkin.ViewModel
         private void SetSyntaxHighlighting(string filePath)
         {
             IHighlightingDefinition highlighting;
-            if (Path.GetExtension(filePath) == ".feature")
+            if (Path.GetExtension(filePath) == GherkinUtil.FEATURE_EXTENSION)
             {
                 highlighting = HighlightingManager.Instance.GetDefinition(GherkinUtil.GherkinHighlightingName(CurrentLanguage));
             }
@@ -245,7 +251,7 @@ namespace Gherkin.ViewModel
         {
             if (string.IsNullOrEmpty(CurrentFilePath) || (MainGherkinEditor == null)) return;
 
-            if (Path.GetExtension(CurrentFilePath) == ".feature")
+            if (Path.GetExtension(CurrentFilePath) == GherkinUtil.FEATURE_EXTENSION)
             {
                 GherkinUtil.RegisterGherkinHighlighting(CurrentLanguage);
                 IHighlightingDefinition highlighting = GetHighlightingDefinition();
@@ -272,7 +278,6 @@ namespace Gherkin.ViewModel
 
         private void ConfigHighlightColor(IHighlightingDefinition highlighting, string name)
         {
-            HighlightingColor highlightingColor;
             string color_name = null;
             switch (name)
             {
@@ -299,10 +304,13 @@ namespace Gherkin.ViewModel
                     break;
             }
 
-            if (color_name == null) return;
-
-            highlightingColor = highlighting.GetNamedColor(name);
-            highlightingColor.Foreground = new SimpleHighlightingBrush(color_name.ToColor());
+            color_name.IfNotNull(x =>
+                {
+                    HighlightingColor highlightingColor;
+                    highlightingColor = highlighting.GetNamedColor(name);
+                    highlightingColor.Foreground = new SimpleHighlightingBrush(x.ToColor());
+                }
+            );
         }
 
         private void InstallFoldingManager()
@@ -461,7 +469,7 @@ namespace Gherkin.ViewModel
             if (string.IsNullOrEmpty(CurrentFilePath) || saveAs)
             {
                 SaveFileDialog dlg = new SaveFileDialog();
-                dlg.DefaultExt = ".feature";
+                dlg.DefaultExt = GherkinUtil.FEATURE_EXTENSION;
                 dlg.FilterIndex = 1;
                 dlg.Filter = "Gherkin feature(.feature)|*.feature|Text File(*.txt)|*.txt|All Files (*.*)|*.*";
                 bool? result = dlg.ShowDialog();

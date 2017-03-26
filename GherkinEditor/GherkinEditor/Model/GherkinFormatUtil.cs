@@ -8,6 +8,7 @@ namespace Gherkin.Model
 {
     public static class GherkinFormatUtil
     {
+        public static Util.IAppSettings AppSettings { get; set; }
         public static string GetText(TextDocument document, DocumentLine line)
         {
             return document.GetText(line.Offset, line.TotalLength);
@@ -94,6 +95,8 @@ namespace Gherkin.Model
 
         public static string MakeGUID(TextDocument document, DocumentLine line)
         {
+            if (!AppSettings.GenerateGUIDforScenario) return "";
+
             while (line != null)
             {
                 string text = GetText(document, line);

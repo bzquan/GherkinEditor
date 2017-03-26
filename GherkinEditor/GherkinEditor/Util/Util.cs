@@ -77,12 +77,6 @@ namespace Gherkin.Util
 
         public static string StartupFolder() => System.AppDomain.CurrentDomain.BaseDirectory;
 
-        //private static string GetApplicationDirectory()
-        //{
-        //    string appPath = System.Windows.Application.ResourceAssembly.Location;
-        //    return Path.GetDirectoryName(appPath);
-        //}
-
         public static bool ExistOnStartupFolder(params string[] fileNames)
         {
             foreach (string fileName in fileNames)
@@ -109,6 +103,31 @@ namespace Gherkin.Util
         }
 
         /// <summary>
+        /// Make an image from overlapped two images
+        /// </summary>
+        /// <param name="image_name1"></param>
+        /// <param name="image_name2"></param>
+        /// <returns></returns>
+        public static DrawingImage DrawingImageByOverlapping(string image_name1, string image_name2)
+        {
+            var group = new DrawingGroup();
+            var image1 = ImageFromResource(image_name1);
+            group.Children.Add(new ImageDrawing(image1, new Rect(0, 0, image1.Width, image1.Height)));
+
+            // draw image2 on top of image1, using same rect as image1
+            var image2 = ImageFromResource(image_name2);
+            group.Children.Add(new ImageDrawing(image2, new Rect(0, 0, image1.Width, image1.Height)));
+
+            return new DrawingImage(group);
+        }
+
+        public static DrawingImage DrawingImageFromResource(string image_name)
+        {
+            var image = ImageFromResource(image_name);
+            return new DrawingImage(new ImageDrawing(image, new Rect(0, 0, image.Width, image.Height)));
+        }
+
+        /// <summary>
         /// Resourceからイメージオブジェクトを取得する
         /// </summary>
         /// <param name="image_name"></param>
@@ -122,7 +141,7 @@ namespace Gherkin.Util
         public static string PackImageURI(string image_name)
         {
             if (image_name != null)
-                return "pack://application:,,,/Kanban;component/images/" + image_name;
+                return "pack://application:,,,/View/Images/" + image_name;
             else
                 return null;
         }
@@ -159,6 +178,12 @@ namespace Gherkin.Util
             return new DrawingImage(visual.Drawing);
         }
 
+        /// <summary>
+        /// Usage sample :  obj.IfNotNull(x => statements);
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="action"></param>
         public static void IfNotNull<T>(this T obj, Action<T> action) where T : class
         {
             if (obj != null) action(obj);

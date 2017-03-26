@@ -228,8 +228,14 @@
   <data name="MenuHelp_About" xml:space="preserve">
     <value>About Gherkin Editor</value>
   </data>
+  <data name="MenuHelp_GherkinKeywords" xml:space="preserve">
+    <value>Gherkin keywords</value>
+  </data>
   <data name="MenuHelp_Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="MenuSetting_AutoGenGUID" xml:space="preserve">
+    <value>Generate GUID for scenarios</value>
   </data>
   <data name="MenuSetting_ChangeLanguage" xml:space="preserve">
     <value>Change language</value>
@@ -262,7 +268,7 @@
     <value>Gherkin folding</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>Gherkin highlighting</value>
+    <value>Setting keywords highlighting</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>Highlight current line</value>
@@ -274,7 +280,7 @@
     <value>Mock color</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>Reset highlighting colors</value>
+    <value>Reset all highlighting colors</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>Setting</value>
@@ -328,6 +334,27 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Message_AboutGherkinTitle" xml:space="preserve">
     <value>Gherkin Editor</value>
   </data>
+  <data name="Message_CodeCompletionBackground" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="Message_CodeCompletionExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="Message_CodeCompletionFeature" xml:space="preserve">
+    <value>Feature</value>
+  </data>
+  <data name="Message_CodeCompletionLanguage" xml:space="preserve">
+    <value>Language tag. Any language different from English should be explicitly marked with a #language: ... comment at the beginning of the feature.</value>
+  </data>
+  <data name="Message_CodeCompletionScenario" xml:space="preserve">
+    <value>Scenario</value>
+  </data>
+  <data name="Message_CodeCompletionScenarioOutline" xml:space="preserve">
+    <value>Scenario outline</value>
+  </data>
+  <data name="Message_CodeCompletionStepKeyword" xml:space="preserve">
+    <value>Step</value>
+  </data>
   <data name="Message_ConfirmRestartApp" xml:space="preserve">
     <value>You need to restart the application to make new language effective</value>
   </data>
@@ -372,6 +399,15 @@ It can generate C++ test code based on GoogleTest.</value>
   </data>
   <data name="PrintButton_Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
+    <value>Use default color</value>
+  </data>
+  <data name="Tooltip_FontFamilty" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="Tooltip_FontSize" xml:space="preserve">
+    <value>Font size</value>
   </data>
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>New file</value>

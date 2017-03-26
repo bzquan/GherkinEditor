@@ -24,8 +24,9 @@ namespace Gherkin.View
         private IAppSettings m_AppSettings;
         private GherkinViewModel m_ViewModel;
         private InteropMessageReceiver m_InteropMessageReceiver;
+        private GherkinKeywordsViewModel m_GherkinKeywordsViewModel;
 
-        public MainWindow(Util.IAppSettings appSettings, ViewModel.GherkinViewModel viewModel)
+        public MainWindow(IAppSettings appSettings, GherkinViewModel viewModel, GherkinKeywordsViewModel gherkinKeywordsViewModel)
         {
             InitializeComponent();
 
@@ -34,6 +35,7 @@ namespace Gherkin.View
                                                                                                 // プログラムの言語設定をしておく必要があります。
             m_AppSettings = appSettings;
             m_ViewModel = viewModel;
+            m_GherkinKeywordsViewModel = gherkinKeywordsViewModel;
             m_ViewModel.EditorTabControl = editorTabControl;
             gherkinKeywordsButton.Visibility = Visibility.Collapsed;
             editorTabControl.SizeChanged += OnEditorTabControlSizeChanged;
@@ -203,6 +205,13 @@ namespace Gherkin.View
             m_InteropMessageReceiver.InitHwnd();
 
             m_ViewModel.IsAllowRunningMultiApps = false;
+        }
+
+        private void OnGherkinKeywordsMenuClicked(object sender, RoutedEventArgs e)
+        {
+            GherkinKeywords help = new GherkinKeywords(m_GherkinKeywordsViewModel);
+            help.Owner = this;
+            help.Show();
         }
     }
 }

@@ -8,11 +8,19 @@ using ICSharpCode.AvalonEdit.Document;
 using static Gherkin.Model.GherkinFormatUtil;
 using static Gherkin.Util.StringBuilderExtension;
 using Gherkin.Util;
+using ICSharpCode.AvalonEdit;
 
 namespace Gherkin.Model
 {
     public class GherkinIndentationStrategy : DefaultIndentationStrategy
     {
+        private TextEditor Editor { get; set; }
+
+        public GherkinIndentationStrategy(TextEditor editor)
+        {
+            Editor = editor;
+        }
+
         public override void IndentLine(TextDocument document, DocumentLine line)
         {
             if (document == null) throw new ArgumentNullException(nameof(document));
@@ -39,11 +47,11 @@ namespace Gherkin.Model
                                      MakeThreeLines(guid_tag, result.Item2, GherkinSimpleParser.IDENT2));
                     break;
                 case TokenType.TableRow:
-                    bool success = MakeFormattedTable(document, line);
-                    if (!success)
-                    {
+                    int lineNo = line.LineNumber;
+                    if (MakeFormattedTable(document, line))
+                        MoveCursorToFirstCellOfTableRow(lineNo);
+                    else
                         base.IndentLine(document, line);
-                    }
                     break;
                 default:
                     base.IndentLine(document, line);
@@ -58,6 +66,8 @@ namespace Gherkin.Model
             int length = CalcSegmentLength(line, endLine);
             if ((offset == -1) || (length == 0)) return;
 
+            IndentationCompletedArg eventArg = PrepareIndentationCompletedArg(document);
+
             GherkinSimpleParser parser = new GherkinSimpleParser(document);
             string formatted_text = parser.Format(beginLine, endLine);
             if (endLine == document.LineCount)
@@ -68,7 +78,17 @@ namespace Gherkin.Model
             }
             document.Replace(offset, length, formatted_text);
 
-            EventAggregator<IndentationCompletedArg>.Instance.Publish(this, new IndentationCompletedArg());
+            EventAggregator<IndentationCompletedArg>.Instance.Publish(document, eventArg);
+        }
+
+        private IndentationCompletedArg PrepareIndentationCompletedArg(TextDocument document)
+        {
+            int currentLineNo = Editor.TextArea.Caret.Line;
+            int currentColumnNo = Editor.TextArea.Caret.Column;
+            DocumentLine line = document.GetLineByNumber(currentLineNo);
+            string line_text = GetText(document, line);
+
+            return new IndentationCompletedArg(currentLineNo, currentColumnNo, line_text);
         }
 
         private int CalcSegmentLength(DocumentLine beginLine, int endLine)
@@ -81,6 +101,20 @@ namespace Gherkin.Model
                 line = line.NextLine;
             }
             return length;
+        }
+
+        private void MoveCursorToFirstCellOfTableRow(int lineNo)
+        {
+            TextDocument document = Editor.Document;
+            DocumentLine line = document.GetLineByNumber(lineNo);
+
+            string line_text = GetText(document, line);
+            int column = line_text.IndexOf('|');
+            if (column >= 0)
+            {
+                int offset = line.Offset + column + 1;
+                Editor.TextArea.Caret.Offset = offset;
+            }
         }
     }
 }

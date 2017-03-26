@@ -20,13 +20,13 @@ namespace Gherkin.ViewModel
             View.AboutControlView about = new View.AboutControlView();
             AboutControlViewModel vm = (AboutControlViewModel)about.FindResource("ViewModel");
 
-            vm.ApplicationLogo = new System.Windows.Media.Imaging.BitmapImage(new System.Uri("pack://application:,,,/View/Images/Gherkin.png"));
+            vm.ApplicationLogo = Util.Util.DrawingImageFromResource("Gherkin.png");
             vm.Title = Properties.Resources.Message_AboutGherkinTitle;
             vm.Description = Properties.Resources.Message_AboutGherkinDescription;
-            vm.Version = "1.0.2";
-            vm.PublisherLogo = new System.Windows.Media.Imaging.BitmapImage(new System.Uri("pack://application:,,,/View/Images/Feature.png"));
+            vm.Version = "1.2.0";
+            vm.PublisherLogo = Util.Util.DrawingImageFromResource("Feature.png");
             vm.ReleaseNote = LoadReleaseNote();
-            vm.HyperlinkText = "https://github.com/bzquan";
+            vm.HyperlinkText = "https://github.com/bzquan/GherkinEditor";
             vm.Window.Content = about;
             vm.Window.Show();
         }

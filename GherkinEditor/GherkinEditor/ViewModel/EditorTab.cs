@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using Gherkin.ViewModel;
 using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
 using System.Windows;
-using Gherkin.Util;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Gherkin.Util;
+using static Gherkin.Util.Util;
 
 namespace Gherkin.ViewModel
 {
-    public class EditorTab : TabItem
+    public class EditorTab : TabItem, INotifyPropertyChanged
     {
         private TextBlock TabTextBlock { get; set; }
 
         public EditorView EditorView { get; set; }
         public TextEditor MainEditor => EditorView.MainEditor;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public EditorTab()
         {
@@ -27,6 +27,39 @@ namespace Gherkin.ViewModel
             ToolTip = Properties.Resources.Message_UnknownFileName;
 
             base.Loaded += OnEditorTabLoaded;
+        }
+
+        private void OnTextEditorLoadedEvent()
+        {
+            MainEditor.TextChanged += OnTextEditorTextChanged;
+        }
+
+        public string DocumentModificationStatusIcon
+        {
+            get
+            {
+                string image_name = (MainEditor?.IsModified == true) ? "Modified.png" : "Unchanged.png";
+                return PackImageURI(image_name);
+            }
+        }
+
+        /// <summary>
+        /// Notify updating DocumentModificationStatusIcon.
+        /// Note: Do this work in background because we may have received TextChanged
+        /// before TextEditor's IsModified property updated
+        /// property stay unchanged.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnTextEditorTextChanged(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                App.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DocumentModificationStatusIcon)));
+                }));
+            });
         }
 
         private void OnEditorTabLoaded(object sender, RoutedEventArgs e)
@@ -42,16 +75,14 @@ namespace Gherkin.ViewModel
             EditorView = editorView;
             base.Content = editorView;
 
+            EditorView.TextEditorLoadedEvent += OnTextEditorLoadedEvent;
             editorView.FileNameChangedEvent += OnFileNameChangedEvent;
         }
 
         public void SetMaxWidth(double width)
         {
             // TabTextBlock may be null when EditorTab has not been loaded yet
-            if (TabTextBlock != null)
-            {
-                TabTextBlock.MaxWidth = Math.Max(width - 40, 1);
-            }
+            TabTextBlock.IfNotNull( x => x.MaxWidth = Math.Max(width - 40, 1));
         }
 
         private void OnFileNameChangedEvent(string filePath)
