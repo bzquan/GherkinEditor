@@ -415,6 +415,9 @@
   <data name="Tooltip_OpenFile" xml:space="preserve">
     <value>打开</value>
   </data>
+  <data name="Tooltip_SaveAllFiles" xml:space="preserve">
+    <value>全部保存</value>
+  </data>
   <data name="Tooltip_SaveFile" xml:space="preserve">
     <value>保存</value>
   </data>

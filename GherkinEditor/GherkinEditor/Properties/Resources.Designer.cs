@@ -953,6 +953,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save all.
+        /// </summary>
+        public static string Tooltip_SaveAllFiles {
+            get {
+                return ResourceManager.GetString("Tooltip_SaveAllFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save file.
         /// </summary>
         public static string Tooltip_SaveFile {

@@ -1,7 +1,7 @@
 # Gherkin Editor
 
 An editor for specification by example in Gherkin.
-It is a WPF application in C#.
+It is a WPF application in C# and is developed by using Visual studio 2015.
 
 # Screen shot
 ![sceen shot](https://github.com/bzquan/GherkinEditor/blob/master/ScreenShot.png)

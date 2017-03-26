@@ -389,6 +389,9 @@
             <Button ToolTip="{x:Static p:Resources.Tooltip_SaveFile}" Command="Save">
                 <Image Source="Images/Save.png" Height="16"/>
             </Button>
+            <Button Command="{Binding SaveAllCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveAllFiles}">
+                <Image Source="Images/SaveAll.png" Height="16"/>
+            </Button>
             <Separator/>
             <Button Command="Find" ToolTip="{x:Static p:Resources.MenuFind_FindReplace}">
                 <Image Source="Images/FindReplace.png" Height="16"/>
@@ -441,7 +444,7 @@
                                 Minimum="10"
                                 Maximum="28"
                                 ToolTip="{x:Static p:Resources.Tooltip_FontSize}"/>
-            <Button Name="createHighlightingFilesButton"  Command="{Binding GherkinSettings.CreateHighlightingFilesCmd}" ToolTip="Create Gherkin highlighting files"
+            <Button Name="createHighlightingFilesButton" Command="{Binding GherkinSettings.CreateHighlightingFilesCmd}" ToolTip="Create Gherkin highlighting files"
                     Visibility="{Binding GherkinSettings.EnableCreateHighlightingFiles}">
                 <Image Source="Images/CreateHighlightingFiles.png" Height="16"/>
             </Button>
@@ -465,7 +468,9 @@
                     <!-- Header -->
                     <DataTemplate x:Key="TabHeader" DataType="vm:EditorTab">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Image Name="documentChangeStatus" Source="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DocumentModificationStatusIcon}"/>
+                            <Button  Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=SaveCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveFile}">
+                                <Image Source="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DocumentModificationStatusIcon}"/>
+                            </Button>
                             <TextBlock Name="tabTextBlock" Text="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=Header}" />
                             <Button Name="deleteTab" Margin="5,0,0,0" Padding="0" Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DeleteTabCmd}">
                                 <Image Source="Images/DeleteTab.png" Height="12"></Image>

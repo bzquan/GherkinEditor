@@ -415,6 +415,9 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_OpenFile" xml:space="preserve">
     <value>Open file</value>
   </data>
+  <data name="Tooltip_SaveAllFiles" xml:space="preserve">
+    <value>Save all</value>
+  </data>
   <data name="Tooltip_SaveFile" xml:space="preserve">
     <value>Save file</value>
   </data>

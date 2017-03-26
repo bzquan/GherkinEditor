@@ -9,6 +9,7 @@ using System.Windows;
 using System.ComponentModel;
 using Gherkin.Util;
 using static Gherkin.Util.Util;
+using System.Windows.Input;
 
 namespace Gherkin.ViewModel
 {
@@ -21,12 +22,22 @@ namespace Gherkin.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ICommand SaveCmd => new DelegateCommandNoArg(OnSave);
+
         public EditorTab()
         {
             Header = Properties.Resources.Message_UnknownFileName;
             ToolTip = Properties.Resources.Message_UnknownFileName;
 
             base.Loaded += OnEditorTabLoaded;
+        }
+
+        private void OnSave()
+        {
+            if (MainEditor.IsModified)
+            {
+                EditorView.SaveFile(saveAs: false);
+            }
         }
 
         private void OnTextEditorLoadedEvent()
