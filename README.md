@@ -3,6 +3,9 @@
 An editor for specification by example in Gherkin.
 It is a WPF application in C#.
 
+# Screen shot
+![sceen shot](https://github.com/bzquan/GherkinEditor/blob/master/ScreenShot.png)
+
 # Features
 1. Keywords highlighting
 2. Folding scenarios and tables
