@@ -43,15 +43,23 @@ namespace Gherkin.ViewModel
             }
         }
 
+        private void OnTextEditorTextChanged(object sender, EventArgs e)
+        {
+            NotifyModificationStatus();
+        }
+
+        private void OnDocumentSavedEvent()
+        {
+            NotifyModificationStatus();
+        }
+
         /// <summary>
         /// Notify updating DocumentModificationStatusIcon.
         /// Note: Do this work in background because we may have received TextChanged
         /// before TextEditor's IsModified property updated
         /// property stay unchanged.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnTextEditorTextChanged(object sender, EventArgs e)
+        private void NotifyModificationStatus()
         {
             Task.Run(() =>
             {
@@ -76,7 +84,8 @@ namespace Gherkin.ViewModel
             base.Content = editorView;
 
             EditorView.TextEditorLoadedEvent += OnTextEditorLoadedEvent;
-            editorView.FileNameChangedEvent += OnFileNameChangedEvent;
+            EditorView.FileNameChangedEvent += OnFileNameChangedEvent;
+            EditorView.DocumentSavedEvent += OnDocumentSavedEvent;
         }
 
         public void SetMaxWidth(double width)

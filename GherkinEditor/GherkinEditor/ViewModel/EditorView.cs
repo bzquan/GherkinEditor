@@ -28,9 +28,11 @@ namespace Gherkin.ViewModel
 
         public delegate void FileNameChangedHandler(string filePath);
         public delegate void TextEditorLoadedHandler();
+        public delegate void DocumentSavedHandler();
 
         public event FileNameChangedHandler FileNameChangedEvent;
         public event TextEditorLoadedHandler TextEditorLoadedEvent;
+        public event DocumentSavedHandler DocumentSavedEvent;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ObservableCollection<ScenarioIndex> m_ScenarioIndexList = new ObservableCollection<ScenarioIndex>();
@@ -481,6 +483,8 @@ namespace Gherkin.ViewModel
             }
             MainEditor.Save(filePath2Save);
             UpdateEditor(filePath2Save);
+
+            DocumentSavedEvent?.Invoke();
         }
 
         public MessageBoxResult SaveCurrentFileWithRequesting()
