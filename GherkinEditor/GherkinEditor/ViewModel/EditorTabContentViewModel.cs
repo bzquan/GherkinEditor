@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -12,17 +9,15 @@ using ICSharpCode.AvalonEdit.Folding;
 using Gherkin.Model;
 using ICSharpCode.AvalonEdit.Document;
 using System.IO;
-using System.Xml;
 using Gherkin.Util;
 using static Gherkin.Util.Util;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Microsoft.Win32;
 
 namespace Gherkin.ViewModel
 {
-    public class EditorView : System.Windows.Controls.ContentControl, INotifyPropertyChanged
+    public class EditorTabContentViewModel : NotifyPropertyChangedBase
     {
         const string editorDataTemplate = "editorDataTemplate";
 
@@ -33,7 +28,6 @@ namespace Gherkin.ViewModel
         public event FileNameChangedHandler FileNameChangedEvent;
         public event TextEditorLoadedHandler TextEditorLoadedEvent;
         public event DocumentSavedHandler DocumentSavedEvent;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private ObservableCollection<ScenarioIndex> m_ScenarioIndexList = new ObservableCollection<ScenarioIndex>();
 
@@ -53,78 +47,57 @@ namespace Gherkin.ViewModel
         public TextEditor MainEditor { get; private set; }
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
         public TextDocument Document => MainGherkinEditor?.Document;
-        public GridSplitter HSplitter { get; set; }
         public string CurrentFilePath { get; set; }
 
-        public EditorView(System.Windows.FrameworkElement parent, IAppSettings appSettings)
+        public EditorTabContentViewModel(string filePath, IAppSettings appSettings)
         {
-            this.ContentTemplate = parent.FindResource(editorDataTemplate) as DataTemplate;
-            this.DataContext = this;
-
+            CurrentFilePath = filePath;
             m_AppSettings = appSettings;
             m_IsCloseTablesFolding = m_AppSettings.IsCloseTablesFoldingByDefault;
             m_IsCloseScenarioFolding = m_AppSettings.IsCloseScenarioFoldingByDefault;
             m_IsScenarioIndexHidden = !m_AppSettings.ShowScenarioIndexByDefault;
             m_IsSplitViewHidden = !m_AppSettings.ShowSplitViewByDefault;
-            m_FontFamily = new FontFamily(m_AppSettings.FontFamilyName);
-            m_FontSize = m_AppSettings.FontSize;
+            LoadFileInfo(filePath);
             HideScenarioIndex = !m_AppSettings.ShowScenarioIndexByDefault;
             HideSplitView = !m_AppSettings.ShowSplitViewByDefault;
 
             FoldingStrategy = new GherkinFoldingStrategy();
-
-            base.Loaded += OnEditorViewLoaded;
         }
 
         public ObservableCollection<ScenarioIndex> ScenarioIndexes => m_ScenarioIndexList;
         public ICommand HideScenarioIndexCmd => new DelegateCommandNoArg(OnHideScenarioIndex);
 
-        public void OnEditorViewLoaded(object sender, RoutedEventArgs e)
-        {
-            if (!IsEditorViewLoaded)
-            {
-                InitializeEditorView();
-            }
-
-            // Important Note: the main editor is focused whenever it is loaded.
-            // Reason: FindControl of InitializeEditorView will fail
-            // when creating loading next new editor if MainEditor is not focused.
-            // 
-            // Root cause: Microsoft bug?
-            Keyboard.Focus(MainEditor);
-        }
-
         private bool IsEditorViewLoaded => MainEditor != null;
 
-        private void InitializeEditorView()
+        public void InitializeEditorView(TextEditor mainEditor, TextEditor subEditor)
         {
-            try
-            {
-                MainEditor = VisualChildrenFinder.FindControl<EditorView, TextEditor>(this, "mainEditor");
-                MainGherkinEditor = new GherkinEditor(MainEditor, m_AppSettings);
+            MainEditor = mainEditor;
+            MainGherkinEditor = new GherkinEditor(MainEditor, m_AppSettings, FontFamily, FontSize);
 
-                TextEditor subEditor = VisualChildrenFinder.FindControl<EditorView, TextEditor>(this, "subEditor");
-                SubGherkinEditor = new GherkinEditor(subEditor, m_AppSettings);
-                SubEditor.Document = MainEditor.Document;
+            SubGherkinEditor = new GherkinEditor(subEditor, m_AppSettings, FontFamily, FontSize);
+            SubEditor.Document = MainEditor.Document;
 
-                Load(CurrentFilePath);
-                EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
-                EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Ready"));
-                TextEditorLoadedEvent?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                EventAggregator<FailedToFindEditorControlArg>.Instance.Publish(this, new FailedToFindEditorControlArg(this));
-                EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(ex.Message));
-            }
+            Load(CurrentFilePath);
+            EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
+            EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Ready"));
+            TextEditorLoadedEvent?.Invoke();
         }
 
-        public new FontFamily FontFamily
+        private void LoadFileInfo(string filePath)
+        {
+            GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
+            FontFamily = new FontFamily(fileInfo.FontFamilyName);
+            FontSize = fileInfo.FontSize;
+        }
+
+        public FontFamily FontFamily
         {
             get { return m_FontFamily; }
             set
             {
+                if (value == null) return;
                 m_FontFamily = value;
+                m_AppSettings.UpdateFontFamilyName(CurrentFilePath, FontFamily.ToString());
 
                 if (IsEditorViewLoaded)
                 {
@@ -134,12 +107,14 @@ namespace Gherkin.ViewModel
             }
         }
 
-        public new string FontSize
+        public string FontSize
         {
             get { return m_FontSize; }
             set
             {
+                if (value == null) return;
                 m_FontSize = value;
+                m_AppSettings.UpdateFontSize(CurrentFilePath, FontSize);
 
                 if (IsEditorViewLoaded)
                 {
@@ -184,11 +159,13 @@ namespace Gherkin.ViewModel
 
         public bool IsEmptyFile()
         {
-            return string.IsNullOrEmpty(CurrentFilePath) && !MainEditor.IsModified;
+            return string.IsNullOrEmpty(CurrentFilePath) && !IsModified;
         }
 
         public void Load(string filePath)
         {
+            LoadFileInfo(filePath);
+
             if (!IsEditorViewLoaded)
             {
                 CurrentFilePath = filePath;
@@ -196,6 +173,9 @@ namespace Gherkin.ViewModel
             else if ((filePath != null) && File.Exists(filePath))
             {
                 MainEditor.Load(filePath);
+                GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
+                ScrollCursorTo(fileInfo.CursorLine, fileInfo.CursorColumn);
+
                 UpdateEditor(filePath);
                 UpdateFoldingsByDefault();
             }
@@ -307,11 +287,11 @@ namespace Gherkin.ViewModel
             }
 
             color_name.IfNotNull(x =>
-                {
-                    HighlightingColor highlightingColor;
-                    highlightingColor = highlighting.GetNamedColor(name);
-                    highlightingColor.Foreground = new SimpleHighlightingBrush(x.ToColor());
-                }
+            {
+                HighlightingColor highlightingColor;
+                highlightingColor = highlighting.GetNamedColor(name);
+                highlightingColor.Foreground = new SimpleHighlightingBrush(x.ToColor());
+            }
             );
         }
 
@@ -381,7 +361,7 @@ namespace Gherkin.ViewModel
             AdjustScenarioIndexCount(scenarioFoldings);
             AdjustScenarioIndexContent(scenarioFoldings);
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ScenarioIndexes)));
+            base.OnPropertyChanged(nameof(ScenarioIndexes));
         }
 
         private void AdjustScenarioIndexCount(List<NewFolding> scenarioFoldings)
@@ -417,7 +397,7 @@ namespace Gherkin.ViewModel
                     m_SelectedScenarioIndex = value;
                     MainGherkinEditor.ScrollCursorTo(ScenarioIndexes[m_SelectedScenarioIndex].Offset);
 
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedScenarioIndex)));
+                    base.OnPropertyChanged();
                 }
             }
         }
@@ -446,7 +426,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_IsScenarioIndexHidden = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HideScenarioIndex)));
+                base.OnPropertyChanged();
             }
         }
 
@@ -456,7 +436,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_IsSplitViewHidden = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HideSplitView)));
+                base.OnPropertyChanged();
             }
         }
 
@@ -477,19 +457,36 @@ namespace Gherkin.ViewModel
                 bool? result = dlg.ShowDialog();
                 if (result == true)
                 {
-                    m_AppSettings.LastUsedFile = dlg.FileName;
                     filePath2Save = dlg.FileName;
+                }
+                else
+                {
+                    return;
                 }
             }
             MainEditor.Save(filePath2Save);
+            if (CurrentFilePath != filePath2Save)
+            {
+                UpdateLastUsedFile(filePath2Save);
+            }
             UpdateEditor(filePath2Save);
 
             DocumentSavedEvent?.Invoke();
         }
 
+        private void UpdateLastUsedFile(string filePath2Save)
+        {
+            m_AppSettings.LastUsedFile = filePath2Save;
+            m_AppSettings.UpdateFontFamilyName(filePath2Save, FontFamily.ToString());
+            m_AppSettings.UpdateFontSize(filePath2Save, FontSize);
+        }
+
+        public bool IsModified => MainEditor?.IsModified == true;
+
         public MessageBoxResult SaveCurrentFileWithRequesting()
         {
-            if (MainEditor.IsModified)
+            m_AppSettings.UpdateCursorPos(CurrentFilePath, MainGherkinEditor.CursorLine, MainGherkinEditor.CursorColumn);
+            if (IsModified)
             {
                 string message = String.Format(Properties.Resources.Message_ConfirmSave, CurrentFilePath);
                 MessageBoxResult result = MessageBox.Show(message,

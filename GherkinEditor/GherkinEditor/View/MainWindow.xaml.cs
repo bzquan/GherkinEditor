@@ -37,19 +37,9 @@ namespace Gherkin.View
             m_ViewModel = viewModel;
             m_GherkinKeywordsViewModel = gherkinKeywordsViewModel;
             m_ViewModel.EditorTabControl = editorTabControl;
-            gherkinKeywordsButton.Visibility = Visibility.Collapsed;
             editorTabControl.SizeChanged += OnEditorTabControlSizeChanged;
 
-            EventAggregator<ShowCodeGenMessageWindowArg>.Instance.Event += OnShowCodeGenMessageWindow;
-            EventAggregator<CurrentGherkinLanguageArg>.Instance.Event += OnGherkinLanguage;
-
-            genCodeMessageTextBox.Height = m_AppSettings.ShowMessageWindow ? 80 : 0;
             InitWindowSize();
-        }
-
-        private void OnGherkinLanguage(object sender, CurrentGherkinLanguageArg arg)
-        {
-            gherkinKeywordsButton.Visibility = Visibility.Visible;
         }
 
         private void OnEditorTabControlSizeChanged(object sender, SizeChangedEventArgs e)
@@ -60,17 +50,6 @@ namespace Gherkin.View
         public string OpenFeatureFile
         {
             set { m_ViewModel.StartupFile(value); }
-        }
-
-        private void OnShowCodeGenMessageWindow(object sender, ShowCodeGenMessageWindowArg arg)
-        {
-            genCodeMessageTextBox.Height = arg.ShowMessageWindow ? 80 : 0;
-            if (arg.Message.Length > 0)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine(arg.Message);
-                genCodeMessageTextBox.Text = sb.ToString();
-            }
         }
 
         private void InitWindowSize()
@@ -89,24 +68,24 @@ namespace Gherkin.View
             if (!HaveRecentFilesChanged()) return;
 
             this.recentFilesMenuItem.Items.Clear();
-            foreach (string path in m_AppSettings.RecentFiles)
+            foreach (var file in m_AppSettings.RecentFilesInfo)
             {
                 MenuItem newSubMenuItem = new MenuItem();
-                newSubMenuItem.Header = path;
+                newSubMenuItem.Header = file.FilePath;
                 newSubMenuItem.Command = m_ViewModel.OpenRecentFileCmd;
-                newSubMenuItem.CommandParameter = path;
+                newSubMenuItem.CommandParameter = file.FilePath;
                 this.recentFilesMenuItem.Items.Add(newSubMenuItem);
             }
         }
 
         private bool HaveRecentFilesChanged()
         {
-            if (this.recentFilesMenuItem.Items.Count != m_AppSettings.RecentFiles.Count) return true;
+            if (this.recentFilesMenuItem.Items.Count != m_AppSettings.RecentFilesInfo.Count) return true;
 
             for (int i = 0; i < this.recentFilesMenuItem.Items.Count; i++)
             {
-                MenuItem newSubMenuItem = this.recentFilesMenuItem.Items[i] as MenuItem;
-                if ((string)newSubMenuItem.Header != m_AppSettings.RecentFiles[i]) return true;
+                MenuItem subMenuItem = this.recentFilesMenuItem.Items[i] as MenuItem;
+                if ((string)subMenuItem.Header != m_AppSettings.RecentFilesInfo[i].FilePath) return true;
             }
 
             return false;
@@ -169,6 +148,7 @@ namespace Gherkin.View
                 return;
             }
 
+            m_ViewModel.SaveLastOpenedFileInfo();
             m_AppSettings.IsMainWindowStateMaximized = (WindowState == WindowState.Maximized);
             if (WindowState == WindowState.Normal)
             {

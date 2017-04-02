@@ -9,11 +9,11 @@ namespace Gherkin.Util
 {
     public class HideScenarioIndexArg : EventArgs
     {
-        public HideScenarioIndexArg(EditorView editorView)
+        public HideScenarioIndexArg(EditorTabContentViewModel editorViewModel)
         {
-            EditorView = editorView;
+            EditorViewModel = editorViewModel;
         }
 
-        public EditorView EditorView { get; private set; }
+        public EditorTabContentViewModel EditorViewModel { get; private set; }
     }
 }

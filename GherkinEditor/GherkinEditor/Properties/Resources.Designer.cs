@@ -619,6 +619,24 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close All But This.
+        /// </summary>
+        public static string MenuTab_CloseAllButThis {
+            get {
+                return ResourceManager.GetString("MenuTab_CloseAllButThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All Documents.
+        /// </summary>
+        public static string MenuTab_CloseAllDocuments {
+            get {
+                return ResourceManager.GetString("MenuTab_CloseAllDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open all foldings.
         /// </summary>
         public static string MenuView_FoldOpenAll {
@@ -919,9 +937,18 @@ namespace Gherkin.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Font.
         /// </summary>
-        public static string Tooltip_FontFamilty {
+        public static string Tooltip_FontFamily {
             get {
-                return ResourceManager.GetString("Tooltip_FontFamilty", resourceCulture);
+                return ResourceManager.GetString("Tooltip_FontFamily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default font.
+        /// </summary>
+        public static string Tooltip_FontFamilyDefault {
+            get {
+                return ResourceManager.GetString("Tooltip_FontFamilyDefault", resourceCulture);
             }
         }
         

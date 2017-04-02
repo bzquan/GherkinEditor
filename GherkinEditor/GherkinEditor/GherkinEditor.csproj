@@ -100,6 +100,9 @@
     <Compile Include="Util\StatusChangedArg.cs" />
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\DeleteAllEditorTabsRequested.cs" />
+    <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
+    <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
     <Compile Include="ViewModel\FontViewModel.cs" />
     <Compile Include="ViewModel\GherkinCodeCompletion.cs" />
     <Compile Include="ViewModel\GherkinCodeCompletionWord.cs" />
@@ -180,7 +183,6 @@
     <Compile Include="Util\AdjustMaxWidthOfEditorTabArg.cs" />
     <Compile Include="Util\ConfigReader.cs" />
     <Compile Include="Util\EventAggregator.cs" />
-    <Compile Include="Util\ShowCodeGenMessageWindowArg.cs" />
     <Compile Include="Util\StringBuilderExtension.cs" />
     <Compile Include="ViewModel\DeleteEditorTabRequested.cs" />
     <Compile Include="ViewModel\DocumentPaginatorWrapper.cs" />
@@ -203,8 +205,8 @@
     <Compile Include="ViewModel\DelegateCommandNoArg.cs" />
     <Compile Include="ViewModel\GherkinViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedBase.cs" />
-    <Compile Include="ViewModel\EditorTab.cs" />
-    <Compile Include="ViewModel\EditorView.cs" />
+    <Compile Include="View\EditorTabItem.cs" />
+    <Compile Include="View\EditorTabContent.cs" />
     <Compile Include="View\FindReplaceDialog.xaml.cs">
       <DependentUpon>FindReplaceDialog.xaml</DependentUpon>
     </Compile>
@@ -355,9 +357,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\FindReplace.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\Trim.png" />
   </ItemGroup>
   <ItemGroup>
@@ -383,9 +382,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\CreateHighlightingFiles.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\FindReplace.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Keywords.png" />
@@ -470,6 +466,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\FontSize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\CloseAllDocuments.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\FindAndReplace.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

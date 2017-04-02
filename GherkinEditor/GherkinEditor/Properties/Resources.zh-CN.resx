@@ -303,6 +303,12 @@
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>Tag颜色</value>
   </data>
+  <data name="MenuTab_CloseAllButThis" xml:space="preserve">
+    <value>除此之外全部关闭</value>
+  </data>
+  <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
+    <value>全部关闭</value>
+  </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>展开全部折叠</value>
   </data>
@@ -403,8 +409,11 @@
   <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
     <value>缺省亮显颜色</value>
   </data>
-  <data name="Tooltip_FontFamilty" xml:space="preserve">
+  <data name="Tooltip_FontFamily" xml:space="preserve">
     <value>字体</value>
+  </data>
+  <data name="Tooltip_FontFamilyDefault" xml:space="preserve">
+    <value>缺省字体</value>
   </data>
   <data name="Tooltip_FontSize" xml:space="preserve">
     <value>字体大小</value>

@@ -5,7 +5,7 @@
         Title="{x:Static p:Resources.MenuFind_FindReplace}" WindowStartupLocation="CenterOwner"
         Width="400" SizeToContent="Height" ResizeMode="NoResize" 
         ShowInTaskbar="False" Closed="Window_Closed"
-        Icon="Images/FindReplace.png">
+        Icon="Images/FindAndReplace.png">
 
     <Grid Margin="0,4">
         <Grid.RowDefinitions>

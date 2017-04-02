@@ -10,7 +10,7 @@ namespace Gherkin.Util
     {
         public CurrentGherkinLanguageArg(string language_key)
         {
-            LanguageKey = language_key;
+            LanguageKey = language_key.Trim();
         }
 
         public string LanguageKey { get; private set; }

@@ -11,12 +11,13 @@ namespace Gherkin.Util
     public class GherkinKeywordGenerator
     {
         static Lazy<GherkinDialectProviderExtention> s_GherkinDialectcs = new Lazy<GherkinDialectProviderExtention>(() => new GherkinDialectProviderExtention());
+
         public static void GenerateKeywords()
         {
             GherkinLanguage[] languages = s_GherkinDialectcs.Value.GherkinLanguages;
 
             Array.Sort(languages, delegate(GherkinLanguage lang1, GherkinLanguage lang2) {
-                return lang1.name.CompareTo(lang2.name);
+                return string.Compare(lang1.name, lang2.name, StringComparison.Ordinal);
             });
 
             StringBuilder sb = new StringBuilder();
@@ -25,7 +26,6 @@ namespace Gherkin.Util
                 GenerateKeywords(sb, language);
             }
             WriteTextFile(sb.ToString());
-
 
             string msg = string.Format("Gherkin languages{0} specific keywords are saved in {1}", languages.Length, OutputFilePath());
             EventAggregator<StatusChangedArg>.Instance.Publish(null, new StatusChangedArg(msg));

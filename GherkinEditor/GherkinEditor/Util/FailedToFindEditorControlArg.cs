@@ -5,11 +5,11 @@ namespace Gherkin.Util
 {
     public class FailedToFindEditorControlArg : EventArgs
     {
-        public FailedToFindEditorControlArg(EditorView editorView)
+        public FailedToFindEditorControlArg(EditorTabContentViewModel editorViewModel)
         {
-            EditorView = editorView;
+            EditorViewModel = editorViewModel;
         }
 
-        public EditorView EditorView { get; private set; }
+        public EditorTabContentViewModel EditorViewModel { get; private set; }
     }
 }

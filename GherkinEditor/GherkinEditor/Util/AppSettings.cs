@@ -10,6 +10,15 @@ using System.Windows;
 
 namespace Gherkin.Util
 {
+    public class GherkinFileInfo
+    {
+        public string FilePath = "";
+        public string FontFamilyName = "KaiTi";
+        public string FontSize = "11";
+        public int CursorLine = 1;
+        public int CursorColumn = 1;
+    }
+
     public class AppSettings : ApplicationSettingsBase, IAppSettings
     {
         [UserScopedSetting()]
@@ -38,6 +47,88 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
+        [DefaultSettingValueAttribute("KaiTi")]
+        public string FontFamilyName
+        {
+            get { return (string)this["FontFamilyName"]; }
+            set { this["FontFamilyName"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("11")]
+        public string FontSize
+        {
+            get { return (string)this["FontSize"]; }
+            set { this["FontSize"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [DefaultSettingValueAttribute("")]
+        public List<GherkinFileInfo> RecentFilesInfo
+        {
+            get
+            {
+                List<GherkinFileInfo> files = (List<GherkinFileInfo>)this["RecentFilesInfo"];
+                files.RemoveAll(f => !File.Exists(f.FilePath));
+                RecentFilesInfo = files;
+
+                return files;
+            }
+            private set { this["RecentFilesInfo"] = value; }
+        }
+
+        public void UpdateFontFamilyName(string filePath, string fontFamilyName)
+        {
+            if (fontFamilyName == null) return;
+
+            var fileInfo = GetExistingFileInfo(filePath);
+            if ((fileInfo != null) && (fileInfo.FontFamilyName != fontFamilyName))
+            {
+                fileInfo.FontFamilyName = fontFamilyName;
+            }
+        }
+
+        public void UpdateFontSize(string filePath, string fontSize)
+        {
+            if (fontSize == null) return;
+
+            var fileInfo = GetExistingFileInfo(filePath);
+            if ((fileInfo != null) && (fileInfo.FontSize != fontSize))
+            {
+                fileInfo.FontSize = fontSize;
+                FontSize = fontSize;
+            }
+        }
+
+        public void UpdateCursorPos(string filePath, int line, int column)
+        {
+            var fileInfo = GetExistingFileInfo(filePath);
+            if (fileInfo != null)
+            {
+                fileInfo.CursorLine = line;
+                fileInfo.CursorColumn = column;
+            }
+        }
+
+        private GherkinFileInfo GetExistingFileInfo(string filePath)
+        {
+            List<GherkinFileInfo> files = RecentFilesInfo;
+            return files.LastOrDefault(x => x.FilePath == filePath);
+        }
+
+        public GherkinFileInfo GetFileInfo(string filePath)
+        {
+            List<GherkinFileInfo> files = RecentFilesInfo;
+            GherkinFileInfo fileInfo = files.LastOrDefault(x => x.FilePath == filePath);
+            if (fileInfo == null)
+            {
+                fileInfo = new GherkinFileInfo() { FilePath = filePath, FontFamilyName = this.FontFamilyName, FontSize = this.FontSize };
+            }
+            return fileInfo;
+        }
+
+        [UserScopedSetting()]
         [DefaultSettingValueAttribute("")]
         public string LastUsedFile
         {
@@ -45,22 +136,22 @@ namespace Gherkin.Util
             set
             {
                 this["LastUsedFile"] = value;
-                AdjustRecentFiles(value);
+                UpdateRecentFiles(value);
             }
         }
 
         [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
         [DefaultSettingValueAttribute("")]
-        public List<string> RecentFiles
+        public List<string> LastOpenedFiles
         {
             get
             {
-                List<string> recentFiles = (List<string>)this["RecentFiles"];
-                recentFiles.RemoveAll(f => !File.Exists(f));
-                this["RecentFiles"] = recentFiles;
-                return recentFiles;
+                List<string> files = (List<string>)this["LastOpenedFiles"];
+                files.RemoveAll(f => !File.Exists(f));
+                return files;
             }
-            private set { this["RecentFiles"] = value; }
+            set { this["LastOpenedFiles"] = value; }
         }
 
         [UserScopedSetting()]
@@ -77,22 +168,6 @@ namespace Gherkin.Util
         {
             get { return (bool)this["IsMainWindowStateMaximized"]; }
             set { this["IsMainWindowStateMaximized"] = value; }
-        }
-
-        [UserScopedSetting()]
-        [DefaultSettingValueAttribute("Fangsong")]
-        public string FontFamilyName
-        {
-            get { return (string)this["FontFamilyName"]; }
-            set { this["FontFamilyName"] = value; }
-        }
-
-        [UserScopedSetting()]
-        [DefaultSettingValueAttribute("11")]
-        public string FontSize
-        {
-            get { return (string)this["FontSize"]; }
-            set { this["FontSize"] = value; }
         }
 
         [UserScopedSetting()]
@@ -242,25 +317,28 @@ namespace Gherkin.Util
             set { this["ColorOfHighlightingMockAttribute"] = value; }
         }
 
-        private void AdjustRecentFiles(string newFilePath)
+        private void UpdateRecentFiles(string newFilePath)
         {
-            List<string> files = RecentFiles;
-            files.RemoveAll(f => (f == newFilePath));
-            files.Insert(0, newFilePath);
-            KeepFirstNFiles(files);
-
-            RecentFiles = files;
-        }
-
-        private static void KeepFirstNFiles(List<string> files)
-        {
-            const int MAX_FILES = 20;
-            if (files.Count > MAX_FILES)
+            List<GherkinFileInfo> files = new List<GherkinFileInfo>();
+            files.AddRange(RecentFilesInfo);
+            var file = files.LastOrDefault(x => x.FilePath == newFilePath);
+            if (file != null)
             {
-                // remove that number of items from the start of the list
-                int remove_count = files.Count - MAX_FILES;
-                files.RemoveRange(MAX_FILES, remove_count);
+                files.RemoveAll(x => x.FilePath == newFilePath);
+                files.Insert(0, file);
             }
+            else
+            {
+                files.Insert(0, new GherkinFileInfo() { FilePath = newFilePath });
+            }
+
+            files.RemoveAll(f => !File.Exists(f.FilePath));
+            if (files.Count > 20)
+            {
+                files.Remove(files.Last());
+            }
+
+            RecentFilesInfo = files;
         }
     }
 }

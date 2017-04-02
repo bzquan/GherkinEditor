@@ -12,11 +12,16 @@ namespace Gherkin.Util
     {
         Languages Language { get; set; }
         Size MainWindowSize { get; set; }
-        List<string> RecentFiles { get; }
         string LastUsedFile { get; set; }
-        bool IsMainWindowStateMaximized { get; set; }
+        List<string> LastOpenedFiles { get; set; }
         string FontFamilyName { get; set; }
         string FontSize { get; set; }
+        List<GherkinFileInfo> RecentFilesInfo { get; }
+        void UpdateFontFamilyName(string filePath, string fontFamilyName);
+        void UpdateFontSize(string filePath, string fontSize);
+        void UpdateCursorPos(string filePath, int line, int column);
+        GherkinFileInfo GetFileInfo(string filePath);
+        bool IsMainWindowStateMaximized { get; set; }
         bool ShowMessageWindow { get; set; }
         bool SupportUnicode { get; set; }
         bool IsAllowRunningMultiApps { get; set; }

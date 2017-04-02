@@ -38,6 +38,7 @@
         
         <!-- local:TabSizeConverter x:Key="tabSizeConverter" / -->
         <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
         <ContextMenu x:Key="editorContextMenu">
             <MenuItem Command="Undo" Header="{x:Static p:Resources.MenuEdit_Undo}" InputGestureText="Ctrl+Z">
@@ -261,7 +262,7 @@
             <MenuItem Header="{x:Static p:Resources.MenuFind_Search}">
                 <MenuItem Command="Find" Header="{x:Static p:Resources.MenuFind_FindReplace}" InputGestureText="Ctrl+F">
                     <MenuItem.Icon>
-                        <Image Source="Images/FindReplace.png" Height="16"/>
+                        <Image Source="Images/FindAndReplace.png" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -327,16 +328,26 @@
                 <MenuItem StaysOpenOnClick="True">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamilty}" FontFamily="{Binding CurrentFontFamily}" VerticalAlignment="Center" Margin="0, 0, 6, 0"/>
-                            <ComboBox Name="fontComboBox" Width="80"
-                                SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
+                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily}" FontFamily="{Binding FontViewModel.DefaultFontFamily}" VerticalAlignment="Center" Margin="0, 0, 6, 0"/>
+                            <ComboBox Name="defaultFontComboBox" MinWidth="80"
+                                SelectedItem="{Binding FontViewModel.DefaultFontFamily, Mode=TwoWay}"
                                 ItemsSource="{Binding FontViewModel.SystemFonts}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
+                            <xctk:IntegerUpDown FormatString="N0"
+                                                AllowTextInput="False"
+                                                Value="{Binding FontViewModel.DefaultFontSize, Mode=TwoWay, FallbackValue=11}"
+                                                Increment="1"
+                                                Minimum="10"
+                                                Maximum="28"
+                                                ToolTip="{x:Static p:Resources.Tooltip_FontSize}"/>
+                            <Button Margin="6, 0, 0, 0"  ToolTip="{x:Static p:Resources.Tooltip_FontFamilyDefault}" Command="{Binding FontViewModel.ResetFontCmd}">
+                                <local:AutoGreyableImage Source="Images/Reset.png" Width ="20" Height="20"/>
+                            </Button>
                         </StackPanel>
                     </MenuItem.Header>
                     <MenuItem.Icon>
@@ -434,9 +445,22 @@
             <CheckBox ToolTip="{x:Static p:Resources.MenuCompile_SupportUnicode}" IsChecked="{Binding GherkinSettings.SupportUnicode}">
                 <Image Source="{Binding GherkinSettings.SupportUnicodeIcon, FallbackValue={StaticResource supportUnicodeImage}}" Height="16"/>
             </CheckBox>
-            <Button Name="gherkinKeywordsButton" ToolTip="{Binding GherkinSettings.GherkinKeywords}">
+            <Button Name="gherkinKeywordsButton"
+                    Visibility="{Binding Path=GherkinSettings.HasGherkinKeywords, Converter={StaticResource BoolToVisibility}}"
+                    ToolTip="{Binding GherkinSettings.GherkinKeywords}">
                 <Image Source="Images/WordIcon.png" Height="16"/>
             </Button>
+            <ComboBox Name="fontComboBox"
+                      MinWidth="40"
+                      ToolTip="{x:Static p:Resources.Tooltip_FontFamily}"
+                      SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
+                      ItemsSource="{Binding FontViewModel.SystemFonts}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <xctk:IntegerUpDown FormatString="N0"
                                 AllowTextInput="False"
                                 Value="{Binding CurrentFontSize, Mode=TwoWay, FallbackValue=10}"
@@ -444,12 +468,16 @@
                                 Minimum="10"
                                 Maximum="28"
                                 ToolTip="{x:Static p:Resources.Tooltip_FontSize}"/>
-            <Button Name="createHighlightingFilesButton" Command="{Binding GherkinSettings.CreateHighlightingFilesCmd}" ToolTip="Create Gherkin highlighting files"
-                    Visibility="{Binding GherkinSettings.EnableCreateHighlightingFiles}">
+            <Button Name="createHighlightingFilesButton"
+                    Command="{Binding GherkinSettings.CreateHighlightingFilesCmd}"
+                    ToolTip="Create Gherkin highlighting files"
+                    Visibility="{Binding Path=GherkinSettings.showCreateHighlightingFilesButton, Converter={StaticResource BoolToVisibility}}">
                 <Image Source="Images/CreateHighlightingFiles.png" Height="16"/>
             </Button>
-            <Button Name="createKeywordsFileButton"  Command="{Binding GherkinSettings.CreateKeywordsFileCmd}" ToolTip="Create Gherkin language specific keywords file"
-                    Visibility="{Binding GherkinSettings.EnableCreateHighlightingFiles}">
+            <Button Name="createKeywordsFileButton"
+                    Command="{Binding GherkinSettings.CreateKeywordsFileCmd}"
+                    ToolTip="Create Gherkin language specific keywords file"
+                    Visibility="{Binding Path=GherkinSettings.showCreateHighlightingFilesButton, Converter={StaticResource BoolToVisibility}}">
                 <Image Source="Images/Keywords.png" Height="16"/>
             </Button>
         </ToolBar>
@@ -461,27 +489,46 @@
         <Grid x:Name="mainGrid" Margin="10, 0, 2, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
-                <RowDefinition Height="Auto" />
+                <vm:HiddenableRowDefinition Height="80" IsHidden="{Binding HideMessageWindow}" />
             </Grid.RowDefinitions>
             <TabControl x:Name="editorTabControl" Grid.Row="0" ItemsSource="{Binding TabPanels}" SelectedIndex="{Binding SelectedTabIndex}">
+                <TabControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_CloseAllDocuments}" Command="{Binding CloseAllDocumentsCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/CloseAllDocuments.png" Height="24"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_CloseAllButThis}" Command="{Binding CloseAllButThisCmd}">
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabControl.ItemContainerStyle>
                 <TabControl.Resources>
                     <!-- Header -->
-                    <DataTemplate x:Key="TabHeader" DataType="vm:EditorTab">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Button  Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=SaveCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveFile}">
-                                <Image Source="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DocumentModificationStatusIcon}"/>
+                    <DataTemplate x:Key="tabItemHeader" DataType="local:EditorTab">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.FilePath}">
+                            <Button  Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.SaveCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveFile}">
+                                <Image Source="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.DocumentModificationStatusIcon}"/>
                             </Button>
-                            <TextBlock Name="tabTextBlock" Text="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=Header}" />
-                            <Button Name="deleteTab" Margin="5,0,0,0" Padding="0" Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorTab}, Path=DeleteTabCmd}">
+                            <TextBlock Name="tabTextBlock"
+                                       MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.MaxWidthOfFileNameText}"
+                                       Text="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.FileName}" />
+                            <Button Name="deleteTab" Margin="5,0,0,0" Padding="0" Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.DeleteTabCmd}">
                                 <Image Source="Images/DeleteTab.png" Height="12"></Image>
                             </Button>
                         </StackPanel>
                     </DataTemplate>
                     <!-- Content -->
-                    <DataTemplate x:Key="editorDataTemplate" DataType="{x:Type vm:EditorView}">
+                    <DataTemplate x:Key="editorDataTemplate" DataType="{x:Type local:EditorTabContent}">
                         <Grid Name="scenarioIndexGrid">
                             <Grid.ColumnDefinitions>
-                                <vm:HiddenableColumnDefinition Width="20*" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=HideScenarioIndex}"/>
+                                <vm:HiddenableColumnDefinition Width="20*" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideScenarioIndex}"/>
                                 <ColumnDefinition Width="80*"/>
                             </Grid.ColumnDefinitions>
                             <Grid Name="scenarioIndexListGrid" Grid.Column="0">
@@ -497,14 +544,14 @@
                                     <Border BorderThickness="1" BorderBrush="Goldenrod" Background="LightGray" >
                                         <TextBlock Grid.Column="0" Text="{x:Static p:Resources.Message_ScenarioIndex}" HorizontalAlignment="Center"/>
                                     </Border>
-                                    <Button Grid.Column="1" Margin="0, 0, 10, 0" Command="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=HideScenarioIndexCmd}">
+                                    <Button Grid.Column="1" Margin="0, 0, 10, 0" Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideScenarioIndexCmd}">
                                         <Image Source="Images/HideScenarioIndex.png" Height="12" Width="12"/>
                                     </Button>
                                 </Grid>
                                 <ListBox Margin="0, 0, 6, 0" Grid.Row="1"
                                          HorizontalAlignment="Stretch"
-                                         ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=ScenarioIndexes}"
-                                         SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=SelectedScenarioIndex}">
+                                         ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.ScenarioIndexes}"
+                                         SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.SelectedScenarioIndex}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <ContentControl Content="{Binding Path=Title}">
@@ -517,13 +564,12 @@
                      Width="5"
                      BorderBrush="DarkGoldenrod"
                      BorderThickness="1"
-                     Visibility="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=ShowScenarioIndex}"
                      VerticalAlignment="Stretch"/>
                             <Grid Name="editGrid" Grid.Column="1">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*"/>
-                                    <vm:HiddenableRowDefinition Height="Auto" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=HideSplitView}"/>
-                                    <vm:HiddenableRowDefinition Height="50*" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=vm:EditorView}, Path=HideSplitView}"/>
+                                    <vm:HiddenableRowDefinition Height="Auto" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideSplitView}"/>
+                                    <vm:HiddenableRowDefinition Height="50*" IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideSplitView}"/>
                                 </Grid.RowDefinitions>
                                 <avalonEdit:TextEditor Name="mainEditor" Grid.Row="0" ContextMenu="{StaticResource editorContextMenu}"/>
                                 <GridSplitter Name="hsplitter"
@@ -539,7 +585,14 @@
                     </DataTemplate>
                 </TabControl.Resources>
             </TabControl>
-            <TextBox Name="genCodeMessageTextBox" Grid.Row="1" BorderThickness="1" BorderBrush="DarkGray" Height="80" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  AcceptsReturn="True"/>
+            <TextBox Name="genCodeMessageTextBox"
+                     Grid.Row="1"
+                     BorderThickness="1"
+                     BorderBrush="DarkGray"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Text="{Binding MessageOfGenCPPTestCode}"
+                     AcceptsReturn="True"/>
         </Grid>
     </DockPanel>
 </Window>

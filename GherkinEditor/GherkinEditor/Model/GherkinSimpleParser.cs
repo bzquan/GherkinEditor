@@ -160,13 +160,18 @@ namespace Gherkin.Model
             {
                 if (TokenMatcher.Match_Language(token))
                 {
-                    EventAggregator<CurrentGherkinLanguageArg>.Instance.Publish(this, new CurrentGherkinLanguageArg(token.MatchedText));
+                    NotifyCurrentGherkinLanguage(token.MatchedText);
                 }
             }
             catch (Exception ex)
             {
                 EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(ex.Message));
             }
+        }
+
+        private void NotifyCurrentGherkinLanguage(string language)
+        {
+            EventAggregator<CurrentGherkinLanguageArg>.Instance.Publish(this, new CurrentGherkinLanguageArg(language));
         }
 
         public void AppendMissingScenarioGUID()
@@ -238,6 +243,12 @@ namespace Gherkin.Model
             {
                 string keyword = token.MatchedKeyword;
                 keywordType = token.MatchedType;
+
+                if (keywordType == TokenType.FeatureLine)
+                {
+                    NotifyCurrentGherkinLanguage(token.MatchedGherkinDialect.Language);
+                }
+
                 return true;
             }
 

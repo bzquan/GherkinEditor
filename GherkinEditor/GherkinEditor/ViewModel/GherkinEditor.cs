@@ -31,11 +31,11 @@ namespace Gherkin.ViewModel
         private bool m_ShowCurrentLineBorder = true;
         private bool m_HighlightCurrentLine = true;
 
-        public GherkinEditor(TextEditor editor, IAppSettings appSettings)
+        public GherkinEditor(TextEditor editor, IAppSettings appSettings, FontFamily FontFamily, string fontSize)
         {
             TextEditor = editor;
 
-            ConfigTextEditor(editor, appSettings);
+            ConfigTextEditor(editor, appSettings, FontFamily, fontSize);
             editor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(editor);
             m_GherkinCodeCompletion = new GherkinCodeCompletion(editor, appSettings);
 
@@ -45,7 +45,7 @@ namespace Gherkin.ViewModel
             EventAggregator<IndentationCompletedArg>.Instance.Event += OnIndentationCompleted;
         }
 
-        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings)
+        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings, FontFamily FontFamily, string fontSize)
         {
             editor.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             editor.ShowLineNumbers = true;
@@ -55,8 +55,8 @@ namespace Gherkin.ViewModel
             editor.Options.EnableRectangularSelection = true;
             editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
             editor.Options.ConvertTabsToSpaces = true;
-            editor.FontFamily = new FontFamily(appSettings.FontFamilyName);
-            editor.FontSize = ToFontSizeByPoint(appSettings.FontSize);
+            editor.FontFamily = FontFamily;
+            editor.FontSize = ToFontSizeByPoint(fontSize);
         }
 
         public TextEditor TextEditor { get; set; }
@@ -78,8 +78,18 @@ namespace Gherkin.ViewModel
             set { TextEditor.FontSize = ToFontSizeByPoint(value); }
         }
 
+        public int CursorLine
+        {
+            get { return TextEditor.TextArea.Caret.Line; }
+        }
+        public int CursorColumn
+        {
+            get { return TextEditor.TextArea.Caret.Column; }
+        }
+
         public void ChangeToEmptyFile()
         {
+            Document.FileName = null;
             TextEditor.Clear();
             TextEditor.IsModified = false;
         }
@@ -118,7 +128,8 @@ namespace Gherkin.ViewModel
         {
             line = Math.Min(line, Document.LineCount);
             DocumentLine doc_line = Document.GetLineByNumber(line);
-            ScrollCursorTo(doc_line.Offset + column - 1);
+            int offset = Math.Min(doc_line.Offset + column - 1, Document.TextLength);
+            ScrollCursorTo(offset);
         }
 
         public void ScrollCursorTo(int offset)

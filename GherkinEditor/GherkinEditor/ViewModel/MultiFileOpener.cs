@@ -1,4 +1,5 @@
 ﻿using Gherkin.Util;
+using Gherkin.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace Gherkin.ViewModel
     {
         private List<string> FilesToLoad = new List<string>();  // files to be loaded
 
-        private ObservableCollection<EditorTab> m_TabPanels;
+        private ObservableCollection<EditorTabItem> m_TabPanels;
         private IOpenNewEditor m_OpenNewEditor;
 
         public MultiFileOpener()
@@ -20,7 +21,7 @@ namespace Gherkin.ViewModel
             EventAggregator<EditorViewInitializationCompleted>.Instance.Event += OnEditorViewInitializationCompleted;
         }
 
-        public void Config(ObservableCollection<EditorTab> tabPanels, IOpenNewEditor openNewEditor)
+        public void Config(ObservableCollection<EditorTabItem> tabPanels, IOpenNewEditor openNewEditor)
         {
             m_TabPanels = tabPanels;
             m_OpenNewEditor = openNewEditor;
@@ -35,7 +36,7 @@ namespace Gherkin.ViewModel
             if (files == null) return;
             FilesToLoad.Clear();
 
-            var existing_files = m_TabPanels.Select(x => x.EditorView.CurrentFilePath);
+            var existing_files = m_TabPanels.Select(x => x.EditorTabContentViewModel.CurrentFilePath);
             string[] new_files = files.Where(x => !existing_files.Contains(x)).ToArray();
             FilesToLoad.AddRange(new_files);
 

@@ -18,6 +18,7 @@ using Gherkin.Model;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
+using Gherkin.View;
 
 namespace Gherkin.ViewModel
 {
@@ -28,12 +29,13 @@ namespace Gherkin.ViewModel
 
         private string m_Status = "Ready";
         private int m_SelectedTabIndex = 0;
-        private EditorView m_CurrentEditor;
+        private EditorTabContentViewModel m_CurrentEditor;
         private IAppSettings m_AppSettings;
         private TabControl m_EditorTabControl;
         private MultiFileOpener m_MultiFilesOpener;
+        private string m_MessageOfGenCPPTestCode = "";
 
-        public ObservableCollection<EditorTab> TabPanels { get; private set; } = new ObservableCollection<EditorTab>();
+        public ObservableCollection<EditorTabItem> TabPanels { get; private set; } = new ObservableCollection<EditorTabItem>();
 
         public ICommand SaveAllCmd => new DelegateCommandNoArg(OnSaveAll);
         public ICommand OpenFileInNewWindowCmd => new DelegateCommandNoArg(OnOpenFileInNewWindow);
@@ -65,6 +67,7 @@ namespace Gherkin.ViewModel
 
             GherkinSettings.ChangeFoldingTextColorOfAvalonEdit();
             EventAggregator<DeleteEditorTabRequested>.Instance.Event += OnDeleteEditorTab;
+            EventAggregator<DeleteAllEditorTabsRequested>.Instance.Event += OnDeleteAllEditorTabsRequested;
             EventAggregator<AdjustMaxWidthOfEditorTabArg>.Instance.Event += OnAdjustMaxWidthOfEditorTab;
             EventAggregator<StatusChangedArg>.Instance.Event += OnStatusChanged;
             EventAggregator<IndentationCompletedArg>.Instance.Event += OnIndentationCompleted;
@@ -80,8 +83,21 @@ namespace Gherkin.ViewModel
             {
                 m_EditorTabControl = value;
                 CreateNewTab(filePath: null); // Create initial editor
-                SelectedTabIndex = 0;
             }
+        }
+
+        public void SaveLastOpenedFileInfo()
+        {
+            List<string> openedFiles = new List<string>();
+            foreach (var tab in TabPanels)
+            {
+                if (File.Exists(tab.EditorTabContentViewModel.CurrentFilePath))
+                {
+                    openedFiles.Add(tab.EditorTabContentViewModel.CurrentFilePath);
+                }
+            }
+
+            m_AppSettings.LastOpenedFiles = openedFiles;
         }
 
         private void OnAdjustMaxWidthOfEditorTab(object sender, AdjustMaxWidthOfEditorTabArg arg)
@@ -94,23 +110,17 @@ namespace Gherkin.ViewModel
             double tab_control_width = EditorTabControl.ActualWidth;
             if (tab_control_width <= 0.00001) return;
 
-            const double STATUS_IMAGE_WIDTH = 16.0;
+            const double STATUS_IMAGE_WIDTH = 18.0;
             const double MIN = 15.0;
             double max_tab_width = Math.Max(tab_control_width / TabPanels.Count - STATUS_IMAGE_WIDTH, MIN);
 
-            foreach (EditorTab tab in TabPanels)
+            foreach (EditorTabItem tab in TabPanels)
             {
                 tab.SetMaxWidth(max_tab_width);
             }
         }
 
-        public void AddTabItem(EditorTab item)
-        {
-            TabPanels.Add(item);
-            base.OnPropertyChanged(nameof(TabPanels));
-        }
-
-        public int SelectedTabIndex
+         public int SelectedTabIndex
         {
             get { return m_SelectedTabIndex; }
             set
@@ -118,7 +128,7 @@ namespace Gherkin.ViewModel
                 if ((value < 0) || (value >= TabPanels.Count)) return;
 
                 m_SelectedTabIndex = value;
-                CurrentEditor = TabPanels[value].EditorView;
+                CurrentEditor = TabPanels[value].EditorTabContentViewModel;
                 base.OnPropertyChanged();
             }
         }
@@ -134,7 +144,7 @@ namespace Gherkin.ViewModel
             }
         }
 
-        private EditorView CurrentEditor
+        private EditorTabContentViewModel CurrentEditor
         {
             get { return m_CurrentEditor; }
             set
@@ -166,18 +176,16 @@ namespace Gherkin.ViewModel
         {
             get
             {
-                if (CurrentEditor?.FontFamily != null)
+                if (CurrentEditor != null)
                     return CurrentEditor.FontFamily;
                 else
                     return new FontFamily(m_AppSettings.FontFamilyName); }
             set
             {
                 string name = value.ToString();
-                if (m_AppSettings.FontFamilyName != name)
+                if (HasEditorLoaded)
                 {
-                    m_AppSettings.FontFamilyName = name;
-                    if (HasEditorLoaded)
-                        CurrentEditor.FontFamily = new FontFamily(name);
+                    CurrentEditor.FontFamily = new FontFamily(name);
                 }
                 base.OnPropertyChanged();
             }
@@ -194,13 +202,11 @@ namespace Gherkin.ViewModel
             }
             set
             {
-                if (m_AppSettings.FontSize != value)
+                if (HasEditorLoaded)
                 {
-                    m_AppSettings.FontSize = value;
-                    if (HasEditorLoaded)
-                        CurrentEditor.FontSize = value;
-                    base.OnPropertyChanged();
+                    CurrentEditor.FontSize = value;
                 }
+                base.OnPropertyChanged();
             }
         }
 
@@ -221,7 +227,7 @@ namespace Gherkin.ViewModel
 
         private void OnHideScenarioIndex(object sender, HideScenarioIndexArg arg)
         {
-            if (CurrentEditor == arg.EditorView)
+            if (CurrentEditor == arg.EditorViewModel)
             {
                 ShowScenarioIndex = false;
             }
@@ -282,19 +288,18 @@ namespace Gherkin.ViewModel
 
         public void StartupFile(string path)
         {
-            string filePath = (path != null) ? path : m_AppSettings.LastUsedFile;
-            LoadFile(filePath);
             StartFoldingUpdateTimer();
-        }
 
-        private void LoadFile(string filePath)
-        {
-            if (File.Exists(filePath))
+            List<string> lastOpenedFiles = null;
+            if (path != null)
             {
-                m_AppSettings.LastUsedFile = filePath;
-                CurrentEditor?.Load(filePath);
-                base.OnPropertyChanged(nameof(CurrentFilePath));
+                lastOpenedFiles = new List<string>() { path };
             }
+            else
+            {
+                lastOpenedFiles = m_AppSettings.LastOpenedFiles;
+            }
+            OpenFiles(lastOpenedFiles.ToArray());
         }
 
         public void OnOpenFile()
@@ -317,7 +322,7 @@ namespace Gherkin.ViewModel
 
         public void OnNewFile()
         {
-            EditorTabControl.SelectedItem = CreateNewTab(filePath: null);
+            CreateNewTab(filePath: null);
         }
 
         /// <summary>
@@ -327,34 +332,39 @@ namespace Gherkin.ViewModel
         /// <param name="filePath">file to open. It should be new file when loading multi files.</param>
         public void OpenNewEditorTab(string filePath)
         {
-            EditorTab tab;
+            EditorTabItem tab;
             if (m_MultiFilesOpener.HaveMoreFilesToLoad)
             {
                 tab = CreateNewTab(filePath);
             }
             else
             {
-                tab = TabPanels.FirstOrDefault(x => x.EditorView.CurrentFilePath == filePath);
+                tab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel.CurrentFilePath == filePath);
                 if (tab == null)
                 {
-                    tab = TabPanels.FirstOrDefault(x => x.EditorView.IsEmptyFile());
+                    tab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel.IsEmptyFile());
                     if (tab != null)
-                        tab.EditorView.Load(filePath);
+                        tab.EditorTabContentViewModel.Load(filePath);
                     else
                         tab = CreateNewTab(filePath);
                 }
             }
 
-            EditorTabControl.SelectedItem = tab;
+            SelectTab(tab);
             m_AppSettings.LastUsedFile = filePath;
         }
 
-        private EditorTab CreateNewTab(string filePath)
+        private void SelectTab(EditorTabItem tab)
         {
-            EditorTab tab = new EditorTab();
-            tab.HeaderTemplate = EditorTabControl.FindResource("TabHeader") as DataTemplate;
-            tab.SetContent(new EditorView(EditorTabControl, m_AppSettings) { CurrentFilePath = filePath });
-            AddTabItem(tab);
+            this.SelectedTabIndex = TabPanels.IndexOf(tab);
+        }
+
+        private EditorTabItem CreateNewTab(string filePath)
+        {
+            EditorTabItem tab = new EditorTabItem(EditorTabControl, TabPanels, filePath, m_AppSettings);
+            TabPanels.Add(tab);
+            SelectTab(tab);
+            base.OnPropertyChanged(nameof(TabPanels));
             base.OnPropertyChanged(nameof(CurrentFilePath));
 
             return tab;
@@ -364,7 +374,7 @@ namespace Gherkin.ViewModel
         {
             if (TabPanels.Count > 1)
             {
-                EditorTab tab = TabPanels.FirstOrDefault(x => x.EditorView == arg.EditorView);
+                EditorTabItem tab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel == arg.EditorViewModel);
                 TabPanels.Remove(tab);
                 base.OnPropertyChanged(nameof(TabPanels));
             }
@@ -402,9 +412,9 @@ namespace Gherkin.ViewModel
 
         private void OnSaveAll()
         {
-            foreach (EditorTab tab in TabPanels)
+            foreach (EditorTabItem tab in TabPanels)
             {
-                tab.EditorView.SaveFile(saveAs: false);
+                tab.EditorTabContentViewModel.SaveFile(saveAs: false);
             }
         }
 
@@ -422,8 +432,8 @@ namespace Gherkin.ViewModel
 
         private void OnDeleteEditorTab(object sender, DeleteEditorTabRequested arg)
         {
-            EditorView editor = arg.EditorTab.EditorView;
-            MessageBoxResult result = GherkinSettings.SaveCurrentFileWithRequesting(editor);
+            EditorTabContentViewModel editorViewModel = arg.EditorViewModel;
+            MessageBoxResult result = GherkinSettings.SaveCurrentFileWithRequesting(editorViewModel);
             if (result == MessageBoxResult.Cancel) return;
 
             if (TabPanels.Count == 1)
@@ -433,19 +443,49 @@ namespace Gherkin.ViewModel
             }
             else
             {
-                TabPanels.Remove(arg.EditorTab);
+                EditorTabItem editorTab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel == editorViewModel);
+                TabPanels.Remove(editorTab);
                 SelectedTabIndex = TabPanels.Count - 1;
                 base.OnPropertyChanged(nameof(TabPanels));
             }
             AdjustMaxWidthOfTabs();
         }
 
-        public MessageBoxResult SaveAllFilesWithRequesting()
+        private void OnDeleteAllEditorTabsRequested(object sender, DeleteAllEditorTabsRequested arg)
         {
-            return GherkinSettings.SaveAllFilesWithRequesting();
+            MessageBoxResult result = GherkinSettings.SaveAllFilesWithRequesting(arg.ExcludedEditorViewModel);
+            if (result == MessageBoxResult.Cancel) return;
+
+            SelectedTabIndex = TabPanels.Count - 1; // Note: Select last tab to force to notify SelectedTabIndex property changed event 
+
+            if (arg.ExcludedEditorViewModel == null)
+            {
+                for (int i = TabPanels.Count - 1; i > 0; i--)
+                {
+                    TabPanels.RemoveAt(i);
+                }
+                TabPanels[0].EditorTabContentViewModel.ChangeToEmptyFile();
+            }
+            else
+            {
+                for (int i = TabPanels.Count - 1; i >= 0; i--)
+                {
+                    if (TabPanels[i].EditorTabContentViewModel != arg.ExcludedEditorViewModel)
+                    {
+                        TabPanels.RemoveAt(i);
+                    }
+                }
+            }
+            SelectedTabIndex = 0;
+            AdjustMaxWidthOfTabs();
         }
 
-        private void SaveFile(EditorView editor, bool saveAs)
+        public MessageBoxResult SaveAllFilesWithRequesting()
+        {
+            return GherkinSettings.SaveAllFilesWithRequesting(excluded: null);
+        }
+
+        private void SaveFile(EditorTabContentViewModel editor, bool saveAs)
         {
             editor.SaveFile(saveAs);
             base.OnPropertyChanged(nameof(CurrentFilePath));
@@ -516,6 +556,10 @@ namespace Gherkin.ViewModel
             }
         }
 
+        public bool HideMessageWindow
+        {
+            get { return !ShowMessageWindow; }
+        }
         public bool ShowMessageWindow
         {
             get { return m_AppSettings.ShowMessageWindow; }
@@ -524,11 +568,8 @@ namespace Gherkin.ViewModel
                 if (m_AppSettings.ShowMessageWindow == value) return;
                 m_AppSettings.ShowMessageWindow = value;
                 base.OnPropertyChanged(nameof(MessageWindowIcon));
+                base.OnPropertyChanged(nameof(HideMessageWindow));
                 base.OnPropertyChanged();
-
-                EventAggregator<ShowCodeGenMessageWindowArg>
-                    .Instance
-                    .Publish(this, new ShowCodeGenMessageWindowArg(value));
             }
         }
 
@@ -570,7 +611,8 @@ namespace Gherkin.ViewModel
                     stringBuilder
                         .AppendLine(Properties.Resources.Message_CppTestCodeGeneration)
                         .Append(generated_file_names);
-                    ShowGenCPPTestCodeMessage(stringBuilder.ToString());
+
+                    MessageOfGenCPPTestCode = stringBuilder.ToString();
                 }
             }
             catch (Exception ex)
@@ -589,7 +631,8 @@ namespace Gherkin.ViewModel
             {
                 stringBuilder.AppendLine(stackTrace);
             }
-            ShowGenCPPTestCodeMessage(stringBuilder.ToString());
+
+            MessageOfGenCPPTestCode = stringBuilder.ToString();
             MoveCursorToErrorLine(errorMsg);
         }
 
@@ -611,14 +654,15 @@ namespace Gherkin.ViewModel
             return true;
         }
 
-        private void ShowGenCPPTestCodeMessage(string message)
+        public string MessageOfGenCPPTestCode
         {
-            ShowMessageWindow = true;
-            ShowCodeGenMessageWindowArg eventArg =
-                        new ShowCodeGenMessageWindowArg(true, message);
-            EventAggregator<ShowCodeGenMessageWindowArg>
-                .Instance
-                .Publish(this, eventArg);
+            get { return m_MessageOfGenCPPTestCode; }
+            set
+            {
+                ShowMessageWindow = true;
+                m_MessageOfGenCPPTestCode = value;
+                base.OnPropertyChanged();
+            }
         }
 
         private void MoveCursorToErrorLine(string exceptionMsg)

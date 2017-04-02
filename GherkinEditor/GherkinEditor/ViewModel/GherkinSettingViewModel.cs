@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Gherkin.Model;
 using Gherkin.Util;
 using System.Runtime.CompilerServices;
+using Gherkin.View;
 
 namespace Gherkin.ViewModel
 {
@@ -42,7 +43,7 @@ namespace Gherkin.ViewModel
         public ICommand CreateHighlightingFilesCmd => new DelegateCommandNoArg(OnCreateHighlightingFiles);
         public ICommand CreateKeywordsFileCmd => new DelegateCommandNoArg(OnCreateKeywordsFile);
 
-        public ObservableCollection<EditorTab> TabPanels { get; set; }
+        public ObservableCollection<EditorTabItem> TabPanels { get; set; }
 
         public GherkinSettingViewModel(IAppSettings appSettings)
         {
@@ -131,7 +132,7 @@ namespace Gherkin.ViewModel
                 m_AppSettings.HighlightCurrentLine = value;
                 foreach (var tab in TabPanels)
                 {
-                    tab.EditorView.HighlightCurrentLine = value;
+                    tab.EditorTabContentViewModel.HighlightCurrentLine = value;
                 }
                 base.OnPropertyChanged();
             }
@@ -145,7 +146,7 @@ namespace Gherkin.ViewModel
                 m_AppSettings.ShowCurrentLineBorder = value;
                 foreach (var tab in TabPanels)
                 {
-                    tab.EditorView.ShowCurrentLineBorder = value;
+                    tab.EditorTabContentViewModel.ShowCurrentLineBorder = value;
                 }
                 base.OnPropertyChanged();
             }
@@ -176,7 +177,7 @@ namespace Gherkin.ViewModel
         {
             foreach (var tab in TabPanels)
             {
-                tab.EditorView.UpdateFoldings(refresh: true);
+                tab.EditorTabContentViewModel.UpdateFoldings(refresh: true);
             }
         }
 
@@ -253,7 +254,7 @@ namespace Gherkin.ViewModel
         {
             foreach (var tab in TabPanels)
             {
-                tab.EditorView.UpdateGherkinHighlighing(installFolding: false);
+                tab.EditorTabContentViewModel.UpdateGherkinHighlighing(installFolding: false);
             }
         }
 
@@ -416,6 +417,11 @@ namespace Gherkin.ViewModel
                    CanExecuteResetMockAttributeColor();
         }
 
+        public bool HasGherkinKeywords
+        {
+            get { return m_GherkinKeywords.Length > 0; }
+        }
+
         public string GherkinKeywords
         {
             get
@@ -428,16 +434,18 @@ namespace Gherkin.ViewModel
                 {
                     m_GherkinKeywords = value;
                     base.OnPropertyChanged();
+                    base.OnPropertyChanged(nameof(HasGherkinKeywords));
                 }
             }
         }
 
         private void OnGherkinLanguage(object sender, CurrentGherkinLanguageArg arg)
         {
-            if (m_CurrentGherkinLanguageKey == arg.LanguageKey) return;
-
-            m_CurrentGherkinLanguageKey = arg.LanguageKey;
-            GherkinKeywords = GherkinKeywordGenerator.GenerateKeywordsToolTip(m_CurrentGherkinLanguageKey);
+            if ((m_CurrentGherkinLanguageKey != arg.LanguageKey) || string.IsNullOrEmpty(m_GherkinKeywords))
+            {
+                m_CurrentGherkinLanguageKey = arg.LanguageKey;
+                GherkinKeywords = GherkinKeywordGenerator.GenerateKeywordsToolTip(m_CurrentGherkinLanguageKey);
+            }
         }
 
         /// <summary>
@@ -446,23 +454,26 @@ namespace Gherkin.ViewModel
         /// </summary>
         private bool IsChangingLanguage { get; set; } = false;
 
-        public MessageBoxResult SaveAllFilesWithRequesting()
+        public MessageBoxResult SaveAllFilesWithRequesting(EditorTabContentViewModel excluded)
         {
             if (IsChangingLanguage) return MessageBoxResult.Yes;
 
-            foreach (EditorTab tab in TabPanels)
+            foreach (EditorTabItem tab in TabPanels)
             {
-                MessageBoxResult result = SaveCurrentFileWithRequesting(tab.EditorView);
-                if (result == MessageBoxResult.Cancel)
+                if (tab.EditorTabContentViewModel != excluded)
                 {
-                    return result;
+                    MessageBoxResult result = SaveCurrentFileWithRequesting(tab.EditorTabContentViewModel);
+                    if (result == MessageBoxResult.Cancel)
+                    {
+                        return result;
+                    }
                 }
             }
 
             return MessageBoxResult.Yes;
         }
 
-        public MessageBoxResult SaveCurrentFileWithRequesting(EditorView editor)
+        public MessageBoxResult SaveCurrentFileWithRequesting(EditorTabContentViewModel editor)
         {
             return editor.SaveCurrentFileWithRequesting();
         }
@@ -480,7 +491,7 @@ namespace Gherkin.ViewModel
 
             if (result == MessageBoxResult.No) return;
 
-            result = SaveAllFilesWithRequesting();
+            result = SaveAllFilesWithRequesting(excluded: null);
             if (result != MessageBoxResult.Cancel)
             {
                 m_AppSettings.Language = language;
@@ -494,14 +505,11 @@ namespace Gherkin.ViewModel
             return m_AppSettings.Language != language;
         }
 
-        public Visibility EnableCreateHighlightingFiles
+        public bool showCreateHighlightingFilesButton
         {
             get
             {
-                if (ConfigReader.GetValue<bool>("showCreateHighlightingFilesButton", false))
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
+                return ConfigReader.GetValue<bool>("showCreateHighlightingFilesButton", false);
             }
         }
 

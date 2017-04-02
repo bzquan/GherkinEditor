@@ -9,11 +9,11 @@ namespace Gherkin.ViewModel
 {
     public class DeleteEditorTabRequested : EventArgs
     {
-        public DeleteEditorTabRequested(EditorTab tab)
+        public DeleteEditorTabRequested(EditorTabContentViewModel editorViewModel)
         {
-            EditorTab = tab;
+            EditorViewModel = editorViewModel;
         }
 
-        public EditorTab EditorTab { get; private set; }
+        public EditorTabContentViewModel EditorViewModel { get; private set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -23,9 +24,9 @@ namespace Gherkin.ViewModel
             vm.ApplicationLogo = Util.Util.DrawingImageFromResource("Gherkin.png");
             vm.Title = Properties.Resources.Message_AboutGherkinTitle;
             vm.Description = Properties.Resources.Message_AboutGherkinDescription;
-            vm.Version = "1.2.0";
             vm.PublisherLogo = Util.Util.DrawingImageFromResource("Feature.png");
             vm.ReleaseNote = LoadReleaseNote();
+            vm.Version = ExtractVersionNoFromReleaseNote(vm.ReleaseNote);
             vm.HyperlinkText = "https://github.com/bzquan/GherkinEditor";
             vm.Window.Content = about;
             vm.Window.Show();
@@ -41,6 +42,18 @@ namespace Gherkin.ViewModel
             {
                 return reader.ReadToEnd();
             }
+        }
+
+        private string ExtractVersionNoFromReleaseNote(string releaseNote)
+        {
+            // Example: <h5>Version 1.0.2 - 2017.03.18</h5>
+            Regex versionRegex = new Regex(@"\s*<h5>\s*Version\s*(\w+\.\w+\.\w+).*</h5>");
+            Match m = versionRegex.Match(releaseNote);
+            if (m.Success)
+            {
+                return m.Groups[1].ToString();
+            }
+            return "Unknown Version";
         }
     }
 }

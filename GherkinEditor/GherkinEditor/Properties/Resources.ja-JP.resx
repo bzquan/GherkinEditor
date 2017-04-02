@@ -280,7 +280,7 @@
     <value>Mock属性色</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>全てディフォルト強調色</value>
+    <value>全てデフォルト強調色</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>設定</value>
@@ -302,6 +302,12 @@
   </data>
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>タグ色</value>
+  </data>
+  <data name="MenuTab_CloseAllButThis" xml:space="preserve">
+    <value>これ以外を全て閉じる</value>
+  </data>
+  <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
+    <value>全て閉じる</value>
   </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>折り畳みの全展開</value>
@@ -401,10 +407,13 @@
     <value>キャンセル</value>
   </data>
   <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
-    <value>ディフォルト強調色</value>
+    <value>デフォルト強調色</value>
   </data>
-  <data name="Tooltip_FontFamilty" xml:space="preserve">
+  <data name="Tooltip_FontFamily" xml:space="preserve">
     <value>フォント</value>
+  </data>
+  <data name="Tooltip_FontFamilyDefault" xml:space="preserve">
+    <value>デフォルトフォント</value>
   </data>
   <data name="Tooltip_FontSize" xml:space="preserve">
     <value>フォントサイズ</value>

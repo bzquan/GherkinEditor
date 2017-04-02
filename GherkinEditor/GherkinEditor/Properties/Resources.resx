@@ -303,6 +303,12 @@
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>Tag color</value>
   </data>
+  <data name="MenuTab_CloseAllButThis" xml:space="preserve">
+    <value>Close All But This</value>
+  </data>
+  <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
+    <value>Close All Documents</value>
+  </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>Open all foldings</value>
   </data>
@@ -403,8 +409,11 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
     <value>Use default color</value>
   </data>
-  <data name="Tooltip_FontFamilty" xml:space="preserve">
+  <data name="Tooltip_FontFamily" xml:space="preserve">
     <value>Font</value>
+  </data>
+  <data name="Tooltip_FontFamilyDefault" xml:space="preserve">
+    <value>Default font</value>
   </data>
   <data name="Tooltip_FontSize" xml:space="preserve">
     <value>Font size</value>
