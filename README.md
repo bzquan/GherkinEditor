@@ -13,6 +13,10 @@ It is a WPF application in C# and is developed by using Visual studio 2015.
 4. Supporting globalization of Gherkin
 5. Generation of executable specification in C++ based on [GoogleTest](https://github.com/google/googletest).
 
+# Building
+Please select "Net40" solution platforms when buiding by using Visual studio 2015 because AvalonEdit project uses conditional compiling.  
+Solution Platforms : Net40
+
 # Note
 1. [AvalonEdit](https://github.com/icsharpcode/AvalonEdit) is included.
 2. [Gherkin Parser](https://github.com/cucumber/cucumber/tree/master/gherkin) is included. It is modified for generating executable specification in C++.
