@@ -20,14 +20,14 @@ namespace Gherkin.View
         private EditorTabHeaderViewModel EditorTabHeaderViewModel { get; set; }
         public EditorTabContentViewModel EditorTabContentViewModel { get; set; }
 
-        public EditorTabItem(System.Windows.FrameworkElement parent, ObservableCollection<EditorTabItem> tabPanels, string filePath, IAppSettings appSettings)
+        public EditorTabItem(System.Windows.FrameworkElement parent, ICanCloseAllDocumentsChecker canCloseAllDocumentsChecker, string filePath, IAppSettings appSettings)
         {
             this.HeaderTemplate = parent.FindResource("tabItemHeader") as DataTemplate;
 
             EditorTabContentViewModel = new EditorTabContentViewModel(filePath, appSettings);
             base.Content = new EditorTabContent(parent, EditorTabContentViewModel);
 
-            EditorTabHeaderViewModel = new EditorTabHeaderViewModel(EditorTabContentViewModel, tabPanels);
+            EditorTabHeaderViewModel = new EditorTabHeaderViewModel(EditorTabContentViewModel, canCloseAllDocumentsChecker);
             this.DataContext = EditorTabHeaderViewModel;
 
             base.Loaded += OnEditorTabLoaded;

@@ -361,7 +361,7 @@ namespace Gherkin.ViewModel
 
         private EditorTabItem CreateNewTab(string filePath)
         {
-            EditorTabItem tab = new EditorTabItem(EditorTabControl, TabPanels, filePath, m_AppSettings);
+            EditorTabItem tab = new EditorTabItem(EditorTabControl, new CanCloseAllDocumentsChecker(TabPanels), filePath, m_AppSettings);
             TabPanels.Add(tab);
             SelectTab(tab);
             base.OnPropertyChanged(nameof(TabPanels));

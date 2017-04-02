@@ -100,6 +100,7 @@
     <Compile Include="Util\StatusChangedArg.cs" />
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\CanCloseAllDocumentsChecker.cs" />
     <Compile Include="ViewModel\DeleteAllEditorTabsRequested.cs" />
     <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="ViewModel\GherkinSettingViewModel.cs" />
     <Compile Include="ViewModel\HiddenableColumnDefinition.cs" />
     <Compile Include="ViewModel\HiddenableRowDefinition.cs" />
+    <Compile Include="ViewModel\ICanCloseAllDocumentsChecker.cs" />
     <Compile Include="ViewModel\IOpenNewEditor.cs" />
     <Compile Include="ViewModel\MultiFileOpener.cs" />
     <Compile Include="ViewModel\RichTextBoxHelper.cs" />

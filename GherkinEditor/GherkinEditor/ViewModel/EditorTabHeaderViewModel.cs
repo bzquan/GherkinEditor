@@ -16,20 +16,20 @@ namespace Gherkin.ViewModel
     {
         private string m_FilePath;
         private EditorTabContentViewModel EditorTabContentViewModel { get; set; }
-        private ObservableCollection<EditorTabItem> TabPanels { get; set; }
+        private ICanCloseAllDocumentsChecker CanCloseAllDocumentsChecker { get; set; }
 
-        public EditorTabHeaderViewModel(EditorTabContentViewModel editorTabContentViewModel, ObservableCollection<EditorTabItem> tabPanels)
+        public EditorTabHeaderViewModel(EditorTabContentViewModel editorTabContentViewModel, ICanCloseAllDocumentsChecker canCloseAllDocumentsChecker)
         {
             EditorTabContentViewModel = editorTabContentViewModel;
-            TabPanels = tabPanels;
+            CanCloseAllDocumentsChecker = canCloseAllDocumentsChecker;
 
             EditorTabContentViewModel.TextEditorLoadedEvent += OnTextEditorLoaded;
             EditorTabContentViewModel.FileNameChangedEvent += OnFileNameChanged;
             EditorTabContentViewModel.DocumentSavedEvent += OnDocumentSaved;
         }
 
-        public ICommand CloseAllDocumentsCmd => new DelegateCommandNoArg(OnCloseAllDocuments, CanCloseAllDocuments);
-        public ICommand CloseAllButThisCmd => new DelegateCommandNoArg(OnCloseAllButThis, CanCloseAllButThis);
+        public ICommand CloseAllDocumentsCmd => new DelegateCommandNoArg(OnCloseAllDocuments, CanCloseAllDocumentsChecker.CanCloseAllDocuments);
+        public ICommand CloseAllButThisCmd => new DelegateCommandNoArg(OnCloseAllButThis, CanCloseAllDocumentsChecker.CanCloseAllButThis);
         public DelegateCommandNoArg DeleteTabCmd => new DelegateCommandNoArg(OnDelete);
         public ICommand SaveCmd => new DelegateCommandNoArg(OnSave);
 
@@ -52,19 +52,11 @@ namespace Gherkin.ViewModel
             DeleteAllEditorTabsRequested arg = new DeleteAllEditorTabsRequested(null);
             Util.EventAggregator<DeleteAllEditorTabsRequested>.Instance.Publish(this, arg);
         }
-        private bool CanCloseAllDocuments()
-        {
-            return (TabPanels.Count > 1) || !EditorTabContentViewModel.IsEmptyFile();
-        }
 
         private void OnCloseAllButThis()
         {
             DeleteAllEditorTabsRequested arg = new DeleteAllEditorTabsRequested(EditorTabContentViewModel);
             Util.EventAggregator<DeleteAllEditorTabsRequested>.Instance.Publish(this, arg);
-        }
-        private bool CanCloseAllButThis()
-        {
-            return (TabPanels.Count > 1);
         }
 
         public string DocumentModificationStatusIcon
