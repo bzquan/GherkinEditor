@@ -303,11 +303,20 @@
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>Tag color</value>
   </data>
+  <data name="MenuTab_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="MenuTab_CloseAllButThis" xml:space="preserve">
     <value>Close All But This</value>
   </data>
   <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
     <value>Close All Documents</value>
+  </data>
+  <data name="MenuTab_OpenInNewEditor" xml:space="preserve">
+    <value>Open in new editor</value>
+  </data>
+  <data name="MenuTab_Rename" xml:space="preserve">
+    <value>Rename</value>
   </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>Open all foldings</value>
@@ -421,6 +430,9 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>New file</value>
   </data>
+  <data name="Tooltip_OpenedDocuments" xml:space="preserve">
+    <value>Opened documents</value>
+  </data>
   <data name="Tooltip_OpenFile" xml:space="preserve">
     <value>Open file</value>
   </data>
@@ -430,10 +442,43 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_SaveFile" xml:space="preserve">
     <value>Save file</value>
   </data>
+  <data name="Tooltip_ScrollLeft" xml:space="preserve">
+    <value>Scroll to left</value>
+  </data>
+  <data name="Tooltip_ScrollRight" xml:space="preserve">
+    <value>Scroll to right</value>
+  </data>
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>Show scenario index</value>
   </data>
   <data name="Tooltip_SplitEditor" xml:space="preserve">
     <value>Split editor</value>
+  </data>
+  <data name="Message_RenameFailedTitle" xml:space="preserve">
+    <value>Rename failed</value>
+  </data>
+  <data name="MenuFind_Grep" xml:space="preserve">
+    <value>Grep in files</value>
+  </data>
+  <data name="DlgGrepLabel_FileExtensions" xml:space="preserve">
+    <value>File extensions</value>
+  </data>
+  <data name="DlgGrepLabel_SearchFolder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="DlgGrepLabel_TextToFind" xml:space="preserve">
+    <value>Text to find</value>
+  </data>
+  <data name="DlgGrepTooltip_FileExtensions" xml:space="preserve">
+    <value>Sample extensions(*.feature; *.cs)</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepSearchFolder" xml:space="preserve">
+    <value>Search folder</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
+    <value>No more text found. Do you find from start again?</value>
   </data>
 </root>

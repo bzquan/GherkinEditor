@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bc="BetterWpfControls"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
   	    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:local="clr-namespace:Gherkin.View"
@@ -12,11 +13,12 @@
         xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
         mc:Ignorable="d"
         AllowDrop="True"
-        Drop="Window_Drop"
-        PreviewDragOver="Window_PreviewDragOver"
+        Drop="OnDrop"
+        PreviewDragOver="OnPreviewDragOver"
         Height="900" Width="760"
         Title="{Binding CurrentFilePath}"
         WindowStartupLocation="CenterScreen"
+        Loaded="OnWindowLoaded"
         ContentRendered="OnWindowContentRendered"
         Closing="OnClosing">
 
@@ -35,7 +37,7 @@
         <BitmapImage x:Key="horizontalSplitImage" UriSource="Images/HSplit.png"/>
         <BitmapImage x:Key="supportUnicodeImage" UriSource="Images/Unicode.png"/>
         <BitmapImage x:Key="messageWindowImage" UriSource="Images/MessageWindow.png"/>
-        
+
         <!-- local:TabSizeConverter x:Key="tabSizeConverter" / -->
         <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -93,6 +95,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="GridSplitterStyle" TargetType="{x:Type GridSplitter}">
             <Setter Property="Background"
                 Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
@@ -121,6 +124,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="TabControlNormalBorderBrush" Color="#8C8E94"/>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -243,7 +247,7 @@
                         <Image Source="Images/OpenAllFoldings.png" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsCheckable="True" Header="{x:Static p:Resources.MenuView_ShowScenarioIndex}" IsChecked="{Binding ShowScenarioIndex}">
+                <MenuItem IsCheckable="True" Header="{x:Static p:Resources.MenuView_ShowScenarioIndex}" IsChecked="{Binding ShowScenarioIndex}" IsEnabled="{Binding IsShowScenarioIndexEnabled}">
                     <MenuItem.Icon>
                         <Image Source="Images/Index.png" Height="16"/>
                     </MenuItem.Icon>
@@ -263,6 +267,11 @@
                 <MenuItem Command="Find" Header="{x:Static p:Resources.MenuFind_FindReplace}" InputGestureText="Ctrl+F">
                     <MenuItem.Icon>
                         <Image Source="Images/FindAndReplace.png" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding GrepCmd}" Header="{x:Static p:Resources.MenuFind_Grep}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/SearchFolder.png" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -322,7 +331,7 @@
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinHighlighting}" Command="{Binding SetGherkinHighlightingCmd}">
                     <MenuItem.Icon>
-                        <Image Source="Images/Setting.png" Height="24"/>
+                        <Image Source="Images/Setting.png" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem StaysOpenOnClick="True">
@@ -346,18 +355,18 @@
                                                 Maximum="28"
                                                 ToolTip="{x:Static p:Resources.Tooltip_FontSize}"/>
                             <Button Margin="6, 0, 0, 0"  ToolTip="{x:Static p:Resources.Tooltip_FontFamilyDefault}" Command="{Binding FontViewModel.ResetFontCmd}">
-                                <local:AutoGreyableImage Source="Images/Reset.png" Width ="20" Height="20"/>
+                                <local:AutoGreyableImage Source="Images/Reset.png" Width ="16" Height="16"/>
                             </Button>
                         </StackPanel>
                     </MenuItem.Header>
                     <MenuItem.Icon>
-                        <Image Source="Images/Font.png" Height="24"/>
+                        <Image Source="Images/Font.png" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True" Header="{x:Static p:Resources.MenuSetting_AutoGenGUID}" StaysOpenOnClick="True" IsChecked="{Binding GherkinSettings.GenerateGUIDforScenario}"/>
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_ChangeLanguage}">
                     <MenuItem.Icon>
-                        <Image Source="Images/LanguageChange.png" Height="24"/>
+                        <Image Source="Images/LanguageChange.png" Height="16"/>
                     </MenuItem.Icon>
                     <MenuItem Header="English" Command="{Binding GherkinSettings.ChangeLanguageCmd}" CommandParameter="English">
                         <MenuItem.Icon>
@@ -405,7 +414,7 @@
             </Button>
             <Separator/>
             <Button Command="Find" ToolTip="{x:Static p:Resources.MenuFind_FindReplace}">
-                <Image Source="Images/FindReplace.png" Height="16"/>
+                <Image Source="Images/FindAndReplace.png" Height="16"/>
             </Button>
             <Button Command="Copy" ToolTip="{x:Static p:Resources.MenuEdit_Copy}">
                 <Image Source="Images/Copy.png" Height="16"/>
@@ -430,7 +439,7 @@
                 <Image Source="Images/Trim.png" Height="16"/>
             </Button>
             <Separator/>
-            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_ShowScenarioIndex}" IsChecked="{Binding ShowScenarioIndex}">
+            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_ShowScenarioIndex}" IsChecked="{Binding ShowScenarioIndex}" IsEnabled="{Binding IsShowScenarioIndexEnabled}">
                 <Image Source="{Binding ScenarioIndexIcon, FallbackValue={StaticResource scenarioIndexImage}}" Height="16"/>
             </CheckBox>
             <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SplitEditor}" IsChecked="{Binding ShowSplitView}">
@@ -447,7 +456,8 @@
             </CheckBox>
             <Button Name="gherkinKeywordsButton"
                     Visibility="{Binding Path=GherkinSettings.HasGherkinKeywords, Converter={StaticResource BoolToVisibility}}"
-                    ToolTip="{Binding GherkinSettings.GherkinKeywords}">
+                    ToolTip="{Binding GherkinSettings.GherkinKeywords}"
+                    ToolTipService.ShowDuration="600000">
                 <Image Source="Images/WordIcon.png" Height="16"/>
             </Button>
             <ComboBox Name="fontComboBox"
@@ -486,42 +496,90 @@
                 <TextBlock Text="{Binding Status}"></TextBlock>
             </StatusBarItem>
         </StatusBar>
-        <Grid x:Name="mainGrid" Margin="10, 0, 2, 0">
+        <Grid x:Name="mainGrid" Margin="2, 0, 2, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <vm:HiddenableRowDefinition Height="80" IsHidden="{Binding HideMessageWindow}" />
             </Grid.RowDefinitions>
-            <TabControl x:Name="editorTabControl" Grid.Row="0" ItemsSource="{Binding TabPanels}" SelectedIndex="{Binding SelectedTabIndex}">
-                <TabControl.ItemContainerStyle>
-                    <Style TargetType="{x:Type TabItem}">
+            <bc:TabControl x:Name="editorTabControl" Grid.Row="0"
+                           ItemsSource="{Binding TabPanels}"
+                           ShowQuickLinksButton="True"
+                           SelectedIndex="{Binding SelectedTabIndex}">
+                <bc:TabControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type bc:TabItem}" BasedOn="{StaticResource {x:Type bc:TabItem}}">
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu>
+                                    <MenuItem Header="{x:Static p:Resources.MenuFile_Save}" Command="{Binding SaveCmd}" InputGestureText="Ctrl+S">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/Save.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuFile_SaveAs}" Command="{Binding SaveAsCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/SaveAs.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_Close}" Command="{Binding CloseCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/Close.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <MenuItem Header="{x:Static p:Resources.MenuTab_CloseAllDocuments}" Command="{Binding CloseAllDocumentsCmd}">
                                         <MenuItem.Icon>
-                                            <Image Source="Images/CloseAllDocuments.png" Height="24"/>
+                                            <Image Source="Images/CloseAllDocuments.png" Height="16"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="{x:Static p:Resources.MenuTab_CloseAllButThis}" Command="{Binding CloseAllButThisCmd}">
                                     </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_Rename}" Command="{Binding RenameCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/Rename.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuFile_OpenFolder}" Command="{Binding OpenCurrentFolderCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/OpenExplorer.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_OpenInNewEditor}" Command="{Binding OpenInNewEditorCmd}">
+                                    </MenuItem>
                                 </ContextMenu>
                             </Setter.Value>
                         </Setter>
+                        <Setter Property="Header" Value="{Binding FileName}" />
                     </Style>
-                </TabControl.ItemContainerStyle>
-                <TabControl.Resources>
+                </bc:TabControl.ItemContainerStyle>
+                <bc:TabControl.ScrollToLeftContent>
+                    <Button bc:ScrollablePanel.IsScroller="True" Padding="0" Margin="0,0,2,0"
+                            ToolTip="{x:Static p:Resources.Tooltip_ScrollLeft}"
+                            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                        <local:AutoGreyableImage Source="Images/ScrollLeft.png" Height="16"/>
+                    </Button>
+                </bc:TabControl.ScrollToLeftContent>
+                <bc:TabControl.ScrollToRightContent>
+                    <Button bc:ScrollablePanel.IsScroller="True" Padding="0" Margin="2,0,0,0"
+                            ToolTip="{x:Static p:Resources.Tooltip_ScrollRight}"
+                            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                        <local:AutoGreyableImage Source="Images/ScrollRight.png" Height="16"/>
+                    </Button>
+                </bc:TabControl.ScrollToRightContent>
+
+                <bc:TabControl.Resources>
                     <!-- Header -->
                     <DataTemplate x:Key="tabItemHeader" DataType="local:EditorTab">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.FilePath}">
-                            <Button  Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.SaveCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveFile}">
-                                <Image Source="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.DocumentModificationStatusIcon}"/>
-                            </Button>
+                            <bc:ImageButton x:Name="modificationStatus"
+                                Height="16" Margin="0,0,2,0"
+                                Source="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.DocumentModificationStatusIcon}"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.SaveCmd}" ToolTip="{x:Static p:Resources.Tooltip_SaveFile}">
+                            </bc:ImageButton>
                             <TextBlock Name="tabTextBlock"
-                                       MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.MaxWidthOfFileNameText}"
                                        Text="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.FileName}" />
-                            <Button Name="deleteTab" Margin="5,0,0,0" Padding="0" Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.DeleteTabCmd}">
-                                <Image Source="Images/DeleteTab.png" Height="12"></Image>
-                            </Button>
+                            <bc:ImageButton Name="deleteTab" Margin="2,0,0,0" Height="16"
+                                            Source="Images/DeleteTab.png"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabItem}, Path=DataContext.CloseCmd}">
+                            </bc:ImageButton>
                         </StackPanel>
                     </DataTemplate>
                     <!-- Content -->
@@ -544,20 +602,22 @@
                                     <Border BorderThickness="1" BorderBrush="Goldenrod" Background="LightGray" >
                                         <TextBlock Grid.Column="0" Text="{x:Static p:Resources.Message_ScenarioIndex}" HorizontalAlignment="Center"/>
                                     </Border>
-                                    <Button Grid.Column="1" Margin="0, 0, 10, 0" Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideScenarioIndexCmd}">
-                                        <Image Source="Images/HideScenarioIndex.png" Height="12" Width="12"/>
+                                    <Button Grid.Column="1" Margin="0, 0, 10, 0"
+                                            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideScenarioIndexCmd}">
+                                        <Image Source="Images/PullDown1.png" Height="12" Width="12"/>
                                     </Button>
                                 </Grid>
                                 <ListBox Margin="0, 0, 6, 0" Grid.Row="1"
                                          HorizontalAlignment="Stretch"
                                          ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.ScenarioIndexes}"
                                          SelectedIndex="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.SelectedScenarioIndex}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <ContentControl Content="{Binding Path=Title}">
-                                                </ContentControl>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ContentControl Content="{Binding Path=Title}">
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                             </Grid>
                             <GridSplitter Name="vsplitter"
@@ -583,8 +643,8 @@
                             </Grid>
                         </Grid>
                     </DataTemplate>
-                </TabControl.Resources>
-            </TabControl>
+                </bc:TabControl.Resources>
+            </bc:TabControl>
             <TextBox Name="genCodeMessageTextBox"
                      Grid.Row="1"
                      BorderThickness="1"

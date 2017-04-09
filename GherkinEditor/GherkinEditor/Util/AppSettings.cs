@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Gherkin.Util
@@ -78,6 +75,103 @@ namespace Gherkin.Util
             private set { this["RecentFilesInfo"] = value; }
         }
 
+        public string LastGreppedText
+        {
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) return;
+
+                var list = LastGreppedTexts;
+                InsertFirst(list, value);
+                LastGreppedTexts = list;
+            }
+        }
+
+        [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [DefaultSettingValueAttribute("")]
+        public List<string> LastGreppedTexts
+        {
+            get { return (List<string>)this["LastGreppedTexts"]; }
+            set { this["LastGreppedTexts"] = value; }
+        }
+
+        /// <summary>
+        /// Insert item at the front of list.
+        /// And limit length of list to 20;
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="item"></param>
+        private void InsertFirst(List<string> list, string item)
+        {
+            list.Remove(item);
+            list.Insert(0, item);
+            var remove_count = list.Count - 20;
+            if (remove_count > 0)
+            {
+                // remove that number of items from the start of the list
+                list.RemoveRange(20, remove_count);
+            }
+        }
+
+        public string LastUsedFileExtension
+        {
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) return;
+
+                var list = LastFileExtensions;
+                InsertFirst(list, value);
+                LastFileExtensions = list;
+            }
+        }
+
+        [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [DefaultSettingValueAttribute("")]
+        public List<string> LastFileExtensions
+        {
+            get { return (List<string>)this["LastFileExtensions"]; }
+            set { this["LastFileExtensions"] = value; }
+        }
+
+        public string LastGreppedFolder
+        {
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) return;
+
+                var list = LastGreppedFolders;
+                InsertFirst(list, value);
+                LastGreppedFolders = list;
+            }
+        }
+
+        [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [DefaultSettingValueAttribute("")]
+        public List<string> LastGreppedFolders
+        {
+            get { return (List<string>)this["LastGreppedFolders"]; }
+            set { this["LastGreppedFolders"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool IsCaseSensitiveInFind
+        {
+            get { return (bool)this["IsCaseSensitiveInFind"]; }
+            set { this["IsCaseSensitiveInFind"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool IsMatchWholeWordInFind
+        {
+            get { return (bool)this["IsMatchWholeWordInFind"]; }
+            set { this["IsMatchWholeWordInFind"] = value; }
+        }
+
         public void UpdateFontFamilyName(string filePath, string fontFamilyName)
         {
             if (fontFamilyName == null) return;
@@ -126,6 +220,14 @@ namespace Gherkin.Util
                 fileInfo = new GherkinFileInfo() { FilePath = filePath, FontFamilyName = this.FontFamilyName, FontSize = this.FontSize };
             }
             return fileInfo;
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("")]
+        public string LastSelectedFile
+        {
+            get { return (string)this["LastSelectedFile"]; }
+            set { this["LastSelectedFile"] = value; }
         }
 
         [UserScopedSetting()]
@@ -213,7 +315,7 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("True")]
+        [DefaultSettingValueAttribute("False")]
         public bool ShowScenarioIndexByDefault
         {
             get { return (bool)this["ShowScenarioIndexByDefault"]; }

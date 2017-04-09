@@ -41,6 +41,8 @@ namespace Gherkin.View
                 }
             }
 
+            EventAggregator<EditorLoadedArg>.Instance.Publish(this, new EditorLoadedArg(EditorTabContentViewModel));
+
             // Important Note: the main editor is focused whenever it is loaded.
             // Reason: FindControl of InitializeEditorView will fail
             // when creating loading next new editor if MainEditor is not focused.

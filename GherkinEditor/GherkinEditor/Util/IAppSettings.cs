@@ -12,8 +12,19 @@ namespace Gherkin.Util
     {
         Languages Language { get; set; }
         Size MainWindowSize { get; set; }
+        string LastSelectedFile { get; set; }
         string LastUsedFile { get; set; }
         List<string> LastOpenedFiles { get; set; }
+
+        string LastGreppedText { set; }
+        List<string> LastGreppedTexts { get; set; }
+        string LastUsedFileExtension { set; }
+        List<string> LastFileExtensions { get; set; }
+        string LastGreppedFolder { set; }
+        List<string> LastGreppedFolders { get; set; }
+        bool IsCaseSensitiveInFind { get; set; }
+        bool IsMatchWholeWordInFind { get; set; }
+
         string FontFamilyName { get; set; }
         string FontSize { get; set; }
         List<GherkinFileInfo> RecentFilesInfo { get; }

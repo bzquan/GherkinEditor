@@ -68,7 +68,7 @@ namespace Gherkin.View
         {
             if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
             {
-                m_ViewModel.OpenFiles(new string[] { filePath });
+                m_ViewModel.OpenFiles(filePath);
             }
         }
     }

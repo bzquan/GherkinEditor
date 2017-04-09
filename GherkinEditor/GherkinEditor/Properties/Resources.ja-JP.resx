@@ -303,11 +303,20 @@
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>タグ色</value>
   </data>
+  <data name="MenuTab_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
   <data name="MenuTab_CloseAllButThis" xml:space="preserve">
     <value>これ以外を全て閉じる</value>
   </data>
   <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
     <value>全て閉じる</value>
+  </data>
+  <data name="MenuTab_OpenInNewEditor" xml:space="preserve">
+    <value>新規エディターで開く</value>
+  </data>
+  <data name="MenuTab_Rename" xml:space="preserve">
+    <value>ファイル名の変更</value>
   </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>折り畳みの全展開</value>
@@ -421,6 +430,9 @@
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>新規作成</value>
   </data>
+  <data name="Tooltip_OpenedDocuments" xml:space="preserve">
+    <value>開いているファイル</value>
+  </data>
   <data name="Tooltip_OpenFile" xml:space="preserve">
     <value>開く</value>
   </data>
@@ -430,10 +442,43 @@
   <data name="Tooltip_SaveFile" xml:space="preserve">
     <value>保存</value>
   </data>
+  <data name="Tooltip_ScrollLeft" xml:space="preserve">
+    <value>左へスクロール</value>
+  </data>
+  <data name="Tooltip_ScrollRight" xml:space="preserve">
+    <value>右へスクロール</value>
+  </data>
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>シナリオ目次の表示</value>
   </data>
   <data name="Tooltip_SplitEditor" xml:space="preserve">
     <value>ウインドウズ分割</value>
+  </data>
+  <data name="Message_RenameFailedTitle" xml:space="preserve">
+    <value>ファイル名の変更失敗</value>
+  </data>
+  <data name="MenuFind_Grep" xml:space="preserve">
+    <value>ファイルからGrep</value>
+  </data>
+  <data name="DlgGrepLabel_FileExtensions" xml:space="preserve">
+    <value>ファイル拡張子</value>
+  </data>
+  <data name="DlgGrepLabel_SearchFolder" xml:space="preserve">
+    <value>フォルダー</value>
+  </data>
+  <data name="DlgGrepLabel_TextToFind" xml:space="preserve">
+    <value>検索文字列</value>
+  </data>
+  <data name="DlgGrepTooltip_FileExtensions" xml:space="preserve">
+    <value>ファイル拡張子例(*.feature; *.cs)</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepSearchFolder" xml:space="preserve">
+    <value>フォルダー検索</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepStart" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
+    <value>最後尾まで検索しました。もう一度検索しますか？</value>
   </data>
 </root>

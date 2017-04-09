@@ -303,11 +303,20 @@
   <data name="MenuSetting_TagColor" xml:space="preserve">
     <value>Tag颜色</value>
   </data>
+  <data name="MenuTab_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
   <data name="MenuTab_CloseAllButThis" xml:space="preserve">
     <value>除此之外全部关闭</value>
   </data>
   <data name="MenuTab_CloseAllDocuments" xml:space="preserve">
     <value>全部关闭</value>
+  </data>
+  <data name="MenuTab_OpenInNewEditor" xml:space="preserve">
+    <value>用新编辑器打开</value>
+  </data>
+  <data name="MenuTab_Rename" xml:space="preserve">
+    <value>换名</value>
   </data>
   <data name="MenuView_FoldOpenAll" xml:space="preserve">
     <value>展开全部折叠</value>
@@ -421,6 +430,9 @@
   <data name="Tooltip_NewFile" xml:space="preserve">
     <value>新建</value>
   </data>
+  <data name="Tooltip_OpenedDocuments" xml:space="preserve">
+    <value>已打开文件</value>
+  </data>
   <data name="Tooltip_OpenFile" xml:space="preserve">
     <value>打开</value>
   </data>
@@ -430,10 +442,43 @@
   <data name="Tooltip_SaveFile" xml:space="preserve">
     <value>保存</value>
   </data>
+  <data name="Tooltip_ScrollLeft" xml:space="preserve">
+    <value>向左滚动</value>
+  </data>
+  <data name="Tooltip_ScrollRight" xml:space="preserve">
+    <value>向右滚动</value>
+  </data>
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>显示场景目录</value>
   </data>
   <data name="Tooltip_SplitEditor" xml:space="preserve">
     <value>分割窗口</value>
+  </data>
+  <data name="Message_RenameFailedTitle" xml:space="preserve">
+    <value>换名失败</value>
+  </data>
+  <data name="MenuFind_Grep" xml:space="preserve">
+    <value>从文件检索(Grep)</value>
+  </data>
+  <data name="DlgGrepLabel_FileExtensions" xml:space="preserve">
+    <value>文件扩展名</value>
+  </data>
+  <data name="DlgGrepLabel_SearchFolder" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="DlgGrepLabel_TextToFind" xml:space="preserve">
+    <value>检索字符串</value>
+  </data>
+  <data name="DlgGrepTooltip_FileExtensions" xml:space="preserve">
+    <value>文件扩展名之例(*.feature; *.cs)</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepSearchFolder" xml:space="preserve">
+    <value>检索文件夹</value>
+  </data>
+  <data name="DlgGrepTooltip_GrepStart" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
+    <value>检索完毕。需要重新检索吗？</value>
   </data>
 </root>

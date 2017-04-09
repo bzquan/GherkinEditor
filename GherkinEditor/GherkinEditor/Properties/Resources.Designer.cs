@@ -160,6 +160,69 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File extensions.
+        /// </summary>
+        public static string DlgGrepLabel_FileExtensions {
+            get {
+                return ResourceManager.GetString("DlgGrepLabel_FileExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder.
+        /// </summary>
+        public static string DlgGrepLabel_SearchFolder {
+            get {
+                return ResourceManager.GetString("DlgGrepLabel_SearchFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text to find.
+        /// </summary>
+        public static string DlgGrepLabel_TextToFind {
+            get {
+                return ResourceManager.GetString("DlgGrepLabel_TextToFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No more text found. Do you find from start again?.
+        /// </summary>
+        public static string DlgGrepMsg_NoMoreTextFound {
+            get {
+                return ResourceManager.GetString("DlgGrepMsg_NoMoreTextFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample extensions(*.feature; *.cs).
+        /// </summary>
+        public static string DlgGrepTooltip_FileExtensions {
+            get {
+                return ResourceManager.GetString("DlgGrepTooltip_FileExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search folder.
+        /// </summary>
+        public static string DlgGrepTooltip_GrepSearchFolder {
+            get {
+                return ResourceManager.GetString("DlgGrepTooltip_GrepSearchFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string DlgGrepTooltip_GrepStart {
+            get {
+                return ResourceManager.GetString("DlgGrepTooltip_GrepStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Compile.
         /// </summary>
         public static string MenuCompile_Comple {
@@ -372,6 +435,15 @@ namespace Gherkin.Properties {
         public static string MenuFind_FindReplace {
             get {
                 return ResourceManager.GetString("MenuFind_FindReplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grep in files.
+        /// </summary>
+        public static string MenuFind_Grep {
+            get {
+                return ResourceManager.GetString("MenuFind_Grep", resourceCulture);
             }
         }
         
@@ -619,6 +691,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string MenuTab_Close {
+            get {
+                return ResourceManager.GetString("MenuTab_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close All But This.
         /// </summary>
         public static string MenuTab_CloseAllButThis {
@@ -633,6 +714,24 @@ namespace Gherkin.Properties {
         public static string MenuTab_CloseAllDocuments {
             get {
                 return ResourceManager.GetString("MenuTab_CloseAllDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open in new editor.
+        /// </summary>
+        public static string MenuTab_OpenInNewEditor {
+            get {
+                return ResourceManager.GetString("MenuTab_OpenInNewEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string MenuTab_Rename {
+            get {
+                return ResourceManager.GetString("MenuTab_Rename", resourceCulture);
             }
         }
         
@@ -854,6 +953,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename failed.
+        /// </summary>
+        public static string Message_RenameFailedTitle {
+            get {
+                return ResourceManager.GetString("Message_RenameFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to Replace All occurences of &quot;{0}&quot; with &quot;{1}&quot;?.
         /// </summary>
         public static string Message_ReplaceAllConfirm {
@@ -971,6 +1079,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opened documents.
+        /// </summary>
+        public static string Tooltip_OpenedDocuments {
+            get {
+                return ResourceManager.GetString("Tooltip_OpenedDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open file.
         /// </summary>
         public static string Tooltip_OpenFile {
@@ -994,6 +1111,24 @@ namespace Gherkin.Properties {
         public static string Tooltip_SaveFile {
             get {
                 return ResourceManager.GetString("Tooltip_SaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll to left.
+        /// </summary>
+        public static string Tooltip_ScrollLeft {
+            get {
+                return ResourceManager.GetString("Tooltip_ScrollLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll to right.
+        /// </summary>
+        public static string Tooltip_ScrollRight {
+            get {
+                return ResourceManager.GetString("Tooltip_ScrollRight", resourceCulture);
             }
         }
         

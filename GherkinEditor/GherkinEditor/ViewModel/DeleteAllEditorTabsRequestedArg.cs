@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gherkin.ViewModel
 {
-    public class DeleteAllEditorTabsRequested : EventArgs
+    public class DeleteAllEditorTabsRequestedArg : EventArgs
     {
-        public DeleteAllEditorTabsRequested(EditorTabContentViewModel excludedEditorViewModel)
+        public DeleteAllEditorTabsRequestedArg(EditorTabContentViewModel excludedEditorViewModel)
         {
             ExcludedEditorViewModel = excludedEditorViewModel;
         }

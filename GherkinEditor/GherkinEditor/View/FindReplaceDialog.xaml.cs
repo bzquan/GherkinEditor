@@ -4,6 +4,8 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using System.Media;
 using Gherkin.Util;
+using Gherkin.Model;
+using System;
 
 namespace Gherkin.View
 {
@@ -13,6 +15,8 @@ namespace Gherkin.View
     /// </summary>
     public partial class FindReplaceDialog : Window
     {
+        private static Lazy<ColorizeAvalonEdit> s_ColorizeAvalonEdit = new Lazy<ColorizeAvalonEdit>(() => new ColorizeAvalonEdit());
+
         private static string textToFind = "";
         private static bool caseSensitive = false;
         private static bool wholeWord = false;
@@ -36,6 +40,9 @@ namespace Gherkin.View
             cbRegex.IsChecked = useRegex;
             cbWildcards.IsChecked = useWildcards;
             cbSearchUp.IsChecked = searchUp;
+            s_ColorizeAvalonEdit.Value.IsCaseSensitive = caseSensitive;
+
+            editor.TextArea.TextView.LineTransformers.Add(s_ColorizeAvalonEdit.Value);
         }
 
         private void Window_Closed(object sender, System.EventArgs e)
@@ -47,24 +54,35 @@ namespace Gherkin.View
             useWildcards = (cbWildcards.IsChecked == true);
             searchUp = (cbSearchUp.IsChecked == true);
             defaultTabMainSelectedIndex = theDialog.tabMain.SelectedIndex;
+            editor.TextArea.TextView.LineTransformers.Remove(s_ColorizeAvalonEdit.Value);
+            SetColorizingWord(text:null);
 
             theDialog = null;
         }
 
+        private static void SetColorizingWord(string text)
+        {
+            s_ColorizeAvalonEdit.Value.ColorizingWord = text;
+            s_ColorizeAvalonEdit.Value.IsCaseSensitive = caseSensitive;
+        }
+
         private void FindNextClick(object sender, RoutedEventArgs e)
         {
+            SetColorizingWord(txtFind.Text);
             if (!FindNext(txtFind.Text))
                 SystemSounds.Beep.Play();
         }
 
         private void FindNext2Click(object sender, RoutedEventArgs e)
         {
+            SetColorizingWord(txtFind2.Text);
             if (!FindNext(txtFind2.Text))
                 SystemSounds.Beep.Play();
         }
 
         private void ReplaceClick(object sender, RoutedEventArgs e)
         {
+            SetColorizingWord(txtFind2.Text);
             Regex regex = GetRegEx(txtFind2.Text);
             string input = editor.Text.Substring(editor.SelectionStart, editor.SelectionLength);
             Match match = regex.Match(input);
@@ -113,10 +131,19 @@ namespace Gherkin.View
 
             if (!match.Success)  // start again from beginning or end
             {
-                if (regex.Options.HasFlag(RegexOptions.RightToLeft))
-                    match = regex.Match(editor.Text, editor.Text.Length);
-                else
-                    match = regex.Match(editor.Text, 0);
+                MessageBoxResult result = MessageBox.Show(
+                                               Application.Current.MainWindow,
+                                               Properties.Resources.DlgGrepMsg_NoMoreTextFound,
+                                               Properties.Resources.DlgFind_FindNext,
+                                               MessageBoxButton.YesNo,
+                                               MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (regex.Options.HasFlag(RegexOptions.RightToLeft))
+                        match = regex.Match(editor.Text, editor.Text.Length);
+                    else
+                        match = regex.Match(editor.Text, 0);
+                }
             }
 
             if (match.Success)
@@ -174,6 +201,7 @@ namespace Gherkin.View
                 theDialog.txtFind.Text = theDialog.txtFind2.Text = editor.TextArea.Selection.GetText();
                 theDialog.txtFind.SelectAll();
                 theDialog.txtFind2.SelectAll();
+                theDialog.txtFind.Focus();
                 theDialog.txtFind2.Focus();
             }
         }

@@ -7,9 +7,9 @@ using Gherkin.View;
 
 namespace Gherkin.ViewModel
 {
-    public class DeleteEditorTabRequested : EventArgs
+    public class DeleteEditorTabRequestedArg : EventArgs
     {
-        public DeleteEditorTabRequested(EditorTabContentViewModel editorViewModel)
+        public DeleteEditorTabRequestedArg(EditorTabContentViewModel editorViewModel)
         {
             EditorViewModel = editorViewModel;
         }

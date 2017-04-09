@@ -48,6 +48,7 @@ namespace Gherkin.ViewModel
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
         public TextDocument Document => MainGherkinEditor?.Document;
         public string CurrentFilePath { get; set; }
+        public GrepViewModel GrepViewModel { get; set; }    // It will own the GrepViewModel if current editor is grep editor
 
         public EditorTabContentViewModel(string filePath, IAppSettings appSettings)
         {
@@ -124,6 +125,15 @@ namespace Gherkin.ViewModel
             }
         }
 
+        public string CurrentLineText
+        {
+            get
+            {
+                int line_no = MainGherkinEditor.CursorLine;
+                return GherkinFormatUtil.GetText(Document, Document.GetLineByNumber(line_no));
+            }
+        }
+
         public bool HighlightCurrentLine
         {
             set
@@ -152,8 +162,10 @@ namespace Gherkin.ViewModel
         {
             MainGherkinEditor.ChangeToEmptyFile();
             SubGherkinEditor.ChangeToEmptyFile();
+            Keyboard.Focus(MainEditor);
 
             CurrentFilePath = null;
+            HideScenarioIndex = true;
             FileNameChangedEvent?.Invoke(CurrentFilePath);
         }
 
@@ -188,10 +200,26 @@ namespace Gherkin.ViewModel
             CurrentFilePath = filePath;
             Document.FileName = filePath;
             FileNameChangedEvent?.Invoke(filePath);
+            HideScenarioIndex = !IsFeatureFile;
 
             if (CurrentFilePath != filePath)
             {
                 EventAggregator<FileSavedAsArg>.Instance.Publish(this, new FileSavedAsArg(CurrentFilePath));
+            }
+        }
+
+        public bool IsFeatureFile
+        {
+            get
+            {
+                try
+                {
+                    return (CurrentFilePath != null) && Path.GetExtension(CurrentFilePath) == ".feature";
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -233,16 +261,23 @@ namespace Gherkin.ViewModel
         {
             if (string.IsNullOrEmpty(CurrentFilePath) || (MainGherkinEditor == null)) return;
 
-            if (Path.GetExtension(CurrentFilePath) == GherkinUtil.FEATURE_EXTENSION)
+            try
             {
-                GherkinUtil.RegisterGherkinHighlighting(CurrentLanguage);
-                IHighlightingDefinition highlighting = GetHighlightingDefinition();
+                if (Path.GetExtension(CurrentFilePath) == GherkinUtil.FEATURE_EXTENSION)
+                {
+                    GherkinUtil.RegisterGherkinHighlighting(CurrentLanguage);
+                    IHighlightingDefinition highlighting = GetHighlightingDefinition();
 
-                MainGherkinEditor.SyntaxHighlighting = highlighting;
-                SubGherkinEditor.SyntaxHighlighting = highlighting;
+                    MainGherkinEditor.SyntaxHighlighting = highlighting;
+                    SubGherkinEditor.SyntaxHighlighting = highlighting;
 
-                if (installFolding)
-                    InstallFoldingManager();
+                    if (installFolding)
+                        InstallFoldingManager();
+                }
+            }
+            catch
+            {
+                // do nothing
             }
         }
 
@@ -425,7 +460,7 @@ namespace Gherkin.ViewModel
             get { return m_IsScenarioIndexHidden; }
             set
             {
-                m_IsScenarioIndexHidden = value;
+                m_IsScenarioIndexHidden = value || !IsFeatureFile;
                 base.OnPropertyChanged();
             }
         }
@@ -445,25 +480,29 @@ namespace Gherkin.ViewModel
             MainGherkinEditor.ScrollCursorTo(line, column);
         }
 
+        /// <summary>
+        /// Force to change modification status to unmodified.
+        /// And set grepText as file name to show in editor tab
+        /// Note: It will be used for grep result editor window
+        /// </summary>
+        /// <param name="grepText">grepped text</param>
+        public void SetUnmodified(string grepText)
+        {
+            MainEditor.IsModified = false;
+            CurrentFilePath = grepText;
+            FileNameChangedEvent?.Invoke(CurrentFilePath);
+            DocumentSavedEvent?.Invoke();
+        }
+
         public void SaveFile(bool saveAs)
         {
             string filePath2Save = CurrentFilePath;
             if (string.IsNullOrEmpty(CurrentFilePath) || saveAs)
             {
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.DefaultExt = GherkinUtil.FEATURE_EXTENSION;
-                dlg.FilterIndex = 1;
-                dlg.Filter = "Gherkin feature(.feature)|*.feature|Text File(*.txt)|*.txt|All Files (*.*)|*.*";
-                bool? result = dlg.ShowDialog();
-                if (result == true)
-                {
-                    filePath2Save = dlg.FileName;
-                }
-                else
-                {
-                    return;
-                }
+                filePath2Save = NewFilePath(CurrentFilePath);
+                if (filePath2Save == null) return;
             }
+
             MainEditor.Save(filePath2Save);
             if (CurrentFilePath != filePath2Save)
             {
@@ -472,6 +511,49 @@ namespace Gherkin.ViewModel
             UpdateEditor(filePath2Save);
 
             DocumentSavedEvent?.Invoke();
+        }
+
+        private string NewFilePath(string defaultFilePath)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.FileName = string.IsNullOrEmpty(defaultFilePath) ? "Unknown" : Path.GetFileName(defaultFilePath);
+            dlg.DefaultExt = GherkinUtil.FEATURE_EXTENSION;
+            dlg.FilterIndex = 1;
+            dlg.Filter = "Gherkin feature(.feature)|*.feature|Text File(*.txt)|*.txt|All Files (*.*)|*.*";
+            bool? result = dlg.ShowDialog();
+            if (result == true)
+            {
+                return dlg.FileName;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void Rename(string filePath)
+        {
+            string newFilePath = NewFilePath(filePath);
+            if (newFilePath == null) return;
+
+            try
+            {
+                File.Move(filePath, newFilePath);
+                if (CurrentFilePath != newFilePath)
+                {
+                    UpdateLastUsedFile(newFilePath);
+                }
+                UpdateEditor(newFilePath);
+
+                DocumentSavedEvent?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,
+                                Properties.Resources.Message_RenameFailedTitle,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
         }
 
         private void UpdateLastUsedFile(string filePath2Save)

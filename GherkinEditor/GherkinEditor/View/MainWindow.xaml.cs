@@ -13,6 +13,7 @@ using Gherkin.ViewModel;
 using System.Windows.Interop;
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Controls.Primitives;
 
 namespace Gherkin.View
 {
@@ -25,6 +26,7 @@ namespace Gherkin.View
         private GherkinViewModel m_ViewModel;
         private InteropMessageReceiver m_InteropMessageReceiver;
         private GherkinKeywordsViewModel m_GherkinKeywordsViewModel;
+        private BetterWpfControls.MenuButton m_ShowQuickLinksButton;
 
         public MainWindow(IAppSettings appSettings, GherkinViewModel viewModel, GherkinKeywordsViewModel gherkinKeywordsViewModel)
         {
@@ -37,14 +39,7 @@ namespace Gherkin.View
             m_ViewModel = viewModel;
             m_GherkinKeywordsViewModel = gherkinKeywordsViewModel;
             m_ViewModel.EditorTabControl = editorTabControl;
-            editorTabControl.SizeChanged += OnEditorTabControlSizeChanged;
-
             InitWindowSize();
-        }
-
-        private void OnEditorTabControlSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            EventAggregator<AdjustMaxWidthOfEditorTabArg>.Instance.Publish(this, new AdjustMaxWidthOfEditorTabArg());
         }
 
         public string OpenFeatureFile
@@ -148,6 +143,7 @@ namespace Gherkin.View
                 return;
             }
 
+            m_ViewModel.SaveLastSelectedFile();
             m_ViewModel.SaveLastOpenedFileInfo();
             m_AppSettings.IsMainWindowStateMaximized = (WindowState == WindowState.Maximized);
             if (WindowState == WindowState.Normal)
@@ -158,20 +154,43 @@ namespace Gherkin.View
             m_AppSettings.Save();
         }
 
-        private void Window_Drop(object sender, DragEventArgs e)
-        {
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
-            m_ViewModel.OpenFiles(files);
-        }
-
-        private void Window_PreviewDragOver(object sender, DragEventArgs e)
+        private void OnDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop, true))
+            {
+                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                m_ViewModel.OpenFiles(files);
+            }
+        }
+
+        private void OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, true) ||
+                e.Data.GetDataPresent(DataFormats.UnicodeText, true))
                 e.Effects = DragDropEffects.Copy;
             else
                 e.Effects = DragDropEffects.None;
 
             e.Handled = true;
+        }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            m_ShowQuickLinksButton = editorTabControl
+                                        .Template
+                                        .FindName("PART_QuickLinksHost", editorTabControl) as BetterWpfControls.MenuButton;
+            m_ShowQuickLinksButton.ToolTip = Properties.Resources.Tooltip_OpenedDocuments;
+
+            //ForceToolTipStayOn();
+        }
+
+        /// <summary>
+        /// Forcing a WPF tooltip to stay on the screen when window is loaded
+        /// </summary>
+        private void ForceToolTipStayOn()
+        {
+            ToolTipService.ShowDurationProperty.OverrideMetadata(
+                typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
         }
 
         /// <summary>

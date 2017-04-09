@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ColorizeAvalonEdit.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
     <Compile Include="Model\HtmlConverter\HtmlCssParser.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\CanCloseAllDocumentsChecker.cs" />
-    <Compile Include="ViewModel\DeleteAllEditorTabsRequested.cs" />
+    <Compile Include="ViewModel\DeleteAllEditorTabsRequestedArg.cs" />
     <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
     <Compile Include="ViewModel\FontViewModel.cs" />
@@ -111,19 +112,28 @@
     <Compile Include="ViewModel\GherkinKeywordsCurrent.cs" />
     <Compile Include="ViewModel\GherkinKeywordsViewModel.cs" />
     <Compile Include="ViewModel\GherkinSettingViewModel.cs" />
+    <Compile Include="ViewModel\GrepViewModel.cs" />
     <Compile Include="ViewModel\HiddenableColumnDefinition.cs" />
     <Compile Include="ViewModel\HiddenableRowDefinition.cs" />
     <Compile Include="ViewModel\ICanCloseAllDocumentsChecker.cs" />
-    <Compile Include="ViewModel\IOpenNewEditor.cs" />
+    <Compile Include="ViewModel\IGrepEditorProvider.cs" />
     <Compile Include="ViewModel\MultiFileOpener.cs" />
+    <Compile Include="ViewModel\OpenNewGherkinEditorRequestedArg.cs" />
+    <Compile Include="ViewModel\RenameDocumentRequestedArg.cs" />
     <Compile Include="ViewModel\RichTextBoxHelper.cs" />
+    <Compile Include="ViewModel\SaveAsDocumentRequestedArg.cs" />
     <Compile Include="ViewModel\ScenarioIndex.cs" />
+    <Compile Include="ViewModel\EditorLoadedArg.cs" />
     <Compile Include="View\AboutControlView.xaml.cs">
       <DependentUpon>AboutControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AutoGreyableImage.cs" />
+    <Compile Include="View\AutoFocusPopup.cs" />
     <Compile Include="View\GherkinKeywords.xaml.cs">
       <DependentUpon>GherkinKeywords.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GrepDialog.xaml.cs">
+      <DependentUpon>GrepDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
@@ -150,6 +160,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GherkinKeywords.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GrepDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,11 +196,10 @@
     <Compile Include="Model\BDD\BDDStepImplCppBuilder.cs" />
     <Compile Include="Model\BDD\BDDUtil.cs" />
     <Compile Include="Model\GherkinFoldingBuilder.cs" />
-    <Compile Include="Util\AdjustMaxWidthOfEditorTabArg.cs" />
     <Compile Include="Util\ConfigReader.cs" />
     <Compile Include="Util\EventAggregator.cs" />
     <Compile Include="Util\StringBuilderExtension.cs" />
-    <Compile Include="ViewModel\DeleteEditorTabRequested.cs" />
+    <Compile Include="ViewModel\DeleteEditorTabRequestedArg.cs" />
     <Compile Include="ViewModel\DocumentPaginatorWrapper.cs" />
     <Compile Include="ViewModel\Printing.cs" />
     <Compile Include="ViewModel\GherkinEditor.cs" />
@@ -349,6 +362,10 @@
     <Resource Include="View\Images\WordWrap.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BetterWpfControls\BetterWpfControls.csproj">
+      <Project>{e8229630-9896-4536-b6f9-ba8c1738e498}</Project>
+      <Name>BetterWpfControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GherkinParser\Gherkin\Gherkin.csproj">
       <Project>{370982b4-9938-4533-8ea1-6f9044b84130}</Project>
       <Name>Gherkin</Name>
@@ -474,6 +491,28 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\FindAndReplace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\PullDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\PullDown1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\ScrollLeft.png" />
+    <Resource Include="View\Images\ScrollRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\SearchFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\StartGrep.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

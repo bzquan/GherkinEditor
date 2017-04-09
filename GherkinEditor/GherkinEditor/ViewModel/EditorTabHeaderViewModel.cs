@@ -9,6 +9,8 @@ using System.Windows;
 using static Gherkin.Util.Util;
 using System.Collections.ObjectModel;
 using Gherkin.View;
+using System.IO;
+using System.Diagnostics;
 
 namespace Gherkin.ViewModel
 {
@@ -21,6 +23,7 @@ namespace Gherkin.ViewModel
         public EditorTabHeaderViewModel(EditorTabContentViewModel editorTabContentViewModel, ICanCloseAllDocumentsChecker canCloseAllDocumentsChecker)
         {
             EditorTabContentViewModel = editorTabContentViewModel;
+            m_FilePath = editorTabContentViewModel.CurrentFilePath;
             CanCloseAllDocumentsChecker = canCloseAllDocumentsChecker;
 
             EditorTabContentViewModel.TextEditorLoadedEvent += OnTextEditorLoaded;
@@ -28,15 +31,56 @@ namespace Gherkin.ViewModel
             EditorTabContentViewModel.DocumentSavedEvent += OnDocumentSaved;
         }
 
+        public ICommand CloseCmd => new DelegateCommandNoArg(OnClose);
         public ICommand CloseAllDocumentsCmd => new DelegateCommandNoArg(OnCloseAllDocuments, CanCloseAllDocumentsChecker.CanCloseAllDocuments);
         public ICommand CloseAllButThisCmd => new DelegateCommandNoArg(OnCloseAllButThis, CanCloseAllDocumentsChecker.CanCloseAllButThis);
-        public DelegateCommandNoArg DeleteTabCmd => new DelegateCommandNoArg(OnDelete);
         public ICommand SaveCmd => new DelegateCommandNoArg(OnSave);
+        public ICommand SaveAsCmd => new DelegateCommandNoArg(OnSaveAs);
+        public ICommand RenameCmd => new DelegateCommandNoArg(OnRename, FileExist);
+        public ICommand OpenCurrentFolderCmd => new DelegateCommandNoArg(OnOpenFolder, FileExist);
+        public ICommand OpenInNewEditorCmd => new DelegateCommandNoArg(OnOpenInNewEditor, CanOpenInNewEditor);
 
-        private void OnDelete()
+        private void OnRename()
         {
-            DeleteEditorTabRequested arg = new DeleteEditorTabRequested(EditorTabContentViewModel);
-            Util.EventAggregator<DeleteEditorTabRequested>.Instance.Publish(this, arg);
+            RenameDocumentRequestedArg arg = new RenameDocumentRequestedArg(EditorTabContentViewModel);
+            Util.EventAggregator<RenameDocumentRequestedArg>.Instance.Publish(this, arg);
+        }
+        private void OnSaveAs()
+        {
+            SaveAsDocumentRequestedArg arg = new SaveAsDocumentRequestedArg(EditorTabContentViewModel);
+            Util.EventAggregator<SaveAsDocumentRequestedArg>.Instance.Publish(this, arg);
+        }
+
+        private bool FileExist()
+        {
+            return (!string.IsNullOrEmpty(m_FilePath) &&
+                    File.Exists(m_FilePath));
+        }
+
+        private void OnOpenFolder()
+        {
+            string path = Path.GetDirectoryName(m_FilePath);
+            Process.Start(path);
+        }
+
+        private void OnOpenInNewEditor()
+        {
+            OnClose();
+
+            OpenNewGherkinEditorRequestedArg arg = new OpenNewGherkinEditorRequestedArg(m_FilePath);
+            Util.EventAggregator<OpenNewGherkinEditorRequestedArg>.Instance.Publish(this, arg);
+        }
+        private bool CanOpenInNewEditor()
+        {
+            return (!string.IsNullOrEmpty(m_FilePath) &&
+                    File.Exists(m_FilePath) &&
+                    !EditorTabContentViewModel.MainEditor.IsModified);
+        }
+        
+        private void OnClose()
+        {
+            DeleteEditorTabRequestedArg arg = new DeleteEditorTabRequestedArg(EditorTabContentViewModel);
+            Util.EventAggregator<DeleteEditorTabRequestedArg>.Instance.Publish(this, arg);
         }
 
         private void OnSave()
@@ -49,14 +93,14 @@ namespace Gherkin.ViewModel
 
         private void OnCloseAllDocuments()
         {
-            DeleteAllEditorTabsRequested arg = new DeleteAllEditorTabsRequested(null);
-            Util.EventAggregator<DeleteAllEditorTabsRequested>.Instance.Publish(this, arg);
+            DeleteAllEditorTabsRequestedArg arg = new DeleteAllEditorTabsRequestedArg(null);
+            Util.EventAggregator<DeleteAllEditorTabsRequestedArg>.Instance.Publish(this, arg);
         }
 
         private void OnCloseAllButThis()
         {
-            DeleteAllEditorTabsRequested arg = new DeleteAllEditorTabsRequested(EditorTabContentViewModel);
-            Util.EventAggregator<DeleteAllEditorTabsRequested>.Instance.Publish(this, arg);
+            DeleteAllEditorTabsRequestedArg arg = new DeleteAllEditorTabsRequestedArg(EditorTabContentViewModel);
+            Util.EventAggregator<DeleteAllEditorTabsRequestedArg>.Instance.Publish(this, arg);
         }
 
         public string DocumentModificationStatusIcon
@@ -68,7 +112,7 @@ namespace Gherkin.ViewModel
             }
         }
 
-        private double m_MaxWidthOfFileNameText = 40;
+        private double m_MaxWidthOfFileNameText = 300;
         public double MaxWidthOfFileNameText
         {
             get { return m_MaxWidthOfFileNameText; }
@@ -95,7 +139,18 @@ namespace Gherkin.ViewModel
             get
             {
                 if (m_FilePath != null)
-                    return System.IO.Path.GetFileName(m_FilePath);
+                {
+                    try
+                    {
+                        return Path.GetFileName(m_FilePath);
+                    }
+                    catch
+                    {
+                        // The the "FilePath" would not not be real file path
+                        //  when grepping text as file path
+                        return m_FilePath;
+                    }
+                }
                 else
                     return Properties.Resources.Message_UnknownFileName;
             }
