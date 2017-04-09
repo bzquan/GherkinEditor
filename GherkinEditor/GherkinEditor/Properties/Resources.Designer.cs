@@ -691,6 +691,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear search highlighting.
+        /// </summary>
+        public static string MenuTab_ClearSearchHighlighting {
+            get {
+                return ResourceManager.GetString("MenuTab_ClearSearchHighlighting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string MenuTab_Close {

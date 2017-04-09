@@ -16,6 +16,7 @@ namespace Gherkin.Util
         string LastUsedFile { get; set; }
         List<string> LastOpenedFiles { get; set; }
 
+        string LastSearchedText { get; set; }
         string LastGreppedText { set; }
         List<string> LastGreppedTexts { get; set; }
         string LastUsedFileExtension { set; }

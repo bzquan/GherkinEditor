@@ -102,9 +102,11 @@
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\CanCloseAllDocumentsChecker.cs" />
+    <Compile Include="ViewModel\CloseWindowCommand.cs" />
     <Compile Include="ViewModel\DeleteAllEditorTabsRequestedArg.cs" />
     <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
+    <Compile Include="ViewModel\FindReplaceViewModel.cs" />
     <Compile Include="ViewModel\FontViewModel.cs" />
     <Compile Include="ViewModel\GherkinCodeCompletion.cs" />
     <Compile Include="ViewModel\GherkinCodeCompletionWord.cs" />

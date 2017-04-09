@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:bc="BetterWpfControls"
-        xmlns:local="clr-namespace:Gherkin.View"
+        xmlns:vm="clr-namespace:Gherkin.ViewModel"
         xmlns:p = "clr-namespace:Gherkin.Properties"
         mc:Ignorable="d"
         Title="{x:Static p:Resources.MenuFind_Grep}" WindowStartupLocation="CenterOwner"
@@ -15,6 +15,10 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{x:Static vm:CloseWindowCommand.Instance}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+    </Window.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -41,7 +45,11 @@
             <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Name="txtFindComboBox"
                       IsEditable="True"
                       ItemsSource="{Binding RecentGreppedTexts}"
-                      Text="{Binding TextToGrep}"/>
+                      Text="{Binding TextToGrep}">
+                <ComboBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                </ComboBox.InputBindings>
+            </ComboBox>
             <bc:ImageButton Grid.Row="0" Grid.Column="2" Margin="10,2" Height="24" ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepStart}"
                             Source="Images/StartGrep.png"
                             Command="{Binding GrepCmd}"/>
@@ -51,7 +59,11 @@
                       ToolTip="{x:Static p:Resources.DlgGrepTooltip_FileExtensions}"
                       IsEditable="True"
                       ItemsSource="{Binding RecentFileExtensions}"
-                      Text="{Binding FileExtension}"/>
+                      Text="{Binding FileExtension}">
+                <ComboBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                </ComboBox.InputBindings>
+            </ComboBox>
 
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,2" Background="LightGray" Text="{x:Static p:Resources.DlgGrepLabel_SearchFolder}" VerticalAlignment="Center"/>
             <Grid Grid.Row="2" Grid.Column="1" Margin="0,3,0,3">
@@ -63,7 +75,11 @@
                           HorizontalAlignment="Stretch"
                           IsEditable="True"
                           ItemsSource="{Binding RecentFolders}"
-                          Text="{Binding Folder}"/>
+                          Text="{Binding Folder}">
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                    </ComboBox.InputBindings>
+                </ComboBox>
                 <bc:ImageButton Grid.Column="1" Name="searchFolderButton" Height="24" ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepSearchFolder}"
                                 Source="Images/SearchFolder.png"
                                 Command="{Binding FindFolderCmd}"/>

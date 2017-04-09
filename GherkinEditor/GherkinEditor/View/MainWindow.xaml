@@ -10,7 +10,6 @@
         xmlns:p = "clr-namespace:Gherkin.Properties"
         xmlns:vm="clr-namespace:Gherkin.ViewModel"
         xmlns:cmd="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
-        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
         mc:Ignorable="d"
         AllowDrop="True"
         Drop="OnDrop"
@@ -510,6 +509,11 @@
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu>
+                                    <MenuItem Header="{x:Static p:Resources.MenuTab_ClearSearchHighlighting}" Command="{Binding ClearSearchHighlightingCmd}">
+                                        <MenuItem.Icon>
+                                            <Image Source="Images/Highlight.png" Height="16"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <MenuItem Header="{x:Static p:Resources.MenuFile_Save}" Command="{Binding SaveCmd}" InputGestureText="Ctrl+S">
                                         <MenuItem.Icon>
                                             <Image Source="Images/Save.png" Height="16"/>

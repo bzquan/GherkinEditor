@@ -75,6 +75,14 @@ namespace Gherkin.Util
             private set { this["RecentFilesInfo"] = value; }
         }
 
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("")]
+        public string LastSearchedText
+        {
+            get { return (string)this["LastSearchedText"]; }
+            set { this["LastSearchedText"] = value; }
+        }
+
         public string LastGreppedText
         {
             set

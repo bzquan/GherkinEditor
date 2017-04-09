@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 using Gherkin.View;
 using System.IO;
 using System.Diagnostics;
+using Gherkin.Model;
+using ICSharpCode.AvalonEdit.Rendering;
 
 namespace Gherkin.ViewModel
 {
@@ -31,6 +33,7 @@ namespace Gherkin.ViewModel
             EditorTabContentViewModel.DocumentSavedEvent += OnDocumentSaved;
         }
 
+        public ICommand ClearSearchHighlightingCmd => new DelegateCommandNoArg(OnClearSearchHighlighting, CanClearSearchHighlighting);
         public ICommand CloseCmd => new DelegateCommandNoArg(OnClose);
         public ICommand CloseAllDocumentsCmd => new DelegateCommandNoArg(OnCloseAllDocuments, CanCloseAllDocumentsChecker.CanCloseAllDocuments);
         public ICommand CloseAllButThisCmd => new DelegateCommandNoArg(OnCloseAllButThis, CanCloseAllDocumentsChecker.CanCloseAllButThis);
@@ -56,6 +59,22 @@ namespace Gherkin.ViewModel
             return (!string.IsNullOrEmpty(m_FilePath) &&
                     File.Exists(m_FilePath));
         }
+
+        private void OnClearSearchHighlighting()
+        {
+            var itemsToRemove = LineTransformers.Where(x => x is ColorizeAvalonEdit).ToList();
+            foreach (var item in itemsToRemove)
+            {
+                LineTransformers.Remove(item);
+            }
+        }
+        private bool CanClearSearchHighlighting()
+        {
+            return LineTransformers.FirstOrDefault(x => x is ColorizeAvalonEdit) != null;
+        }
+
+        private IList<IVisualLineTransformer> LineTransformers =>
+            EditorTabContentViewModel.MainEditor.TextArea.TextView.LineTransformers;
 
         private void OnOpenFolder()
         {

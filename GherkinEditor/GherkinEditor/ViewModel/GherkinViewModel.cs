@@ -133,7 +133,7 @@ namespace Gherkin.ViewModel
         {
             if (HasEditorLoaded)
             {
-                View.FindReplaceDialog.ShowForReplace(MainTextEditor);
+                View.FindReplaceDialog.ShowForReplace(MainTextEditor, m_AppSettings);
             }
         }
 

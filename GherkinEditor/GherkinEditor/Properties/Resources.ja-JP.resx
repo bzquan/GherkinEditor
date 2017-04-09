@@ -481,4 +481,7 @@
   <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
     <value>最後尾まで検索しました。もう一度検索しますか？</value>
   </data>
+  <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
+    <value>検索協調色のクリア</value>
+  </data>
 </root>

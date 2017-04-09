@@ -481,4 +481,7 @@
   <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
     <value>检索完毕。需要重新检索吗？</value>
   </data>
+  <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
+    <value>取消检索亮显</value>
+  </data>
 </root>

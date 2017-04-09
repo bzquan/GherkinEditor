@@ -481,4 +481,7 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
     <value>No more text found. Do you find from start again?</value>
   </data>
+  <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
+    <value>Clear search highlighting</value>
+  </data>
 </root>
