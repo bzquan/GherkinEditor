@@ -120,9 +120,6 @@
   <data name="DlgFind_Find" xml:space="preserve">
     <value>Find</value>
   </data>
-  <data name="DlgFind_FindNext" xml:space="preserve">
-    <value>Find Next</value>
-  </data>
   <data name="DlgFind_MachCase" xml:space="preserve">
     <value>Match case</value>
   </data>
@@ -133,10 +130,10 @@
     <value>Regular Expression</value>
   </data>
   <data name="DlgFind_Replace" xml:space="preserve">
-    <value>Replace</value>
+    <value>Replace(ALT+R)</value>
   </data>
   <data name="DlgFind_ReplaceAll" xml:space="preserve">
-    <value>Replace All</value>
+    <value>Replace All(ALT+A)</value>
   </data>
   <data name="DlgFind_ReplaceWith" xml:space="preserve">
     <value>Replace with:</value>
@@ -327,8 +324,8 @@
   <data name="MenuView_FoldTables" xml:space="preserve">
     <value>Folding table sections</value>
   </data>
-  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
-    <value>Show code generation message window</value>
+  <data name="MenuView_WorkAreaEditor" xml:space="preserve">
+    <value>Show/Hide work area window</value>
   </data>
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>Show scenario index</value>
@@ -392,7 +389,7 @@ It can generate C++ test code based on GoogleTest.</value>
     <value>Pretty format completed.</value>
   </data>
   <data name="Message_ReplaceAllConfirm" xml:space="preserve">
-    <value>Are you sure you want to Replace All occurences of "{0}" with "{1}"?</value>
+    <value>Are you sure to Replace All occurences of "{0}" with "{1}"?</value>
   </data>
   <data name="Message_ReplaceAllResult" xml:space="preserve">
     <value>{0} items are replaced.</value>
@@ -478,10 +475,59 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="DlgGrepTooltip_GrepStart" xml:space="preserve">
     <value>Start</value>
   </data>
-  <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
+  <data name="DlgFind_NoMoreTextFound" xml:space="preserve">
     <value>No more text found. Do you find from start again?</value>
+  </data>
+  <data name="DlgFind_FindNextToolTip" xml:space="preserve">
+    <value>Find next(F3)</value>
   </data>
   <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
     <value>Clear search highlighting</value>
+  </data>
+  <data name="DlgFind_FindNextUpToolTip" xml:space="preserve">
+    <value>Find next up(Shift+F3)</value>
+  </data>
+  <data name="Message_RegexNoteTitle" xml:space="preserve">
+    <value>Regex note</value>
+  </data>
+  <data name="MenuFind_FindNextDown" xml:space="preserve">
+    <value>Find next</value>
+  </data>
+  <data name="MenuFind_FindNextUp" xml:space="preserve">
+    <value>Find next up</value>
+  </data>
+  <data name="DlgFind_NoMatchesFoundText" xml:space="preserve">
+    <value>No matches found!</value>
+  </data>
+  <data name="DlgFind_ReplacementTermText" xml:space="preserve">
+    <value>Replacement term</value>
+  </data>
+  <data name="DlgFind_SearchTermText" xml:space="preserve">
+    <value>Search term</value>
+  </data>
+  <data name="DlgFind_ToggleFindReplace" xml:space="preserve">
+    <value>Toggle to switch between find and replace modes</value>
+  </data>
+  <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
+    <value>Grep Options</value>
+  </data>
+  <data name="Tooltip_GrepResultUage" xml:space="preserve">
+    <value>Open a file by double clicking the file name line.</value>
+  </data>
+  <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
+    <value>Do you reload current file in selected encoding?
+Any change of the file would be discarded.</value>
+  </data>
+  <data name="Message_ConfirmReloadFileTitle" xml:space="preserve">
+    <value>Reload File</value>
+  </data>
+  <data name="Status_CodePageListTitle" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Status_ReloadFileWithCodePage" xml:space="preserve">
+    <value>Reload file in selected encoding</value>
+  </data>
+  <data name="Status_SaveAsWithCodePage" xml:space="preserve">
+    <value>Save file in selected encoding</value>
   </data>
 </root>

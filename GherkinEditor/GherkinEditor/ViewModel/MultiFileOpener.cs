@@ -53,19 +53,7 @@ namespace Gherkin.ViewModel
             LoadNextFile();
         }
 
-        /// <summary>
-        /// Open one file
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public EditorTabItem OpenFile(string filePath)
-        {
-            EditorTabItem tab = OpenEditorTab(filePath).Item2;
-            LoadFilesCompletedEvent?.Invoke();
-            return tab;
-        }
-
-        private static void SortFiles(string[] files)
+         private static void SortFiles(string[] files)
         {
             Array.Sort(files, delegate (string path1, string path2)
             {
@@ -101,8 +89,11 @@ namespace Gherkin.ViewModel
                 isNewTab = OpenEditorTab(filePath).Item1;
             }
 
-            if (!HaveMoreFilesToLoad)
+            if (!HaveMoreFilesToLoad && !isNewTab)
             {
+                // Important note: LoadFilesCompletedEvent should ONLY be raised
+                // after all editor tabs have been loaded.
+                // Otherwise the last editor could not be loaded in EditorTabContent.
                 LoadFilesCompletedEvent?.Invoke();
             }
         }
@@ -112,7 +103,7 @@ namespace Gherkin.ViewModel
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>true: new tab created</returns>
-        private Tuple<bool, EditorTabItem>  OpenEditorTab(string filePath)
+        public Tuple<bool, EditorTabItem>  OpenEditorTab(string filePath)
         {
             bool isNewTab = false;
             EditorTabItem tab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel.CurrentFilePath == filePath);

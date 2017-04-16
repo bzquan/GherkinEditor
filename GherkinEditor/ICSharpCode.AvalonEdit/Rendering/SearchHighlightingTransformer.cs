@@ -4,51 +4,51 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Gherkin.Model
+namespace ICSharpCode.AvalonEdit.Rendering
 {
-    public class ColorizeAvalonEdit : DocumentColorizingTransformer
+    /// <summary>
+    /// Searched text highlighting transformer
+    /// Note: added by bzquan@gmail.com
+    /// </summary>
+    public class SearchHighlightingTransformer : DocumentColorizingTransformer
     {
-        private StringComparison CompareType { get; set; } = StringComparison.CurrentCultureIgnoreCase;
-        public string ColorizingWord { get; set; }
-        public bool IsCaseSensitive
-        {
-            set
-            {
-                if (value)
-                    CompareType = StringComparison.CurrentCulture;
-                else
-                    CompareType = StringComparison.CurrentCultureIgnoreCase;
-            }
-        }
+        /// <summary>
+        /// Searched Text
+        /// </summary>
+        public Regex SearchRegex { get; set; }
 
         /// <summary>
         /// Find colorize text by considering case sensitive.
-        /// Limitation: Currently whole word searching is not supported.
         /// </summary>
         /// <param name="line"></param>
         protected override void ColorizeLine(DocumentLine line)
         {
-            if (string.IsNullOrEmpty(ColorizingWord)) return;
+            if (SearchRegex == null) return;
 
-            int lenthOfWord = ColorizingWord.Length;
             int lineStartOffset = line.Offset;
             string text = CurrentContext.Document.GetText(line);
+            int line_len = text.Length;
             int start = 0;
-            int index;
-            while ((index = text.IndexOf(ColorizingWord, start, CompareType)) >= 0)
+            Match match = SearchRegex.Match(text, start);
+            while (match.Success && (start < line_len))
             {
                 base.ChangeLinePart(
-                    lineStartOffset + index, // startOffset
-                    lineStartOffset + index + lenthOfWord, // endOffset
+                    lineStartOffset + match.Index,                // startOffset
+                    lineStartOffset + match.Index + match.Length, // endOffset
                     (VisualLineElement element) =>
                     {
                         ColorizeElement(element);
                     });
-                start = index + lenthOfWord; // search for next occurrence
+                start = match.Index + match.Length; // search for next occurrence
+                if (start < line_len)
+                {
+                    match = SearchRegex.Match(text, start);
+                }
             }
         }
 

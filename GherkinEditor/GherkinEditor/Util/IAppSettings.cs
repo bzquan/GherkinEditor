@@ -8,6 +8,16 @@ using System.Windows;
 
 namespace Gherkin.Util
 {
+    public class GherkinFileInfo
+    {
+        public string FilePath = "";
+        public string FontFamilyName = "KaiTi";
+        public string FontSize = "11";
+        public int CursorLine = 1;
+        public int CursorColumn = 1;
+        public int CodePage = 0;    // undefined: use automatic detection
+    }
+
     public interface IAppSettings
     {
         Languages Language { get; set; }
@@ -16,7 +26,8 @@ namespace Gherkin.Util
         string LastUsedFile { get; set; }
         List<string> LastOpenedFiles { get; set; }
 
-        string LastSearchedText { get; set; }
+        string LastSearchedText { set; }
+        List<string> LastSearchedTexts { get; set; }
         string LastGreppedText { set; }
         List<string> LastGreppedTexts { get; set; }
         string LastUsedFileExtension { set; }
@@ -25,6 +36,8 @@ namespace Gherkin.Util
         List<string> LastGreppedFolders { get; set; }
         bool IsCaseSensitiveInFind { get; set; }
         bool IsMatchWholeWordInFind { get; set; }
+        bool IsUseRegexInFind { get; set; }
+        bool IsUseWildcardsInFind { get; set; }
 
         string FontFamilyName { get; set; }
         string FontSize { get; set; }
@@ -32,6 +45,7 @@ namespace Gherkin.Util
         void UpdateFontFamilyName(string filePath, string fontFamilyName);
         void UpdateFontSize(string filePath, string fontSize);
         void UpdateCursorPos(string filePath, int line, int column);
+        void UpdateCodePage(string filePath, int codePage);
         GherkinFileInfo GetFileInfo(string filePath);
         bool IsMainWindowStateMaximized { get; set; }
         bool ShowMessageWindow { get; set; }

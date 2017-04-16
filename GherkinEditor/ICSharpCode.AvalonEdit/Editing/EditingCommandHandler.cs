@@ -92,8 +92,10 @@ namespace ICSharpCode.AvalonEdit.Editing
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertLeadingTabsToSpaces, OnConvertLeadingTabsToSpaces));
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertLeadingSpacesToTabs, OnConvertLeadingSpacesToTabs));
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.IndentSelection, OnIndentSelection));
-			
-			TextAreaDefaultInputHandler.WorkaroundWPFMemoryLeak(InputBindings);
+            // Note: added by bzquan@gmail.com
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.ClearSearchHighlighting, OnClearSearchHighlighting, CanClearSearchHighlighting));
+
+            TextAreaDefaultInputHandler.WorkaroundWPFMemoryLeak(InputBindings);
 		}
 		
 		static TextArea GetTextArea(object target)
@@ -657,5 +659,45 @@ namespace ICSharpCode.AvalonEdit.Editing
 				args.Handled = true;
 			}
 		}
-	}
+
+        /// <summary>
+        /// Clear highliting by search text
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void OnClearSearchHighlighting(object target, ExecutedRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                var transformers = textArea.TextView.LineTransformers;
+                var itemsToRemove = transformers.Where(x => x is Rendering.SearchHighlightingTransformer).ToList();
+                foreach (var item in itemsToRemove)
+                {
+                    transformers.Remove(item);
+                }
+
+                args.Handled = true;
+            }
+        }
+        /// <summary>
+        /// Check if SearchHighlightingTransformer is registered
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void CanClearSearchHighlighting(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                // is SearchHighlightingTransformer registered?
+                var searchHighlightingTransformer = textArea.TextView.LineTransformers.FirstOrDefault(x => x is Rendering.SearchHighlightingTransformer);
+                args.CanExecute = (searchHighlightingTransformer != null);
+
+                args.Handled = true;
+            }
+        }
+    }
 }

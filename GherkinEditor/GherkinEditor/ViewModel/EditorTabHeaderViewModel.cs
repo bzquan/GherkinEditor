@@ -13,6 +13,7 @@ using System.IO;
 using System.Diagnostics;
 using Gherkin.Model;
 using ICSharpCode.AvalonEdit.Rendering;
+using System.Windows.Media;
 
 namespace Gherkin.ViewModel
 {
@@ -62,19 +63,12 @@ namespace Gherkin.ViewModel
 
         private void OnClearSearchHighlighting()
         {
-            var itemsToRemove = LineTransformers.Where(x => x is ColorizeAvalonEdit).ToList();
-            foreach (var item in itemsToRemove)
-            {
-                LineTransformers.Remove(item);
-            }
+            EditorTabContentViewModel.ClearSearchHighlighting();
         }
         private bool CanClearSearchHighlighting()
         {
-            return LineTransformers.FirstOrDefault(x => x is ColorizeAvalonEdit) != null;
+            return EditorTabContentViewModel.HasSearchHighlightingTransformer();
         }
-
-        private IList<IVisualLineTransformer> LineTransformers =>
-            EditorTabContentViewModel.MainEditor.TextArea.TextView.LineTransformers;
 
         private void OnOpenFolder()
         {

@@ -1,44 +1,195 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:search="clr-namespace:ICSharpCode.AvalonEdit.Search">
-	<Style TargetType="search:SearchPanel">
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:search="clr-namespace:ICSharpCode.AvalonEdit.Search">
+
+    <Style x:Key="ShowHideToggleImageStyle" BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" TargetType="ToggleButton">
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="arrow_up.png" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="arrow_down.png" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="search:SearchPanel">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type search:SearchPanel}">
-					<Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Arrow">
-						<StackPanel Orientation="Horizontal">
-							<TextBox Name="PART_searchTextBox" Focusable="True" Width="150" Height="24" Margin="3,3,3,0">
-								<TextBox.Text>
-									<Binding Path="SearchPattern" RelativeSource="{RelativeSource TemplatedParent}" UpdateSourceTrigger="PropertyChanged">
-										<Binding.ValidationRules>
-											<ExceptionValidationRule />
-										</Binding.ValidationRules>
-									</Binding>
-								</TextBox.Text>
-							</TextBox>
-							<search:DropDownButton Height="24">
-								<search:DropDownButton.DropDownContent>
-									<Popup StaysOpen="False">
-										<Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1">
-											<StackPanel Orientation="Vertical">
-												<CheckBox IsChecked="{Binding MatchCase, RelativeSource={RelativeSource TemplatedParent}}" Content="{Binding Localization.MatchCaseText, RelativeSource={RelativeSource TemplatedParent}}" Margin="3" />
-												<CheckBox IsChecked="{Binding WholeWords, RelativeSource={RelativeSource TemplatedParent}}" Content="{Binding Localization.MatchWholeWordsText, RelativeSource={RelativeSource TemplatedParent}}" Margin="3" />
-												<CheckBox IsChecked="{Binding UseRegex, RelativeSource={RelativeSource TemplatedParent}}" Content="{Binding Localization.UseRegexText, RelativeSource={RelativeSource TemplatedParent}}" Margin="3" />
-											</StackPanel>
-										</Border>
-									</Popup>
-								</search:DropDownButton.DropDownContent>
-							</search:DropDownButton>
-							<Button Margin="3" Height="24" Width="24" Command="search:SearchCommands.FindPrevious" ToolTip="{Binding Localization.FindPreviousText, RelativeSource={RelativeSource TemplatedParent}}">
-								<Image Width="16" Height="16" Stretch="Fill" Source="prev.png" />
-							</Button>
-							<Button Margin="3" Height="24" Width="24" Command="search:SearchCommands.FindNext" ToolTip="{Binding Localization.FindNextText, RelativeSource={RelativeSource TemplatedParent}}">
-								<Image Width="16" Height="16" Stretch="Fill" Source="next.png" />
-							</Button>
-							<Button Height="16" Width="16" HorizontalAlignment="Right" VerticalAlignment="Top" Command="search:SearchCommands.CloseSearchPanel"
-							        VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Focusable="False">
-								<Path Data="M 0,0 L 8,8 M 8,0 L 0,8" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" />
-							</Button>
-						</StackPanel>
+					<ControlTemplate.Resources>
+						<BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+					</ControlTemplate.Resources>
+					<Border Name="PART_searchPanel" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Arrow">
+                        <Grid  Background="LightGray">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ToggleButton x:Name="showReplacePart" Grid.Row="0" Grid.Column="0" Width="24"
+                                          IsChecked="{Binding ShowReplace, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ToolTip="{Binding Localization.ToggleFindReplace, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{StaticResource ShowHideToggleImageStyle}"/>
+                            <Grid Grid.Row="0" Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Name="PART_searchTextBox" Focusable="True" Grid.Column="0" MinWidth="150" Height="24" Margin="3,3,3,0" TabIndex="0"
+                                          IsEditable="True"
+                                          ToolTip="{Binding Localization.SearchTermText, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ItemsSource="{Binding RecentSearchPatterns, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ComboBox.Text>
+                                        <Binding Path="SearchPattern" RelativeSource="{RelativeSource TemplatedParent}" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <ExceptionValidationRule />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </ComboBox.Text>
+                                </ComboBox>
+                                <Button Margin="3" Height="24" Width="24"
+                                        Grid.Column="1"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                        Command="search:SearchCommands.FindNext" ToolTip="{Binding Localization.FindNextText, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="4">
+                                    <Image Width="16" Height="16" Stretch="Fill" Source="next.png" />
+                                </Button>
+                                <Button Margin="3" Height="24" Width="24"
+                                        Grid.Column="2"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                        Command="search:SearchCommands.FindPrevious" ToolTip="{Binding Localization.FindPreviousText, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="3">
+                                    <Image Width="16" Height="16" Stretch="Fill" Source="prev.png" />
+                                </Button>
+                                <Button x:Name="closeButton" Height="16" Width="16" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                        Grid.Column="3"
+                                        Command="search:SearchCommands.CloseSearchPanel"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+    									VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Focusable="False" TabIndex="7">
+                                    <Path Data="M 0,0 L 8,8 M 8,0 L 0,8" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" />
+                                </Button>
+                            </Grid>
+                            
+                            <Grid  Grid.Row="1" Grid.Column="1" Margin="0,0,0,3"
+                                         Visibility="{Binding ShowReplace, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource booleanToVisibilityConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Name="PART_replaceTextBox"
+                                         Focusable="True"
+                                         Grid.Column="0"
+                                         MinWidth="150"
+                                         Height="24" Margin="3,0,3,0" TabIndex="1"
+                                         ToolTip="{Binding Localization.ReplacementTermText, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <TextBox.Text>
+                                        <Binding Path="Replacement" RelativeSource="{RelativeSource TemplatedParent}" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <ExceptionValidationRule />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Button Margin="3" Height="24" Width="24"
+                                        Grid.Column="1"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                        Command="search:SearchCommands.ReplaceNext" ToolTip="{Binding Localization.ReplaceNextText, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="5">
+                                    <Image Width="16" Height="16" Stretch="Fill" Source="replacenext.png" />
+                                </Button>
+                                <Button Margin="3" Height="24" Width="24"
+                                        Grid.Column="2"
+                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                        Command="search:SearchCommands.ReplaceAll" ToolTip="{Binding Localization.ReplaceAllText, RelativeSource={RelativeSource TemplatedParent}}" TabIndex="6">
+                                    <Image Width="16" Height="16" Stretch="Fill" Source="replaceall.png" />
+                                </Button>
+                                <!-- The size of dummy panel is the same as size of closeButton -->
+                                <StackPanel x:Name="dummyPanel"
+                                            Width="16"
+                                            Grid.Column="3">
+                                    
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,3" Orientation="Horizontal">
+                                <ToggleButton x:Name="caseSensitivity"
+                                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                              IsChecked="{Binding MatchCase, RelativeSource={RelativeSource TemplatedParent}}"
+                                              ToolTip="{Binding Localization.MatchCaseText, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Image Width="20" Source="case_sensitive.png" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="wholeWord"
+                                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                              IsChecked="{Binding WholeWords, RelativeSource={RelativeSource TemplatedParent}}"
+                                              ToolTip="{Binding Localization.MatchWholeWordsText, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Image Width="20" Source="whole_word.png" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="wildcards"
+                                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                              IsChecked="{Binding UseWildCards, RelativeSource={RelativeSource TemplatedParent}}"
+                                              ToolTip="{Binding Localization.UseWildCardsText, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Image Width="20" Source="wildcards.png" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="regex"
+                                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                              IsChecked="{Binding UseRegex, RelativeSource={RelativeSource TemplatedParent}}"
+                                              ToolTip="{Binding Localization.UseRegexText, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Image Width="20" Source="regex.png" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="regexHelp"
+                                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                              IsChecked="{Binding ShowRegexPopup, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Image Width="16" Source="question.png" />
+                                </ToggleButton>
+                                <Popup x:Name="RegexNotePopup"
+                                       IsOpen="{Binding ShowRegexPopup, RelativeSource={RelativeSource TemplatedParent}}"
+                                       PlacementTarget="{Binding ElementName=regexHelp}"
+                                       HorizontalOffset="-140"
+                                       VerticalOffset="6"
+                                       Placement="Bottom"
+                                       StaysOpen="True"
+                                       MaxHeight="300">
+                                    <Border BorderBrush="DarkGray"
+                                            BorderThickness="1">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <DockPanel  Grid.Row="0"
+                                                        Background="LightGray">
+                                                <Button DockPanel.Dock="Right"
+                                                        Height="16"
+                                                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                                        Command="search:SearchCommands.CloseRegexNote">
+                                                    <Image Width="20"
+                                                           Source="delete.png" />
+                                                </Button>
+                                                <TextBlock Text="{Binding Localization.RegexNoteTitle, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            </DockPanel>
+                                            <WebBrowser Grid.Row="1"
+                                                        Width="280"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                        search:BrowserBehavior.Html="{Binding Localization.RegexNote, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        </Grid>
+                                    </Border>
+                                </Popup>
+                            </StackPanel>
+                        </Grid>
 					</Border>
 				</ControlTemplate>
 			</Setter.Value>

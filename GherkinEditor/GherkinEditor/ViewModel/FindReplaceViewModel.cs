@@ -11,136 +11,110 @@ using Gherkin.Util;
 using ICSharpCode.AvalonEdit;
 using Gherkin.Model;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Rendering;
+using System.Windows.Media;
 
 namespace Gherkin.ViewModel
 {
-    public class FindReplaceViewModel : NotifyPropertyChangedBase
+    public class FindReplaceViewModel : AbstractFindViewModel
     {
-        private IAppSettings m_AppSettings;
+        private string m_ReplaceText = "";
 
-        private static string m_TextToFind = "";
-        private static string m_ReplaceText = "";
-        private static bool m_IsCaseSensitive;
-        private static bool m_MatchWholeWord;
-        private static bool m_IsUseRegex;
-        private static bool m_IsUseWildcards;
-        private static bool m_IsSearchUp;
+        private GherkinEditor GherkinEditor { get; set; }
+        private TextEditor Editor => GherkinEditor.TextEditor;
+        private SearchHighlightingTransformer SearchHighlightingTransformer => GherkinEditor.GetSearchHighlightingTransformer();
 
-        private TextEditor Editor { get; set; }
-        private ColorizeAvalonEdit DocumentColorizingTransformer4Search { get; set; }
-
-        public FindReplaceViewModel(TextEditor editor, IAppSettings appSettings)
+        public FindReplaceViewModel(GherkinEditor editor, IAppSettings appSettings) :
+            base(appSettings)
         {
-            Editor = editor;
-            m_AppSettings = appSettings;
-            InitializeProperties();
+            GherkinEditor = editor;
+            m_SearchCondition.IsCaseSensitive = m_AppSettings.IsCaseSensitiveInFind;
+            m_SearchCondition.IsMatchWholeWord = m_AppSettings.IsMatchWholeWordInFind;
+            m_SearchCondition.IsUseRegex = m_AppSettings.IsUseRegexInFind;
+            m_SearchCondition.IsUseWildcards = m_AppSettings.IsUseWildcardsInFind;
         }
 
         public ICommand FindNextCmd => new DelegateCommandNoArg(OnFindNext, CanExecFindReplaceCmd);
+        public ICommand FindNextUpCmd => new DelegateCommandNoArg(OnFindNextUp, CanExecFindReplaceCmd);
+        public ICommand FindNextCmd2 => new DelegateCommand<bool>(OnFindNext, CanExecFindReplaceCmd);
         public ICommand ReplaceCmd => new DelegateCommandNoArg(OnReplace, CanExecFindReplaceCmd);
         public ICommand ReplaceAllCmd => new DelegateCommandNoArg(OnReplaceAll, CanExecFindReplaceCmd);
 
-        private void InitializeProperties()
-        {
-            m_TextToFind = Editor.TextArea.Selection.GetText();
-            if (string.IsNullOrEmpty(m_TextToFind))
-            {
-                m_TextToFind = m_AppSettings.LastSearchedText;
-            }
-            else
-            {
-                m_AppSettings.LastSearchedText = m_TextToFind;
-            }
-            m_IsCaseSensitive = m_AppSettings.IsCaseSensitiveInFind;
-            m_MatchWholeWord = m_AppSettings.IsMatchWholeWordInFind;
-        }
+        public RegexDocument RegexDocument { get; private set; } = new RegexDocument();
 
-        public string TextToFind
+        public void SetTextToFind()
         {
-            get { return m_TextToFind; }
-            set
+            if (!Editor.TextArea.Selection.IsMultiline)
             {
-                m_TextToFind = value;
-                m_AppSettings.LastSearchedText = value;
-                base.OnPropertyChanged();
+                TextToFind = Editor.TextArea.Selection.GetText();
+            }
+            if (string.IsNullOrEmpty(TextToFind))
+            {
+                TextToFind = RecentTextsToFind.Count > 0 ? RecentTextsToFind[0] : "";
             }
         }
 
         public string ReplaceText
         {
-            get { return m_ReplaceText; }
+            get { return m_ReplaceText ?? ""; }
             set
             {
-                m_ReplaceText = value;
+                m_ReplaceText = value ?? "";
                 base.OnPropertyChanged();
             }
         }
-
-        public bool IsCaseSensitive
+        public List<string> RecentTextsToFind
         {
-            get { return m_IsCaseSensitive; }
-            set
-            {
-                m_IsCaseSensitive = value;
-                m_AppSettings.IsCaseSensitiveInFind = value;
-                base.OnPropertyChanged();
-            }
-        }
-
-        public bool IsMatchWholeWord
-        {
-            get { return m_MatchWholeWord; }
-            set
-            {
-                m_MatchWholeWord = value;
-                m_AppSettings.IsMatchWholeWordInFind = value;
-                base.OnPropertyChanged();
-            }
-        }
-
-        public bool IsUseRegex
-        {
-            get { return m_IsUseRegex; }
-            set
-            {
-                m_IsUseRegex = value;
-                base.OnPropertyChanged();
-            }
-        }
-
-        public bool IsUseWildcards
-        {
-            get { return m_IsUseWildcards; }
-            set
-            {
-                m_IsUseWildcards = value;
-                base.OnPropertyChanged();
-            }
+            get { return m_AppSettings.LastSearchedTexts; }
         }
 
         public bool IsSearchUp
         {
-            get { return m_IsSearchUp; }
+            get { return m_SearchCondition.IsSearchUp; }
             set
             {
-                m_IsSearchUp = value;
+                m_SearchCondition.IsSearchUp = value;
+                base.OnPropertyChanged(nameof(ArrowDownIcon));
+                base.OnPropertyChanged(nameof(ArrowUpIcon));
                 base.OnPropertyChanged();
             }
         }
 
-        private void OnFindNext()
+        public DrawingImage ArrowDownIcon => ArrowIcon("ArrowDown.png", isSelected: !IsSearchUp);
+        public DrawingImage ArrowUpIcon => ArrowIcon("ArrowUp.png", isSelected: IsSearchUp);
+
+        private DrawingImage ArrowIcon(string arrow, bool isSelected) =>
+                                Util.Util.DrawingCircleOnImage(arrow, isSelected);
+
+        public void FindNextByDefault()
         {
-            SetColorizingWord(TextToFind);
-            FindNext(TextToFind);
+            OnFindNext(m_SearchCondition.IsSearchUp);
         }
 
-        private bool CanExecFindReplaceCmd()
-            => string.IsNullOrEmpty(TextToFind) == false;
+        private void OnFindNext()
+        {
+            OnFindNext(isSeachUp: false);
+        }
+
+        private void OnFindNextUp()
+        {
+            OnFindNext(isSeachUp: true);
+        }
+
+        public void OnFindNext(bool isSeachUp)
+        {
+            IsSearchUp = isSeachUp;
+            SetTransformerAndBackup(TextToFind);
+            FindNext();
+        }
+
+        private bool CanExecFindReplaceCmd() => m_SearchCondition.IsValidTextToFind();
+        private bool CanExecFindReplaceCmd(bool isSeachUp) => CanExecFindReplaceCmd();
 
         private void OnReplace()
         {
-            SetColorizingWord(TextToFind);
-            Regex regex = GetRegEx(TextToFind);
+            SetTransformerAndBackup(TextToFind);
+            Regex regex = GetRegEx(isForHighlighting:false);
             string input = Editor.Text.Substring(Editor.SelectionStart, Editor.SelectionLength);
             Match match = regex.Match(input);
             if (match.Success && match.Index == 0 && match.Length == input.Length)
@@ -148,12 +122,11 @@ namespace Gherkin.ViewModel
                 Editor.Document.Replace(Editor.SelectionStart, Editor.SelectionLength, ReplaceText);
             }
 
-            FindNext(TextToFind);
+            FindNext();
         }
 
         private void OnReplaceAll()
         {
-            SetColorizingWord(ReplaceText);
             string msg = string.Format(Properties.Resources.Message_ReplaceAllConfirm, TextToFind, ReplaceText);
             if (MessageBox.Show(Application.Current.MainWindow,
                            msg,
@@ -161,7 +134,8 @@ namespace Gherkin.ViewModel
                            MessageBoxButton.OKCancel,
                            MessageBoxImage.Question) == MessageBoxResult.OK)
             {
-                Regex regex = GetRegEx(TextToFind, true);
+                SetTransformerAndBackup(ReplaceText, true);
+                Regex regex = GetRegEx(isForHighlighting: false, leftToRight: true);
                 int offset = 0;
                 Editor.BeginChange();
                 var matchCollection = regex.Matches(Editor.Text);
@@ -177,44 +151,34 @@ namespace Gherkin.ViewModel
             }
         }
 
-        private void SetColorizingWord(string text)
+        private void SetTransformerAndBackup(string text, bool isReplacedText = false)
         {
-            if (DocumentColorizingTransformer4Search == null)
-            {
-                InitializeHighlighting();
-            }
-
-            DocumentColorizingTransformer4Search.ColorizingWord = text;
-            DocumentColorizingTransformer4Search.IsCaseSensitive = m_IsCaseSensitive;
-        }
-
-        private void InitializeHighlighting()
-        {
-            var transformer = Editor.TextArea.TextView.LineTransformers.FirstOrDefault(x => x is ColorizeAvalonEdit);
-            if (transformer == null)
-            {
-                DocumentColorizingTransformer4Search = new ColorizeAvalonEdit();
-                Editor.TextArea.TextView.LineTransformers.Add(DocumentColorizingTransformer4Search);
-            }
+            BackupLastUsedText();
+            Editor.TextArea.TextView.Redraw();
+            if (isReplacedText)
+                SearchHighlightingTransformer.SearchRegex = m_SearchCondition.GetSimpleRegEx(text);
             else
-            {
-                DocumentColorizingTransformer4Search = transformer as ColorizeAvalonEdit;
-            }
+                SearchHighlightingTransformer.SearchRegex = GetRegEx(isForHighlighting: true);
         }
 
-        private bool FindNext(string textToFind)
+        private void BackupLastUsedText()
         {
-            Regex regex = GetRegEx(textToFind);
+            m_AppSettings.LastSearchedText = TextToFind;
+        }
+
+        private bool FindNext()
+        {
+            Regex regex = GetRegEx(isForHighlighting: false);
             int start = regex.Options.HasFlag(RegexOptions.RightToLeft) ?
-            Editor.SelectionStart : Editor.SelectionStart + Editor.SelectionLength;
+                                Editor.SelectionStart : Editor.SelectionStart + Editor.SelectionLength;
             Match match = regex.Match(Editor.Text, start);
 
             if (!match.Success)  // start again from beginning or end
             {
                 MessageBoxResult result = MessageBox.Show(
                                                Application.Current.MainWindow,
-                                               Properties.Resources.DlgGrepMsg_NoMoreTextFound,
-                                               Properties.Resources.DlgFind_FindNext,
+                                               Properties.Resources.DlgFind_NoMoreTextFound,
+                                               Properties.Resources.DlgFind_Find,
                                                MessageBoxButton.YesNo,
                                                MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
@@ -236,27 +200,9 @@ namespace Gherkin.ViewModel
             return match.Success;
         }
 
-        private Regex GetRegEx(string textToFind, bool leftToRight = false)
+        private Regex GetRegEx(bool isForHighlighting, bool leftToRight = false)
         {
-            RegexOptions options = RegexOptions.None;
-            if (IsSearchUp && !leftToRight)
-                options |= RegexOptions.RightToLeft;
-            if (!IsCaseSensitive)
-                options |= RegexOptions.IgnoreCase;
-
-            if (IsUseRegex)
-            {
-                return new Regex(textToFind, options);
-            }
-            else
-            {
-                string pattern = Regex.Escape(textToFind);
-                if (IsUseWildcards)
-                    pattern = pattern.Replace("\\*", ".*").Replace("\\?", ".");
-                if (IsMatchWholeWord)
-                    pattern = "\\b" + pattern + "\\b";
-                return new Regex(pattern, options);
-            }
+            return m_SearchCondition.GetRegEx(isForHighlighting, leftToRight);
         }
     }
 }

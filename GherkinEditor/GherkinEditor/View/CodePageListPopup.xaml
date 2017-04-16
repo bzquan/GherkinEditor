@@ -1,0 +1,93 @@
+﻿<Popup x:Class="Gherkin.View.CodePageListPopup"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:p="clr-namespace:Gherkin.Properties"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:local="clr-namespace:Gherkin.View"
+       xmlns:bc="BetterWpfControls"
+       mc:Ignorable="d"
+       d:DesignHeight="300"
+       d:DesignWidth="300">
+
+    <Popup.Resources>
+        <Style x:Key="listBoxItemStyle"
+               TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="2"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected"
+                                     Value="true">
+                                <Setter TargetName="_Border"
+                                        Property="Background"
+                                        Value="Yellow" />
+                                <Setter Property="Foreground"
+                                        Value="Blue" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Popup.Resources>
+
+    <Popup.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{Binding Path=CodePageListPopupViewModel.CloseCodePageListCmd}" />
+    </Popup.InputBindings>
+
+    <Border BorderBrush="DarkGray"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- ContentCanvas is dummy canvas for implementing draggable popup-->
+            <Canvas Grid.Row="0"
+                    Grid.Column="0"
+                    x:Name="dummyCanvasForGragablePopup" />
+            <DockPanel Grid.Row="1"
+                       Background="LightGray">
+                <bc:ImageButton x:Name="reloadFileButton"
+                                Margin="3,0,0,0"
+                                Command="{Binding Path=CodePageListPopupViewModel.ReloadFileWithCodePageCmd}"
+                                ToolTip="{x:Static p:Resources.Status_ReloadFileWithCodePage}"
+                                Height="24"
+                                Source="Images/ReloadFile.png" />
+                <bc:ImageButton x:Name="saveAsInEncodingButton"
+                                Margin="3,0,0,0"
+                                Command="{Binding Path=CodePageListPopupViewModel.SaveAsWithEncodingCmd}"
+                                ToolTip="{x:Static p:Resources.Status_SaveAsWithCodePage}"
+                                Height="24"
+                                Source="Images/SaveAs.png" />
+                <bc:ImageButton HorizontalAlignment="Right"
+                                Source="Images/Delete.png"
+                                Height="16"
+                                Command="{Binding Path=CodePageListPopupViewModel.CloseCodePageListCmd}" />
+            </DockPanel>
+            <local:AutoScrollListBox x:Name="codePageList"
+                                     Grid.Row="2"
+                                     ItemContainerStyle="{DynamicResource listBoxItemStyle}"
+                                     ItemsSource="{Binding Path=CodePageListPopupViewModel.CodePageList}"
+                                     MaxHeight="500"
+                                     SelectionMode="Single"
+                                     SelectedIndex="{Binding Path=CodePageListPopupViewModel.SelectedCodePageIndex, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding Path=DisplayName}">
+                        </ContentControl>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </local:AutoScrollListBox>
+        </Grid>
+    </Border>
+</Popup>

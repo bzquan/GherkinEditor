@@ -35,28 +35,48 @@ namespace ICSharpCode.AvalonEdit.Search
 		public static ISearchStrategy Create(string searchPattern, bool ignoreCase, bool matchWholeWords, SearchMode mode)
 		{
 			if (searchPattern == null)
-				throw new ArgumentNullException("searchPattern");
-			RegexOptions options = RegexOptions.Compiled | RegexOptions.Multiline;
-			if (ignoreCase)
-				options |= RegexOptions.IgnoreCase;
-			
-			switch (mode) {
-				case SearchMode.Normal:
-					searchPattern = Regex.Escape(searchPattern);
-					break;
-				case SearchMode.Wildcard:
-					searchPattern = ConvertWildcardsToRegex(searchPattern);
-					break;
-			}
-			try {
-				Regex pattern = new Regex(searchPattern, options);
-				return new RegexSearchStrategy(pattern, matchWholeWords);
-			} catch (ArgumentException ex) {
+				throw new ArgumentNullException(nameof(searchPattern));
+
+            try
+            {
+                Regex pattern = MakeRegex(searchPattern, ignoreCase, matchWholeWords, mode);
+				return new RegexSearchStrategy(pattern);
+            }
+            catch (ArgumentException ex)
+            {
 				throw new SearchPatternException(ex.Message, ex);
 			}
 		}
-		
-		static string ConvertWildcardsToRegex(string searchPattern)
+
+        /// <summary>
+        /// Make regex for searching with the given parameters.
+        /// </summary>
+        private static Regex MakeRegex(string searchPattern, bool ignoreCase, bool matchWholeWords, SearchMode mode)
+        {
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.Multiline;
+            if (ignoreCase)
+                options |= RegexOptions.IgnoreCase;
+
+            if (mode != SearchMode.RegEx)
+            {
+                switch (mode)
+                {
+                    case SearchMode.Normal:
+                        searchPattern = Regex.Escape(searchPattern);
+                        break;
+                    case SearchMode.Wildcard:
+                        searchPattern = ConvertWildcardsToRegex(searchPattern);
+                        break;
+                }
+
+                if (matchWholeWords)
+                    searchPattern = "\\b" + searchPattern + "\\b";
+            }
+
+            return new Regex(searchPattern, options);
+        }
+
+        static string ConvertWildcardsToRegex(string searchPattern)
 		{
 			if (string.IsNullOrEmpty(searchPattern))
 				return "";

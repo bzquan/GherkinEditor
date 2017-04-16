@@ -22,7 +22,7 @@ using Gherkin.View;
 
 namespace Gherkin.ViewModel
 {
-    public class GherkinViewModel : NotifyPropertyChangedBase, IGrepEditorProvider
+    public class GherkinViewModel : NotifyPropertyChangedBase
     {
         // Example: (12:0): detailed error message 
         private Regex m_ErrorMsgRegex = new Regex(@"\s*\((\d+):(\d+)\):.*");
@@ -33,7 +33,6 @@ namespace Gherkin.ViewModel
         private IAppSettings m_AppSettings;
         private TabControl m_EditorTabControl;
         private MultiFileOpener m_MultiFilesOpener;
-        private string m_MessageOfGenCPPTestCode = "";
 
         public ObservableCollection<EditorTabItem> TabPanels { get; private set; } = new ObservableCollection<EditorTabItem>();
 
@@ -46,16 +45,17 @@ namespace Gherkin.ViewModel
         public ICommand SetGherkinHighlightingCmd => new DelegateCommandNoArg(OnSetGherkinHighlighting);
         public ICommand GenCPPTestCodeCmd => new DelegateCommandNoArg(OnGenCPPTestCode);
         public ICommand GrepCmd => new DelegateCommandNoArg(OnGrep);
-        
+        public ICommand ShowCodePageListCmd => new DelegateCommandNoArg(OnShowCodePageList);
         public FontViewModel FontViewModel { get; private set; }
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
-
+        public CodePageListPopupViewModel CodePageListPopupViewModel { get; private set; }
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
                                 FontViewModel fontViewModel,
                                 GherkinSettingViewModel gherkinSettings,
-                                AboutViewModel aboutViewModel)
+                                AboutViewModel aboutViewModel,
+                                CodePageListPopupViewModel codePageListPopupViewModel)
         {
             m_AppSettings = appSettings;
             GherkinFormatUtil.AppSettings = appSettings;
@@ -67,6 +67,8 @@ namespace Gherkin.ViewModel
             GherkinSettings = gherkinSettings;
             GherkinSettings.TabPanels = TabPanels;
             AboutViewModel = aboutViewModel;
+            CodePageListPopupViewModel = codePageListPopupViewModel;
+            CodePageListPopupViewModel.CodePageChangedEvent += delegate { base.OnPropertyChanged(nameof(Codepage)); }; 
 
             GherkinSettings.ChangeFoldingTextColorOfAvalonEdit();
             EventAggregator<DeleteEditorTabRequestedArg>.Instance.Event += OnDeleteEditorTab;
@@ -79,8 +81,8 @@ namespace Gherkin.ViewModel
             EventAggregator<HideScenarioIndexArg>.Instance.Event += OnHideScenarioIndex;
             EventAggregator<FileSavedAsArg>.Instance.Event += OnFileSavedAs;
             EventAggregator<OpenNewGherkinEditorRequestedArg>.Instance.Event += OnOpenNewGherkinEditorRequested;
-            EventAggregator<EditorLoadedArg>.Instance.Event += OnUpdateScenarioIndexMenu;
-
+            EventAggregator<EditorLoadedArg>.Instance.Event += OnEditorLoaded;
+            EventAggregator<FileLoadedArg>.Instance.Event += OnFileLoaded; ;
         }
 
         public TabControl EditorTabControl
@@ -92,6 +94,13 @@ namespace Gherkin.ViewModel
                 m_MultiFilesOpener.Initialize(TabPanels, value);
                 CreateEmptyTab(); // Create initial editor
             }
+        }
+
+        public WorkAreaEditorViewModel WorkAreaEditor { get; set; }
+
+        public void SetMessageTextEditor(TextEditor editor)
+        {
+            WorkAreaEditor = new WorkAreaEditorViewModel(editor, m_MultiFilesOpener, m_AppSettings);
         }
 
         public void SaveLastSelectedFile()
@@ -129,12 +138,9 @@ namespace Gherkin.ViewModel
         public bool HasEditorLoaded => (MainTextEditor != null);
         private TextEditor MainTextEditor => CurrentEditor?.MainEditor;
 
-        public void FindAndReplace()
+        public void ShowFindReplace()
         {
-            if (HasEditorLoaded)
-            {
-                View.FindReplaceDialog.ShowForReplace(MainTextEditor, m_AppSettings);
-            }
+            CurrentEditor?.ShowSearchPanel();
         }
 
         private EditorTabContentViewModel CurrentEditor
@@ -151,11 +157,13 @@ namespace Gherkin.ViewModel
         {
             ShowScenarioIndex = CurrentEditor?.HideScenarioIndex == false;
             ShowSplitView = CurrentEditor?.HideSplitView == false;
+
             base.OnPropertyChanged(nameof(CurrentFilePath));
             base.OnPropertyChanged(nameof(IsCloseTablesFolding));
             base.OnPropertyChanged(nameof(IsCloseScenarioFolding));
             base.OnPropertyChanged(nameof(CurrentFontFamily));
             base.OnPropertyChanged(nameof(CurrentFontSize));
+            base.OnPropertyChanged(nameof(Codepage));
         }
 
         public string CurrentFilePath => CurrentEditor?.CurrentFilePath ?? "";
@@ -213,12 +221,40 @@ namespace Gherkin.ViewModel
             }
         }
 
+        public string Codepage
+        {
+            get
+            {
+                CodePageListPopupViewModel.CurrentEditor = CurrentEditor;
+                base.OnPropertyChanged(nameof(CanShowCodePageList));
+                return CurrentEditor?.Encoding?.EncodingName;
+            }
+        }
+        
+        private void OnShowCodePageList()
+        {
+            CodePageListPopupViewModel.ShowCodePageList = true;
+            CodePageListPopupViewModel.CurrentEditor = CurrentEditor;
+            base.OnPropertyChanged(nameof(CanShowCodePageList));
+        }
+        public bool CanShowCodePageList =>
+                    (CurrentEditor?.CurrentFilePath != null) &&
+                    File.Exists(CurrentFilePath);
+
+        private void OnFileLoaded(object sender, FileLoadedArg arg)
+        {
+            if (sender == CurrentEditor)
+            {
+                base.OnPropertyChanged(nameof(Codepage));
+            }
+        }
+
         private void OnStatusChanged(object sender, StatusChangedArg arg)
         {
             Status = arg.StatusMsg;
         }
 
-        private void OnUpdateScenarioIndexMenu(object sender, EditorLoadedArg arg)
+        private void OnEditorLoaded(object sender, EditorLoadedArg arg)
         {
             base.OnPropertyChanged(nameof(ShowScenarioIndex));
             base.OnPropertyChanged(nameof(IsShowScenarioIndexEnabled));
@@ -311,12 +347,13 @@ namespace Gherkin.ViewModel
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.CheckFileExists = true;
+            dlg.Multiselect = true;
             dlg.FilterIndex = 1;
             dlg.Filter = ConfigReader.GetValue<string>("file_open_filter", "All Files (*.*)|*.*");
             bool? result = dlg.ShowDialog();
-            if (result == true)
+            if ((result == true) && (dlg.FileNames.Length > 0))
             {
-                OpenFiles(dlg.FileName);
+                OpenFiles(dlg.FileNames);
             }
         }
 
@@ -364,22 +401,16 @@ namespace Gherkin.ViewModel
 
         private void OnGrep()
         {
-            GrepViewModel vm = new GrepViewModel(this, m_AppSettings);
+            string default_grep_text = "";
+            if (CurrentEditor?.MainEditor.TextArea.Selection.IsMultiline == false)
+            {
+                default_grep_text = CurrentEditor.MainEditor.TextArea.Selection.GetText();
+            }
+
+            GrepViewModel vm = new GrepViewModel(WorkAreaEditor, m_MultiFilesOpener, m_AppSettings, default_grep_text);
             var dialog = new GrepDialog(vm);
             vm.GrepDiaglog = dialog;
             dialog.ShowDialog();
-        }
-
-        public EditorTabContentViewModel NewGrepEditor()
-        {
-            EditorTabItem tab = CreateEmptyTab();
-            return tab.EditorTabContentViewModel;
-        }
-
-        public EditorTabContentViewModel OpenEditor(string filePath)
-        {
-            EditorTabItem tab = m_MultiFilesOpener.OpenFile(filePath);
-            return tab.EditorTabContentViewModel;
         }
 
         private EditorTabItem CreateEmptyTab()
@@ -606,34 +637,6 @@ namespace Gherkin.ViewModel
             }
         }
 
-        public bool HideMessageWindow
-        {
-            get { return !ShowMessageWindow; }
-        }
-        public bool ShowMessageWindow
-        {
-            get { return m_AppSettings.ShowMessageWindow; }
-            set
-            {
-                if (m_AppSettings.ShowMessageWindow == value) return;
-                m_AppSettings.ShowMessageWindow = value;
-                base.OnPropertyChanged(nameof(MessageWindowIcon));
-                base.OnPropertyChanged(nameof(HideMessageWindow));
-                base.OnPropertyChanged();
-            }
-        }
-
-        public DrawingImage MessageWindowIcon
-        {
-            get
-            {
-                if (ShowMessageWindow)
-                    return Util.Util.DrawingImageByOverlapping("MessageWindow.png", "Tick64.png");
-                else
-                    return Util.Util.DrawingImageFromResource("MessageWindow.png");
-            }
-        }
-
         private void OnOpenAllFoldings()
         {
             CurrentEditor?.OpenAllFoldings();
@@ -662,7 +665,7 @@ namespace Gherkin.ViewModel
                         .AppendLine(Properties.Resources.Message_CppTestCodeGeneration)
                         .Append(generated_file_names);
 
-                    MessageOfGenCPPTestCode = stringBuilder.ToString();
+                    WorkAreaEditor.MessageOfGenCPPTestCode = stringBuilder.ToString();
                 }
             }
             catch (Exception ex)
@@ -682,7 +685,7 @@ namespace Gherkin.ViewModel
                 stringBuilder.AppendLine(stackTrace);
             }
 
-            MessageOfGenCPPTestCode = stringBuilder.ToString();
+            WorkAreaEditor.MessageOfGenCPPTestCode = stringBuilder.ToString();
             MoveCursorToErrorLine(errorMsg);
         }
 
@@ -702,17 +705,6 @@ namespace Gherkin.ViewModel
                 return false;
             }
             return true;
-        }
-
-        public string MessageOfGenCPPTestCode
-        {
-            get { return m_MessageOfGenCPPTestCode; }
-            set
-            {
-                ShowMessageWindow = true;
-                m_MessageOfGenCPPTestCode = value;
-                base.OnPropertyChanged();
-            }
         }
 
         private void MoveCursorToErrorLine(string exceptionMsg)

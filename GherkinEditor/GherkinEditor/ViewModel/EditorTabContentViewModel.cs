@@ -14,6 +14,7 @@ using static Gherkin.Util.Util;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Text;
 
 namespace Gherkin.ViewModel
 {
@@ -39,7 +40,7 @@ namespace Gherkin.ViewModel
         private bool m_IsSplitViewHidden;
         private int m_SelectedScenarioIndex;
 
-        private GherkinEditor MainGherkinEditor { get; set; }
+        public GherkinEditor MainGherkinEditor { get; set; }
         private GherkinEditor SubGherkinEditor { get; set; }
         private IAppSettings m_AppSettings;
         private GherkinFoldingStrategy FoldingStrategy { get; set; }
@@ -48,6 +49,7 @@ namespace Gherkin.ViewModel
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
         public TextDocument Document => MainGherkinEditor?.Document;
         public string CurrentFilePath { get; set; }
+        public GherkinEditor LastUsedGherkinEditor { get; set; }
         public GrepViewModel GrepViewModel { get; set; }    // It will own the GrepViewModel if current editor is grep editor
 
         public EditorTabContentViewModel(string filePath, IAppSettings appSettings)
@@ -74,9 +76,11 @@ namespace Gherkin.ViewModel
         {
             MainEditor = mainEditor;
             MainGherkinEditor = new GherkinEditor(MainEditor, m_AppSettings, FontFamily, FontSize);
+            mainEditor.TextArea.IsKeyboardFocusedChanged += OnMainEditorKeyboardFocusedChanged;
 
             SubGherkinEditor = new GherkinEditor(subEditor, m_AppSettings, FontFamily, FontSize);
             SubEditor.Document = MainEditor.Document;
+            subEditor.TextArea.IsKeyboardFocusedChanged += OnSubEditorKeyboardFocusedChanged;
 
             Load(CurrentFilePath);
             EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
@@ -84,11 +88,53 @@ namespace Gherkin.ViewModel
             TextEditorLoadedEvent?.Invoke();
         }
 
+        private void OnMainEditorKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (MainGherkinEditor?.HasFocus == true)
+                LastUsedGherkinEditor = MainGherkinEditor;
+        }
+
+        private void OnSubEditorKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (SubGherkinEditor?.HasFocus == true)
+                LastUsedGherkinEditor = SubGherkinEditor;
+        }
+
         private void LoadFileInfo(string filePath)
         {
             GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
             FontFamily = new FontFamily(fileInfo.FontFamilyName);
             FontSize = fileInfo.FontSize;
+        }
+
+        public void ShowSearchPanel()
+        {
+            FocusedGherkinEditor?.ShowSearchPanel();
+        }
+
+        private GherkinEditor FocusedGherkinEditor
+        {
+            get
+            {
+                if (MainGherkinEditor?.HasFocus == true)
+                    return MainGherkinEditor;
+                else if (SubGherkinEditor?.HasFocus == true)
+                    return SubGherkinEditor;
+                else
+                    return MainGherkinEditor;
+            }
+        }
+
+        public bool HasSearchHighlightingTransformer()
+        {
+            return MainGherkinEditor.HasSearchHighlightingTransformer ||
+                   SubGherkinEditor.HasSearchHighlightingTransformer;
+        }
+
+        public void ClearSearchHighlighting()
+        {
+            MainGherkinEditor.ClearSearchHighlighting();
+            SubGherkinEditor.ClearSearchHighlighting();
         }
 
         public FontFamily FontFamily
@@ -122,15 +168,6 @@ namespace Gherkin.ViewModel
                     MainGherkinEditor.FontSize = value;
                     SubGherkinEditor.FontSize = value;
                 }
-            }
-        }
-
-        public string CurrentLineText
-        {
-            get
-            {
-                int line_no = MainGherkinEditor.CursorLine;
-                return GherkinFormatUtil.GetText(Document, Document.GetLineByNumber(line_no));
             }
         }
 
@@ -174,7 +211,7 @@ namespace Gherkin.ViewModel
             return string.IsNullOrEmpty(CurrentFilePath) && !IsModified;
         }
 
-        public void Load(string filePath)
+        public void Load(string filePath, Encoding encoding = null)
         {
             LoadFileInfo(filePath);
 
@@ -184,13 +221,22 @@ namespace Gherkin.ViewModel
             }
             else if ((filePath != null) && File.Exists(filePath))
             {
-                MainEditor.Load(filePath);
                 GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
+                MainEditor.Encoding = encoding ?? GetEncoding(fileInfo);
+                MainEditor.Load(filePath);
+                m_AppSettings.UpdateCodePage(filePath, MainEditor.Encoding.CodePage);
                 ScrollCursorTo(fileInfo.CursorLine, fileInfo.CursorColumn);
-
+                EventAggregator<FileLoadedArg>.Instance.Publish(this, new FileLoadedArg());
                 UpdateEditor(filePath);
                 UpdateFoldingsByDefault();
             }
+        }
+
+        private Encoding GetEncoding(GherkinFileInfo fileInfo)
+        {
+            var encodings = Encoding.GetEncodings();
+            var encoding = encodings.FirstOrDefault(x => x.CodePage == fileInfo.CodePage);
+            return encoding?.GetEncoding();
         }
 
         private void UpdateEditor(string filePath)
@@ -255,6 +301,11 @@ namespace Gherkin.ViewModel
                 else
                     return GherkinUtil.DEFAULT_LANGUAGE;
             }
+        }
+
+        public Encoding Encoding
+        {
+            get { return MainGherkinEditor?.Encoding; }
         }
 
         public void UpdateGherkinHighlighing(bool installFolding = true)
@@ -481,36 +532,33 @@ namespace Gherkin.ViewModel
         }
 
         /// <summary>
-        /// Force to change modification status to unmodified.
-        /// And set grepText as file name to show in editor tab
-        /// Note: It will be used for grep result editor window
+        /// Save current file
         /// </summary>
-        /// <param name="grepText">grepped text</param>
-        public void SetUnmodified(string grepText)
-        {
-            MainEditor.IsModified = false;
-            CurrentFilePath = grepText;
-            FileNameChangedEvent?.Invoke(CurrentFilePath);
-            DocumentSavedEvent?.Invoke();
-        }
-
-        public void SaveFile(bool saveAs)
+        /// <param name="saveAs">true: show save as diaglog</param>
+        /// <param name="newEncoding">not null: use new encoding to save file</param>
+        /// <returns>true : if file saved</returns>
+        public bool SaveFile(bool saveAs, Encoding newEncoding = null)
         {
             string filePath2Save = CurrentFilePath;
             if (string.IsNullOrEmpty(CurrentFilePath) || saveAs)
             {
                 filePath2Save = NewFilePath(CurrentFilePath);
-                if (filePath2Save == null) return;
+                if (filePath2Save == null) return false;
             }
 
+            if (newEncoding != null)
+            {
+                MainEditor.Encoding = newEncoding;
+            }
             MainEditor.Save(filePath2Save);
             if (CurrentFilePath != filePath2Save)
             {
                 UpdateLastUsedFile(filePath2Save);
             }
-            UpdateEditor(filePath2Save);
 
+            UpdateEditor(filePath2Save);
             DocumentSavedEvent?.Invoke();
+            return true;
         }
 
         private string NewFilePath(string defaultFilePath)
@@ -519,7 +567,7 @@ namespace Gherkin.ViewModel
             dlg.FileName = string.IsNullOrEmpty(defaultFilePath) ? "Unknown" : Path.GetFileName(defaultFilePath);
             dlg.DefaultExt = GherkinUtil.FEATURE_EXTENSION;
             dlg.FilterIndex = 1;
-            dlg.Filter = "Gherkin feature(.feature)|*.feature|Text File(*.txt)|*.txt|All Files (*.*)|*.*";
+            dlg.Filter = ConfigReader.GetValue<string>("file_open_filter", "All Files (*.*)|*.*");
             bool? result = dlg.ShowDialog();
             if (result == true)
             {
@@ -561,6 +609,7 @@ namespace Gherkin.ViewModel
             m_AppSettings.LastUsedFile = filePath2Save;
             m_AppSettings.UpdateFontFamilyName(filePath2Save, FontFamily.ToString());
             m_AppSettings.UpdateFontSize(filePath2Save, FontSize);
+            m_AppSettings.UpdateCodePage(filePath2Save, MainEditor.Encoding.CodePage);
         }
 
         public bool IsModified => MainEditor?.IsModified == true;

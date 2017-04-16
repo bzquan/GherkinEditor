@@ -8,15 +8,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Input;
 
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Rendering;
 using Gherkin.Model;
 using Gherkin.Util;
-using System.Windows.Input;
 
 namespace Gherkin.ViewModel
 {
@@ -27,15 +27,18 @@ namespace Gherkin.ViewModel
         static readonly Pen s_CurrentLineBorderTransparentPen = new Pen(Brushes.Transparent, thickness: 1);
         private static FontSizeConverter s_FontSizeConv = new FontSizeConverter();
 
+        private IAppSettings m_AppSettings;
+        private ICSharpCode.AvalonEdit.Search.SearchPanel m_SearchPanel;
         private GherkinCodeCompletion m_GherkinCodeCompletion;
         private bool m_ShowCurrentLineBorder = true;
         private bool m_HighlightCurrentLine = true;
 
-        public GherkinEditor(TextEditor editor, IAppSettings appSettings, FontFamily FontFamily, string fontSize)
+        public GherkinEditor(TextEditor editor, IAppSettings appSettings, FontFamily fontFamily, string fontSize)
         {
             TextEditor = editor;
+            m_AppSettings = appSettings;
 
-            ConfigTextEditor(editor, appSettings, FontFamily, fontSize);
+            ConfigTextEditor(editor, appSettings, fontFamily, fontSize);
             editor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(editor);
             m_GherkinCodeCompletion = new GherkinCodeCompletion(editor, appSettings);
 
@@ -45,7 +48,7 @@ namespace Gherkin.ViewModel
             EventAggregator<IndentationCompletedArg>.Instance.Event += OnIndentationCompleted;
         }
 
-        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings, FontFamily FontFamily, string fontSize)
+        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings, FontFamily fontFamily, string fontSize)
         {
             editor.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             editor.ShowLineNumbers = true;
@@ -55,12 +58,94 @@ namespace Gherkin.ViewModel
             editor.Options.EnableRectangularSelection = true;
             editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
             editor.Options.ConvertTabsToSpaces = true;
-            editor.FontFamily = FontFamily;
+            editor.FontFamily = fontFamily;
             editor.FontSize = ToFontSizeByPoint(fontSize);
         }
 
         public TextEditor TextEditor { get; set; }
         public FoldingManager FoldingManager { get; set; }
+
+        public bool HasFocus
+        {
+            get { return TextEditor.TextArea.IsKeyboardFocused; }
+        }
+
+        public void ShowSearchPanel()
+        {
+            if (m_SearchPanel == null)
+            {
+                m_SearchPanel = ICSharpCode.AvalonEdit.Search.SearchPanel.Install(TextEditor);
+                m_SearchPanel.Localization = SearchPanelLocalization.Instance.Value;
+                m_SearchPanel.Closed += OnSearchPanelClosed;
+            }
+            SetDefaults();
+            m_SearchPanel.Open();
+        }
+
+        private void OnSearchPanelClosed()
+        {
+            m_AppSettings.LastSearchedText = m_SearchPanel.SearchPattern;
+            m_AppSettings.IsCaseSensitiveInFind = m_SearchPanel.MatchCase;
+            m_AppSettings.IsMatchWholeWordInFind = m_SearchPanel.WholeWords;
+            m_AppSettings.IsUseWildcardsInFind = m_SearchPanel.UseWildCards;
+            m_AppSettings.IsUseRegexInFind = m_SearchPanel.UseRegex;
+
+            m_SearchPanel.Closed -= OnSearchPanelClosed;
+            m_SearchPanel.Uninstall();
+            m_SearchPanel = null;
+        }
+
+        private void SetDefaults()
+        {
+            m_SearchPanel.MatchCase = m_AppSettings.IsCaseSensitiveInFind;
+            m_SearchPanel.WholeWords = m_AppSettings.IsMatchWholeWordInFind;
+            m_SearchPanel.UseWildCards = m_AppSettings.IsUseWildcardsInFind;
+            m_SearchPanel.UseRegex = m_AppSettings.IsUseRegexInFind;
+
+            m_SearchPanel.RecentSearchPatterns = m_AppSettings.LastSearchedTexts;
+            if (TextEditor.TextArea.Selection.IsMultiline == false)
+            {
+                var text = TextEditor.TextArea.Selection.GetText();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    m_SearchPanel.SearchPattern = text;
+                }
+            }
+
+            if (string.IsNullOrEmpty(m_SearchPanel.SearchPattern))
+            {
+                m_SearchPanel.SearchPattern = m_SearchPanel.RecentSearchPatterns.Count > 0 ? m_SearchPanel.RecentSearchPatterns[0] : "";
+            }
+        }
+
+        public SearchHighlightingTransformer GetSearchHighlightingTransformer()
+        {
+            var transformer = LineTransformers.FirstOrDefault(x => x is SearchHighlightingTransformer);
+            if (transformer == null)
+            {
+                var lineTransformers = new SearchHighlightingTransformer();
+                LineTransformers.Add(lineTransformers);
+                return lineTransformers;
+            }
+            else
+            {
+                return transformer as SearchHighlightingTransformer;
+            }
+        }
+
+        public void ClearSearchHighlighting()
+        {
+            var transformers = LineTransformers;
+            var itemsToRemove = transformers.Where(x => x is SearchHighlightingTransformer).ToList();
+            foreach (var item in itemsToRemove)
+            {
+                transformers.Remove(item);
+            }
+        }
+
+        public bool HasSearchHighlightingTransformer =>
+                            LineTransformers.FirstOrDefault(x => x is SearchHighlightingTransformer) != null;
+        private IList<IVisualLineTransformer> LineTransformers => TextEditor.TextArea.TextView.LineTransformers;
 
         public TextDocument Document
         {
@@ -76,6 +161,11 @@ namespace Gherkin.ViewModel
         public string FontSize
         {
             set { TextEditor.FontSize = ToFontSizeByPoint(value); }
+        }
+
+        public Encoding Encoding
+        {
+            get { return TextEditor.Encoding; }
         }
 
         public int CursorLine
@@ -162,6 +252,11 @@ namespace Gherkin.ViewModel
                 FoldingManager.Uninstall(FoldingManager);
                 FoldingManager = null;
             }
+        }
+
+        public void AppendText(string text)
+        {
+            TextEditor.AppendText(text);
         }
 
         private double ToFontSizeByPoint(string fontSize)

@@ -300,6 +300,7 @@
     </Compile>
     <Compile Include="Rendering\LinkElementGenerator.cs" />
     <Compile Include="Rendering\MouseHoverLogic.cs" />
+    <Compile Include="Rendering\SearchHighlightingTransformer.cs" />
     <Compile Include="Rendering\SimpleTextSource.cs">
       <DependentUpon>FormattedTextElement.cs</DependentUpon>
     </Compile>
@@ -331,6 +332,7 @@
     <Compile Include="Rendering\VisualYPosition.cs">
       <DependentUpon>VisualLine.cs</DependentUpon>
     </Compile>
+    <Compile Include="Search\BrowserBehavior.cs" />
     <Compile Include="Search\Localization.cs" />
     <Compile Include="Search\RegexSearchStrategy.cs" />
     <Compile Include="Search\DropDownButton.cs" />
@@ -446,5 +448,28 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Highlighting\Resources\MarkDown-Mode.xshd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Search\replaceall.png" />
+    <Resource Include="Search\replacenext.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Search\arrow_down.png" />
+    <Resource Include="Search\arrow_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Search\case_sensitive.png" />
+    <Resource Include="Search\regex.png" />
+    <Resource Include="Search\whole_word.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Search\delete.png" />
+    <Resource Include="Search\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Search\wildcards.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Search\resize_popup.png" />
   </ItemGroup>
 </Project>

@@ -70,11 +70,20 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Find Next.
+        ///   Looks up a localized string similar to Find next(F3).
         /// </summary>
-        public static string DlgFind_FindNext {
+        public static string DlgFind_FindNextToolTip {
             get {
-                return ResourceManager.GetString("DlgFind_FindNext", resourceCulture);
+                return ResourceManager.GetString("DlgFind_FindNextToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find next up(Shift+F3).
+        /// </summary>
+        public static string DlgFind_FindNextUpToolTip {
+            get {
+                return ResourceManager.GetString("DlgFind_FindNextUpToolTip", resourceCulture);
             }
         }
         
@@ -97,6 +106,24 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No matches found!.
+        /// </summary>
+        public static string DlgFind_NoMatchesFoundText {
+            get {
+                return ResourceManager.GetString("DlgFind_NoMatchesFoundText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No more text found. Do you find from start again?.
+        /// </summary>
+        public static string DlgFind_NoMoreTextFound {
+            get {
+                return ResourceManager.GetString("DlgFind_NoMoreTextFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regular Expression.
         /// </summary>
         public static string DlgFind_RegularExpression {
@@ -106,7 +133,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace.
+        ///   Looks up a localized string similar to Replace(ALT+R).
         /// </summary>
         public static string DlgFind_Replace {
             get {
@@ -115,11 +142,20 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace All.
+        ///   Looks up a localized string similar to Replace All(ALT+A).
         /// </summary>
         public static string DlgFind_ReplaceAll {
             get {
                 return ResourceManager.GetString("DlgFind_ReplaceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replacement term.
+        /// </summary>
+        public static string DlgFind_ReplacementTermText {
+            get {
+                return ResourceManager.GetString("DlgFind_ReplacementTermText", resourceCulture);
             }
         }
         
@@ -129,6 +165,15 @@ namespace Gherkin.Properties {
         public static string DlgFind_ReplaceWith {
             get {
                 return ResourceManager.GetString("DlgFind_ReplaceWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search term.
+        /// </summary>
+        public static string DlgFind_SearchTermText {
+            get {
+                return ResourceManager.GetString("DlgFind_SearchTermText", resourceCulture);
             }
         }
         
@@ -151,6 +196,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle to switch between find and replace modes.
+        /// </summary>
+        public static string DlgFind_ToggleFindReplace {
+            get {
+                return ResourceManager.GetString("DlgFind_ToggleFindReplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wildcards.
         /// </summary>
         public static string DlgFind_Wildcards {
@@ -169,6 +223,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grep Options.
+        /// </summary>
+        public static string DlgGrepLabel_SearchCondition {
+            get {
+                return ResourceManager.GetString("DlgGrepLabel_SearchCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder.
         /// </summary>
         public static string DlgGrepLabel_SearchFolder {
@@ -183,15 +246,6 @@ namespace Gherkin.Properties {
         public static string DlgGrepLabel_TextToFind {
             get {
                 return ResourceManager.GetString("DlgGrepLabel_TextToFind", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No more text found. Do you find from start again?.
-        /// </summary>
-        public static string DlgGrepMsg_NoMoreTextFound {
-            get {
-                return ResourceManager.GetString("DlgGrepMsg_NoMoreTextFound", resourceCulture);
             }
         }
         
@@ -426,6 +480,24 @@ namespace Gherkin.Properties {
         public static string MenuFile_SaveAs {
             get {
                 return ResourceManager.GetString("MenuFile_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find next.
+        /// </summary>
+        public static string MenuFind_FindNextDown {
+            get {
+                return ResourceManager.GetString("MenuFind_FindNextDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find next up.
+        /// </summary>
+        public static string MenuFind_FindNextUp {
+            get {
+                return ResourceManager.GetString("MenuFind_FindNextUp", resourceCulture);
             }
         }
         
@@ -772,15 +844,6 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show code generation message window.
-        /// </summary>
-        public static string MenuView_GenCodeMessageWindow {
-            get {
-                return ResourceManager.GetString("MenuView_GenCodeMessageWindow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show scenario index.
         /// </summary>
         public static string MenuView_ShowScenarioIndex {
@@ -804,6 +867,15 @@ namespace Gherkin.Properties {
         public static string MenuView_View {
             get {
                 return ResourceManager.GetString("MenuView_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show/Hide work area window.
+        /// </summary>
+        public static string MenuView_WorkAreaEditor {
+            get {
+                return ResourceManager.GetString("MenuView_WorkAreaEditor", resourceCulture);
             }
         }
         
@@ -899,6 +971,25 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you reload current file in selected encoding?
+        ///Any change of the file would be discarded..
+        /// </summary>
+        public static string Message_ConfirmReloadFileMessage {
+            get {
+                return ResourceManager.GetString("Message_ConfirmReloadFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload File.
+        /// </summary>
+        public static string Message_ConfirmReloadFileTitle {
+            get {
+                return ResourceManager.GetString("Message_ConfirmReloadFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You need to restart the application to make new language effective.
         /// </summary>
         public static string Message_ConfirmRestartApp {
@@ -962,6 +1053,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regex note.
+        /// </summary>
+        public static string Message_RegexNoteTitle {
+            get {
+                return ResourceManager.GetString("Message_RegexNoteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename failed.
         /// </summary>
         public static string Message_RenameFailedTitle {
@@ -971,7 +1071,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to Replace All occurences of &quot;{0}&quot; with &quot;{1}&quot;?.
+        ///   Looks up a localized string similar to Are you sure to Replace All occurences of &quot;{0}&quot; with &quot;{1}&quot;?.
         /// </summary>
         public static string Message_ReplaceAllConfirm {
             get {
@@ -1043,6 +1143,33 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        public static string Status_CodePageListTitle {
+            get {
+                return ResourceManager.GetString("Status_CodePageListTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload file in selected encoding.
+        /// </summary>
+        public static string Status_ReloadFileWithCodePage {
+            get {
+                return ResourceManager.GetString("Status_ReloadFileWithCodePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file in selected encoding.
+        /// </summary>
+        public static string Status_SaveAsWithCodePage {
+            get {
+                return ResourceManager.GetString("Status_SaveAsWithCodePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use default color.
         /// </summary>
         public static string Tooltip_DefaultHighlighingColor {
@@ -1075,6 +1202,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_FontSize {
             get {
                 return ResourceManager.GetString("Tooltip_FontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a file by double clicking the file name line..
+        /// </summary>
+        public static string Tooltip_GrepResultUage {
+            get {
+                return ResourceManager.GetString("Tooltip_GrepResultUage", resourceCulture);
             }
         }
         

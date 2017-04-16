@@ -4,34 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:bc="BetterWpfControls"
+        xmlns:local="clr-namespace:Gherkin.View"
         xmlns:vm="clr-namespace:Gherkin.ViewModel"
-        xmlns:p = "clr-namespace:Gherkin.Properties"
+        xmlns:p="clr-namespace:Gherkin.Properties"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.MenuFind_Grep}" WindowStartupLocation="CenterOwner"
-        Width="400" SizeToContent="Height" ResizeMode="NoResize" 
+        Title="{x:Static p:Resources.MenuFind_Grep}"
+        WindowStartupLocation="CenterOwner"
+        Width="400"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
         ShowInTaskbar="False"
         Icon="Images/SearchFolder.png">
-    
+
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="Escape" Command="{x:Static vm:CloseWindowCommand.Instance}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+        <KeyBinding Key="Escape"
+                    Command="{x:Static vm:CloseWindowCommand.Instance}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
     </Window.InputBindings>
 
-    <Grid>
+    <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -41,56 +43,153 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,2" Background="LightGray" Text="{x:Static p:Resources.DlgGrepLabel_TextToFind}" VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Name="txtFindComboBox"
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="10,2"
+                       Text="{x:Static p:Resources.DlgGrepLabel_TextToFind}"
+                       VerticalAlignment="Center" />
+            <ComboBox Grid.Row="0"
+                      Grid.Column="1"
+                      Margin="0,3,0,3"
+                      Name="txtFindComboBox"
                       IsEditable="True"
                       ItemsSource="{Binding RecentGreppedTexts}"
                       Text="{Binding TextToGrep}">
                 <ComboBox.InputBindings>
-                    <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                    <KeyBinding Key="Return"
+                                Command="{Binding GrepCmd}" />
                 </ComboBox.InputBindings>
             </ComboBox>
-            <bc:ImageButton Grid.Row="0" Grid.Column="2" Margin="10,2" Height="24" ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepStart}"
+            <bc:ImageButton Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="10,2"
+                            Height="24"
+                            ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepStart}"
                             Source="Images/StartGrep.png"
-                            Command="{Binding GrepCmd}"/>
+                            Command="{Binding GrepCmd}" />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,2" Background="LightGray" Text="{x:Static p:Resources.DlgGrepLabel_FileExtensions}" VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,3,0,3"  Name="fileExtension"
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="10,2"
+                       Text="{x:Static p:Resources.DlgGrepLabel_FileExtensions}"
+                       VerticalAlignment="Center" />
+            <ComboBox Grid.Row="1"
+                      Grid.Column="1"
+                      Margin="0,3,0,3"
+                      Name="fileExtension"
                       ToolTip="{x:Static p:Resources.DlgGrepTooltip_FileExtensions}"
                       IsEditable="True"
                       ItemsSource="{Binding RecentFileExtensions}"
                       Text="{Binding FileExtension}">
                 <ComboBox.InputBindings>
-                    <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                    <KeyBinding Key="Return"
+                                Command="{Binding GrepCmd}" />
                 </ComboBox.InputBindings>
             </ComboBox>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,2" Background="LightGray" Text="{x:Static p:Resources.DlgGrepLabel_SearchFolder}" VerticalAlignment="Center"/>
-            <Grid Grid.Row="2" Grid.Column="1" Margin="0,3,0,3">
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="10,2"
+                       Text="{x:Static p:Resources.DlgGrepLabel_SearchFolder}"
+                       VerticalAlignment="Center" />
+            <Grid Grid.Row="2"
+                  Grid.Column="1"
+                  Margin="0,3,0,3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Name="Folder"
+                <ComboBox Grid.Column="0"
+                          Name="Folder"
                           HorizontalAlignment="Stretch"
                           IsEditable="True"
                           ItemsSource="{Binding RecentFolders}"
                           Text="{Binding Folder}">
                     <ComboBox.InputBindings>
-                        <KeyBinding Key="Return" Command="{Binding GrepCmd}" />
+                        <KeyBinding Key="Return"
+                                    Command="{Binding GrepCmd}" />
                     </ComboBox.InputBindings>
                 </ComboBox>
-                <bc:ImageButton Grid.Column="1" Name="searchFolderButton" Height="24" ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepSearchFolder}"
+                <bc:ImageButton Grid.Column="1"
+                                Name="searchFolderButton"
+                                Height="24"
+                                ToolTip="{x:Static p:Resources.DlgGrepTooltip_GrepSearchFolder}"
                                 Source="Images/SearchFolder.png"
-                                Command="{Binding FindFolderCmd}"/>
+                                Command="{Binding FindFolderCmd}" />
 
             </Grid>
+            <TextBlock Grid.Row="3"
+                       Grid.Column="0"
+                       Margin="10,2"
+                       Text="{x:Static p:Resources.DlgGrepLabel_SearchCondition}"
+                       VerticalAlignment="Center" />
+            <StackPanel Grid.Row="3"
+                        Grid.Column="1"
+                        Orientation="Horizontal">
+                <ToggleButton x:Name="caseSensitivity"
+                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                              IsChecked="{Binding IsCaseSensitive}"
+                              ToolTip="{x:Static p:Resources.DlgFind_MachCase}">
+                    <Image Width="20"
+                           Source="Images/case_sensitive.png" />
+                </ToggleButton>
+                <ToggleButton x:Name="wholeWord"
+                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                              IsChecked="{Binding IsMatchWholeWord}"
+                              ToolTip="{x:Static p:Resources.DlgFind_MachWholdWord}">
+                    <Image Width="20"
+                           Source="Images/whole_word.png" />
+                </ToggleButton>
+                <ToggleButton x:Name="wildcards"
+                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                              IsChecked="{Binding IsUseWildcards}"
+                              ToolTip="{x:Static p:Resources.DlgFind_Wildcards}">
+                    <Image Width="20"
+                           Source="Images/wildcards.png" />
+                </ToggleButton>
+                <ToggleButton x:Name="regex"
+                              Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                              IsChecked="{Binding IsUseRegex}"
+                              ToolTip="{x:Static p:Resources.DlgFind_RegularExpression}">
+                    <Image Width="20"
+                           Source="Images/regex.png" />
+                </ToggleButton>
+                <bc:ImageButton Name="regexHelp"
+                                Source="Images/Question.png"
+                                Height="16"
+                                Command="{Binding Path=RegexDocument.ShowRegexHelpCmd}" />
+                <Popup x:Name="RegexNotePopup"
+                       IsOpen="{Binding Path=RegexDocument.IsShowingRegexHelp}"
+                       PlacementTarget="{Binding ElementName=regexHelp}"
+                       Placement="Bottom"
+                       StaysOpen="True"
+                       MaxHeight="300">
+                    <Border BorderBrush="DarkGray" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <DockPanel  Grid.Row="0"
+                                        Background="LightGray">
+                                <bc:ImageButton DockPanel.Dock="Right"
+                                                Source="Images/Delete.png"
+                                                Height="16"
+                                                Command="{Binding Path=RegexDocument.CloseRegexHelpCmd}" />
+                                <TextBlock Text="{x:Static p:Resources.Message_RegexNoteTitle}" />
+                            </DockPanel>
+                            <WebBrowser Grid.Row="1"
+                                        Width="280"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                        local:BrowserBehavior.Html="{Binding  Path=RegexDocument.RegexNote}" />
+                        </Grid>
+                    </Border>
+                </Popup>
+            </StackPanel>
         </Grid>
-        <CheckBox Grid.Row="1" Grid.Column="0" Margin="10,2,10,10" 
-        Name="cbCaseSensitive" Content="{x:Static p:Resources.DlgFind_MachCase}" IsChecked="{Binding IsCaseSensitive}" />
-        <CheckBox Grid.Row="1" Grid.Column="1" Margin="10,2" 
-        Name="cbWholeWord" Content="{x:Static p:Resources.DlgFind_MachWholdWord}" IsChecked="{Binding IsMatchWholeWord}" />
-        <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="Blue">
+        <Border Grid.Row="1"
+                BorderThickness="1"
+                BorderBrush="DarkGray">
             <Grid>
                 <!-- ProgressBar has the ability to show a text representation of the progress as well as the progress bar. -->
                 <!-- We accomplish the above by putting the ProgressBar and the TextBlock showing the percentage inside of the same Grid, -->
@@ -100,11 +199,17 @@
                 <!-- Notice the special StringFormat syntax, which allows us to show the value with a percentage sign postfix -->
                 <!-- Please be aware that if you specify a format string that doesn't include any custom text, then you need to add an extra set of curly braces, when defining it in XAML.-->
                 <!-- The reason is that WPF may otherwise confuse the syntax with the one used for Markup Extensions.-->
-                <ProgressBar Minimum="0" Maximum="100" Value="{Binding GrepCompletedPercent}" Name="pbStatus" />
-                <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <TextBlock Name="status" VerticalAlignment="Center" Background="LightGray"
+                <ProgressBar Minimum="0"
+                             Maximum="100"
+                             Value="{Binding GrepCompletedPercent}"
+                             Name="pbStatus" />
+                <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                <TextBlock Name="status"
+                           VerticalAlignment="Center"
                            Visibility="{Binding Path=ShowStatus, Converter={StaticResource BoolToVisibility}}"
-                           Text="{Binding Status, FallbackValue=Status}"/>
+                           Text="{Binding Status, FallbackValue=Status}" />
             </Grid>
         </Border>
     </Grid>

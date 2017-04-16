@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
@@ -7,15 +8,6 @@ using System.Windows;
 
 namespace Gherkin.Util
 {
-    public class GherkinFileInfo
-    {
-        public string FilePath = "";
-        public string FontFamilyName = "KaiTi";
-        public string FontSize = "11";
-        public int CursorLine = 1;
-        public int CursorColumn = 1;
-    }
-
     public class AppSettings : ApplicationSettingsBase, IAppSettings
     {
         [UserScopedSetting()]
@@ -75,12 +67,43 @@ namespace Gherkin.Util
             private set { this["RecentFilesInfo"] = value; }
         }
 
-        [UserScopedSetting()]
-        [DefaultSettingValueAttribute("")]
         public string LastSearchedText
         {
-            get { return (string)this["LastSearchedText"]; }
-            set { this["LastSearchedText"] = value; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) return;
+
+                var list = LastSearchedTexts;
+                InsertFirst(list, value);
+                LastSearchedTexts = list;
+            }
+        }
+
+        /// <summary>
+        /// Insert item at the front of list.
+        /// And limit length of list to 20;
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="item"></param>
+        private void InsertFirst(List<string> list, string item)
+        {
+            list.RemoveAll(x => x == item);
+            list.Insert(0, item);
+            var remove_count = list.Count - 20;
+            if (remove_count > 0)
+            {
+                // remove that number of items from the start of the list
+                list.RemoveRange(20, remove_count);
+            }
+        }
+
+        [UserScopedSetting()]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [DefaultSettingValueAttribute("")]
+        public List<string> LastSearchedTexts
+        {
+            get { return (List<string>)this["LastSearchedTexts"]; }
+            set { this["LastSearchedTexts"] = value; }
         }
 
         public string LastGreppedText
@@ -102,24 +125,6 @@ namespace Gherkin.Util
         {
             get { return (List<string>)this["LastGreppedTexts"]; }
             set { this["LastGreppedTexts"] = value; }
-        }
-
-        /// <summary>
-        /// Insert item at the front of list.
-        /// And limit length of list to 20;
-        /// </summary>
-        /// <param name="list"></param>
-        /// <param name="item"></param>
-        private void InsertFirst(List<string> list, string item)
-        {
-            list.Remove(item);
-            list.Insert(0, item);
-            var remove_count = list.Count - 20;
-            if (remove_count > 0)
-            {
-                // remove that number of items from the start of the list
-                list.RemoveRange(20, remove_count);
-            }
         }
 
         public string LastUsedFileExtension
@@ -180,6 +185,22 @@ namespace Gherkin.Util
             set { this["IsMatchWholeWordInFind"] = value; }
         }
 
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool IsUseRegexInFind
+        {
+            get { return (bool)this["IsUseRegexInFind"]; }
+            set { this["IsUseRegexInFind"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool IsUseWildcardsInFind
+        {
+            get { return (bool)this["IsUseWildcardsInFind"]; }
+            set { this["IsUseWildcardsInFind"] = value; }
+        }
+
         public void UpdateFontFamilyName(string filePath, string fontFamilyName)
         {
             if (fontFamilyName == null) return;
@@ -210,6 +231,15 @@ namespace Gherkin.Util
             {
                 fileInfo.CursorLine = line;
                 fileInfo.CursorColumn = column;
+            }
+        }
+
+        public void UpdateCodePage(string filePath, int codePage)
+        {
+            var fileInfo = GetExistingFileInfo(filePath);
+            if (fileInfo != null)
+            {
+                fileInfo.CodePage = codePage;
             }
         }
 
@@ -442,13 +472,20 @@ namespace Gherkin.Util
                 files.Insert(0, new GherkinFileInfo() { FilePath = newFilePath });
             }
 
-            files.RemoveAll(f => !File.Exists(f.FilePath));
-            if (files.Count > 20)
-            {
-                files.Remove(files.Last());
-            }
+            RemoveExtraFileInfo(files);
 
             RecentFilesInfo = files;
+        }
+
+        private static void RemoveExtraFileInfo(List<GherkinFileInfo> files)
+        {
+            files.RemoveAll(f => !File.Exists(f.FilePath));
+            int max_files = ConfigReader.GetValue<int>("max_recent_files_for_backup", 100);
+            if (files.Count() > max_files)
+            {
+                var count = files.Count() - max_files;
+                files.RemoveRange(max_files, count);
+            }
         }
     }
 }

@@ -21,14 +21,17 @@ namespace Gherkin.View
     /// </summary>
     public partial class GrepDialog : Window
     {
+        private GrepViewModel m_ViewModel;
         public GrepDialog(GrepViewModel viewModel)
         {
             InitializeComponent();
+
+            m_ViewModel = viewModel;
             this.Owner = Application.Current.MainWindow;
             this.DataContext = viewModel;
 
-            // WPF and initial focus
-            // I just need to add the following code to my Window's constructor
+            // Initial focus
+            SetDefaultFocus();
         }
 
         /// <summary>

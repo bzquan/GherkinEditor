@@ -120,9 +120,6 @@
   <data name="DlgFind_Find" xml:space="preserve">
     <value>检索</value>
   </data>
-  <data name="DlgFind_FindNext" xml:space="preserve">
-    <value>继续检索</value>
-  </data>
   <data name="DlgFind_MachCase" xml:space="preserve">
     <value>区别大小写</value>
   </data>
@@ -133,10 +130,10 @@
     <value>正则表达式</value>
   </data>
   <data name="DlgFind_Replace" xml:space="preserve">
-    <value>替换</value>
+    <value>替换(ALT+R)</value>
   </data>
   <data name="DlgFind_ReplaceAll" xml:space="preserve">
-    <value>全部替换</value>
+    <value>全部替换(ALT+A)</value>
   </data>
   <data name="DlgFind_ReplaceWith" xml:space="preserve">
     <value>替换文字：</value>
@@ -327,8 +324,8 @@
   <data name="MenuView_FoldTables" xml:space="preserve">
     <value>折叠表格</value>
   </data>
-  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
-    <value>显示代码生成界面</value>
+  <data name="MenuView_WorkAreaEditor" xml:space="preserve">
+    <value>显示或隐藏工作区界面</value>
   </data>
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>显示场景目录</value>
@@ -481,7 +478,56 @@
   <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
     <value>检索完毕。需要重新检索吗？</value>
   </data>
+  <data name="DlgFind_FindNextToolTip" xml:space="preserve">
+    <value>向下检索(F3)</value>
+  </data>
   <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
     <value>取消检索亮显</value>
+  </data>
+  <data name="DlgFind_FindNextUpToolTip" xml:space="preserve">
+    <value>向下检索(Shift+F3)</value>
+  </data>
+  <data name="Message_RegexNoteTitle" xml:space="preserve">
+    <value>正规表达式便笺</value>
+  </data>
+  <data name="MenuFind_FindNextDown" xml:space="preserve">
+    <value>向下检索</value>
+  </data>
+  <data name="MenuFind_FindNextUp" xml:space="preserve">
+    <value>向下检索</value>
+  </data>
+  <data name="DlgFind_NoMatchesFoundText" xml:space="preserve">
+    <value>没有匹配的字符串</value>
+  </data>
+  <data name="DlgFind_ReplacementTermText" xml:space="preserve">
+    <value>替换字符串</value>
+  </data>
+  <data name="DlgFind_SearchTermText" xml:space="preserve">
+    <value>检索内容</value>
+  </data>
+  <data name="DlgFind_ToggleFindReplace" xml:space="preserve">
+    <value>切换检索和替换</value>
+  </data>
+  <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
+    <value>检索选项</value>
+  </data>
+  <data name="Tooltip_GrepResultUage" xml:space="preserve">
+    <value>双击打开相应文件。</value>
+  </data>
+  <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
+    <value>确实以字符集重读文件吗？
+编辑内容将被丢弃。</value>
+  </data>
+  <data name="Message_ConfirmReloadFileTitle" xml:space="preserve">
+    <value>重读文件</value>
+  </data>
+  <data name="Status_CodePageListTitle" xml:space="preserve">
+    <value>变更</value>
+  </data>
+  <data name="Status_ReloadFileWithCodePage" xml:space="preserve">
+    <value>用所选字符集重读文件</value>
+  </data>
+  <data name="Status_SaveAsWithCodePage" xml:space="preserve">
+    <value>用所选字符集保存</value>
   </data>
 </root>

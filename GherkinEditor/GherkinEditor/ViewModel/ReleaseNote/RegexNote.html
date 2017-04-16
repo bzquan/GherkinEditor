@@ -1,0 +1,91 @@
+﻿<h5>Character Classes</h5>
+<div>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td><div style="padding: 3px 8px;">\s</div></td>
+            <td><div style="padding: 3px 8px;">White space</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\S</div></td>
+            <td><div style="padding: 3px 8px;">Not white space</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\d</div></td>
+            <td><div style="padding: 3px 8px;">Digit</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\D</div></td>
+            <td><div style="padding: 3px 8px;">Not digit</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\w</div></td>
+            <td><div style="padding: 3px 8px;">Word</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\W</div></td>
+            <td><div style="padding: 3px 8px;">Not word</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\x</div></td>
+            <td><div style="padding: 3px 8px;">Hexadecimal digit</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\O</div></td>
+            <td><div style="padding: 3px 8px;">Octal digit</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">\p</div></td>
+            <td><div style="padding: 3px 8px;">()*+,-.:;<=>?[]!"'#$%&amp;{} (punctuation characters)</div></td>
+        </tr>
+    </table>
+</div>
+
+<h5>Modifiers</h5>
+<div>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td><div style="padding: 3px 8px;">+</div></td>
+            <td><div style="padding: 3px 8px;">To match one or more times (eg \w+ or \d+)</div></td>
+        </tr>
+        <tr>
+            <td><div style="padding: 3px 8px;">*</div></td>
+            <td><div style="padding: 3px 8px;">To match zero or more times (eg \w* or \d*)</div></td>
+        </tr>
+    </table>
+</div>
+
+<h5>Groups and Ranges</h5>
+<div>
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td><div style="padding: 3px 8px;">.</div></td>
+                <td><div style="padding: 3px 8px;">Any character except new line (\n)</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">(a|b)</div></td>
+                <td><div style="padding: 3px 8px;">a or b</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">[abc]</div></td>
+                <td><div style="padding: 3px 8px;">Range (a or b or c)</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">[^abc]</div></td>
+                <td><div style="padding: 3px 8px;">Not (a or b or c)</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">[a-q]</div></td>
+                <td><div style="padding: 3px 8px;">Lower case letter from a to q</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">[A-Q]</div></td>
+                <td><div style="padding: 3px 8px;">Upper case letter from A to Q</div></td>
+            </tr>
+            <tr>
+                <td><div style="padding: 3px 8px;">[0-7]</div></td>
+                <td><div style="padding: 3px 8px;">Digit from 0 to 7</div></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

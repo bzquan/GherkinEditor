@@ -46,13 +46,63 @@ namespace ICSharpCode.AvalonEdit.Search
 		TextDocument currentDocument;
 		SearchResultBackgroundRenderer renderer;
 		TextBox searchTextBox;
+		TextBox replaceTextBox;
+		Border searchPanel;
 		SearchPanelAdorner adorner;
-		
-		#region DependencyProperties
-		/// <summary>
-		/// Dependency property for <see cref="UseRegex"/>.
-		/// </summary>
-		public static readonly DependencyProperty UseRegexProperty =
+
+        #region DependencyProperties
+        /// <summary>
+        /// Dependency property for <see cref="ShowRegexPopup"/>.
+        /// </summary>
+        public static readonly DependencyProperty ShowRegexPopupProperty =
+            DependencyProperty.Register("ShowRegexPopup", typeof(bool), typeof(SearchPanel),
+                                        new FrameworkPropertyMetadata(false, SearchPatternChangedCallback));
+
+        /// <summary>
+        /// Gets/sets whether the search pattern should be interpreted as regular expression.
+        /// </summary>
+        public bool ShowRegexPopup
+        {
+            get { return (bool)GetValue(ShowRegexPopupProperty); }
+            set { SetValue(ShowRegexPopupProperty, value); }
+        }
+
+        /// <summary>
+        /// Hide regex note popup
+        /// </summary>
+        public void HideRegexPopup()
+        {
+            ShowRegexPopup = false;
+        }
+
+        /// <summary>
+        /// Dependency property for <see cref="UseWildCards"/>.
+        /// </summary>
+        public static readonly DependencyProperty UseWildCardsProperty =
+            DependencyProperty.Register("UseWildCards", typeof(bool), typeof(SearchPanel),
+                                        new FrameworkPropertyMetadata(false, SearchPatternChangedCallback));
+
+        /// <summary>
+        /// Gets/sets whether the search pattern uses wild cards, including ? or *.
+        /// </summary>
+        public bool UseWildCards
+        {
+            get { return (bool)GetValue(UseWildCardsProperty); }
+            set
+            {
+                SetValue(UseWildCardsProperty, value);
+                if (value)
+                {
+                    // do not use when using wild cards
+                    UseRegex = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Dependency property for <see cref="UseRegex"/>.
+        /// </summary>
+        public static readonly DependencyProperty UseRegexProperty =
 			DependencyProperty.Register("UseRegex", typeof(bool), typeof(SearchPanel),
 			                            new FrameworkPropertyMetadata(false, SearchPatternChangedCallback));
 		
@@ -108,7 +158,53 @@ namespace ICSharpCode.AvalonEdit.Search
 			get { return (string)GetValue(SearchPatternProperty); }
 			set { SetValue(SearchPatternProperty, value); }
 		}
-		
+
+        /// <summary>
+        /// Dependency property for <see cref="RecentSearchPatterns"/>.
+        /// </summary>
+        public static readonly DependencyProperty RecentSearchPatternsProperty =
+            DependencyProperty.Register("RecentSearchPatterns", typeof(List<string>), typeof(SearchPanel),
+                                        new FrameworkPropertyMetadata(new List<string>()));
+
+        /// <summary>
+        /// Gets/sets the recent search patterns.
+        /// </summary>
+        public List<string> RecentSearchPatterns
+        {
+            get { return (List<string>)GetValue(RecentSearchPatternsProperty); }
+            set { SetValue(RecentSearchPatternsProperty, value); }
+        }
+
+        /// <summary>
+        /// Dependency property for <see cref="Replacement"/>.
+        /// </summary>
+        public static readonly DependencyProperty ReplacementProperty =
+			DependencyProperty.Register("Replacement", typeof(string), typeof(SearchPanel),
+										new FrameworkPropertyMetadata(""));
+
+		/// <summary>
+		/// Gets/sets the replacement.
+		/// </summary>
+		public string Replacement {
+			get { return (string)GetValue(ReplacementProperty); }
+			set { SetValue(ReplacementProperty, value); }
+		}
+
+		/// <summary>
+		/// Dependency property for <see cref="ShowReplace"/>.
+		/// </summary>
+		public static readonly DependencyProperty ShowReplaceProperty =
+			DependencyProperty.Register("ShowReplace", typeof(bool), typeof(SearchPanel),
+										new FrameworkPropertyMetadata(false));
+
+		/// <summary>
+		/// Gets/sets whether the replace is shown.
+		/// </summary>
+		public bool ShowReplace {
+			get { return (bool)GetValue(ShowReplaceProperty); }
+			set { SetValue(ShowReplaceProperty, value); }
+		}
+
 		/// <summary>
 		/// Dependency property for <see cref="MarkerBrush"/>.
 		/// </summary>
@@ -165,21 +261,38 @@ namespace ICSharpCode.AvalonEdit.Search
 		}
 
 		void UpdateSearch()
-		{
-			// only reset as long as there are results
-			// if no results are found, the "no matches found" message should not flicker.
-			// if results are found by the next run, the message will be hidden inside DoSearch ...
-			if (renderer.CurrentResults.Any())
-				messageView.IsOpen = false;
-			strategy = SearchStrategyFactory.Create(SearchPattern ?? "", !MatchCase, WholeWords, UseRegex ? SearchMode.RegEx : SearchMode.Normal);
-			OnSearchOptionsChanged(new SearchOptionsChangedEventArgs(SearchPattern, MatchCase, UseRegex, WholeWords));
-			DoSearch(true);
-		}
-		
-		/// <summary>
-		/// Creates a new SearchPanel.
-		/// </summary>
-		SearchPanel()
+        {
+            // only reset as long as there are results
+            // if no results are found, the "no matches found" message should not flicker.
+            // if results are found by the next run, the message will be hidden inside DoSearch ...
+            if (renderer.CurrentResults.Any())
+                messageView.IsOpen = false;
+
+            strategy = SearchStrategyFactory.Create(SearchPattern ?? "", !MatchCase, WholeWords, GetSearchMode());
+            OnSearchOptionsChanged(new SearchOptionsChangedEventArgs(SearchPattern, MatchCase, UseWildCards, UseRegex, WholeWords));
+            DoSearch(true);
+        }
+
+        private SearchMode GetSearchMode()
+        {
+            var searchMode = SearchMode.Normal;
+            if (UseWildCards)
+                searchMode = SearchMode.Wildcard;
+            else if (UseRegex)
+                searchMode = SearchMode.RegEx;
+            return searchMode;
+        }
+
+
+        /// <summary>
+        /// It will be raised after finishing Close() 
+        /// </summary>
+        public event Action Closed;
+
+        /// <summary>
+        /// Creates a new SearchPanel.
+        /// </summary>
+        SearchPanel()
 		{
 		}
 		
@@ -213,7 +326,8 @@ namespace ICSharpCode.AvalonEdit.Search
 			if (textArea == null)
 				throw new ArgumentNullException("textArea");
 			SearchPanel panel = new SearchPanel();
-			panel.AttachInternal(textArea);
+
+            panel.AttachInternal(textArea);
 			panel.handler = new SearchInputHandler(textArea, panel);
 			textArea.DefaultInputHandler.NestedInputHandlers.Add(panel.handler);
 			return panel;
@@ -248,11 +362,16 @@ namespace ICSharpCode.AvalonEdit.Search
 				currentDocument.TextChanged += textArea_Document_TextChanged;
 			textArea.DocumentChanged += textArea_DocumentChanged;
 			KeyDown += SearchLayerKeyDown;
-			
+
+			this.CommandBindings.Add(new CommandBinding(SearchCommands.Find, (sender, e) => Open(false)));
+			this.CommandBindings.Add(new CommandBinding(SearchCommands.Replace, (sender, e) => Open(true)));
 			this.CommandBindings.Add(new CommandBinding(SearchCommands.FindNext, (sender, e) => FindNext()));
 			this.CommandBindings.Add(new CommandBinding(SearchCommands.FindPrevious, (sender, e) => FindPrevious()));
+			this.CommandBindings.Add(new CommandBinding(SearchCommands.ReplaceNext, (sender, e) => ReplaceNext()));
+			this.CommandBindings.Add(new CommandBinding(SearchCommands.ReplaceAll, (sender, e) => ReplaceAll()));
 			this.CommandBindings.Add(new CommandBinding(SearchCommands.CloseSearchPanel, (sender, e) => Close()));
-			IsClosed = true;
+            this.CommandBindings.Add(new CommandBinding(SearchCommands.CloseRegexNote, (sender, e) => HideRegexPopup()));
+            IsClosed = true;
 		}
 
 		void textArea_DocumentChanged(object sender, EventArgs e)
@@ -275,7 +394,9 @@ namespace ICSharpCode.AvalonEdit.Search
 		public override void OnApplyTemplate()
 		{
 			base.OnApplyTemplate();
+			searchPanel = Template.FindName("PART_searchPanel", this) as Border;
 			searchTextBox = Template.FindName("PART_searchTextBox", this) as TextBox;
+			replaceTextBox = Template.FindName("PART_replaceTextBox", this) as TextBox;
 		}
 		
 		void ValidateSearchText()
@@ -330,6 +451,55 @@ namespace ICSharpCode.AvalonEdit.Search
 				SelectResult(result);
 			}
 		}
+
+		/// <summary>
+		/// Replaces current result if any and moves to the next occurrence in the file.
+		/// </summary>
+		public int ReplaceNext() {
+			SearchResult result = renderer.CurrentResults.FindFirstSegmentWithStartAfter(textArea.Caret.Offset);
+			var count = renderer.CurrentResults.Count;
+			if (result != null
+				&& !textArea.Selection.IsEmpty
+				&& textArea.Document.GetOffset(textArea.Selection.StartPosition.Location) == result.StartOffset
+				&& textArea.Document.GetOffset(textArea.Selection.EndPosition.Location) == result.EndOffset) {
+				Replace(result);
+				--count;
+			}
+			result = renderer.CurrentResults.FindFirstSegmentWithStartAfter(textArea.Caret.Offset + textArea.Selection.Length);
+			if (result == null)
+				result = renderer.CurrentResults.FirstSegment;
+			if (result != null) {
+				SelectResult(result);
+				return count;
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// Replaces all occurrences in the file.
+		/// </summary>
+		public void ReplaceAll() {
+            string msg = string.Format(Localization.ReplaceAllConfirmMessage, SearchPattern, Replacement);
+            if (MessageBox.Show(Application.Current.MainWindow,
+                           msg,
+                           Localization.ReplaceAllConfirmTitle,
+                           MessageBoxButton.OKCancel,
+                           MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                var count = ReplaceNext();
+                while (count-- > 0)
+                {
+                    ReplaceNext();
+                }
+
+                // select all replaced text
+                SearchPattern = Replacement;
+            }
+        }
+
+		void Replace(SearchResult result) {
+			currentDocument.Replace(textArea.Selection.Segments.FirstOrDefault(), result.ReplaceWith(Replacement));
+		}
 		
 		ToolTip messageView = new ToolTip { Placement = PlacementMode.Bottom, StaysOpen = true, Focusable = false };
 
@@ -355,7 +525,7 @@ namespace ICSharpCode.AvalonEdit.Search
 				if (!renderer.CurrentResults.Any()) {
 					messageView.IsOpen = true;
 					messageView.Content = Localization.NoMatchesFoundText;
-					messageView.PlacementTarget = searchTextBox;
+					messageView.PlacementTarget = searchPanel;
 				} else
 					messageView.IsOpen = false;
 			}
@@ -376,16 +546,21 @@ namespace ICSharpCode.AvalonEdit.Search
 			switch (e.Key) {
 				case Key.Enter:
 					e.Handled = true;
-					if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-						FindPrevious();
-					else
-						FindNext();
-					if (searchTextBox != null) {
-						var error = Validation.GetErrors(searchTextBox).FirstOrDefault();
-						if (error != null) {
-							messageView.Content = Localization.ErrorText + " " + error.ErrorContent;
-							messageView.PlacementTarget = searchTextBox;
-							messageView.IsOpen = true;
+					if (replaceTextBox != null
+						&& replaceTextBox.IsFocused) {
+						ReplaceNext();
+					} else {
+						if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+							FindPrevious();
+						else
+							FindNext();
+						if (searchTextBox != null) {
+							var error = Validation.GetErrors(searchTextBox).FirstOrDefault();
+							if (error != null) {
+								messageView.Content = Localization.ErrorText + " " + error.ErrorContent;
+								messageView.PlacementTarget = searchPanel;
+								messageView.IsOpen = true;
+							}
 						}
 					}
 					break;
@@ -419,7 +594,8 @@ namespace ICSharpCode.AvalonEdit.Search
 			
 			// Clear existing search results so that the segments don't have to be maintained
 			renderer.CurrentResults.Clear();
-		}
+            Closed?.Invoke();
+        }
 		
 		/// <summary>
 		/// Closes the SearchPanel and removes it.
@@ -432,12 +608,21 @@ namespace ICSharpCode.AvalonEdit.Search
 			if (currentDocument != null)
 				currentDocument.TextChanged -= textArea_Document_TextChanged;
 		}
-		
+
+        /// <summary>
+        /// Opens the an existing search panel with previous show replace property.
+        /// </summary>
+        public void Open()
+        {
+            Open(ShowReplace);
+        }
+
 		/// <summary>
 		/// Opens the an existing search panel.
 		/// </summary>
-		public void Open()
+		public void Open(bool showReplace)
 		{
+			ShowReplace = showReplace;
 			if (!IsClosed) return;
 			var layer = AdornerLayer.GetAdornerLayer(textArea);
 			if (layer != null)
@@ -457,10 +642,8 @@ namespace ICSharpCode.AvalonEdit.Search
 		/// </summary>
 		protected virtual void OnSearchOptionsChanged(SearchOptionsChangedEventArgs e)
 		{
-			if (SearchOptionsChanged != null) {
-				SearchOptionsChanged(this, e);
-			}
-		}
+            SearchOptionsChanged?.Invoke(this, e);
+        }
 	}
 	
 	/// <summary>
@@ -477,11 +660,16 @@ namespace ICSharpCode.AvalonEdit.Search
 		/// Gets whether the search pattern should be interpreted case-sensitive.
 		/// </summary>
 		public bool MatchCase { get; private set; }
-		
-		/// <summary>
-		/// Gets whether the search pattern should be interpreted as regular expression.
-		/// </summary>
-		public bool UseRegex { get; private set; }
+
+        /// <summary>
+        /// Gets whether the search pattern should be interpreted as wild cards.
+        /// </summary>
+        public bool UseWildCards { get; private set; }
+
+        /// <summary>
+        /// Gets whether the search pattern should be interpreted as regular expression.
+        /// </summary>
+        public bool UseRegex { get; private set; }
 		
 		/// <summary>
 		/// Gets whether the search pattern should only match whole words.
@@ -491,16 +679,21 @@ namespace ICSharpCode.AvalonEdit.Search
 		/// <summary>
 		/// Creates a new SearchOptionsChangedEventArgs instance.
 		/// </summary>
-		public SearchOptionsChangedEventArgs(string searchPattern, bool matchCase, bool useRegex, bool wholeWords)
+		public SearchOptionsChangedEventArgs(string searchPattern, bool matchCase, bool useWildCards, bool useRegex, bool wholeWords)
 		{
 			this.SearchPattern = searchPattern;
 			this.MatchCase = matchCase;
-			this.UseRegex = useRegex;
+            this.UseWildCards = useWildCards;
+            this.UseRegex = useRegex;
 			this.WholeWords = wholeWords;
 		}
 	}
-	
-	class SearchPanelAdorner : Adorner
+
+    /// This is simple adorner.
+    /// It may possible to make search panel resizable by following technique.
+    /// WPF. SIMPLE ADORNER USAGE WITH DRAG AND RESIZE OPERATIONS
+    /// URL: https://denisvuyka.wordpress.com/2007/10/15/wpf-simple-adorner-usage-with-drag-and-resize-operations/
+    class SearchPanelAdorner : Adorner
 	{
 		SearchPanel panel;
 		

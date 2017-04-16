@@ -108,5 +108,12 @@ namespace ICSharpCode.AvalonEdit
 			new InputGestureCollection {
 				new KeyGesture(Key.I, ModifierKeys.Control)
 			});
-	}
+        /// <summary>
+        /// Clear search highlighting.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        public static readonly RoutedCommand ClearSearchHighlighting =
+            new RoutedCommand("ClearSearchHighlighting", typeof(TextEditor),
+                new InputGestureCollection { new KeyGesture(Key.Escape) });
+    }
 }

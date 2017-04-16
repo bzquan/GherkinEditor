@@ -120,9 +120,6 @@
   <data name="DlgFind_Find" xml:space="preserve">
     <value>検索</value>
   </data>
-  <data name="DlgFind_FindNext" xml:space="preserve">
-    <value>次の検索</value>
-  </data>
   <data name="DlgFind_MachCase" xml:space="preserve">
     <value>大小文字の区別</value>
   </data>
@@ -133,10 +130,10 @@
     <value>正規表現</value>
   </data>
   <data name="DlgFind_Replace" xml:space="preserve">
-    <value>置換</value>
+    <value>置換(ALT+R)</value>
   </data>
   <data name="DlgFind_ReplaceAll" xml:space="preserve">
-    <value>全置換</value>
+    <value>全置換(ALT+A)</value>
   </data>
   <data name="DlgFind_ReplaceWith" xml:space="preserve">
     <value>置換テキスト：</value>
@@ -327,8 +324,8 @@
   <data name="MenuView_FoldTables" xml:space="preserve">
     <value>テーブルの折り畳み</value>
   </data>
-  <data name="MenuView_GenCodeMessageWindow" xml:space="preserve">
-    <value>コード生成画面の表示</value>
+  <data name="MenuView_WorkAreaEditor" xml:space="preserve">
+    <value>作業領域画面の表示/非表示</value>
   </data>
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>シナリオ目次の表示</value>
@@ -481,7 +478,56 @@
   <data name="DlgGrepMsg_NoMoreTextFound" xml:space="preserve">
     <value>最後尾まで検索しました。もう一度検索しますか？</value>
   </data>
+  <data name="DlgFind_FindNextToolTip" xml:space="preserve">
+    <value>下候補検索(F3)</value>
+  </data>
   <data name="MenuTab_ClearSearchHighlighting" xml:space="preserve">
-    <value>検索協調色のクリア</value>
+    <value>検索強調色のクリア</value>
+  </data>
+  <data name="DlgFind_FindNextUpToolTip" xml:space="preserve">
+    <value>上候補検索(Shift+F3)</value>
+  </data>
+  <data name="Message_RegexNoteTitle" xml:space="preserve">
+    <value>正規表現メモ</value>
+  </data>
+  <data name="MenuFind_FindNextDown" xml:space="preserve">
+    <value>下候補検索</value>
+  </data>
+  <data name="MenuFind_FindNextUp" xml:space="preserve">
+    <value>上候補検索</value>
+  </data>
+  <data name="DlgFind_NoMatchesFoundText" xml:space="preserve">
+    <value>検索結果がありません</value>
+  </data>
+  <data name="DlgFind_ReplacementTermText" xml:space="preserve">
+    <value>置換文字列</value>
+  </data>
+  <data name="DlgFind_SearchTermText" xml:space="preserve">
+    <value>検索対象</value>
+  </data>
+  <data name="DlgFind_ToggleFindReplace" xml:space="preserve">
+    <value>検索と置換の切り替え</value>
+  </data>
+  <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
+    <value>检索条件</value>
+  </data>
+  <data name="Tooltip_GrepResultUage" xml:space="preserve">
+    <value>ダブルクリックにて指定ファイルを開きます。</value>
+  </data>
+  <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
+    <value>指定文字コードにてファイルを読み直しますか？
+編集内容は破棄されます。</value>
+  </data>
+  <data name="Message_ConfirmReloadFileTitle" xml:space="preserve">
+    <value>再読み込み</value>
+  </data>
+  <data name="Status_CodePageListTitle" xml:space="preserve">
+    <value>変更</value>
+  </data>
+  <data name="Status_ReloadFileWithCodePage" xml:space="preserve">
+    <value>選択した文字コードで再読み込み</value>
+  </data>
+  <data name="Status_SaveAsWithCodePage" xml:space="preserve">
+    <value>選択した文字コードで保存</value>
   </data>
 </root>

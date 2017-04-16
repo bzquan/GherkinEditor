@@ -14,6 +14,7 @@ using System.Windows.Interop;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Controls.Primitives;
+using System.Linq;
 
 namespace Gherkin.View
 {
@@ -38,8 +39,16 @@ namespace Gherkin.View
             m_AppSettings = appSettings;
             m_ViewModel = viewModel;
             m_GherkinKeywordsViewModel = gherkinKeywordsViewModel;
-            m_ViewModel.EditorTabControl = editorTabControl;
+            m_ViewModel.EditorTabControl = this.editorTabControl;
+            m_ViewModel.SetMessageTextEditor(this.messageTextEditor);
             InitWindowSize();
+
+            this.Deactivated += OnWindowDeactivated;
+        }
+
+        private void OnWindowDeactivated(object sender, EventArgs e)
+        {
+            EventAggregator<WindowDeactivatedArg>.Instance.Publish(this, new WindowDeactivatedArg());
         }
 
         public string OpenFeatureFile
@@ -63,7 +72,8 @@ namespace Gherkin.View
             if (!HaveRecentFilesChanged()) return;
 
             this.recentFilesMenuItem.Items.Clear();
-            foreach (var file in m_AppSettings.RecentFilesInfo)
+            int max_items = ConfigReader.GetValue<int>("max_recent_files_for_submenu", 20);
+            foreach (var file in m_AppSettings.RecentFilesInfo.Take(max_items))
             {
                 MenuItem newSubMenuItem = new MenuItem();
                 newSubMenuItem.Header = file.FilePath;
@@ -88,7 +98,10 @@ namespace Gherkin.View
 
         private void OnFindAndReplace(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel?.FindAndReplace();
+            if (m_ViewModel != null)
+            {
+                m_ViewModel.ShowFindReplace();
+            }
             e.Handled = true;
         }
 

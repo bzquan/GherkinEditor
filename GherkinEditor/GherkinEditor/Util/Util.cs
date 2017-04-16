@@ -103,22 +103,55 @@ namespace Gherkin.Util
         }
 
         /// <summary>
-        /// Make an image from overlapped two images
+        /// Make an image from overlapping multi-images
         /// </summary>
-        /// <param name="image_name1"></param>
-        /// <param name="image_name2"></param>
+        /// <param name="image_names"></param>
         /// <returns></returns>
-        public static DrawingImage DrawingImageByOverlapping(string image_name1, string image_name2)
+        public static DrawingImage DrawingImageByOverlapping(params string[] image_names)
         {
             var group = new DrawingGroup();
-            var image1 = ImageFromResource(image_name1);
+
+            var image1 = ImageFromResource(image_names[0]);
             group.Children.Add(new ImageDrawing(image1, new Rect(0, 0, image1.Width, image1.Height)));
 
-            // draw image2 on top of image1, using same rect as image1
-            var image2 = ImageFromResource(image_name2);
-            group.Children.Add(new ImageDrawing(image2, new Rect(0, 0, image1.Width, image1.Height)));
+            // draw other images on top of image1, using same rect as image1
+            for (int i = 1; i < image_names.Length; i++)
+            {
+                var other_image = ImageFromResource(image_names[i]);
+                group.Children.Add(new ImageDrawing(other_image, new Rect(0, 0, image1.Width, image1.Height)));
+            }
 
             return new DrawingImage(group);
+        }
+
+        public static DrawingImage DrawingCircleOnImage(string image_name, bool drawCircle)
+        {
+            if (drawCircle)
+            {
+                var image = ImageFromResource(image_name);
+                Rect rect = new Rect(0, 0, image.Width, image.Height);
+                var visual = new DrawingVisual();
+                using (DrawingContext dc = visual.RenderOpen())
+                {
+                    dc.DrawImage(image, rect);
+                    DrawEllipse(dc, rect);
+                }
+
+                return new DrawingImage(visual.Drawing);
+            }
+            else
+                return DrawingImageFromResource(image_name);
+        }
+
+        private static void DrawEllipse(DrawingContext dc, Rect rect)
+        {
+            double radius1 = rect.Width / 2.0;
+            double radius2 = rect.Height / 2.0;
+            Point center = new Point(radius1, radius2);
+            var pen = new Pen(Brushes.Green, 4);
+            const double offset = 6.0;
+            dc.DrawEllipse(Brushes.Transparent, pen, center, radius1, radius2);
+            dc.DrawEllipse(Brushes.Transparent, pen, center, radius1 - offset, radius2 - offset);
         }
 
         public static DrawingImage DrawingImageFromResource(string image_name)

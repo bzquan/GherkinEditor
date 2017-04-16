@@ -1,0 +1,228 @@
+﻿<Popup x:Class="Gherkin.View.FindReplacePopup"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+       xmlns:local="clr-namespace:Gherkin.View"
+       xmlns:p = "clr-namespace:Gherkin.Properties"
+       xmlns:s="clr-namespace:System;assembly=mscorlib"
+       xmlns:bc="BetterWpfControls"
+       xmlns:vm="clr-namespace:Gherkin.ViewModel"
+       mc:Ignorable="d"
+       Opened="Popup_Opened"
+       Width="400">
+
+    <Popup.Resources>
+        <s:Boolean x:Key="True">True</s:Boolean>
+        <s:Boolean x:Key="False">False</s:Boolean>
+
+        <BitmapImage x:Key="ArrowDownImage" UriSource="Images/ArrowDown.png"/>
+        <BitmapImage x:Key="ArrowUpImage" UriSource="Images/ArrowUp.png"/>
+
+        <SolidColorBrush x:Key="TabControlNormalBorderBrush" Color="#8C8E94"/>
+        
+        <!-- TabControl with single line TabPanel and Overflow Panel -->
+        <!-- http://stackoverflow.com/questions/35219863/tabcontrol-with-single-line-tabpanel-and-overflow-panel -->
+        <!-- It's easy to extract the copy of template using Visual Studio
+             (right click in Document Outline window on TabControl element -> Edit Template -> Edit Copy) -->
+        <Style x:Key="findReplaceTabControlStyle" TargetType="{x:Type TabControl}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Padding" Value="4,4,4,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}"/>
+            <Setter Property="Background" Value="#F9F9F9"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Panel.ZIndex="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Let Original tab header is at TabIndex="1" -->
+                                <TabPanel x:Name="HeaderPanel" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" />
+                                <!-- Add addtional content, imageButton, to column="1" -->
+                                <bc:ImageButton Grid.Column="1"
+                                                Margin="2"
+                                                HorizontalAlignment="Right"
+                                                Source="Images/Delete.png" Height="16"
+                                                Command="{Binding  Path=HideFindReplaceDialogCmd}"/>
+                            </Grid>
+                            <Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="2,0,2,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="1"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="2,2,0,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="0,2,2,2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Popup.Resources>
+
+    <Popup.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding HideFindReplaceDialogCmd}" />
+        <KeyBinding Key="F3" Command="{Binding FindReplaceViewModel.FindNextCmd2}" CommandParameter="{StaticResource False}" />
+        <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding FindReplaceViewModel.FindNextCmd2}" CommandParameter="{StaticResource True}" />
+    </Popup.InputBindings>
+        
+    <Border BorderBrush="DarkBlue" BorderThickness="1">
+        <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- ContentCanvas is dummy canvas for implementing draggable popup-->
+        <Canvas Grid.Row="0" Grid.Column="0" x:Name="dummyCanvasForGragablePopup"/>
+        <TabControl Name="tabMain" Height="Auto" Grid.Row="0" Grid.ColumnSpan="2"
+                    Style="{DynamicResource findReplaceTabControlStyle}">
+            <TabItem Header="{x:Static p:Resources.DlgFind_Find}">
+                <StackPanel>
+                    <TextBlock Margin="3" Text="{x:Static p:Resources.DlgFind_TextToFind}"></TextBlock>
+                    <ComboBox Margin="3" Name="txtFindComboBox"
+                              IsEditable="True"
+                              ItemsSource="{Binding  Path=FindReplaceViewModel.RecentTextsToFind}"
+                              PreviewKeyDown="txtFindComboBox_PreviewKeyDown"
+                              Text="{Binding  Path=FindReplaceViewModel.TextToFind}">
+                            <!-- It does not work for this comboBox. why? we do it by using txtFindComboBox_PreviewKeyDown
+                              <ComboBox.InputBindings>
+                                   <KeyBinding Key="Return" Command="{Binding Path=FindReplaceViewModel.FindNextCmd, UpdateSourceTrigger=PropertyChanged}" />
+                              </ComboBox.InputBindings>
+                            -->
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <bc:ImageButton
+                                     ToolTip="{x:Static p:Resources.DlgFind_FindNextToolTip}"
+                                     Source="{Binding  Path=FindReplaceViewModel.ArrowDownIcon, FallbackValue={StaticResource ArrowDownImage}}" Height="24"
+                                     Command="{Binding  Path=FindReplaceViewModel.FindNextCmd}"/>
+                        <bc:ImageButton
+                                     ToolTip="{x:Static p:Resources.DlgFind_FindNextUpToolTip}"
+                                     Source="{Binding  Path=FindReplaceViewModel.ArrowUpIcon, FallbackValue={StaticResource ArrowUpImage}}" Height="24"
+                                     Command="{Binding  Path=FindReplaceViewModel.FindNextUpCmd}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{x:Static p:Resources.DlgFind_Replace}">
+                <StackPanel>
+                    <TextBlock Margin="3" Text="{x:Static p:Resources.DlgFind_TextToFind}" />
+                    <ComboBox Margin="3" Name="txtFindComboBox2"
+                              IsEditable="True"
+                              ItemsSource="{Binding  Path=FindReplaceViewModel.RecentTextsToFind}"
+                              PreviewKeyDown="txtFindComboBox_PreviewKeyDown"
+                              Text="{Binding Path=FindReplaceViewModel.TextToFind}">
+
+                            <!-- It does not work for this comboBox. why? we do it by using txtFindComboBox_PreviewKeyDown
+                              <ComboBox.InputBindings>
+                                   <KeyBinding Key="Return" Command="{Binding Path=FindReplaceViewModel.FindNextCmd, UpdateSourceTrigger=PropertyChanged}" />
+                              </ComboBox.InputBindings>
+                        -->
+                    </ComboBox>
+                    <TextBlock Margin="3" Text="{x:Static p:Resources.DlgFind_ReplaceWith}" />
+                        <TextBox Margin="3" Name="txtReplace" Text="{Binding  Path=FindReplaceViewModel.ReplaceText, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                           <KeyBinding Key="Return" Command="{Binding Path=FindReplaceViewModel.ReplaceCmd}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <bc:ImageButton
+                                     ToolTip="{x:Static p:Resources.DlgFind_FindNextToolTip}"
+                                     Source="{Binding  Path=FindReplaceViewModel.ArrowDownIcon, FallbackValue={StaticResource ArrowDownImage}}" Height="24"
+                                     Command="{Binding  Path=FindReplaceViewModel.FindNextCmd}"/>
+                        <bc:ImageButton HorizontalAlignment="Right" 
+                                     ToolTip="{x:Static p:Resources.DlgFind_FindNextUpToolTip}"
+                                     Source="{Binding  Path=FindReplaceViewModel.ArrowUpIcon, FallbackValue={StaticResource ArrowUpImage}}" Height="24"
+                                     Command="{Binding  Path=FindReplaceViewModel.FindNextUpCmd}"/>
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Right" 
+                            Width="80" Content="{x:Static p:Resources.DlgFind_Replace}" Command="{Binding  Path=FindReplaceViewModel.ReplaceCmd}" />
+                        <Button Margin="5,0,0,0" HorizontalAlignment="Right" 
+                            Width="80" Content="{x:Static p:Resources.DlgFind_ReplaceAll}" Command="{Binding  Path=FindReplaceViewModel.ReplaceAllCmd}" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <CheckBox Grid.Row="1" Grid.Column="0" Margin="10,2" 
+            Name="cbCaseSensitive" Content="{x:Static p:Resources.DlgFind_MachCase}" IsChecked="{Binding  Path=FindReplaceViewModel.IsCaseSensitive}" />
+        <CheckBox Grid.Row="2" Grid.Column="0" Margin="10,2" 
+            Name="cbWholeWord" Content="{x:Static p:Resources.DlgFind_MachWholdWord}" IsChecked="{Binding  Path=FindReplaceViewModel.IsMatchWholeWord}" />
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,2" Orientation="Horizontal">
+                <CheckBox Name="cbRegex" Content="{x:Static p:Resources.DlgFind_RegularExpression}" IsChecked="{Binding  Path=FindReplaceViewModel.IsUseRegex}" />
+            <bc:ImageButton Name="regexHelp" Source="Images/Question.png" Height="16"
+                            Command="{Binding Path=FindReplaceViewModel.RegexDocument.ShowRegexHelpCmd}"/>
+            <Popup x:Name="RegexNotePopup"
+                   IsOpen="{Binding Path=FindReplaceViewModel.RegexDocument.IsShowing}"
+                   PlacementTarget="{Binding ElementName=regexHelp}"
+                   Placement="Bottom"
+                   StaysOpen="True"
+                   MaxHeight="300">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <DockPanel  Grid.Row="0" Margin="6,6,6,0" Background="LightGray">
+                        <bc:ImageButton DockPanel.Dock="Right"  Source="Images/Delete.png" Height="16"
+                                        Command="{Binding Path=FindReplaceViewModel.RegexDocument.CloseRegexHelpCmd}"/>
+                        <TextBlock Text="{x:Static p:Resources.Message_RegexNoteTitle}"/>
+                    </DockPanel>
+                    <WebBrowser Grid.Row="1" Margin="6,0,6,6"
+                                Width="280"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                local:BrowserBehavior.Html="{Binding  Path=FindReplaceViewModel.RegexDocument.RegexNote}" />
+                </Grid>
+            </Popup>
+        </StackPanel>
+        <CheckBox Grid.Row="2" Grid.Column="1" Margin="10,2" 
+            Name="cbWildcards" Content="{x:Static p:Resources.DlgFind_Wildcards}" IsChecked="{Binding  Path=FindReplaceViewModel.IsUseWildcards}" />
+    </Grid>
+    </Border>
+</Popup>

@@ -5,37 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Gherkin.ViewModel;
 
 namespace Gherkin.ViewModel
 {
-    public class CloseWindowCommand : ICommand
+    public class CloseWindowCommand
     {
-        #region ICommand Members
+        public static readonly ICommand Instance = new CloseWindowCommand().CloseCmd;
 
-        public bool CanExecute(object parameter)
+        private CloseWindowCommand()
+        {
+        }
+
+        private ICommand CloseCmd => new DelegateCommand<object>(Execute, CanExecute);
+
+        private bool CanExecute(object parameter)
         {
             //we can only close Windows
             return (parameter is Window);
         }
 
-#pragma warning disable 67  // Get rid of “[some event] never used” compiler warnings
-        public event EventHandler CanExecuteChanged;
-#pragma warning restore 67
-
-        public void Execute(object parameter)
+        private void Execute(object parameter)
         {
             if (this.CanExecute(parameter))
             {
                 ((Window)parameter).Close();
             }
         }
-
-        #endregion
-
-        private CloseWindowCommand()
-        {
-        }
-
-        public static readonly ICommand Instance = new CloseWindowCommand();
     }
 }
