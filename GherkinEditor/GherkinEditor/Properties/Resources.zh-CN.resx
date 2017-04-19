@@ -530,4 +530,10 @@
   <data name="Status_SaveAsWithCodePage" xml:space="preserve">
     <value>用所选字符集保存</value>
   </data>
+  <data name="Tooltip_FontFamilyDefault4NonGherkin" xml:space="preserve">
+    <value>Gherkin以外的缺省字体</value>
+  </data>
+  <data name="Tooltip_FontFamily4NonGherkin" xml:space="preserve">
+    <value>字体1</value>
+  </data>
 </root>

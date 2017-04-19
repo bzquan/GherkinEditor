@@ -1188,11 +1188,29 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Font1.
+        /// </summary>
+        public static string Tooltip_FontFamily4NonGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontFamily4NonGherkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default font.
         /// </summary>
         public static string Tooltip_FontFamilyDefault {
             get {
                 return ResourceManager.GetString("Tooltip_FontFamilyDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font for Non Gherkin.
+        /// </summary>
+        public static string Tooltip_FontFamilyDefault4NonGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontFamilyDefault4NonGherkin", resourceCulture);
             }
         }
         

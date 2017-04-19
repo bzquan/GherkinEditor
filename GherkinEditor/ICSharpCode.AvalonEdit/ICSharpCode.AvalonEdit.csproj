@@ -470,6 +470,6 @@
     <Resource Include="Search\wildcards.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Search\resize_popup.png" />
+    <Resource Include="Search\resize_popup.png" />
   </ItemGroup>
 </Project>

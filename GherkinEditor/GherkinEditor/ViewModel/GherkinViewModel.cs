@@ -175,12 +175,7 @@ namespace Gherkin.ViewModel
 
         public FontFamily CurrentFontFamily
         {
-            get
-            {
-                if (CurrentEditor != null)
-                    return CurrentEditor.FontFamily;
-                else
-                    return new FontFamily(m_AppSettings.FontFamilyName); }
+            get { return CurrentEditor?.FontFamily ?? new FontFamily(m_AppSettings.FontFamilyName); }
             set
             {
                 string name = value.ToString();
@@ -194,13 +189,7 @@ namespace Gherkin.ViewModel
 
         public string CurrentFontSize
         {
-            get
-            {
-                if (CurrentEditor?.FontSize != null)
-                    return CurrentEditor.FontSize;
-                else
-                    return m_AppSettings.FontSize;
-            }
+            get { return CurrentEditor?.FontSize ?? m_AppSettings.FontSize; }
             set
             {
                 if (HasEditorLoaded)

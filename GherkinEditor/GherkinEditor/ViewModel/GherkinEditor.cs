@@ -77,8 +77,9 @@ namespace Gherkin.ViewModel
                 m_SearchPanel = ICSharpCode.AvalonEdit.Search.SearchPanel.Install(TextEditor);
                 m_SearchPanel.Localization = SearchPanelLocalization.Instance.Value;
                 m_SearchPanel.Closed += OnSearchPanelClosed;
+                SetDefaults();
             }
-            SetDefaults();
+            SetInitialSearchText();
             m_SearchPanel.Open();
         }
 
@@ -89,10 +90,6 @@ namespace Gherkin.ViewModel
             m_AppSettings.IsMatchWholeWordInFind = m_SearchPanel.WholeWords;
             m_AppSettings.IsUseWildcardsInFind = m_SearchPanel.UseWildCards;
             m_AppSettings.IsUseRegexInFind = m_SearchPanel.UseRegex;
-
-            m_SearchPanel.Closed -= OnSearchPanelClosed;
-            m_SearchPanel.Uninstall();
-            m_SearchPanel = null;
         }
 
         private void SetDefaults()
@@ -101,7 +98,10 @@ namespace Gherkin.ViewModel
             m_SearchPanel.WholeWords = m_AppSettings.IsMatchWholeWordInFind;
             m_SearchPanel.UseWildCards = m_AppSettings.IsUseWildcardsInFind;
             m_SearchPanel.UseRegex = m_AppSettings.IsUseRegexInFind;
+        }
 
+        private void SetInitialSearchText()
+        {
             m_SearchPanel.RecentSearchPatterns = m_AppSettings.LastSearchedTexts;
             if (TextEditor.TextArea.Selection.IsMultiline == false)
             {

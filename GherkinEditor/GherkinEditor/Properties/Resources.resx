@@ -530,4 +530,10 @@ Any change of the file would be discarded.</value>
   <data name="Status_SaveAsWithCodePage" xml:space="preserve">
     <value>Save file in selected encoding</value>
   </data>
+  <data name="Tooltip_FontFamilyDefault4NonGherkin" xml:space="preserve">
+    <value>Font for Non Gherkin</value>
+  </data>
+  <data name="Tooltip_FontFamily4NonGherkin" xml:space="preserve">
+    <value>Font1</value>
+  </data>
 </root>

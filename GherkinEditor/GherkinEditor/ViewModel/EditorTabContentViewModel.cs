@@ -43,7 +43,7 @@ namespace Gherkin.ViewModel
         public GherkinEditor MainGherkinEditor { get; set; }
         private GherkinEditor SubGherkinEditor { get; set; }
         private IAppSettings m_AppSettings;
-        private GherkinFoldingStrategy FoldingStrategy { get; set; }
+        private FoldingExecutor FoldingExecutor { get; set; }
 
         public TextEditor MainEditor { get; private set; }
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
@@ -63,8 +63,6 @@ namespace Gherkin.ViewModel
             LoadFileInfo(filePath);
             HideScenarioIndex = !m_AppSettings.ShowScenarioIndexByDefault;
             HideSplitView = !m_AppSettings.ShowSplitViewByDefault;
-
-            FoldingStrategy = new GherkinFoldingStrategy();
         }
 
         public ObservableCollection<ScenarioIndex> ScenarioIndexes => m_ScenarioIndexList;
@@ -82,6 +80,7 @@ namespace Gherkin.ViewModel
             SubEditor.Document = MainEditor.Document;
             subEditor.TextArea.IsKeyboardFocusedChanged += OnSubEditorKeyboardFocusedChanged;
 
+            FoldingExecutor = new FoldingExecutor(MainGherkinEditor, SubGherkinEditor);
             Load(CurrentFilePath);
             EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
             EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Ready"));
@@ -242,7 +241,7 @@ namespace Gherkin.ViewModel
         private void UpdateEditor(string filePath)
         {
             SetSyntaxHighlighting(filePath);
-            InstallFoldingManager();
+            FoldingExecutor?.InstallFoldingManager(filePath);
             CurrentFilePath = filePath;
             Document.FileName = filePath;
             FileNameChangedEvent?.Invoke(filePath);
@@ -322,8 +321,8 @@ namespace Gherkin.ViewModel
                     MainGherkinEditor.SyntaxHighlighting = highlighting;
                     SubGherkinEditor.SyntaxHighlighting = highlighting;
 
-                    if (installFolding)
-                        InstallFoldingManager();
+                    if (installFolding && (FoldingExecutor != null))
+                        FoldingExecutor.InstallFoldingManager(CurrentFilePath);
                 }
             }
             catch
@@ -381,21 +380,6 @@ namespace Gherkin.ViewModel
             );
         }
 
-        private void InstallFoldingManager()
-        {
-            string highlighingName = MainGherkinEditor.SyntaxHighlighting?.Name;
-            if (GherkinUtil.IsGherkinHighlighting(highlighingName))
-            {
-                MainGherkinEditor.InstallFoldingManager();
-                SubGherkinEditor.InstallFoldingManager();
-            }
-            else
-            {
-                MainGherkinEditor.UnnstallFoldingManager();
-                SubGherkinEditor.UnnstallFoldingManager();
-            }
-        }
-
         public void OpenAllFoldings()
         {
             m_IsCloseTablesFolding = false;
@@ -427,17 +411,18 @@ namespace Gherkin.ViewModel
 
         public void UpdateFoldings(bool refresh)
         {
-            if (MainGherkinEditor == null) return;
+            if (FoldingExecutor == null) return;
 
-            UpdateGherkinHighlighing();
-            List<FoldingManager> managers = new List<FoldingManager>();
-            if (MainGherkinEditor.FoldingManager != null)
-                managers.Add(MainGherkinEditor.FoldingManager);
-            if (SubGherkinEditor.FoldingManager != null)
-                managers.Add(SubGherkinEditor.FoldingManager);
-
-            List<NewFolding> scenarioFoldings = FoldingStrategy.UpdateFoldings(managers, Document, IsCloseTablesFolding, IsCloseScenarioFolding, refresh);
-            UpdateScenarioIndexes(scenarioFoldings);
+            if (FoldingExecutor.IsCurrentFoldingFeature)
+            {
+                UpdateGherkinHighlighing();
+                List<NewFolding> scenarioFoldings = FoldingExecutor.UpdateFeatureFoldings(IsCloseTablesFolding, IsCloseScenarioFolding, refresh);
+                UpdateScenarioIndexes(scenarioFoldings);
+            }
+            else if (FoldingExecutor.IsCurrentFoldingXML)
+            {
+                FoldingExecutor.UpdateXMLFoldings();
+            }
         }
 
         private void UpdateScenarioIndexes(List<NewFolding> scenarioFoldings)

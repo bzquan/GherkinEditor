@@ -560,6 +560,45 @@
                                Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem StaysOpenOnClick="True">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily4NonGherkin}"
+                                       FontFamily="{Binding FontViewModel.DefaultFontFamily4NonGherkin}"
+                                       VerticalAlignment="Center"
+                                       Margin="0, 0, 6, 0" />
+                            <ComboBox Name="defaultFont4NonGherkinComboBox"
+                                      MinWidth="80"
+                                      SelectedItem="{Binding FontViewModel.DefaultFontFamily4NonGherkin, Mode=TwoWay}"
+                                      ItemsSource="{Binding FontViewModel.SystemFonts}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <xctk:IntegerUpDown FormatString="N0"
+                                                AllowTextInput="False"
+                                                Value="{Binding FontViewModel.DefaultFontSize4NonGherkin, Mode=TwoWay, FallbackValue=10}"
+                                                Increment="1"
+                                                Minimum="10"
+                                                Maximum="28"
+                                                ToolTip="{x:Static p:Resources.Tooltip_FontSize}" />
+                            <Button Margin="6, 0, 0, 0"
+                                    ToolTip="{x:Static p:Resources.Tooltip_FontFamilyDefault4NonGherkin}"
+                                    Command="{Binding FontViewModel.ResetFont4NonGherkinCmd}">
+                                <local:AutoGreyableImage Source="Images/Reset.png"
+                                                         Width="16"
+                                                         Height="16" />
+                            </Button>
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        <Image Source="Images/Font.png"
+                               Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuSetting_AutoGenGUID}"
                           StaysOpenOnClick="True"
@@ -774,7 +813,7 @@
             <StatusBarItem Grid.Column="1">
                 <Border BorderBrush="DarkGray" BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=Codepage}" />
+                        <TextBlock Text="{Binding Path=Codepage}" VerticalAlignment="Center" />
                         <Button x:Name="codePageButton"
                                 Content="{x:Static p:Resources.Status_CodePageListTitle}"
                                 Visibility="{Binding Path=CanShowCodePageList, Converter={StaticResource BoolToVisibility}}"

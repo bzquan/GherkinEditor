@@ -530,4 +530,10 @@
   <data name="Status_SaveAsWithCodePage" xml:space="preserve">
     <value>選択した文字コードで保存</value>
   </data>
+  <data name="Tooltip_FontFamilyDefault4NonGherkin" xml:space="preserve">
+    <value>Gherkin以外用フォント</value>
+  </data>
+  <data name="Tooltip_FontFamily4NonGherkin" xml:space="preserve">
+    <value>フォント1</value>
+  </data>
 </root>

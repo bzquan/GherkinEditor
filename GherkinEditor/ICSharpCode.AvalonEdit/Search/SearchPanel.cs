@@ -41,14 +41,18 @@ namespace ICSharpCode.AvalonEdit.Search
 	/// </summary>
 	public class SearchPanel : Control
 	{
-		TextArea textArea;
+        private const double MIN_WIDTH_SEARCH_PANEL = 260;
+
+        TextArea textArea;
 		SearchInputHandler handler;
 		TextDocument currentDocument;
 		SearchResultBackgroundRenderer renderer;
-		TextBox searchTextBox;
-		TextBox replaceTextBox;
+		ComboBox searchComboBox;
+        TextBox searchTextBox;  // internal editable TextBox of search comboBox
+        TextBox replaceTextBox;
 		Border searchPanel;
-		SearchPanelAdorner adorner;
+        Thumb resizeThumb;
+        SearchPanelAdorner adorner;
 
         #region DependencyProperties
         /// <summary>
@@ -254,13 +258,35 @@ namespace ICSharpCode.AvalonEdit.Search
 		static void SearchPatternChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			SearchPanel panel = d as SearchPanel;
-			if (panel != null) {
-				panel.ValidateSearchText();
-				panel.UpdateSearch();
-			}
-		}
+            panel?.ValidateAndUpdateSearch();
+        }
 
-		void UpdateSearch()
+        void ValidateAndUpdateSearch()
+        {
+            if (searchComboBox == null)
+                return;
+
+            var be = searchComboBox.GetBindingExpression(ComboBox.TextProperty);
+            try
+            {
+                Validation.ClearInvalid(be);
+                UpdateSearch();
+            }
+            catch (Exception ex)
+            {
+                if (messageView != null)
+                {
+                    messageView.IsOpen = true;
+                    messageView.Content = ex.Message;
+                    messageView.PlacementTarget = searchPanel;
+                }
+
+                var ve = new ValidationError(be.ParentBinding.ValidationRules[0], be, ex.Message, ex);
+                Validation.MarkInvalid(be, ve);
+            }
+        }
+
+        void UpdateSearch()
         {
             // only reset as long as there are results
             // if no results are found, the "no matches found" message should not flicker.
@@ -395,24 +421,59 @@ namespace ICSharpCode.AvalonEdit.Search
 		{
 			base.OnApplyTemplate();
 			searchPanel = Template.FindName("PART_searchPanel", this) as Border;
-			searchTextBox = Template.FindName("PART_searchTextBox", this) as TextBox;
-			replaceTextBox = Template.FindName("PART_replaceTextBox", this) as TextBox;
-		}
-		
-		void ValidateSearchText()
-		{
-			if (searchTextBox == null)
-				return;
-			var be = searchTextBox.GetBindingExpression(TextBox.TextProperty);
-			try {
-				Validation.ClearInvalid(be);
-				UpdateSearch();
-			} catch (SearchPatternException ex) {
-				var ve = new ValidationError(be.ParentBinding.ValidationRules[0], be, ex.Message, ex);
-				Validation.MarkInvalid(be, ve);
-			}
-		}
-		
+            searchPanel.Width = MIN_WIDTH_SEARCH_PANEL;
+
+            searchComboBox = Template.FindName("PART_searchComboBox", this) as ComboBox;
+            searchComboBox.Loaded += OnSearchComboBoxLoaded; 
+
+            replaceTextBox = Template.FindName("PART_replaceTextBox", this) as TextBox;
+
+            resizeThumb = Template.FindName("resizeThumb", this) as Thumb;
+            resizeThumb.DragDelta += OnResizeThumbDragDelta;
+        }
+
+        /// <summary>
+        /// Extract internal editable TextBox of search comboBox and do initial search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSearchComboBoxLoaded(object sender, RoutedEventArgs e)
+        {
+            searchTextBox = searchComboBox.Template.FindName("PART_EditableTextBox", searchComboBox) as TextBox;
+            searchComboBox.Focus();
+            ValidateAndUpdateSearch();
+        }
+
+        /// <summary>
+        /// Extract internal editable TextBox of search comboBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchTextComboBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            searchTextBox = searchComboBox.Template.FindName("PART_EditableTextBox", searchComboBox) as TextBox;
+            ValidateAndUpdateSearch();
+        }
+
+        /// <summary>
+        /// Resize search panel by using thumb.
+        /// Note:
+        /// WPF. SIMPLE ADORNER USAGE WITH DRAG AND RESIZE OPERATIONS
+        /// URL: https://denisvuyka.wordpress.com/2007/10/15/wpf-simple-adorner-usage-with-drag-and-resize-operations/
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnResizeThumbDragDelta(object sender, DragDeltaEventArgs args)
+        {
+            double x_adjust = args.HorizontalChange;
+            double new_width = searchPanel.Width - x_adjust;
+            if ((new_width > MIN_WIDTH_SEARCH_PANEL) &&
+                (new_width < textArea.ActualWidth))
+            {
+                searchPanel.Width = new_width;
+            }
+        }
+
 		/// <summary>
 		/// Reactivates the SearchPanel by setting the focus on the search box and selecting all text.
 		/// </summary>
@@ -505,7 +566,7 @@ namespace ICSharpCode.AvalonEdit.Search
 
 		void DoSearch(bool changeSelection)
 		{
-			if (IsClosed)
+			if (IsClosed || (strategy == null))
 				return;
 			renderer.CurrentResults.Clear();
 			
@@ -689,10 +750,6 @@ namespace ICSharpCode.AvalonEdit.Search
 		}
 	}
 
-    /// This is simple adorner.
-    /// It may possible to make search panel resizable by following technique.
-    /// WPF. SIMPLE ADORNER USAGE WITH DRAG AND RESIZE OPERATIONS
-    /// URL: https://denisvuyka.wordpress.com/2007/10/15/wpf-simple-adorner-usage-with-drag-and-resize-operations/
     class SearchPanelAdorner : Adorner
 	{
 		SearchPanel panel;
@@ -717,7 +774,7 @@ namespace ICSharpCode.AvalonEdit.Search
 		
 		protected override Size ArrangeOverride(Size finalSize)
 		{
-			panel.Arrange(new Rect(new Point(0, 0), finalSize));
+            panel.Arrange(new Rect(new Point(0, 0), finalSize));
 			return new Size(panel.ActualWidth, panel.ActualHeight);
 		}
 	}

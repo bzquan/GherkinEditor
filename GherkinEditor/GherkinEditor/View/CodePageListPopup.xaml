@@ -79,6 +79,7 @@
                                      ItemContainerStyle="{DynamicResource listBoxItemStyle}"
                                      ItemsSource="{Binding Path=CodePageListPopupViewModel.CodePageList}"
                                      MaxHeight="500"
+                                     Width="260"
                                      SelectionMode="Single"
                                      SelectedIndex="{Binding Path=CodePageListPopupViewModel.SelectedCodePageIndex, Mode=TwoWay}">
                 <ListBox.ItemTemplate>

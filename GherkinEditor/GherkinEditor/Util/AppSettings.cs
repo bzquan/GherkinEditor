@@ -44,11 +44,27 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
+        [DefaultSettingValueAttribute("Meiryo")]
+        public string FontFamilyName4NonGherkin
+        {
+            get { return (string)this["FontFamilyName4NonGherkin"]; }
+            set { this["FontFamilyName4NonGherkin"] = value; }
+        }
+
+        [UserScopedSetting()]
         [DefaultSettingValueAttribute("11")]
         public string FontSize
         {
             get { return (string)this["FontSize"]; }
             set { this["FontSize"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("10")]
+        public string FontSize4NonGherkin
+        {
+            get { return (string)this["FontSize4NonGherkin"]; }
+            set { this["FontSize4NonGherkin"] = value; }
         }
 
         [UserScopedSetting()]
@@ -253,10 +269,23 @@ namespace Gherkin.Util
         {
             List<GherkinFileInfo> files = RecentFilesInfo;
             GherkinFileInfo fileInfo = files.LastOrDefault(x => x.FilePath == filePath);
-            if (fileInfo == null)
+            return fileInfo ?? NewGherkinFileInfo(filePath);
+        }
+
+        private GherkinFileInfo NewGherkinFileInfo(string filePath)
+        {
+            GherkinFileInfo fileInfo = new GherkinFileInfo() { FilePath = filePath };
+            if (Model.GherkinUtil.IsFeatureFile(filePath))
             {
-                fileInfo = new GherkinFileInfo() { FilePath = filePath, FontFamilyName = this.FontFamilyName, FontSize = this.FontSize };
+                fileInfo.FontFamilyName = FontFamilyName;
+                fileInfo.FontSize = FontSize;
             }
+            else
+            {
+                fileInfo.FontFamilyName = FontFamilyName4NonGherkin;
+                fileInfo.FontSize = FontSize4NonGherkin;
+            }
+
             return fileInfo;
         }
 
@@ -469,11 +498,10 @@ namespace Gherkin.Util
             }
             else
             {
-                files.Insert(0, new GherkinFileInfo() { FilePath = newFilePath });
+                files.Insert(0, NewGherkinFileInfo(newFilePath));
             }
 
             RemoveExtraFileInfo(files);
-
             RecentFilesInfo = files;
         }
 

@@ -89,5 +89,14 @@ namespace Gherkin.Model
         {
             return s_LoadedHighlitings.Contains(language);
         }
+
+        public static bool IsFeatureFile(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return false;
+            return HasExtension(filePath, ".feature");
+        }
+
+        public static bool HasExtension(string filePath, string ext) =>
+            filePath.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase);
     }
 }

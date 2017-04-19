@@ -40,7 +40,9 @@ namespace Gherkin.Util
         bool IsUseWildcardsInFind { get; set; }
 
         string FontFamilyName { get; set; }
+        string FontFamilyName4NonGherkin { get; set; }
         string FontSize { get; set; }
+        string FontSize4NonGherkin { get; set; }
         List<GherkinFileInfo> RecentFilesInfo { get; }
         void UpdateFontFamilyName(string filePath, string fontFamilyName);
         void UpdateFontSize(string filePath, string fontSize);
