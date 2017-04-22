@@ -163,7 +163,7 @@ namespace CucumberCpp
                     multiLineString.Append(indent);
                 }
 
-                multiLineString.Append("L\"" + docStrings[i]);
+                multiLineString.Append("L\"" + EscapeStringConstant(docStrings[i]));
                 if (i < docStrings.Length - 1)
                     multiLineString.AppendLine("\\n\"");
                 else
@@ -172,6 +172,8 @@ namespace CucumberCpp
 
             return multiLineString.ToString();
         }
+
+        private string EscapeStringConstant(string str) => str.Replace("\"", "\\\"");
 
         private void BuildStepStatement(string indent, StringBuilder stepOfScenario)
         {

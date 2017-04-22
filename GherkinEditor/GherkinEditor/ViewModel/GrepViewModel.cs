@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Forms;
 using System.IO;
 using Gherkin.Util;
 using ICSharpCode.AvalonEdit;
@@ -179,14 +178,13 @@ namespace Gherkin.ViewModel
 
         private void OnFindFolder()
         {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                DialogResult result = dialog.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
-                {
-                    Folder = dialog.SelectedPath;
-                }
+            var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog();
+            dialog.FileName = m_AppSettings.LastGreppedFolder;
+
+            if (dialog.ShowDialog() == true)
+            {
+                Folder = dialog.FileName;
             }
         }
 

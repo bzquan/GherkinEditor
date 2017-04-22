@@ -166,6 +166,11 @@ namespace Gherkin.Util
 
         public string LastGreppedFolder
         {
+            get
+            {
+                List<string> folders = LastGreppedFolders;
+                return folders.Count > 0 ? folders[0] : null;
+            }
             set
             {
                 if (string.IsNullOrWhiteSpace(value)) return;
@@ -321,6 +326,14 @@ namespace Gherkin.Util
                 return files;
             }
             set { this["LastOpenedFiles"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("")]
+        public string LastFolderToCopyFile
+        {
+            get { return (string)this["LastFolderToCopyFile"]; }
+            set { this["LastFolderToCopyFile"] = value; }
         }
 
         [UserScopedSetting()]

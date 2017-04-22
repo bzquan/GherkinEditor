@@ -53,7 +53,26 @@ namespace Gherkin.ViewModel
             LoadNextFile();
         }
 
-         private static void SortFiles(string[] files)
+        /// <summary>
+        /// Open a file or reload the file if it has been opened.
+        /// </summary>
+        /// <param name="filePath">file to be opened or reloaded</param>
+        public void OpenFileByReloading(string filePath)
+        {
+            EditorTabItem tab = TabPanels.FirstOrDefault(x => x.EditorTabContentViewModel.CurrentFilePath == filePath);
+            if (tab != null)
+            {
+                tab.EditorTabContentViewModel.Load(filePath);
+                OpeningTabEvent?.Invoke(tab);
+            }
+            else
+            {
+                FilesToLoad.Add(filePath);
+                LoadNextFile();
+            }
+        }
+
+        private static void SortFiles(string[] files)
         {
             Array.Sort(files, delegate (string path1, string path2)
             {

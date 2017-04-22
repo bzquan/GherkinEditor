@@ -594,7 +594,10 @@ namespace Gherkin.ViewModel
             m_AppSettings.LastUsedFile = filePath2Save;
             m_AppSettings.UpdateFontFamilyName(filePath2Save, FontFamily.ToString());
             m_AppSettings.UpdateFontSize(filePath2Save, FontSize);
-            m_AppSettings.UpdateCodePage(filePath2Save, MainEditor.Encoding.CodePage);
+            if (MainEditor.Encoding != null)
+            {
+                m_AppSettings.UpdateCodePage(filePath2Save, MainEditor.Encoding.CodePage);
+            }
         }
 
         public bool IsModified => MainEditor?.IsModified == true;

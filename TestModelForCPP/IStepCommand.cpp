@@ -19,14 +19,12 @@ IStepCommand::IStepCommand(const std::wstring feature, const std::wstring step_p
     m_StepPattern(step_pattern)
 {
     RegexSubstituter::ExpandRegex(m_StepPattern);
-    StepCommandContainder container;
-    container.Register(this);
+	StepCommandContainder::Instance().Register(this);
 }
 
 IStepCommand::~IStepCommand()
 {
-    StepCommandContainder container;
-    container.Unregister(this);
+	StepCommandContainder::Instance().Unregister(this);
 }
 
 bool IStepCommand::IsMatch(const std::wstring step)

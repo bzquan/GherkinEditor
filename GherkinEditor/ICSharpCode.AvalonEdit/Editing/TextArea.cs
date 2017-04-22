@@ -1105,12 +1105,18 @@ namespace ICSharpCode.AvalonEdit.Editing
 			if (TextCopied != null)
 				TextCopied(this, e);
 		}
-	}
-	
-	/// <summary>
-	/// EventArgs with text.
-	/// </summary>
-	[Serializable]
+
+        /// <summary>
+        /// Copy file to delegate. String is the file path to be copied.
+        /// Note: bzquan@gmail.com
+        /// </summary>
+        public Action<string> CopyFileToHandler { get; set; }
+    }
+
+    /// <summary>
+    /// EventArgs with text.
+    /// </summary>
+    [Serializable]
 	public class TextEventArgs : EventArgs
 	{
 		string text;

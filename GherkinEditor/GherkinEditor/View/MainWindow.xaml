@@ -131,7 +131,15 @@
                            Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem Command="cmd:AvalonEditCommands.CopyFileTo"
+                      Header="{x:Static p:Resources.MenuEdit_ContextCopyFileTo}" >
+                <MenuItem.Icon>
+                    <Image Source="Images/CopyFileTo.png"
+                           Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>
+        
         <Style x:Key="GridSplitterPreviewStyle">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -191,6 +199,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
         <SolidColorBrush x:Key="TabControlNormalBorderBrush"
                          Color="#8C8E94" />
     </Window.Resources>
@@ -524,7 +533,8 @@
                 <MenuItem StaysOpenOnClick="True">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily}"
+                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamilyText}"
+                                       ToolTip="{x:Static p:Resources.Tooltip_FontForGherkin}"
                                        FontFamily="{Binding FontViewModel.DefaultFontFamily}"
                                        VerticalAlignment="Center"
                                        Margin="0, 0, 6, 0" />
@@ -540,6 +550,7 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <xctk:IntegerUpDown FormatString="N0"
+                                                Margin="3, 0, 0, 0"
                                                 AllowTextInput="False"
                                                 Value="{Binding FontViewModel.DefaultFontSize, Mode=TwoWay, FallbackValue=11}"
                                                 Increment="1"
@@ -563,7 +574,8 @@
                 <MenuItem StaysOpenOnClick="True">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily4NonGherkin}"
+                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily4NonGherkinText}"
+                                       ToolTip="{x:Static p:Resources.Tooltip_FontForNonGherkin}"
                                        FontFamily="{Binding FontViewModel.DefaultFontFamily4NonGherkin}"
                                        VerticalAlignment="Center"
                                        Margin="0, 0, 6, 0" />
@@ -579,6 +591,7 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <xctk:IntegerUpDown FormatString="N0"
+                                                Margin="3, 0, 0, 0"
                                                 AllowTextInput="False"
                                                 Value="{Binding FontViewModel.DefaultFontSize4NonGherkin, Mode=TwoWay, FallbackValue=10}"
                                                 Increment="1"
@@ -754,7 +767,7 @@
             </Button>
             <ComboBox Name="fontComboBox"
                       MinWidth="40"
-                      ToolTip="{x:Static p:Resources.Tooltip_FontFamily}"
+                      ToolTip="{x:Static p:Resources.Tooltip_FontForGherkin}"
                       SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
                       ItemsSource="{Binding FontViewModel.SystemFonts}">
                 <ComboBox.ItemTemplate>
@@ -831,8 +844,7 @@
               Margin="2, 0, 2, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*" />
-                <vm:HiddenableRowDefinition Height="Auto"
-                                            IsHidden="{Binding Path=WorkAreaEditor.HideMessageWindow}" />
+                <RowDefinition Height="Auto" />
                 <vm:HiddenableRowDefinition Height="50*"
                                             IsHidden="{Binding Path=WorkAreaEditor.HideMessageWindow}" />
             </Grid.RowDefinitions>
@@ -1030,14 +1042,53 @@
                     </DataTemplate>
                 </bc:TabControl.Resources>
             </bc:TabControl>
+
             <GridSplitter Name="bottomHSplitter"
                           Grid.Row="1"
-                          Height="10"
-                          BorderBrush="Navy"
+                          BorderBrush="DarkGoldenrod"
+                          Background="White"
                           BorderThickness="1"
-                          HorizontalAlignment="Stretch"
-                          Style="{DynamicResource GridSplitterStyle}">
+                          HorizontalAlignment="Stretch">
+                <GridSplitter.Style>
+                    <Style TargetType="{x:Type GridSplitter}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="5">
+                                        <Grid Height="Auto">
+                                            <StackPanel x:Name="RowCollapsers"
+                                                        VerticalAlignment="Stretch"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Center">
+                                                <bc:ImageButton x:Name="showWorkAreaButton"
+                                                                Height="10"
+                                                                ToolTip="{x:Static p:Resources.Tooltip_ShowWorkAreaEditor}"
+                                                                Cursor="Arrow"
+                                                                Source="Images/Expand.png"
+                                                                Visibility="{Binding Path=WorkAreaEditor.HideMessageWindow, Converter={StaticResource BoolToVisibility}}"
+                                                                Command="{Binding Path=WorkAreaEditor.ShowMessageWindowCmd}">
+                                                </bc:ImageButton>
+                                                <bc:ImageButton x:Name="hideWorkAreaButton"
+                                                                Height="10"
+                                                                ToolTip="{x:Static p:Resources.Tooltip_HideWorkAreaEditor}"
+                                                                Cursor="Arrow"
+                                                                Source="Images/Collapse.png"
+                                                                Visibility="{Binding Path=WorkAreaEditor.ShowMessageWindow, Converter={StaticResource BoolToVisibility}}"
+                                                                Command="{Binding Path=WorkAreaEditor.HideMessageWindowCmd}">
+                                                </bc:ImageButton>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GridSplitter.Style>
             </GridSplitter>
+            
             <Popup x:Name="grepResultUagePopup"
                    IsOpen="{Binding Path=WorkAreaEditor.ShowGrepResultUsagePopup}"
                    PlacementTarget="{Binding ElementName=bottomHSplitter}"

@@ -72,6 +72,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFFolderBrowser, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WPFFolderBrowser\WPFFolderBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
@@ -555,6 +559,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\ReloadFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\CopyFileTo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Collapse.png" />
+    <Resource Include="View\Images\Expand.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

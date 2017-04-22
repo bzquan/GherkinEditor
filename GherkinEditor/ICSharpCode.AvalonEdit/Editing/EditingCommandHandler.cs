@@ -93,7 +93,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertLeadingSpacesToTabs, OnConvertLeadingSpacesToTabs));
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.IndentSelection, OnIndentSelection));
             // Note: added by bzquan@gmail.com
-            CommandBindings.Add(new CommandBinding(AvalonEditCommands.ClearSearchHighlighting, OnClearSearchHighlighting, CanClearSearchHighlighting));
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.CopyFileTo, OnCopyFileTo, CanCopyFileTo));
 
             TextAreaDefaultInputHandler.WorkaroundWPFMemoryLeak(InputBindings);
 		}
@@ -661,43 +661,46 @@ namespace ICSharpCode.AvalonEdit.Editing
 		}
 
         /// <summary>
-        /// Clear highliting by search text
+        /// Copy cursor line file to a folder
         /// Note: added by bzquan@gmail.com
         /// </summary>
         /// <param name="target"></param>
         /// <param name="args"></param>
-        static void OnClearSearchHighlighting(object target, ExecutedRoutedEventArgs args)
+        static void OnCopyFileTo(object target, ExecutedRoutedEventArgs args)
         {
             TextArea textArea = GetTextArea(target);
             if (textArea != null)
             {
-                var transformers = textArea.TextView.LineTransformers;
-                var itemsToRemove = transformers.Where(x => x is Rendering.SearchHighlightingTransformer).ToList();
-                foreach (var item in itemsToRemove)
-                {
-                    transformers.Remove(item);
-                }
+                textArea.CopyFileToHandler?.Invoke(LineTextInCurrentCursor(textArea));
+                args.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Check if cursor line file is an exsiting file
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void CanCopyFileTo(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if ((textArea != null) && (textArea.CopyFileToHandler != null))
+            {
+                var line_text = LineTextInCurrentCursor(textArea);
+                args.CanExecute = File.Exists(line_text);
 
                 args.Handled = true;
             }
         }
-        /// <summary>
-        /// Check if SearchHighlightingTransformer is registered
-        /// Note: added by bzquan@gmail.com
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="args"></param>
-        static void CanClearSearchHighlighting(object target, CanExecuteRoutedEventArgs args)
-        {
-            TextArea textArea = GetTextArea(target);
-            if (textArea != null)
-            {
-                // is SearchHighlightingTransformer registered?
-                var searchHighlightingTransformer = textArea.TextView.LineTransformers.FirstOrDefault(x => x is Rendering.SearchHighlightingTransformer);
-                args.CanExecute = (searchHighlightingTransformer != null);
 
-                args.Handled = true;
-            }
+        static string LineTextInCurrentCursor(TextArea textArea)
+        {
+            var caret = textArea.Caret;
+            var line = textArea.Document.GetLineByNumber(caret.Line);
+            return textArea.Document
+                           .GetText(line.Offset, line.TotalLength)
+                           .Trim();
         }
     }
 }

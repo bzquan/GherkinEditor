@@ -12,12 +12,18 @@ namespace CucumberCpp
 {
     public class BDDCucumber
     {
-        public string GenCucumberTestCode(TextReader reader, string outputPath)
+        public struct GeneratedFiles
+        {
+            public string FeatureFilePath { get; set; }
+            public string StepImplFilePath { get; set; }
+        }
+
+        public GeneratedFiles GenCucumberTestCode(TextReader reader, string outputPath)
         {
             try
             {
                 GherkinDocument gherkinDocument = ParseFeature(reader);
-                string generated_file_names = GenerateBDDTestCodes(gherkinDocument.Feature, outputPath);
+                GeneratedFiles generated_file_names = GenerateBDDTestCodes(gherkinDocument.Feature, outputPath);
                 EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Completed C++ test code"));
 
                 return generated_file_names;
@@ -36,7 +42,7 @@ namespace CucumberCpp
             return parser.Parse(reader);
         }
 
-        string GenerateBDDTestCodes(Feature feature, string outputFileDir)
+        GeneratedFiles GenerateBDDTestCodes(Feature feature, string outputFileDir)
         {
             BDDASTVisitor visitor = new BDDASTVisitor();
             BDDStepImplBuilderContext.StartBuildFeature(feature);
@@ -51,12 +57,7 @@ namespace CucumberCpp
             string featureFilePath = Path.Combine(outputFileDir, visitor.FeatureFileName);
             WriteToOutputFile(featureFilePath, visitor.FeatureImpl);
 
-            StringBuilder sb = new StringBuilder();
-            sb
-                .AppendLine(stepImplFilePath)
-                .Append(featureFilePath);
-
-            return sb.ToString();
+            return new GeneratedFiles() { FeatureFilePath = featureFilePath, StepImplFilePath = stepImplFilePath };
         }
 
         void WriteToOutputFile(string featureOutputFilePath, string formattedText)

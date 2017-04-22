@@ -380,7 +380,8 @@
     <value>确认保存</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
-    <value>生成了如下C++测试代码。</value>
+    <value>生成了如下C++测试代码。
+用"拷贝文件到"菜单可把文件拷贝到指定文件夹。</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>生成C++测试代码时，发生了如下错误。</value>
@@ -415,7 +416,7 @@
   <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
     <value>缺省亮显颜色</value>
   </data>
-  <data name="Tooltip_FontFamily" xml:space="preserve">
+  <data name="Tooltip_FontFamilyText" xml:space="preserve">
     <value>字体</value>
   </data>
   <data name="Tooltip_FontFamilyDefault" xml:space="preserve">
@@ -533,7 +534,25 @@
   <data name="Tooltip_FontFamilyDefault4NonGherkin" xml:space="preserve">
     <value>Gherkin以外的缺省字体</value>
   </data>
-  <data name="Tooltip_FontFamily4NonGherkin" xml:space="preserve">
+  <data name="Tooltip_FontFamily4NonGherkinText" xml:space="preserve">
     <value>字体1</value>
+  </data>
+  <data name="MenuEdit_ContextCopyFileTo" xml:space="preserve">
+    <value>拷贝文件到</value>
+  </data>
+  <data name="Message_CopyFileToResult" xml:space="preserve">
+    <value>文件已拷贝到 - "{0}"</value>
+  </data>
+  <data name="Tooltip_FontForGherkin" xml:space="preserve">
+    <value>Gherkin文档的字体</value>
+  </data>
+  <data name="Tooltip_FontForNonGherkin" xml:space="preserve">
+    <value>非Gherkin文档的字体</value>
+  </data>
+  <data name="Tooltip_HideWorkAreaEditor" xml:space="preserve">
+    <value>隐藏工作区窗口</value>
+  </data>
+  <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
+    <value>显示工作区窗口</value>
   </data>
 </root>

@@ -109,11 +109,10 @@ namespace ICSharpCode.AvalonEdit
 				new KeyGesture(Key.I, ModifierKeys.Control)
 			});
         /// <summary>
-        /// Clear search highlighting.
+        /// Copy cursor line file to a folder.
         /// Note: added by bzquan@gmail.com
         /// </summary>
-        public static readonly RoutedCommand ClearSearchHighlighting =
-            new RoutedCommand("ClearSearchHighlighting", typeof(TextEditor),
-                new InputGestureCollection { new KeyGesture(Key.Escape) });
+        public static readonly RoutedCommand CopyFileTo =
+            new RoutedCommand("CopyFileTo", typeof(TextEditor));
     }
 }

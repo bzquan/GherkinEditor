@@ -32,16 +32,12 @@ namespace Gherkin.ViewModel
         private void OpenGreppedFile(MultiFileOpener multiFilesOpener, string grepLine)
         {
             m_MultiFilesOpener = multiFilesOpener;
+            Tuple<string, int> fileNameAndLineNo = TryGetFileNameAndLineNo(grepLine);
+            GreppedLineNo = fileNameAndLineNo.Item2;
 
-            Match m = s_GrepLineRegex.Match(grepLine);
-            if (!m.Success) return;
+            if (!File.Exists(fileNameAndLineNo.Item1)) return;
 
-            string filePath = m.Groups[1].ToString();
-            if (!File.Exists(filePath)) return;
-
-            string line = m.Groups[2].ToString();
-            GreppedLineNo = int.Parse(line);
-            var tab = m_MultiFilesOpener.OpenEditorTab(filePath);
+            var tab = m_MultiFilesOpener.OpenEditorTab(fileNameAndLineNo.Item1);
             m_GreppedFileEditorViewModel = tab.Item2.EditorTabContentViewModel;
             if (tab.Item1)
             {
@@ -55,6 +51,22 @@ namespace Gherkin.ViewModel
             }
         }
 
+        private Tuple<string, int> TryGetFileNameAndLineNo(string grepLine)
+        {
+            Match m = s_GrepLineRegex.Match(grepLine);
+            if (m.Success)
+            {
+                string filePath = m.Groups[1].ToString();
+                string line = m.Groups[2].ToString();
+                return new Tuple<string, int>(filePath, int.Parse(line));
+            }
+            else
+            {
+                string filePath = grepLine.Trim();
+                return new Tuple<string, int>(filePath, -1);
+            }
+        }
+
         private void OnGrepEditorLoaded(object sender, EditorLoadedArg arg)
         {
             if (arg.EditorTabContentViewModel != m_GreppedFileEditorViewModel) return;
@@ -63,7 +75,12 @@ namespace Gherkin.ViewModel
             ScrollCursorToLine(GreppedLineNo);
         }
 
-        private void ScrollCursorToLine(int line_no) =>
-                            m_GreppedFileEditorViewModel.ScrollCursorTo(line_no, 1);
+        private void ScrollCursorToLine(int line_no)
+        {
+            if (line_no > 0)
+            {
+                m_GreppedFileEditorViewModel.ScrollCursorTo(line_no, 1);
+            }
+        }
     }
 }

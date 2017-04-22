@@ -46,10 +46,12 @@ namespace Gherkin.ViewModel
         public ICommand GenCPPTestCodeCmd => new DelegateCommandNoArg(OnGenCPPTestCode);
         public ICommand GrepCmd => new DelegateCommandNoArg(OnGrep);
         public ICommand ShowCodePageListCmd => new DelegateCommandNoArg(OnShowCodePageList);
+
         public FontViewModel FontViewModel { get; private set; }
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
         public CodePageListPopupViewModel CodePageListPopupViewModel { get; private set; }
+
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
                                 FontViewModel fontViewModel,
@@ -647,14 +649,17 @@ namespace Gherkin.ViewModel
                 {
                     CucumberCpp.BDDUtil.SupportUnicode = m_AppSettings.SupportUnicode;
                     CucumberCpp.BDDCucumber gen = new CucumberCpp.BDDCucumber();
-                    string generated_file_names = gen.GenCucumberTestCode(reader, Path.GetDirectoryName(CurrentFilePath));
+                    CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names = gen.GenCucumberTestCode(reader, Path.GetDirectoryName(CurrentFilePath));
 
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder
                         .AppendLine(Properties.Resources.Message_CppTestCodeGeneration)
-                        .Append(generated_file_names);
+                        .AppendLine(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"))
+                        .AppendLine(generated_file_names.StepImplFilePath)
+                        .Append(generated_file_names.FeatureFilePath);
 
                     WorkAreaEditor.MessageOfGenCPPTestCode = stringBuilder.ToString();
+                    m_MultiFilesOpener.OpenFileByReloading(generated_file_names.StepImplFilePath);
                 }
             }
             catch (Exception ex)

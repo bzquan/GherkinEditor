@@ -380,7 +380,8 @@ It can generate C++ test code based on GoogleTest.</value>
     <value>Confirm save</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
-    <value>C++ test codes are generated.</value>
+    <value>C++ test codes are generated.
+You can copy the generated files to a file by "Copy file to" context menu.</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>There is following error when generating C++ test code.</value>
@@ -415,7 +416,7 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_DefaultHighlighingColor" xml:space="preserve">
     <value>Use default color</value>
   </data>
-  <data name="Tooltip_FontFamily" xml:space="preserve">
+  <data name="Tooltip_FontFamilyText" xml:space="preserve">
     <value>Font</value>
   </data>
   <data name="Tooltip_FontFamilyDefault" xml:space="preserve">
@@ -533,7 +534,25 @@ Any change of the file would be discarded.</value>
   <data name="Tooltip_FontFamilyDefault4NonGherkin" xml:space="preserve">
     <value>Font for Non Gherkin</value>
   </data>
-  <data name="Tooltip_FontFamily4NonGherkin" xml:space="preserve">
+  <data name="Tooltip_FontFamily4NonGherkinText" xml:space="preserve">
     <value>Font1</value>
+  </data>
+  <data name="MenuEdit_ContextCopyFileTo" xml:space="preserve">
+    <value>Copy file to</value>
+  </data>
+  <data name="Message_CopyFileToResult" xml:space="preserve">
+    <value>File is copied to  - "{0}"</value>
+  </data>
+  <data name="Tooltip_FontForGherkin" xml:space="preserve">
+    <value>Font for Gherkin document</value>
+  </data>
+  <data name="Tooltip_FontForNonGherkin" xml:space="preserve">
+    <value>Font for Non Gherkin document</value>
+  </data>
+  <data name="Tooltip_HideWorkAreaEditor" xml:space="preserve">
+    <value>Hide work area window</value>
+  </data>
+  <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
+    <value>Show work area window</value>
   </data>
 </root>

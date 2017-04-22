@@ -10,7 +10,7 @@ const std::wstring BDDStepArg::DocStringArg(L"$doc$");
 
 BDDStepArg::BDDStepArg(wstring arg) :
 	ArgIndex(0),
-	m_RegexPattern(RegexSubstituter::StringRegex), // default is a string argument
+	m_RegexPattern(RegexSubstituter::StringRegex()), // default is a string argument
 	m_ArgText(arg)
 {
     DeduceArgType(arg);
@@ -50,7 +50,7 @@ void BDDStepArg::DeduceArgType(wstring arg)
     else if ((arg.length() == 0) || (arg[0] == L'\"'))
     {
         m_ArgType = BDDStepArgType::StringArg;
-        m_RegexPattern = RegexSubstituter::StringRegex;
+        m_RegexPattern = RegexSubstituter::StringRegex();
     }
     else if ((arg[0] == L'<') && (arg[arg.length() - 1] == L'>'))
     {
@@ -60,11 +60,11 @@ void BDDStepArg::DeduceArgType(wstring arg)
     else if (arg.find(L'.') == std::wstring::npos)
     {
         m_ArgType = BDDStepArgType::IntArg;
-        m_RegexPattern = RegexSubstituter::IntRegex;
+        m_RegexPattern = RegexSubstituter::IntRegex();
     }
     else
     {
         m_ArgType = BDDStepArgType::FloatArg;
-        m_RegexPattern = RegexSubstituter::FloatRegex;
+        m_RegexPattern = RegexSubstituter::FloatRegex();
     }
 }

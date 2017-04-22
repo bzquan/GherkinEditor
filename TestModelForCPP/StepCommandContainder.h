@@ -13,7 +13,7 @@ namespace bdd
     {
         typedef std::map<std::wstring, std::map<std::wstring, IStepCommand*>> TStepMap;
     public:
-        StepCommandContainder(){}
+		static StepCommandContainder& Instance();
 
         void Register(IStepCommand* step);
         void Unregister(IStepCommand* step);
@@ -24,13 +24,15 @@ namespace bdd
         void OnExecuteStep(std::wstring step_text, StepParameters& params);
 
     private:
-        IStepCommand* GetStep(const std::wstring step_text);
-        StepCommandContainder(bool is_persistent);
+		StepCommandContainder();
+		StepCommandContainder(StepCommandContainder&);
+		StepCommandContainder& operator=(const StepCommandContainder& other);
+
+		IStepCommand* GetStep(const std::wstring step_text);
         void TryAddStepMap(std::wstring feature);
 
     private:
-        static StepCommandContainder s_persistent;
-        static TStepMap s_container;
-        static std::wstring s_FeatureToRun;
+        TStepMap m_StepMap;
+        std::wstring m_FeatureToRun;
     };
 }

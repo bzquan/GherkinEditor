@@ -25,6 +25,7 @@ namespace Gherkin.Util
         string LastSelectedFile { get; set; }
         string LastUsedFile { get; set; }
         List<string> LastOpenedFiles { get; set; }
+        string LastFolderToCopyFile { get; set; }
 
         string LastSearchedText { set; }
         List<string> LastSearchedTexts { get; set; }
@@ -32,7 +33,7 @@ namespace Gherkin.Util
         List<string> LastGreppedTexts { get; set; }
         string LastUsedFileExtension { set; }
         List<string> LastFileExtensions { get; set; }
-        string LastGreppedFolder { set; }
+        string LastGreppedFolder { get; set; }
         List<string> LastGreppedFolders { get; set; }
         bool IsCaseSensitiveInFind { get; set; }
         bool IsMatchWholeWordInFind { get; set; }

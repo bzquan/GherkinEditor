@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Gherkin.Util;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
-using Gherkin.View;
+using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using Gherkin.Model;
+using ICSharpCode.AvalonEdit.Editing;
+using System.IO;
 
 namespace Gherkin.ViewModel
 {
@@ -26,6 +28,7 @@ namespace Gherkin.ViewModel
                                                  appSettings,
                                                  new FontFamily(appSettings.FontFamilyName),
                                                  appSettings.FontSize);
+            editor.TextArea.CopyFileToHandler = CopyFileTo;
             m_MultiFilesOpener = multiFilesOpener;
             m_AppSettings = appSettings;
             m_WorkAreaEditor.TextEditor.TextArea.MouseDoubleClick += OnGrepLineDoubleClick;
@@ -33,6 +36,8 @@ namespace Gherkin.ViewModel
         }
 
         public ICommand CloseGrepResultUagePopupCmd => new DelegateCommandNoArg(OnCloseGrepResultUagePopup);
+        public ICommand ShowMessageWindowCmd => new DelegateCommandNoArg(OnShowMessageWindow);
+        public ICommand HideMessageWindowCmd => new DelegateCommandNoArg(OnHideMessageWindow);
 
         public bool HideMessageWindow
         {
@@ -52,6 +57,16 @@ namespace Gherkin.ViewModel
                 base.OnPropertyChanged(nameof(HideMessageWindow));
                 base.OnPropertyChanged();
             }
+        }
+
+        private void OnShowMessageWindow()
+        {
+            ShowMessageWindow = true;
+        }
+
+        private void OnHideMessageWindow()
+        {
+            ShowMessageWindow = false;
         }
 
         public DrawingImage MessageWindowIcon
@@ -135,6 +150,28 @@ namespace Gherkin.ViewModel
         public void OnGrepFinished()
         {
             m_WorkAreaEditor.ScrollCursorTo(1, 1);
+        }
+
+        private void CopyFileTo(string filePath)
+        {
+            var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog();
+            dialog.FileName = m_AppSettings.LastFolderToCopyFile;
+
+            if (dialog.ShowDialog() != true) return;
+
+            try
+            {
+                m_AppSettings.LastFolderToCopyFile = dialog.FileName;
+                string dstPath = Path.Combine(dialog.FileName, Path.GetFileName(filePath));
+                File.Copy(filePath, dstPath, overwrite: true);
+
+                string copyResultMsg = string.Format(Properties.Resources.Message_CopyFileToResult, dstPath);
+                EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(copyResultMsg));
+            }
+            catch (Exception ex)
+            {
+                EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(ex.Message));
+            }
         }
     }
 }

@@ -88,7 +88,7 @@ std::wstring StepParser::Parse(std::wstring step_text, std::vector<BDDStepArg>& 
 
 void StepParser::ParseParams(std::wstring step_text, std::vector<BDDStepArg>& argList)
 {
-    wregex  stepRegex(RegexSubstituter::StepPattern);
+    wregex  stepRegex(RegexSubstituter::StepPattern());
     wsmatch match;
     wstring text(step_text);
     int numArg = 1;
@@ -115,7 +115,7 @@ std::wstring StepParser::CreateStepPattern(std::wstring step_text, std::vector<B
     static std::wstring paramIndicator(L"QQQQQQ");
 
     std::wstring preEscapedText = PreEscapeSpecialCharacters(step_text);
-    wregex  stepRegex(RegexSubstituter::StepPattern);
+    wregex  stepRegex(RegexSubstituter::StepPattern());
     wstring stepRegexText = regex_replace(preEscapedText, stepRegex, paramIndicator);
 	for (std::vector<BDDStepArg>::iterator iter = argList.begin(); iter != argList.end(); ++iter)
     {

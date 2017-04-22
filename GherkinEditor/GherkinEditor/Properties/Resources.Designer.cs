@@ -304,6 +304,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy file to.
+        /// </summary>
+        public static string MenuEdit_ContextCopyFileTo {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextCopyFileTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string MenuEdit_Copy {
@@ -1026,7 +1035,17 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C++ test codes are generated..
+        ///   Looks up a localized string similar to File is copied to  - &quot;{0}&quot;.
+        /// </summary>
+        public static string Message_CopyFileToResult {
+            get {
+                return ResourceManager.GetString("Message_CopyFileToResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C++ test codes are generated.
+        ///You can copy the generated files to a file by &quot;Copy file to&quot; context menu..
         /// </summary>
         public static string Message_CppTestCodeGeneration {
             get {
@@ -1179,20 +1198,11 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Font.
-        /// </summary>
-        public static string Tooltip_FontFamily {
-            get {
-                return ResourceManager.GetString("Tooltip_FontFamily", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Font1.
         /// </summary>
-        public static string Tooltip_FontFamily4NonGherkin {
+        public static string Tooltip_FontFamily4NonGherkinText {
             get {
-                return ResourceManager.GetString("Tooltip_FontFamily4NonGherkin", resourceCulture);
+                return ResourceManager.GetString("Tooltip_FontFamily4NonGherkinText", resourceCulture);
             }
         }
         
@@ -1215,6 +1225,33 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Font.
+        /// </summary>
+        public static string Tooltip_FontFamilyText {
+            get {
+                return ResourceManager.GetString("Tooltip_FontFamilyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font for Gherkin document.
+        /// </summary>
+        public static string Tooltip_FontForGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontForGherkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font for Non Gherkin document.
+        /// </summary>
+        public static string Tooltip_FontForNonGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontForNonGherkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Font size.
         /// </summary>
         public static string Tooltip_FontSize {
@@ -1229,6 +1266,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_GrepResultUage {
             get {
                 return ResourceManager.GetString("Tooltip_GrepResultUage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide work area window.
+        /// </summary>
+        public static string Tooltip_HideWorkAreaEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_HideWorkAreaEditor", resourceCulture);
             }
         }
         
@@ -1301,6 +1347,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_ShowScenarioIndex {
             get {
                 return ResourceManager.GetString("Tooltip_ShowScenarioIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show work area window.
+        /// </summary>
+        public static string Tooltip_ShowWorkAreaEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowWorkAreaEditor", resourceCulture);
             }
         }
         

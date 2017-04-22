@@ -59,6 +59,10 @@ namespace Gherkin.View
                 FilePathStruct filePathStruct = (FilePathStruct)Marshal.PtrToStructure(cds.lpData, typeof(FilePathStruct));
 
                 OpenFile(filePathStruct.FilePath);
+                if (this.Owner.WindowState == WindowState.Minimized)
+                {
+                    this.Owner.WindowState = WindowState.Normal;
+                }
                 this.Owner.Activate(); // Bring the Gherkin window to the foreground and activates it.
             }
             return IntPtr.Zero;
