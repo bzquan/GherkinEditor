@@ -76,7 +76,7 @@ namespace Gherkin.ViewModel
 
             return (IsLeadingTextOfCurrentLineWhiteSpace() &&
                     (filename != null) &&
-                    filename.EndsWith(GherkinUtil.FEATURE_EXTENSION, StringComparison.InvariantCultureIgnoreCase));
+                    GherkinUtil.IsFeatureFile(filename));
         }
 
         private bool IsLeadingTextOfCurrentLineWhiteSpace()

@@ -555,4 +555,7 @@
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>显示工作区窗口</value>
   </data>
+  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
+    <value>列尺</value>
+  </data>
 </root>

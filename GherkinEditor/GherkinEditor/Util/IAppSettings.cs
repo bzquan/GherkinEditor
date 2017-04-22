@@ -52,6 +52,8 @@ namespace Gherkin.Util
         GherkinFileInfo GetFileInfo(string filePath);
         bool IsMainWindowStateMaximized { get; set; }
         bool ShowMessageWindow { get; set; }
+        bool ShowColumnRuler { get; set; }
+        int ColumnRulerPositon { get; set; }
         bool SupportUnicode { get; set; }
         bool IsAllowRunningMultiApps { get; set; }
         bool IsCloseTablesFoldingByDefault { get; set; }

@@ -111,6 +111,13 @@ namespace Gherkin.ViewModel
             FocusedGherkinEditor?.ShowSearchPanel();
         }
 
+        public void UpdateColumnRuler()
+        {
+            MainGherkinEditor?.UpdateColumnRuler();
+            SubGherkinEditor?.UpdateColumnRuler();
+        }
+
+
         private GherkinEditor FocusedGherkinEditor
         {
             get
@@ -278,7 +285,7 @@ namespace Gherkin.ViewModel
         private void SetSyntaxHighlighting(string filePath)
         {
             IHighlightingDefinition highlighting;
-            if (Path.GetExtension(filePath) == GherkinUtil.FEATURE_EXTENSION)
+            if (GherkinUtil.IsFeatureFile(filePath))
             {
                 highlighting = HighlightingManager.Instance.GetDefinition(GherkinUtil.GherkinHighlightingName(CurrentLanguage));
             }
@@ -313,7 +320,7 @@ namespace Gherkin.ViewModel
 
             try
             {
-                if (Path.GetExtension(CurrentFilePath) == GherkinUtil.FEATURE_EXTENSION)
+                if (GherkinUtil.IsFeatureFile(CurrentFilePath))
                 {
                     GherkinUtil.RegisterGherkinHighlighting(CurrentLanguage);
                     IHighlightingDefinition highlighting = GetHighlightingDefinition();

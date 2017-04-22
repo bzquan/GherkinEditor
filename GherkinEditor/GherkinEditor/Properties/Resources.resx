@@ -555,4 +555,7 @@ Any change of the file would be discarded.</value>
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>Show work area window</value>
   </data>
+  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
+    <value>Column ruler</value>
+  </data>
 </root>

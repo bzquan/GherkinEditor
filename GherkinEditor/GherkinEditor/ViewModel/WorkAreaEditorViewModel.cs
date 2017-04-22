@@ -91,9 +91,9 @@ namespace Gherkin.ViewModel
             set
             {
                 Clear();
-                ShowGrepResultUsagePopup = false;
                 ShowMessageWindow = true;
                 m_WorkAreaEditor.AppendText(value);
+                ShowGrepResultUsagePopup = true;
             }
         }
 

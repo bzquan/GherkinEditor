@@ -9,6 +9,7 @@ using static Gherkin.Model.GherkinFormatUtil;
 using static Gherkin.Util.StringBuilderExtension;
 using Gherkin.Util;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Editing;
 
 namespace Gherkin.Model
 {
@@ -19,12 +20,16 @@ namespace Gherkin.Model
         public GherkinIndentationStrategy(TextEditor editor)
         {
             Editor = editor;
+            editor.TextArea.TextEntered += OnTextEntered;
         }
 
         public override void IndentLine(TextDocument document, DocumentLine line)
         {
             if (document == null) throw new ArgumentNullException(nameof(document));
             if (line == null) throw new ArgumentNullException(nameof(line));
+
+            if (string.IsNullOrEmpty(document.FileName) ||
+                !GherkinUtil.IsFeatureFile(document.FileName)) return;
 
             DocumentLine previousLine = line.PreviousLine;
             if (previousLine == null) return;
@@ -47,11 +52,7 @@ namespace Gherkin.Model
                                      MakeThreeLines(guid_tag, result.Item2, GherkinSimpleParser.IDENT2));
                     break;
                 case TokenType.TableRow:
-                    int lineNo = line.LineNumber;
-                    if (MakeFormattedTable(document, line))
-                        MoveCursorToFirstCellOfTableRow(lineNo);
-                    else
-                        base.IndentLine(document, line);
+                    FormatTable(document, line);
                     break;
                 default:
                     base.IndentLine(document, line);
@@ -103,17 +104,114 @@ namespace Gherkin.Model
             return length;
         }
 
-        private void MoveCursorToFirstCellOfTableRow(int lineNo)
+        private TextDocument Document => Editor.Document;
+
+        private void OnTextEntered(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Document.FileName) ||
+                !GherkinUtil.IsFeatureFile(Document.FileName)) return;
+
+            // Do nothing because IndentLine would be called by textArea.
+            if (e.Text == "\n" || e.Text == "\r" || e.Text == "\r\n") return;
+
+            var line_no = Editor.TextArea.Caret.Line;
+            var line = Document.GetLineByNumber(line_no);
+
+            GherkinSimpleParser parser = new GherkinSimpleParser(Document);
+            Tuple<TokenType, string> result = parser.Format(GetText(Document, line));
+            if (result.Item1 == TokenType.TableRow)
+            {
+                FormatTable(Document, line);
+            }
+        }
+
+        private void FormatTable(TextDocument document, DocumentLine line)
+        {
+            if (CanFormatTable(Editor.TextArea, document, line))
+            {
+                CursorPosInTable pos = new CursorPosInTable(Editor.TextArea, document, line);
+                if (MakeFormattedTable(document, line))
+                    MoveCursorToTableRow(pos);
+                else
+                    base.IndentLine(document, line);
+            }
+            else
+                base.IndentLine(document, line);
+        }
+
+        private bool CanFormatTable(TextArea textArea, TextDocument document, DocumentLine line)
+        {
+            string line_text = GetText(document, line);
+
+            if (string.IsNullOrWhiteSpace(line_text))
+                return true;
+
+            int col = textArea.Caret.Column - 1;
+            int firstIndex = line_text.IndexOf('|');
+            int lastIndex = line_text.LastIndexOf('|');
+            return (firstIndex >= 0) &&
+                   (col > firstIndex) &&
+                   (col <= lastIndex);
+        }
+
+        private void MoveCursorToTableRow(CursorPosInTable previousPos)
         {
             TextDocument document = Editor.Document;
-            DocumentLine line = document.GetLineByNumber(lineNo);
+            DocumentLine line = document.GetLineByNumber(previousPos.LineNo);
 
             string line_text = GetText(document, line);
-            int column = line_text.IndexOf('|');
-            if (column >= 0)
+            int cell_counter = 0;
+            int pos = 0;
+            foreach (var c in line_text)
             {
-                int offset = line.Offset + column + 1;
-                Editor.TextArea.Caret.Offset = offset;
+                if (c == '|') cell_counter++;
+                if (cell_counter >= previousPos.CellNo) break;
+                pos++;
+            }
+
+            int offset = line.Offset + pos + previousPos.PosInCell;
+            Editor.TextArea.Caret.Offset = offset;
+        }
+
+        class CursorPosInTable
+        {
+            public CursorPosInTable(TextArea textArea, TextDocument document, DocumentLine line)
+            {
+                CalcCursorPostion(textArea, document, line);
+            }
+
+            public int LineNo { get; private set; }
+            public int CellNo { get; private set; }
+            public int PosInCell { get; private set; }
+
+            private void CalcCursorPostion(TextArea textArea, TextDocument document, DocumentLine line)
+            {
+                LineNo = line.LineNumber;
+                string line_text = GetText(document, line);
+                if (string.IsNullOrWhiteSpace(line_text))
+                {
+                    CellNo = 1;
+                    PosInCell = 1;
+                }
+                else
+                {
+                    int col = textArea.Caret.Column;
+                    string subStr_before_cursor = line_text.Substring(0, col - 1).Trim();
+                    CellNo = Math.Max(subStr_before_cursor.Count(c => c == '|'), 1);
+                    PosInCell = CalcPosInCell(subStr_before_cursor);
+                }
+            }
+
+            private int CalcPosInCell(string text)
+            {
+                int pos = 0;
+                for (int i = text.Length - 1; i >= 0; i--)
+                {
+                    if (text[i] == '|') break;
+                    pos++;
+                }
+
+                return pos + 1;
             }
         }
     }

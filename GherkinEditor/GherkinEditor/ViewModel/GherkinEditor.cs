@@ -58,8 +58,10 @@ namespace Gherkin.ViewModel
             editor.Options.EnableRectangularSelection = true;
             editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
             editor.Options.ConvertTabsToSpaces = true;
+            editor.Options.AllowToggleOverstrikeMode = true;
             editor.FontFamily = fontFamily;
             editor.FontSize = ToFontSizeByPoint(fontSize);
+            UpdateColumnRuler();
         }
 
         public TextEditor TextEditor { get; set; }
@@ -68,6 +70,12 @@ namespace Gherkin.ViewModel
         public bool HasFocus
         {
             get { return TextEditor.TextArea.IsKeyboardFocused; }
+        }
+
+        public void UpdateColumnRuler()
+        {
+            TextEditor.Options.ColumnRulerPosition = m_AppSettings.ColumnRulerPositon;
+            TextEditor.Options.ShowColumnRuler = m_AppSettings.ShowColumnRuler;
         }
 
         public void ShowSearchPanel()

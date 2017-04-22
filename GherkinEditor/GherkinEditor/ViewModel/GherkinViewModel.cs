@@ -145,6 +145,38 @@ namespace Gherkin.ViewModel
             CurrentEditor?.ShowSearchPanel();
         }
 
+        public bool ShowColumnRuler
+        {
+            get { return  m_AppSettings.ShowColumnRuler; }
+            set
+            {
+                m_AppSettings.ShowColumnRuler = value;
+                UpdateColumnRuler();
+                base.OnPropertyChanged();
+            }
+        }
+
+        public int ColumnRulerPositon
+        {
+            get { return m_AppSettings.ColumnRulerPositon; }
+            set
+            {
+                int v = Math.Max(60, value);
+                int pos = Math.Min(300, v);
+                m_AppSettings.ColumnRulerPositon = pos;
+                UpdateColumnRuler();
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void UpdateColumnRuler()
+        {
+            foreach (var tab in TabPanels)
+            {
+                tab.EditorTabContentViewModel.UpdateColumnRuler();
+            }
+        }
+
         private EditorTabContentViewModel CurrentEditor
         {
             get { return m_CurrentEditor; }
@@ -647,18 +679,10 @@ namespace Gherkin.ViewModel
                 string feature_text = MainTextEditor.Document.Text;
                 using (TextReader reader = new StringReader(feature_text))
                 {
-                    CucumberCpp.BDDUtil.SupportUnicode = m_AppSettings.SupportUnicode;
-                    CucumberCpp.BDDCucumber gen = new CucumberCpp.BDDCucumber();
-                    CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names = gen.GenCucumberTestCode(reader, Path.GetDirectoryName(CurrentFilePath));
+                    CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names = GenerateCPPTestCode(reader);
+                    var message = BuildCPPTestCodeResultMessage(ref generated_file_names);
 
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder
-                        .AppendLine(Properties.Resources.Message_CppTestCodeGeneration)
-                        .AppendLine(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"))
-                        .AppendLine(generated_file_names.StepImplFilePath)
-                        .Append(generated_file_names.FeatureFilePath);
-
-                    WorkAreaEditor.MessageOfGenCPPTestCode = stringBuilder.ToString();
+                    WorkAreaEditor.MessageOfGenCPPTestCode = message;
                     m_MultiFilesOpener.OpenFileByReloading(generated_file_names.StepImplFilePath);
                 }
             }
@@ -666,6 +690,24 @@ namespace Gherkin.ViewModel
             {
                 DisplayErrorMessage(ex.Message, ex.StackTrace);
             }
+        }
+
+        private CucumberCpp.BDDCucumber.GeneratedFiles GenerateCPPTestCode(TextReader reader)
+        {
+            CucumberCpp.BDDUtil.SupportUnicode = m_AppSettings.SupportUnicode;
+            CucumberCpp.BDDCucumber gen = new CucumberCpp.BDDCucumber();
+            return gen.GenCucumberTestCode(reader, Path.GetDirectoryName(CurrentFilePath));
+        }
+
+        private string BuildCPPTestCodeResultMessage(ref CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder
+                .AppendLine(Properties.Resources.Message_CppTestCodeGeneration)
+                .AppendLine(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"))
+                .AppendLine(generated_file_names.StepImplFilePath)
+                .Append(generated_file_names.FeatureFilePath);
+            return stringBuilder.ToString();
         }
 
         private void DisplayErrorMessage(string errorMsg, string stackTrace)

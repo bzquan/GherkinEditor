@@ -415,6 +415,23 @@
                                Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem IsCheckable="True"
+                          StaysOpenOnClick="True"
+                          IsChecked="{Binding Path=ShowColumnRuler}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.MenuSetting_ColumnRuler}" />
+                            <xctk:IntegerUpDown Margin="10, 0, 0, 0"
+                                                FormatString="N0"
+                                                AllowTextInput="False"
+                                                Value="{Binding Path=ColumnRulerPositon, Mode=TwoWay, FallbackValue=100}"
+                                                Visibility="{Binding Path=ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
+                                                Increment="5"
+                                                Minimum="60"
+                                                Maximum="160"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuFind_Search}">
                 <MenuItem Command="Find"

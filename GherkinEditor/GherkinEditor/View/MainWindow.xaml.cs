@@ -15,6 +15,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Controls.Primitives;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Gherkin.View
 {

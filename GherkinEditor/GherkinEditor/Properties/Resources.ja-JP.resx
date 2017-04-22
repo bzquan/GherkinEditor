@@ -555,4 +555,7 @@
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>作業領域画面の表示</value>
   </data>
+  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
+    <value>列ルーラー</value>
+  </data>
 </root>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.AvalonEdit", "ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj", "{6C55B776-26D4-4DB3-A6AB-87E783B2F3D1}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gherkin", "GherkinParser\Gherkin\Gherkin.csproj", "{370982B4-9938-4533-8EA1-6F9044B84130}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterWpfControls", "BetterWpfControls\BetterWpfControls.csproj", "{E8229630-9896-4536-B6F9-BA8C1738E498}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterWpfControls.Demo", "BetterWpfControls.Demo\BetterWpfControls.Demo.csproj", "{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,18 +101,6 @@ Global
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|WithNRefactory.Build.0 = Release|Any CPU
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|x86.ActiveCfg = Release|Any CPU
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|x86.Build.0 = Release|Any CPU
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|Net35.ActiveCfg = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|Net40.ActiveCfg = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|WithNRefactory.ActiveCfg = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|x86.ActiveCfg = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Debug|x86.Build.0 = Debug|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|Any CPU.ActiveCfg = Release|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|Net35.ActiveCfg = Release|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|Net40.ActiveCfg = Release|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|WithNRefactory.ActiveCfg = Release|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|x86.ActiveCfg = Release|x86
-		{51766B3A-9E6E-4600-8214-F3AE70D6CFA7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

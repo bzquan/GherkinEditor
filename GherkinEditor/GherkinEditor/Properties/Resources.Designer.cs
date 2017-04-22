@@ -610,6 +610,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column ruler.
+        /// </summary>
+        public static string MenuSetting_ColumnRuler {
+            get {
+                return ResourceManager.GetString("MenuSetting_ColumnRuler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Constants color.
         /// </summary>
         public static string MenuSetting_ConstantsColor {

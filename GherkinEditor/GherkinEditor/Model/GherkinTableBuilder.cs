@@ -48,8 +48,22 @@ namespace Gherkin.Model
         {
             CollectLeadingRows();
 
-            if (m_Rows.Count == 0) return false;
-            m_Rows.Add("||");   // add dummy row corresponding to m_Line
+            string text = GetText(m_Doc, m_Line).Trim();
+            if ((m_Rows.Count == 0) && (text.Length == 0)) return false;
+
+            if (text.Length != 0)
+            {
+                if (m_Rows.Count == 0)
+                {
+                    Offset = m_Line.Offset;
+                }
+                m_Rows.Add(text);
+                Length += m_Line.TotalLength;
+            }
+            else
+            {
+                m_Rows.Add("||");   // add dummy row corresponding to m_Line
+            }
 
             CollectTrailingRows();
             return true;

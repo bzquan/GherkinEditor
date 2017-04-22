@@ -361,6 +361,22 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
+        [DefaultSettingValueAttribute("True")]
+        public bool ShowColumnRuler
+        {
+            get { return (bool)this["ShowColumnRuler"]; }
+            set { this["ShowColumnRuler"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("100")]
+        public int ColumnRulerPositon
+        {
+            get { return (int)this["ColumnRulerPositon"]; }
+            set { this["ColumnRulerPositon"] = value; }
+        }
+
+        [UserScopedSetting()]
         [DefaultSettingValueAttribute("False")]
         public bool SupportUnicode
         {

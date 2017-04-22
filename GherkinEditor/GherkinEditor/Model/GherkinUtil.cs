@@ -93,7 +93,7 @@ namespace Gherkin.Model
         public static bool IsFeatureFile(string filePath)
         {
             if (string.IsNullOrEmpty(filePath)) return false;
-            return HasExtension(filePath, ".feature");
+            return HasExtension(filePath, FEATURE_EXTENSION);
         }
 
         public static bool HasExtension(string filePath, string ext) =>
