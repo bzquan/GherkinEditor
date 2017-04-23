@@ -52,7 +52,7 @@ namespace Gherkin.Model
                                      MakeThreeLines(guid_tag, result.Item2, GherkinSimpleParser.IDENT2));
                     break;
                 case TokenType.TableRow:
-                    FormatTable(document, line);
+                    FormatTable(document, line, isEnteredNewLine: true);
                     break;
                 default:
                     base.IndentLine(document, line);
@@ -121,22 +121,42 @@ namespace Gherkin.Model
             Tuple<TokenType, string> result = parser.Format(GetText(Document, line));
             if (result.Item1 == TokenType.TableRow)
             {
-                FormatTable(Document, line);
+                FormatTable(Document, line, isEnteredNewLine: false);
             }
         }
 
-        private void FormatTable(TextDocument document, DocumentLine line)
+        private void FormatTable(TextDocument document, DocumentLine line, bool isEnteredNewLine)
         {
             if (CanFormatTable(Editor.TextArea, document, line))
             {
                 CursorPosInTable pos = new CursorPosInTable(Editor.TextArea, document, line);
-                if (MakeFormattedTable(document, line))
+                if (MakeFormattedTable(document, line, isEnteredNewLine))
                     MoveCursorToTableRow(pos);
                 else
                     base.IndentLine(document, line);
             }
             else
                 base.IndentLine(document, line);
+        }
+
+        private bool MakeFormattedTable(TextDocument document, DocumentLine line, bool isEnteredNewLine)
+        {
+            GherkinTableBuilder builder = new GherkinTableBuilder(document, line);
+            GherkinTable table = builder.Build();
+            if (table == null) return false;
+
+            string table_text = table.Format();
+            if (!table_text.EndsWith(Environment.NewLine))
+            {
+                table_text += Environment.NewLine;
+            }
+
+            // We need to replace newly entered new line when formatting table by entering new line
+            // New line length is 2 because it is "\r\n"
+            int new_line_length = isEnteredNewLine ? 2 : 0;
+            document.Replace(builder.Offset, builder.Length + new_line_length, table_text);
+
+            return true;
         }
 
         private bool CanFormatTable(TextArea textArea, TextDocument document, DocumentLine line)

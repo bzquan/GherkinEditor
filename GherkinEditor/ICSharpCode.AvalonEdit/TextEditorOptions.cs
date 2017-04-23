@@ -201,15 +201,71 @@ namespace ICSharpCode.AvalonEdit
 				}
 			}
 		}
-		#endregion
-		
-		#region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString
-		// I'm using '_' prefixes for the fields here to avoid confusion with the local variables
-		// in the methods below.
-		// The fields should be accessed only by their property - the fields might not be used
-		// if someone overrides the property.
-		
-		int indentationSize = 4;
+        #endregion
+
+        #region FilePathClick -- added by bzquan@gmail
+
+        /// <summary>
+        /// A delegate which check whether text contains clickable file path 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="start_offset">matched start offset</param>
+        /// <param name="lenth">matched file path length</param>
+        /// <returns>true if has clickable file path</returns>
+        public delegate bool ContainOpenableFilePathHandler(string text, out int start_offset, out int lenth);
+
+        ContainOpenableFilePathHandler containOpenableFilePath { get; set; }
+
+        /// <summary>
+        /// Gets/Sets whether the user needs to click file path.
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual ContainOpenableFilePathHandler ContainOpenableFilePath
+        {
+            get { return containOpenableFilePath; }
+            set
+            {
+                if (containOpenableFilePath != value)
+                {
+                    containOpenableFilePath = value;
+                    OnPropertyChanged(nameof(ContainOpenableFilePath));
+                }
+            }
+        }
+
+        Action<string> filePathClickedHandler { get; set; }
+
+        /// <summary>
+        /// Gets/Sets action to click a text which contains clickable file path.
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual Action<string> FilePathClickedHandler
+        {
+            get { return filePathClickedHandler; }
+            set
+            {
+                if (filePathClickedHandler != value)
+                {
+                    filePathClickedHandler = value;
+                    OnPropertyChanged(nameof(FilePathClickedHandler));
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString
+        // I'm using '_' prefixes for the fields here to avoid confusion with the local variables
+        // in the methods below.
+        // The fields should be accessed only by their property - the fields might not be used
+        // if someone overrides the property.
+
+        int indentationSize = 4;
 		
 		/// <summary>
 		/// Gets/Sets the width of one indentation unit.

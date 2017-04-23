@@ -108,6 +108,7 @@ namespace ICSharpCode.AvalonEdit
 			new InputGestureCollection {
 				new KeyGesture(Key.I, ModifierKeys.Control)
 			});
+
         /// <summary>
         /// Copy cursor line file to a folder.
         /// Note: added by bzquan@gmail.com

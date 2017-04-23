@@ -512,9 +512,6 @@
   <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
     <value>检索条件</value>
   </data>
-  <data name="Tooltip_GrepResultUage" xml:space="preserve">
-    <value>ダブルクリックにて指定ファイルを開きます。</value>
-  </data>
   <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
     <value>指定文字コードにてファイルを読み直しますか？
 編集内容は破棄されます。</value>
@@ -557,5 +554,11 @@
   </data>
   <data name="MenuSetting_ColumnRuler" xml:space="preserve">
     <value>列ルーラー</value>
+  </data>
+  <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>(Ctrl + Click)にてブラウザーを開く</value>
+  </data>
+  <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>WebブラウザーからURLを開く場合、Ctrlキーを使用する</value>
   </data>
 </root>

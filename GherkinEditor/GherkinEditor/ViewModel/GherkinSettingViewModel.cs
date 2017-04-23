@@ -505,6 +505,57 @@ namespace Gherkin.ViewModel
             return m_AppSettings.Language != language;
         }
 
+        public bool ShowColumnRuler
+        {
+            get { return m_AppSettings.ShowColumnRuler; }
+            set
+            {
+                m_AppSettings.ShowColumnRuler = value;
+                UpdateColumnRuler();
+                base.OnPropertyChanged();
+            }
+        }
+
+        public int ColumnRulerPositon
+        {
+            get { return m_AppSettings.ColumnRulerPositon; }
+            set
+            {
+                int v = Math.Max(60, value);
+                int pos = Math.Min(300, v);
+                m_AppSettings.ColumnRulerPositon = pos;
+                UpdateColumnRuler();
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void UpdateColumnRuler()
+        {
+            foreach (var tab in TabPanels)
+            {
+                tab.EditorTabContentViewModel.UpdateColumnRuler();
+            }
+        }
+
+        public bool RequireControlModifierForHyperlinkClick
+        {
+            get { return m_AppSettings.RequireControlModifierForHyperlinkClick; }
+            set
+            {
+                m_AppSettings.RequireControlModifierForHyperlinkClick = value;
+                UpdateRequireControlModifierForHyperlinkClick();
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void UpdateRequireControlModifierForHyperlinkClick()
+        {
+            foreach (var tab in TabPanels)
+            {
+                tab.EditorTabContentViewModel.UpdateRequireControlModifierForHyperlinkClick();
+            }
+        }
+
         public bool showCreateHighlightingFilesButton
         {
             get

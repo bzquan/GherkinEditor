@@ -145,39 +145,7 @@ namespace Gherkin.ViewModel
             CurrentEditor?.ShowSearchPanel();
         }
 
-        public bool ShowColumnRuler
-        {
-            get { return  m_AppSettings.ShowColumnRuler; }
-            set
-            {
-                m_AppSettings.ShowColumnRuler = value;
-                UpdateColumnRuler();
-                base.OnPropertyChanged();
-            }
-        }
-
-        public int ColumnRulerPositon
-        {
-            get { return m_AppSettings.ColumnRulerPositon; }
-            set
-            {
-                int v = Math.Max(60, value);
-                int pos = Math.Min(300, v);
-                m_AppSettings.ColumnRulerPositon = pos;
-                UpdateColumnRuler();
-                base.OnPropertyChanged();
-            }
-        }
-
-        private void UpdateColumnRuler()
-        {
-            foreach (var tab in TabPanels)
-            {
-                tab.EditorTabContentViewModel.UpdateColumnRuler();
-            }
-        }
-
-        private EditorTabContentViewModel CurrentEditor
+         private EditorTabContentViewModel CurrentEditor
         {
             get { return m_CurrentEditor; }
             set

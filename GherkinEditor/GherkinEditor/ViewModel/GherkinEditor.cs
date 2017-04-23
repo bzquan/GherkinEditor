@@ -61,7 +61,9 @@ namespace Gherkin.ViewModel
             editor.Options.AllowToggleOverstrikeMode = true;
             editor.FontFamily = fontFamily;
             editor.FontSize = ToFontSizeByPoint(fontSize);
+
             UpdateColumnRuler();
+            UpdateRequireControlModifierForHyperlinkClick();
         }
 
         public TextEditor TextEditor { get; set; }
@@ -76,6 +78,11 @@ namespace Gherkin.ViewModel
         {
             TextEditor.Options.ColumnRulerPosition = m_AppSettings.ColumnRulerPositon;
             TextEditor.Options.ShowColumnRuler = m_AppSettings.ShowColumnRuler;
+        }
+
+        public void UpdateRequireControlModifierForHyperlinkClick()
+        {
+            TextEditor.Options.RequireControlModifierForHyperlinkClick = m_AppSettings.RequireControlModifierForHyperlinkClick;
         }
 
         public void ShowSearchPanel()

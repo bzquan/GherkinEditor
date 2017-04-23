@@ -417,15 +417,15 @@
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           StaysOpenOnClick="True"
-                          IsChecked="{Binding Path=ShowColumnRuler}">
+                          IsChecked="{Binding Path=GherkinSettings.ShowColumnRuler}">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{x:Static p:Resources.MenuSetting_ColumnRuler}" />
                             <xctk:IntegerUpDown Margin="10, 0, 0, 0"
                                                 FormatString="N0"
                                                 AllowTextInput="False"
-                                                Value="{Binding Path=ColumnRulerPositon, Mode=TwoWay, FallbackValue=100}"
-                                                Visibility="{Binding Path=ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
+                                                Value="{Binding Path=GherkinSettings.ColumnRulerPositon, Mode=TwoWay, FallbackValue=100}"
+                                                Visibility="{Binding Path=GherkinSettings.ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
                                                 Increment="5"
                                                 Minimum="60"
                                                 Maximum="160"/>
@@ -499,6 +499,16 @@
                           Header="{x:Static p:Resources.MenuSetting_ShowCurrentLineBorder}"
                           StaysOpenOnClick="True"
                           IsChecked="{Binding GherkinSettings.ShowCurrentLineBorder}" />
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuSetting_RequireControlModifierForHyperlinkClick}"
+                          ToolTip="{x:Static p:Resources.Tooltip_RequireControlModifierForHyperlinkClick}"
+                          StaysOpenOnClick="True"
+                          IsChecked="{Binding GherkinSettings.RequireControlModifierForHyperlinkClick}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Browser.png"
+                               Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinFolding}">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left"
@@ -844,10 +854,12 @@
                 <Border BorderBrush="DarkGray" BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=Codepage}" VerticalAlignment="Center" />
-                        <Button x:Name="codePageButton"
-                                Content="{x:Static p:Resources.Status_CodePageListTitle}"
+                        <bc:ImageButton x:Name="codePageButton"
+                                ToolTip="{x:Static p:Resources.Status_CodePageListTitle}"
                                 Visibility="{Binding Path=CanShowCodePageList, Converter={StaticResource BoolToVisibility}}"
-                                Command="{Binding Path=ShowCodePageListCmd}" />
+                                Command="{Binding Path=ShowCodePageListCmd}"
+                                        Source="Images/ReloadFile.png"
+                                        Height="16"/>
                         <local:CodePageListPopup IsOpen="{Binding Path=CodePageListPopupViewModel.ShowCodePageList}"
                                                  PlacementTarget="{Binding ElementName=codePageButton}"
                                Placement="Top"
@@ -1106,28 +1118,6 @@
                 </GridSplitter.Style>
             </GridSplitter>
             
-            <Popup x:Name="grepResultUagePopup"
-                   IsOpen="{Binding Path=WorkAreaEditor.ShowGrepResultUsagePopup}"
-                   PlacementTarget="{Binding ElementName=bottomHSplitter}"
-                   Placement="Bottom"
-                   HorizontalOffset="6"
-                   VerticalOffset="3"
-                   StaysOpen="True">
-
-                <Border BorderBrush="Goldenrod" BorderThickness="1">
-                    <StackPanel Background="LightGray"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Right">
-                        <bc:ImageButton DockPanel.Dock="Right"
-                                        Source="Images/DeleteTab.png"
-                                        Height="16"
-                                        Command="{Binding Path=WorkAreaEditor.CloseGrepResultUagePopupCmd}" />
-                        <TextBlock VerticalAlignment="Center"
-                                   Foreground="Blue"
-                                   Text="{x:Static p:Resources.Tooltip_GrepResultUage}" />
-                    </StackPanel>
-                </Border>
-            </Popup>
             <avalonEdit:TextEditor Name="messageTextEditor"
                                    Grid.Row="2"
                                    ContextMenu="{StaticResource editorContextMenu}" />

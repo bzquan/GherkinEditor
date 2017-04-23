@@ -381,7 +381,7 @@ It can generate C++ test code based on GoogleTest.</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
     <value>C++ test codes are generated.
-You can copy the generated files to a file by "Copy file to" context menu.</value>
+You can copy the generated files to a folder by "Copy file to" context menu.</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>There is following error when generating C++ test code.</value>
@@ -512,9 +512,6 @@ You can copy the generated files to a file by "Copy file to" context menu.</valu
   <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
     <value>Grep Options</value>
   </data>
-  <data name="Tooltip_GrepResultUage" xml:space="preserve">
-    <value>Open a file by double clicking the file name line.</value>
-  </data>
   <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
     <value>Do you reload current file in selected encoding?
 Any change of the file would be discarded.</value>
@@ -557,5 +554,11 @@ Any change of the file would be discarded.</value>
   </data>
   <data name="MenuSetting_ColumnRuler" xml:space="preserve">
     <value>Column ruler</value>
+  </data>
+  <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>Open web browser in Ctrl + Click</value>
+  </data>
+  <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>Use Ctrl key to open URL by Web browser</value>
   </data>
 </root>

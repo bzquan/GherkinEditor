@@ -369,6 +369,14 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool RequireControlModifierForHyperlinkClick
+        {
+            get { return (bool)this["RequireControlModifierForHyperlinkClick"]; }
+            set { this["RequireControlModifierForHyperlinkClick"] = value; }
+        }
+
+        [UserScopedSetting()]
         [DefaultSettingValueAttribute("100")]
         public int ColumnRulerPositon
         {

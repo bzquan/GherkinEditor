@@ -272,6 +272,7 @@
     <Compile Include="Rendering\DocumentColorizingTransformer.cs">
       <DependentUpon>IVisualLineTransformer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Rendering\FilePathElementGenerator.cs" />
     <Compile Include="Rendering\FormattedTextElement.cs" />
     <Compile Include="Rendering\GlobalTextRunProperties.cs">
       <DependentUpon>TextView.cs</DependentUpon>
@@ -320,6 +321,7 @@
     <Compile Include="Rendering\VisualLineElementTextRunProperties.cs">
       <DependentUpon>VisualLine.cs</DependentUpon>
     </Compile>
+    <Compile Include="Rendering\VisualLineFilePathText.cs" />
     <Compile Include="Rendering\VisualLineLinkText.cs" />
     <Compile Include="Rendering\VisualLinesInvalidException.cs" />
     <Compile Include="Rendering\VisualLineText.cs" />

@@ -709,6 +709,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open web browser in Ctrl + Click.
+        /// </summary>
+        public static string MenuSetting_RequireControlModifierForHyperlinkClick {
+            get {
+                return ResourceManager.GetString("MenuSetting_RequireControlModifierForHyperlinkClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset all highlighting colors.
         /// </summary>
         public static string MenuSetting_ResetHighlightingColor {
@@ -1054,7 +1063,7 @@ namespace Gherkin.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to C++ test codes are generated.
-        ///You can copy the generated files to a file by &quot;Copy file to&quot; context menu..
+        ///You can copy the generated files to a folder by &quot;Copy file to&quot; context menu..
         /// </summary>
         public static string Message_CppTestCodeGeneration {
             get {
@@ -1270,15 +1279,6 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open a file by double clicking the file name line..
-        /// </summary>
-        public static string Tooltip_GrepResultUage {
-            get {
-                return ResourceManager.GetString("Tooltip_GrepResultUage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Hide work area window.
         /// </summary>
         public static string Tooltip_HideWorkAreaEditor {
@@ -1311,6 +1311,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_OpenFile {
             get {
                 return ResourceManager.GetString("Tooltip_OpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Ctrl key to open URL by Web browser.
+        /// </summary>
+        public static string Tooltip_RequireControlModifierForHyperlinkClick {
+            get {
+                return ResourceManager.GetString("Tooltip_RequireControlModifierForHyperlinkClick", resourceCulture);
             }
         }
         

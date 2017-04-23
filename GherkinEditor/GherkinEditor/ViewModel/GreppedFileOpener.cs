@@ -25,10 +25,26 @@ namespace Gherkin.ViewModel
             opener.OpenGreppedFile(multiFilesOpener, grepLine);
         }
 
+        public static bool ContainOpenableFilePath(string textLine, out int start_offset, out int lenth)
+        {
+            Tuple<string, int> fileNameAndLineNo = TryGetFileNameAndLineNo(textLine.Trim());
+            start_offset = -1;
+            lenth = -1;
+
+            if (File.Exists(fileNameAndLineNo.Item1))
+            {
+                start_offset = textLine.IndexOf(fileNameAndLineNo.Item1);
+                lenth = fileNameAndLineNo.Item1.Length;
+                return true;
+            }
+
+            return false;
+        }
+
         private GreppedFileOpener()
         {
         }
-
+        
         private void OpenGreppedFile(MultiFileOpener multiFilesOpener, string grepLine)
         {
             m_MultiFilesOpener = multiFilesOpener;
@@ -51,9 +67,9 @@ namespace Gherkin.ViewModel
             }
         }
 
-        private Tuple<string, int> TryGetFileNameAndLineNo(string grepLine)
+        private static Tuple<string, int> TryGetFileNameAndLineNo(string textLine)
         {
-            Match m = s_GrepLineRegex.Match(grepLine);
+            Match m = s_GrepLineRegex.Match(textLine);
             if (m.Success)
             {
                 string filePath = m.Groups[1].ToString();
@@ -62,7 +78,7 @@ namespace Gherkin.ViewModel
             }
             else
             {
-                string filePath = grepLine.Trim();
+                string filePath = textLine.Trim();
                 return new Tuple<string, int>(filePath, -1);
             }
         }

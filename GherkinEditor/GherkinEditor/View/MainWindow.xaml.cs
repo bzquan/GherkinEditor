@@ -86,9 +86,11 @@ namespace Gherkin.View
 
         private bool HaveRecentFilesChanged()
         {
-            if (this.recentFilesMenuItem.Items.Count != m_AppSettings.RecentFilesInfo.Count) return true;
+            int max_items = ConfigReader.GetValue<int>("max_recent_files_for_submenu", 20);
+            if ((this.recentFilesMenuItem.Items.Count < max_items) &&
+                (m_AppSettings.RecentFilesInfo.Count >= max_items)) return true;
 
-            for (int i = 0; i < this.recentFilesMenuItem.Items.Count; i++)
+            for (int i = 0; i < this.recentFilesMenuItem.Items.Count && i < m_AppSettings.RecentFilesInfo.Count; i++)
             {
                 MenuItem subMenuItem = this.recentFilesMenuItem.Items[i] as MenuItem;
                 if ((string)subMenuItem.Header != m_AppSettings.RecentFilesInfo[i].FilePath) return true;

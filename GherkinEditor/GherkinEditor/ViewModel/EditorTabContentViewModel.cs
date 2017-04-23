@@ -117,6 +117,11 @@ namespace Gherkin.ViewModel
             SubGherkinEditor?.UpdateColumnRuler();
         }
 
+        public void UpdateRequireControlModifierForHyperlinkClick()
+        {
+            MainGherkinEditor?.UpdateRequireControlModifierForHyperlinkClick();
+            SubGherkinEditor?.UpdateRequireControlModifierForHyperlinkClick();
+        }
 
         private GherkinEditor FocusedGherkinEditor
         {

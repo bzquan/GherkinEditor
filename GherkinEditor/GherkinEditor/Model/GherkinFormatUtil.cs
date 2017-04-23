@@ -41,18 +41,6 @@ namespace Gherkin.Model
             return trimmed.EndsWith("|", StringComparison.Ordinal);
         }
 
-        public static bool MakeFormattedTable(TextDocument document, DocumentLine line)
-        {
-            GherkinTableBuilder builder = new GherkinTableBuilder(document, line);
-            GherkinTable table = builder.Build();
-            if (table == null) return false;
-
-            string table_text = table.Format();
-            document.Replace(builder.Offset, builder.Length, table_text);
-
-            return true;
-        }
-
         public static Tuple<DocumentLine, string> FormatTable(TextDocument document, DocumentLine line, int endLine)
         {
             Tuple<DocumentLine, List<string>> table_rows = ExtractTableText(document, line, endLine);

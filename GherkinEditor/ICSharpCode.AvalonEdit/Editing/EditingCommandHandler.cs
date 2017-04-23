@@ -693,7 +693,7 @@ namespace ICSharpCode.AvalonEdit.Editing
                 args.Handled = true;
             }
         }
-
+          
         static string LineTextInCurrentCursor(TextArea textArea)
         {
             var caret = textArea.Caret;

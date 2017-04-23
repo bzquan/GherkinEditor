@@ -512,9 +512,6 @@
   <data name="DlgGrepLabel_SearchCondition" xml:space="preserve">
     <value>检索选项</value>
   </data>
-  <data name="Tooltip_GrepResultUage" xml:space="preserve">
-    <value>双击打开相应文件。</value>
-  </data>
   <data name="Message_ConfirmReloadFileMessage" xml:space="preserve">
     <value>确实以字符集重读文件吗？
 编辑内容将被丢弃。</value>
@@ -557,5 +554,11 @@
   </data>
   <data name="MenuSetting_ColumnRuler" xml:space="preserve">
     <value>列尺</value>
+  </data>
+  <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>用(Ctrl + Click)打开浏览器</value>
+  </data>
+  <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
+    <value>对于文本中的URL，打开Web浏览器时，需要用Ctrl键</value>
   </data>
 </root>

@@ -39,6 +39,7 @@ namespace Gherkin.Util
         bool IsMatchWholeWordInFind { get; set; }
         bool IsUseRegexInFind { get; set; }
         bool IsUseWildcardsInFind { get; set; }
+        bool RequireControlModifierForHyperlinkClick { get; set; }
 
         string FontFamilyName { get; set; }
         string FontFamilyName4NonGherkin { get; set; }
