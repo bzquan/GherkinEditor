@@ -24,6 +24,7 @@ using System.Windows.Documents;
 using ICSharpCode.NRefactory.Editor;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Rendering;
 
 namespace ICSharpCode.AvalonEdit.Utils
 {
@@ -50,27 +51,88 @@ namespace ICSharpCode.AvalonEdit.Utils
 		/// <summary>
 		/// Converts an IDocument to a Block and applies the provided highlighter.
 		/// </summary>
-		public static Block ConvertTextDocumentToBlock(IDocument document, IHighlighter highlighter)
+		public static Block ConvertTextDocumentToBlock(IDocument document, IHighlighter highlighter, List<VisualLineElementGenerator> visualLineElementGenerators)
 		{
 			if (document == null)
 				throw new ArgumentNullException("document");
 			Paragraph p = new Paragraph();
 			p.TextAlignment = TextAlignment.Left;
-			for (int lineNumber = 1; lineNumber <= document.LineCount; lineNumber++) {
-				if (lineNumber > 1)
-					p.Inlines.Add(new LineBreak());
-				var line = document.GetLineByNumber(lineNumber);
-				if (highlighter != null) {
-					HighlightedLine highlightedLine = highlighter.HighlightLine(lineNumber);
-					p.Inlines.AddRange(highlightedLine.ToRichText().CreateRuns());
-				} else {
-					p.Inlines.Add(document.GetText(line));
-				}
-			}
-			return p;
+			for (int lineNumber = 1; lineNumber <= document.LineCount; lineNumber++)
+            {
+                if (lineNumber > 1)
+                    p.Inlines.Add(new LineBreak());
+                var line = document.GetLineByNumber(lineNumber);
+                if (!AddVisualLineElements(visualLineElementGenerators, p, line))
+                {
+                    if (highlighter != null)
+                    {
+                        HighlightedLine highlightedLine = highlighter.HighlightLine(lineNumber);
+                        p.Inlines.AddRange(highlightedLine.ToRichText().CreateRuns());
+                    }
+                    else
+                    {
+                        p.Inlines.Add(document.GetText(line));
+                    }
+                }
+            }
+            return p;
 		}
-		
-		#if NREFACTORY
+
+        /// <summary>
+        /// Add Run elements, if available, to paragrapsh
+        /// Added by: bzquan@gmail.com
+        /// </summary>
+        /// <param name="visualLineElementGenerators"></param>
+        /// <param name="p"></param>
+        /// <param name="line"></param>
+        /// <returns>true if Run elements added</returns>
+        private static bool AddVisualLineElements(List<VisualLineElementGenerator> visualLineElementGenerators, Paragraph p, IDocumentLine line)
+        {
+            InlineObjectElementWithText inlineObject = GetVisualLineElement(visualLineElementGenerators, line);
+            if (inlineObject == null) return false;
+
+            // Leading text
+            if (inlineObject.LeadingText != null)
+            {
+                p.Inlines.Add(inlineObject.LeadingText);
+            }
+            // UIElement
+            p.Inlines.Add(inlineObject.Element);
+            // Trailing text
+            if (inlineObject.TrailingText != null)
+            {
+                p.Inlines.Add(inlineObject.TrailingText);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get a InlineObjectElementWithText from generators if availabe.
+        /// Added by: bzquan@gmail.com
+        /// </summary>
+        /// <param name="visualLineElementGenerators">generators</param>
+        /// <param name="line"></param>
+        /// <returns>an in line object if available or null </returns>
+        private static InlineObjectElementWithText GetVisualLineElement(List<VisualLineElementGenerator> visualLineElementGenerators, IDocumentLine line)
+        {
+            foreach (var generator in visualLineElementGenerators)
+            {
+                int offset = generator.GetFirstInterestedOffset(line.Offset);
+                if (offset >= 0)
+                {
+                    var elem = generator.ConstructElement(offset) as InlineObjectElementWithText;
+                    if (elem != null)
+                    {
+                        return elem;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+#if NREFACTORY
 		/// <summary>
 		/// Converts a readonly TextDocument to a RichText and applies the provided highlighting definition.
 		/// </summary>
@@ -83,12 +145,12 @@ namespace ICSharpCode.AvalonEdit.Utils
 				highlighter = null;
 			return ConvertTextDocumentToRichText(document, highlighter);
 		}
-		#endif
-		
-		/// <summary>
-		/// Converts an IDocument to a RichText and applies the provided highlighter.
-		/// </summary>
-		public static RichText ConvertTextDocumentToRichText(IDocument document, IHighlighter highlighter)
+#endif
+
+        /// <summary>
+        /// Converts an IDocument to a RichText and applies the provided highlighter.
+        /// </summary>
+        public static RichText ConvertTextDocumentToRichText(IDocument document, IHighlighter highlighter)
 		{
 			if (document == null)
 				throw new ArgumentNullException("document");
@@ -110,10 +172,10 @@ namespace ICSharpCode.AvalonEdit.Utils
 		/// <summary>
 		/// Creates a flow document from the editor's contents.
 		/// </summary>
-		public static FlowDocument CreateFlowDocumentForEditor(TextEditor editor)
+		public static FlowDocument CreateFlowDocumentForEditor(TextEditor editor, List<VisualLineElementGenerator> visualLineElementGenerators)
 		{
-			IHighlighter highlighter = editor.TextArea.GetService(typeof(IHighlighter)) as IHighlighter;
-			FlowDocument doc = new FlowDocument(ConvertTextDocumentToBlock(editor.Document, highlighter));
+            IHighlighter highlighter = editor.TextArea.GetService(typeof(IHighlighter)) as IHighlighter;
+			FlowDocument doc = new FlowDocument(ConvertTextDocumentToBlock(editor.Document, highlighter, visualLineElementGenerators));
 			doc.FontFamily = editor.FontFamily;
 			doc.FontSize = editor.FontSize;
 			return doc;

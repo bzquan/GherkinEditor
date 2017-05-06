@@ -168,6 +168,8 @@ namespace Gherkin.View
             }
             Properties.Settings.Default.Save();
             m_AppSettings.Save();
+
+            Application.Current.Shutdown(); // It will kill all threads that opened by application
         }
 
         private void OnDrop(object sender, DragEventArgs e)

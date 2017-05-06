@@ -21,6 +21,12 @@ namespace ICSharpCode.AvalonEdit.Rendering
         public string FilePath { get; set; }
 
         /// <summary>
+		/// Gets/Sets whether the user needs to press Control to click the link.
+		/// The default value is false.
+        /// </summary>
+        public bool RequireControlModifierForClick { get; set; } = false;
+
+        /// <summary>
         /// The action will be called with FilePath as parameter if file is clicked.
         /// </summary>
         public Action<string> FilePathClickedHandler { get; set; }
@@ -49,7 +55,12 @@ namespace ICSharpCode.AvalonEdit.Rendering
         /// </summary>
         protected virtual bool LinkIsClickable()
         {
-            return (FilePath != null);
+            if (FilePath == null) return false;
+
+            if (RequireControlModifierForClick)
+                return (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control;
+            else
+                return true;
         }
 
         /// <inheritdoc/>
@@ -63,8 +74,6 @@ namespace ICSharpCode.AvalonEdit.Rendering
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
-                                                         Justification = "I've seen Process.Start throw undocumented exceptions when the mail client / web browser is installed incorrectly")]
         protected internal override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && !e.Handled && LinkIsClickable())
@@ -81,7 +90,8 @@ namespace ICSharpCode.AvalonEdit.Rendering
             return new VisualLineFilePathText(ParentVisualLine, length)
             {
                 FilePath = this.FilePath,
-                FilePathClickedHandler = this.FilePathClickedHandler
+                FilePathClickedHandler = this.FilePathClickedHandler,
+                RequireControlModifierForClick = this.RequireControlModifierForClick
             };
         }
     }

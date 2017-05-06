@@ -128,8 +128,8 @@ namespace Gherkin
         {
             if (!e.Handled)
             {
-                e.Handled = true;
                 if (!IsStartingUp) ShowExceptionMessages(e.Exception);
+                e.Handled = true;
             }
         }
 

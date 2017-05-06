@@ -313,6 +313,24 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show IntelliSense.
+        /// </summary>
+        public static string MenuEdit_ContextShowCodeCompletion {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextShowCodeCompletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete tab.
+        /// </summary>
+        public static string MenuEdit_ContextTabBackward {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextTabBackward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string MenuEdit_Copy {
@@ -547,6 +565,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic Help.
+        /// </summary>
+        public static string MenuHelp_GherkinHelp {
+            get {
+                return ResourceManager.GetString("MenuHelp_GherkinHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gherkin keywords.
         /// </summary>
         public static string MenuHelp_GherkinKeywords {
@@ -561,6 +588,15 @@ namespace Gherkin.Properties {
         public static string MenuHelp_Help {
             get {
                 return ResourceManager.GetString("MenuHelp_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LaTeX Math Symbols.
+        /// </summary>
+        public static string MenuHelp_LaTeXSymbols {
+            get {
+                return ResourceManager.GetString("MenuHelp_LaTeXSymbols", resourceCulture);
             }
         }
         
@@ -610,11 +646,11 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Column ruler.
+        ///   Looks up a localized string similar to Column ruler position.
         /// </summary>
-        public static string MenuSetting_ColumnRuler {
+        public static string MenuSetting_ColumnRulerPosition {
             get {
-                return ResourceManager.GetString("MenuSetting_ColumnRuler", resourceCulture);
+                return ResourceManager.GetString("MenuSetting_ColumnRulerPosition", resourceCulture);
             }
         }
         
@@ -624,6 +660,15 @@ namespace Gherkin.Properties {
         public static string MenuSetting_ConstantsColor {
             get {
                 return ResourceManager.GetString("MenuSetting_ConstantsColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert tabs to spaces.
+        /// </summary>
+        public static string MenuSetting_ConvertTabsToSpaces {
+            get {
+                return ResourceManager.GetString("MenuSetting_ConvertTabsToSpaces", resourceCulture);
             }
         }
         
@@ -673,7 +718,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting keywords highlighting.
+        ///   Looks up a localized string similar to Gherkin keywords highlighting.
         /// </summary>
         public static string MenuSetting_GherkinHighlighting {
             get {
@@ -718,7 +763,7 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset all highlighting colors.
+        ///   Looks up a localized string similar to Reset highlighting colors.
         /// </summary>
         public static string MenuSetting_ResetHighlightingColor {
             get {
@@ -736,6 +781,24 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detail settings.
+        /// </summary>
+        public static string MenuSetting_SettingMenuHeader {
+            get {
+                return ResourceManager.GetString("MenuSetting_SettingMenuHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show column ruler.
+        /// </summary>
+        public static string MenuSetting_ShowColumnRuler {
+            get {
+                return ResourceManager.GetString("MenuSetting_ShowColumnRuler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show current line border.
         /// </summary>
         public static string MenuSetting_ShowCurrentLineBorder {
@@ -745,11 +808,47 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show end of line.
+        /// </summary>
+        public static string MenuSetting_ShowEndOfLine {
+            get {
+                return ResourceManager.GetString("MenuSetting_ShowEndOfLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show scenario index by default.
         /// </summary>
         public static string MenuSetting_ShowScenarioIndexByDefault {
             get {
                 return ResourceManager.GetString("MenuSetting_ShowScenarioIndexByDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show spaces.
+        /// </summary>
+        public static string MenuSetting_ShowSpaces {
+            get {
+                return ResourceManager.GetString("MenuSetting_ShowSpaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show tabs.
+        /// </summary>
+        public static string MenuSetting_ShowTabs {
+            get {
+                return ResourceManager.GetString("MenuSetting_ShowTabs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special symbols.
+        /// </summary>
+        public static string MenuSetting_SpecialSymbols {
+            get {
+                return ResourceManager.GetString("MenuSetting_SpecialSymbols", resourceCulture);
             }
         }
         
@@ -840,6 +939,69 @@ namespace Gherkin.Properties {
         public static string MenuTab_Rename {
             get {
                 return ResourceManager.GetString("MenuTab_Rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as PDF.
+        /// </summary>
+        public static string MenuTool_SaveAsPDF {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as PDF(Print version).
+        /// </summary>
+        public static string MenuTool_SaveAsPDFBySharpPDF {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsPDFBySharpPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as PDF(by Word).
+        /// </summary>
+        public static string MenuTool_SaveAsPDFByWord {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsPDFByWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as RTF.
+        /// </summary>
+        public static string MenuTool_SaveAsRTF {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsRTF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as word file(by Word).
+        /// </summary>
+        public static string MenuTool_SaveAsWord {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as XPS.
+        /// </summary>
+        public static string MenuTool_SaveAsXPS {
+            get {
+                return ResourceManager.GetString("MenuTool_SaveAsXPS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tools.
+        /// </summary>
+        public static string MenuTool_Tools {
+            get {
+                return ResourceManager.GetString("MenuTool_Tools", resourceCulture);
             }
         }
         
@@ -1062,12 +1224,20 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C++ test codes are generated.
-        ///You can copy the generated files to a folder by &quot;Copy file to&quot; context menu..
+        ///   Looks up a localized string similar to C++ test codes are generated..
         /// </summary>
         public static string Message_CppTestCodeGeneration {
             get {
                 return ResourceManager.GetString("Message_CppTestCodeGeneration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy file to.
+        /// </summary>
+        public static string Message_DlgCopyFileToTitle {
+            get {
+                return ResourceManager.GetString("Message_DlgCopyFileToTitle", resourceCulture);
             }
         }
         
@@ -1207,6 +1377,25 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear status message.
+        /// </summary>
+        public static string Tooltip_ClearStatus {
+            get {
+                return ResourceManager.GetString("Tooltip_ClearStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. Copy file by &quot;Copy file to&quot; context menu.
+        ///2. Use Ctr key to open a file..
+        /// </summary>
+        public static string Tooltip_CPPCodeGenResultUage {
+            get {
+                return ResourceManager.GetString("Tooltip_CPPCodeGenResultUage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use default color.
         /// </summary>
         public static string Tooltip_DefaultHighlighingColor {
@@ -1275,6 +1464,33 @@ namespace Gherkin.Properties {
         public static string Tooltip_FontSize {
             get {
                 return ResourceManager.GetString("Tooltip_FontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font size for Gherkin document.
+        /// </summary>
+        public static string Tooltip_FontSizeForGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontSizeForGherkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font size for Non Gherkin document.
+        /// </summary>
+        public static string Tooltip_FontSizeForNonGherkin {
+            get {
+                return ResourceManager.GetString("Tooltip_FontSizeForNonGherkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide sub editor.
+        /// </summary>
+        public static string Tooltip_HideSubEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_HideSubEditor", resourceCulture);
             }
         }
         
@@ -1365,6 +1581,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_ShowScenarioIndex {
             get {
                 return ResourceManager.GetString("Tooltip_ShowScenarioIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show sub editor.
+        /// </summary>
+        public static string Tooltip_ShowSubEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowSubEditor", resourceCulture);
             }
         }
         

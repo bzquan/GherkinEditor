@@ -56,11 +56,34 @@ namespace ICSharpCode.AvalonEdit.Rendering
 			return new InlineObjectRun(1, this.TextRunProperties, this.Element);
 		}
 	}
-	
-	/// <summary>
-	/// A text run with an embedded UIElement.
-	/// </summary>
-	public class InlineObjectRun : TextEmbeddedObject
+
+    /// <summary>
+    /// A inline UIElement in the document with leading and trailing text.
+    /// Leading and trailing are used in DocumentPrinter.
+    /// Added by: bzquan@gmail.com
+    /// </summary>
+    public class InlineObjectElementWithText : InlineObjectElement
+    {
+        /// <inheritdoc/>
+        public InlineObjectElementWithText(int documentLength, UIElement element) : base(documentLength, element)
+        {
+        }
+
+        /// <summary>
+        /// Leading text of UIElement. Default is null.
+        /// </summary>
+        public string LeadingText { get; set; }
+
+        /// <summary>
+        /// Trailing text of UIElement. Default is null.
+        /// </summary>
+        public string TrailingText { get; set; }
+    }
+
+    /// <summary>
+    /// A text run with an embedded UIElement.
+    /// </summary>
+    public class InlineObjectRun : TextEmbeddedObject
 	{
 		UIElement element;
 		int length;

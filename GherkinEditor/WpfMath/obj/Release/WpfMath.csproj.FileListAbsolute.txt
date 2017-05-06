@@ -1,0 +1,13 @@
+D:\Program\GherkinEditor\WpfMath\bin\Release\WpfMath.dll
+D:\Program\GherkinEditor\WpfMath\bin\Release\WpfMath.pdb
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.csprojResolveAssemblyReference.cache
+D:\Program\GherkinEditor\WpfMath\obj\Release\Controls\FormulaControl.g.cs
+D:\Program\GherkinEditor\WpfMath\obj\Release\GeneratedInternalTypeHelper.g.cs
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath_MarkupCompile.cache
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath_MarkupCompile.lref
+D:\Program\GherkinEditor\WpfMath\obj\Release\Controls\FormulaControl.baml
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.g.resources
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.Properties.Resources.resources
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.csproj.GenerateResource.Cache
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.dll
+D:\Program\GherkinEditor\WpfMath\obj\Release\WpfMath.pdb

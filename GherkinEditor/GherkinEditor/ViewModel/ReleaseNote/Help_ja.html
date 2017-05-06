@@ -1,0 +1,79 @@
+﻿<meta charset="UTF-8">
+<font face="Meiryo">
+    <h3><font size="5">簡易ヘルプ</font></h3>
+
+    <font size="3">
+        <h4>機能</h4>
+        <ol>
+            <li>キーワードのハイライト</li>
+            <li>Gherkin編集中のIntelliSense</li>
+            <li>Gherkinテーブルの動的整形</li>
+            <li>Gherkin文書内での画像表示</li>
+            <li>LaTex形式の数式</li>
+            <li>日本語のGherkinサポート</li>
+            <li>Gherkinの実行用C++コードの生成</li>
+        </ol>
+
+        <h4>編集</h4>
+
+        <h5>日本語Gherkin</h5>
+        <p>
+            日本語にてGherkin文書を書くためには、下記言語タグを文書先頭に描く必要があります。<br />
+            <b>
+                <font color="green">#language: ja
+                </font>
+            </b>
+        </p>
+
+        <h5>画像表示</h5>
+        <p>
+            下記MarkDownタグにて画像の表示が可能です。拡大率の範囲は10から500であり、省略可能です。デフォルトの拡大率は100です。
+            なお、画像の最大縦横は1024画素以内に調整されます。タグ「IMAGE」は大小文字を区別しません。<br />
+            <b>
+                <font color="blue">
+                    ![IMAGE 拡大率](画像ファイル名)、例えば、<br />
+                    ![IMAGE 50](Gherkin.png)
+                </font>
+            </b>
+            <br />
+            画像ファイルはGherkin文書のフォルダー、またはその下位フォルダーに置く必要があります。例えば、Images/Gherkin.png。<br />
+            画面の上下分割状態で、下部エディタで画像が表示されます。このエディタをサブエディタとも言います。
+        </p>
+
+        <h5>LaTex形式の数式</h5>
+        <p>
+            下記MarkDownタグにて数式の表示が可能です。拡大率の範囲は10から100であり、省略可能です。デフォルトの拡大率は20です。
+            タグ「LaTex」は大小文字を区別しません。<br />
+            <b>
+                <font color="blue">
+                    ![LaTex 拡大率](LaTeX形式のテキスト)、例えば、<br />
+                    ![LaTex 20](\sqrt[3]{\frac{ax^2+bx+\pi}{x^3}})
+                </font>
+            </b><br />
+            数式はサブエディタ上に表示されます。
+        </p>
+        <p>
+            例
+            <ul>
+                <li>合計式に上限と下限を指定できます。例えば、\sum_{下限}^{上限}</li>
+            </ul>
+        </p>
+
+        <h5>自動生成されたC++ファイルのコピー</h5>
+        <ol>
+            <li>コンパイラーがC++での日本語シンボルをサポートしてくれる場合（例えば、Visual Studio）、"C++でUnicode名称を使用"をチックします。</li>
+            <li>「C++テストコード生成」メニューにてC++テストコードを生成します。</li>
+            <li>最下位の作業領域のコンテキストメニューにて生成されたC++ファイルを必要なフォルダーにコピーします。</li>
+        </ol>
+
+        <h5>PDFなど文書への変換</h5>
+        <ul>
+            <li>ツールメニューにて、PDF、Word, XPSまたはRTFを生成できます。<br />
+                Wordフィアルを生成には、MS Wordが必要です。
+                WordにてPDFフィアルを生成には、MS Word2007以上が必要です。
+            </li>
+            <li>Windows 10を使用している場合は、印刷時に"Microsoft Print To PDF"仮想プリンターにて、PDFファイルが生成できます。Windows 10では、"Microsoft Print To PDF"が標準インストールされます。</li>
+            <li>印刷時に"Microsoft XPS Document Writer"仮想プリンターにて、XPSファイルが生成できます。</li>
+        </ul>
+    </font>
+</font>

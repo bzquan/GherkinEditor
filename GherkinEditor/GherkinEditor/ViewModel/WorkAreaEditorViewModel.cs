@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using Gherkin.Util;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
-using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
-using Gherkin.Model;
-using ICSharpCode.AvalonEdit.Editing;
 using System.IO;
+using Microsoft.Win32;
 
 namespace Gherkin.ViewModel
 {
@@ -20,24 +18,34 @@ namespace Gherkin.ViewModel
         private GherkinEditor m_WorkAreaEditor;
         private IAppSettings m_AppSettings;
         private MultiFileOpener m_MultiFilesOpener;
+        private bool m_ShowCppCodeGenResultUsagePopup;
+        private bool m_ShowMessageWindow;
+
+        public event Action MessageWindowHiddenEvent;
 
         public WorkAreaEditorViewModel(TextEditor editor, MultiFileOpener multiFilesOpener, IAppSettings appSettings)
         {
             m_WorkAreaEditor = new GherkinEditor(editor,
+                                                 null, // subEditor,
+                                                 editor.Document,
                                                  appSettings,
                                                  new FontFamily(appSettings.FontFamilyName),
-                                                 appSettings.FontSize);
-            editor.TextArea.CopyFileToHandler = CopyFileTo;
+                                                 appSettings.FontSize,
+                                                 installElementGenerators: false);
+            editor.Options.CopyFileToHandler = CopyFileTo;
             editor.Options.RequireControlModifierForHyperlinkClick = false;     // Directly open web browser for work area instead of using Ctrl key
             m_MultiFilesOpener = multiFilesOpener;
             m_AppSettings = appSettings;
 
             m_WorkAreaEditor.TextEditor.Options.ContainOpenableFilePath = ContainOpenableFilePath;
             m_WorkAreaEditor.TextEditor.Options.FilePathClickedHandler = OnFilePathClickedHandler;
+
+            EventAggregator<WindowDeactivatedArg>.Instance.Event += OnWindowDeactivatedEvent;
         }
 
-        public ICommand ShowMessageWindowCmd => new DelegateCommandNoArg(OnShowMessageWindow);
-        public ICommand HideMessageWindowCmd => new DelegateCommandNoArg(OnHideMessageWindow);
+        public ICommand ShowMessageWindowCmd => new DelegateCommandNoArg(OnShowMessageWindow, CanShowMessageWindow);
+        public ICommand HideMessageWindowCmd => new DelegateCommandNoArg(OnHideMessageWindow, CanHideMessageWindow);
+        public ICommand CloseCPPCodeGenResultUagePopupCmd => new DelegateCommandNoArg(OnCloseCPPCodeGenResultUsagePopup);
 
         private bool ContainOpenableFilePath(string text, out int start_offset, out int lenth)
         {
@@ -56,13 +64,15 @@ namespace Gherkin.ViewModel
 
         public bool ShowMessageWindow
         {
-            get { return m_AppSettings.ShowMessageWindow; }
+            get { return m_ShowMessageWindow; }
             set
             {
-                if (m_AppSettings.ShowMessageWindow == value) return;
-                m_AppSettings.ShowMessageWindow = value;
-                base.OnPropertyChanged(nameof(MessageWindowIcon));
-                base.OnPropertyChanged(nameof(HideMessageWindow));
+                m_ShowMessageWindow = value;
+                if (m_ShowMessageWindow)
+                    m_WorkAreaEditor.TextEditor.Focus();
+                else
+                    MessageWindowHiddenEvent?.Invoke();
+
                 base.OnPropertyChanged(nameof(HideMessageWindow));
                 base.OnPropertyChanged();
             }
@@ -75,17 +85,19 @@ namespace Gherkin.ViewModel
 
         private void OnHideMessageWindow()
         {
+            ShowCPPCodeGenResultUsagePopup = false;
             ShowMessageWindow = false;
         }
 
-        public DrawingImage MessageWindowIcon
+        private bool CanShowMessageWindow() => HideMessageWindow;
+
+        private bool CanHideMessageWindow() => ShowMessageWindow;
+
+        public void ShowSearchPanel()
         {
-            get
+            if (ShowMessageWindow)
             {
-                if (ShowMessageWindow)
-                    return Util.Util.DrawingImageByOverlapping("MessageWindow.png", "Tick64.png");
-                else
-                    return Util.Util.DrawingImageFromResource("MessageWindow.png");
+                m_WorkAreaEditor.ShowSearchPanel();
             }
         }
 
@@ -95,13 +107,16 @@ namespace Gherkin.ViewModel
             searchHighlightingTransformer.SearchRegex = regex;
         }
 
-        public string MessageOfGenCPPTestCode
+        public void ShowMessageOfGenCPPTestCode(string message, bool IsCodeGenerationSuccess)
         {
-            set
+            Clear();
+            ShowMessageWindow = true;
+            m_WorkAreaEditor.TextEditor.Options.RequireControlModifierForHyperlinkClick = true;
+            m_WorkAreaEditor.AppendText(message);
+
+            if (IsCodeGenerationSuccess)
             {
-                Clear();
-                ShowMessageWindow = true;
-                m_WorkAreaEditor.AppendText(value);
+                ShowCPPCodeGenResultUsagePopup = true;
             }
         }
 
@@ -115,6 +130,26 @@ namespace Gherkin.ViewModel
             m_WorkAreaEditor.AppendText(text);
         }
 
+        public bool ShowCPPCodeGenResultUsagePopup
+        {
+            get { return m_ShowCppCodeGenResultUsagePopup; }
+            set
+            {
+                m_ShowCppCodeGenResultUsagePopup = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void OnWindowDeactivatedEvent(object sender, WindowDeactivatedArg arg)
+        {
+            ShowCPPCodeGenResultUsagePopup = false;
+        }
+
+        private void OnCloseCPPCodeGenResultUsagePopup()
+        {
+            ShowCPPCodeGenResultUsagePopup = false;
+        }
+
         public void OnGrepStarted()
         {
             Clear();
@@ -123,29 +158,41 @@ namespace Gherkin.ViewModel
 
         public void OnGrepFinished()
         {
+            m_WorkAreaEditor.TextEditor.Options.RequireControlModifierForHyperlinkClick = false;
             m_WorkAreaEditor.ScrollCursorTo(1, 1);
         }
 
         private void CopyFileTo(string filePath)
         {
-            var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog();
-            dialog.FileName = m_AppSettings.LastFolderToCopyFile;
-
-            if (dialog.ShowDialog() != true) return;
-
             try
             {
-                m_AppSettings.LastFolderToCopyFile = dialog.FileName;
-                string dstPath = Path.Combine(dialog.FileName, Path.GetFileName(filePath));
-                File.Copy(filePath, dstPath, overwrite: true);
+                string defaultDestPath = Path.Combine(m_AppSettings.LastFolderToCopyFile, Path.GetFileName(filePath));
+                string destPath = GetSavingFilePath(defaultDestPath);
+                if (string.IsNullOrWhiteSpace(destPath)) return;
 
-                string copyResultMsg = string.Format(Properties.Resources.Message_CopyFileToResult, dstPath);
+                m_AppSettings.LastFolderToCopyFile = Path.GetDirectoryName(destPath);
+                File.Copy(filePath, destPath, overwrite: true);
+
+                string copyResultMsg = string.Format(Properties.Resources.Message_CopyFileToResult, destPath);
                 EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(copyResultMsg));
             }
             catch (Exception ex)
             {
                 EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(ex.Message));
             }
+        }
+
+        private string GetSavingFilePath(string defaultFilePath)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Title = Properties.Resources.Message_DlgCopyFileToTitle;
+            dlg.FileName = Path.GetFileName(defaultFilePath);
+            dlg.DefaultExt = Path.GetExtension(defaultFilePath);
+            dlg.Filter = "C++ File(*.cpp)|*.cpp|All Files (*.*)|*.*";
+            dlg.FilterIndex = 1;
+            bool? result = dlg.ShowDialog();
+
+            return (result == true) ? dlg.FileName : null;
         }
     }
 }

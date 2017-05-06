@@ -26,11 +26,18 @@ namespace ICSharpCode.AvalonEdit.Indentation
 	/// </summary>
 	public interface IIndentationStrategy
 	{
-		/// <summary>
-		/// Sets the indentation for the specified line.
-		/// Usually this is constructed from the indentation of the previous line.
-		/// </summary>
-		void IndentLine(TextDocument document, DocumentLine line);
+        /// <summary>
+        /// Wheather to support multiple lines indenting
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns>true if support multiple lines indenting</returns>
+        bool SupportMultiLinesIndent(TextDocument document);
+
+        /// <summary>
+        /// Sets the indentation for the specified line.
+        /// Usually this is constructed from the indentation of the previous line.
+        /// </summary>
+        void IndentLine(TextDocument document, DocumentLine line);
 		
 		/// <summary>
 		/// Reindents a set of lines.

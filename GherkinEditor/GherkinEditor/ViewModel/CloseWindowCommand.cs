@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Gherkin.ViewModel;
+using Gherkin.Util;
 
 namespace Gherkin.ViewModel
 {

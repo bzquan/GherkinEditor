@@ -1099,18 +1099,21 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// Occurs when text inside the TextArea was copied.
 		/// </summary>
 		public event EventHandler<TextEventArgs> TextCopied;
-		
-		internal void OnTextCopied(TextEventArgs e)
-		{
-			if (TextCopied != null)
-				TextCopied(this, e);
-		}
+
+        internal void OnTextCopied(TextEventArgs e)
+        {
+            TextCopied?.Invoke(this, e);
+        }
 
         /// <summary>
-        /// Copy file to delegate. String is the file path to be copied.
-        /// Note: bzquan@gmail.com
+        /// Occurs when text was pasted.
         /// </summary>
-        public Action<string> CopyFileToHandler { get; set; }
+        public event EventHandler<TextEventArgs> TextPasted;
+
+        internal void OnTextPasted(TextEventArgs e)
+        {
+            TextPasted?.Invoke(this, e);
+        }
     }
 
     /// <summary>

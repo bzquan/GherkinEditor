@@ -11,13 +11,12 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using Microsoft.Win32;
+using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 using ICSharpCode.AvalonEdit;
 using Gherkin.Util;
 using Gherkin.Model;
-using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using System.Windows.Media.Imaging;
 using Gherkin.View;
 
 namespace Gherkin.ViewModel
@@ -34,27 +33,34 @@ namespace Gherkin.ViewModel
         private TabControl m_EditorTabControl;
         private MultiFileOpener m_MultiFilesOpener;
 
+        private TextEditor MainTextEditor => CurrentEditor?.MainEditor;
+
         public ObservableCollection<EditorTabItem> TabPanels { get; private set; } = new ObservableCollection<EditorTabItem>();
 
         public ICommand SaveAllCmd => new DelegateCommandNoArg(OnSaveAll);
+        public ICommand SaveAsPDFByWordCmd => new DelegateCommandNoArg(OnSaveAsPDFByWord, CanSaveAsOtherFormat);
+        public ICommand SaveAsPDFBySharpPDFCmd => new DelegateCommandNoArg(OnSaveAsPDFBySharpPDF, CanSaveAsOtherFormat);
+        public ICommand SaveAsXPSCmd => new DelegateCommandNoArg(OnSaveAsXPS, CanSaveAsOtherFormat);
+        public ICommand SaveAsRTFCmd => new DelegateCommandNoArg(OnSaveAsRTF, CanSaveAsOtherFormat);
+        public ICommand SaveAsWordCmd => new DelegateCommandNoArg(OnSaveAsWord, CanSaveAsOtherFormat);
         public ICommand OpenFileInNewWindowCmd => new DelegateCommandNoArg(OnOpenFileInNewWindow);
         public ICommand OpenRecentFileCmd => new DelegateCommand<string>(OnOpenRecentFile);
         public ICommand OpenCurrentFolderCmd => new DelegateCommandNoArg(OnOpenFolder);
         public ICommand OpenAllFoldingsCmd => new DelegateCommandNoArg(OnOpenAllFoldings);
 
-        public ICommand SetGherkinHighlightingCmd => new DelegateCommandNoArg(OnSetGherkinHighlighting);
         public ICommand GenCPPTestCodeCmd => new DelegateCommandNoArg(OnGenCPPTestCode);
         public ICommand GrepCmd => new DelegateCommandNoArg(OnGrep);
         public ICommand ShowCodePageListCmd => new DelegateCommandNoArg(OnShowCodePageList);
+        public ICommand ShowLaTeXSymbolsCmd => new DelegateCommandNoArg(OnShowLaTeXSymbols);
+        public ICommand ShowHelpCmd => new DelegateCommandNoArg(OnShowHelp);
+        public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus);
 
-        public FontViewModel FontViewModel { get; private set; }
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
         public CodePageListPopupViewModel CodePageListPopupViewModel { get; private set; }
 
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
-                                FontViewModel fontViewModel,
                                 GherkinSettingViewModel gherkinSettings,
                                 AboutViewModel aboutViewModel,
                                 CodePageListPopupViewModel codePageListPopupViewModel)
@@ -65,12 +71,11 @@ namespace Gherkin.ViewModel
             m_MultiFilesOpener.OpeningTabEvent += OnOpeningTab;
             m_MultiFilesOpener.LoadFilesCompletedEvent += OnLoadFilesCompleted;
 
-            FontViewModel = fontViewModel;
             GherkinSettings = gherkinSettings;
             GherkinSettings.TabPanels = TabPanels;
             AboutViewModel = aboutViewModel;
             CodePageListPopupViewModel = codePageListPopupViewModel;
-            CodePageListPopupViewModel.CodePageChangedEvent += delegate { base.OnPropertyChanged(nameof(Codepage)); }; 
+            CodePageListPopupViewModel.CodePageChangedEvent += delegate { base.OnPropertyChanged(nameof(Codepage)); };
 
             GherkinSettings.ChangeFoldingTextColorOfAvalonEdit();
             EventAggregator<DeleteEditorTabRequestedArg>.Instance.Event += OnDeleteEditorTab;
@@ -84,7 +89,11 @@ namespace Gherkin.ViewModel
             EventAggregator<FileSavedAsArg>.Instance.Event += OnFileSavedAs;
             EventAggregator<OpenNewGherkinEditorRequestedArg>.Instance.Event += OnOpenNewGherkinEditorRequested;
             EventAggregator<EditorLoadedArg>.Instance.Event += OnEditorLoaded;
-            EventAggregator<FileLoadedArg>.Instance.Event += OnFileLoaded; ;
+            EventAggregator<FileLoadedArg>.Instance.Event += OnFileLoaded;
+            EventAggregator<ShowSubEditorRequestArg>.Instance.Event += OnShowSplitViewRequested;
+
+            // register it to GherkinEditerCommand
+            GherkinEditerCommand.GherkinViewModel = this;
         }
 
         public TabControl EditorTabControl
@@ -103,6 +112,12 @@ namespace Gherkin.ViewModel
         public void SetMessageTextEditor(TextEditor editor)
         {
             WorkAreaEditor = new WorkAreaEditorViewModel(editor, m_MultiFilesOpener, m_AppSettings);
+            WorkAreaEditor.MessageWindowHiddenEvent += OnWorkAreaEditorMessageWindowHiddenEvent;
+        }
+
+        private void OnWorkAreaEditorMessageWindowHiddenEvent()
+        {
+            MainTextEditor?.Focus();
         }
 
         public void SaveLastSelectedFile()
@@ -138,14 +153,17 @@ namespace Gherkin.ViewModel
         }
 
         public bool HasEditorLoaded => (MainTextEditor != null);
-        private TextEditor MainTextEditor => CurrentEditor?.MainEditor;
-
+        public bool IsFeatureFile => GherkinUtil.IsFeatureFile(CurrentFilePath);
         public void ShowFindReplace()
         {
-            CurrentEditor?.ShowSearchPanel();
+            bool isShown = CurrentEditor?.ShowSearchPanel() == true;
+            if (!isShown)
+            {
+                WorkAreaEditor.ShowSearchPanel();
+            }
         }
 
-         private EditorTabContentViewModel CurrentEditor
+        public EditorTabContentViewModel CurrentEditor
         {
             get { return m_CurrentEditor; }
             set
@@ -160,19 +178,25 @@ namespace Gherkin.ViewModel
             ShowScenarioIndex = CurrentEditor?.HideScenarioIndex == false;
             ShowSplitView = CurrentEditor?.HideSplitView == false;
 
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
             base.OnPropertyChanged(nameof(IsCloseTablesFolding));
             base.OnPropertyChanged(nameof(IsCloseScenarioFolding));
             base.OnPropertyChanged(nameof(CurrentFontFamily));
             base.OnPropertyChanged(nameof(CurrentFontSize));
             base.OnPropertyChanged(nameof(Codepage));
+            base.OnPropertyChanged(nameof(IsFeatureFile));
         }
 
         public string CurrentFilePath => CurrentEditor?.CurrentFilePath ?? "";
+        private void NotifyCurrentFilePathChanged()
+        {
+            base.OnPropertyChanged(nameof(CurrentFilePath));
+            base.OnPropertyChanged(nameof(IsFeatureFile));
+        }
 
         private void OnFileSavedAs(object sender, FileSavedAsArg arg)
         {
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
         }
 
         public FontFamily CurrentFontFamily
@@ -186,6 +210,15 @@ namespace Gherkin.ViewModel
                     CurrentEditor.FontFamily = new FontFamily(name);
                 }
                 base.OnPropertyChanged();
+            }
+        }
+
+        public List<FontFamily> SystemFonts
+        {
+            get
+            {
+                var fontProvider = new FontFamilyItemsSource();
+                return fontProvider.SystemFonts;
             }
         }
 
@@ -212,6 +245,11 @@ namespace Gherkin.ViewModel
             }
         }
 
+        private void OnClearStatus()
+        {
+            Status = "Ready";
+        }
+
         public string Codepage
         {
             get
@@ -228,9 +266,33 @@ namespace Gherkin.ViewModel
             CodePageListPopupViewModel.CurrentEditor = CurrentEditor;
             base.OnPropertyChanged(nameof(CanShowCodePageList));
         }
+
         public bool CanShowCodePageList =>
                     (CurrentEditor?.CurrentFilePath != null) &&
                     File.Exists(CurrentFilePath);
+
+        private void OnShowHelp()
+        {
+            var window = new HelpWindow(new HelpViewModel(m_AppSettings));
+            window.Show();
+        }
+
+        private void OnShowLaTeXSymbols()
+        {
+            string laTexSymbolsFile = "References/LaTeXSymbols.pdf";
+            string laTexSymbolsFilePath = Path.Combine(FileUtil.StartupFolder(), laTexSymbolsFile);
+            if (File.Exists(laTexSymbolsFilePath))
+            {
+                Process.Start(laTexSymbolsFilePath);
+            }
+            else
+            {
+                MessageBox.Show(laTexSymbolsFile + " does not exist!",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
+        }
 
         private void OnFileLoaded(object sender, FileLoadedArg arg)
         {
@@ -312,6 +374,11 @@ namespace Gherkin.ViewModel
             }
         }
 
+        private void OnShowSplitViewRequested(object sender, ShowSubEditorRequestArg arg)
+        {
+            if (!ShowSplitView) ShowSplitView = true;
+        }
+
         public Brush CurrentLineBackground
         {
             get { return Brushes.Red; }
@@ -358,7 +425,7 @@ namespace Gherkin.ViewModel
         private void OnOpeningTab(EditorTabItem tab)
         {
             SelectTab(tab);
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
         }
 
         /// <summary>
@@ -369,7 +436,7 @@ namespace Gherkin.ViewModel
         private void OnLoadFilesCompleted()
         {
             SelectLastSelectedFile();
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
 
             m_MultiFilesOpener.LoadFilesCompletedEvent -= OnLoadFilesCompleted;
         }
@@ -408,7 +475,8 @@ namespace Gherkin.ViewModel
         {
             var tab = m_MultiFilesOpener.CreateEmtyTab();
             SelectTab(tab);
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
+
             return tab;
         }
 
@@ -460,17 +528,59 @@ namespace Gherkin.ViewModel
             }
         }
 
+        private void OnSaveAsPDFByWord()
+        {
+            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            pdfFileSaver.SaveAsPDFByWord();
+        }
+
+        private void OnSaveAsPDFBySharpPDF()
+        {
+            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            pdfFileSaver.SaveAsPDFBySharpPDF();
+        }
+
+
+        private void OnSaveAsXPS()
+        {
+            var xpsFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            xpsFileSaver.SaveAsXPS();
+        }
+
+        private void OnSaveAsRTF()
+        {
+            var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            fileSaver.SaveAsRTF();
+        }
+
+        private void OnSaveAsWord()
+        {
+            var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            fileSaver.SaveAsDocx();
+        }
+
+        private bool CanSaveAsOtherFormat()
+        {
+            return string.IsNullOrEmpty(CurrentEditor?.Document.FileName) == false;
+        }
+
         public void OnPrint()
         {
-            Mouse.OverrideCursor = Cursors.Wait;
-            Printing.PrintDialog(CurrentEditor.MainEditor, CurrentFilePath);
+            if (Printing.PageSetupDialog(CurrentEditor.SubEditor))
+            {
+                Printing.PrintDialog(CurrentEditor.SubEditor, PrintTitle);
+            }
         }
 
         public void OnPrintPreview()
         {
-            Mouse.OverrideCursor = Cursors.Wait;
-            Printing.PrintPreviewDialog(CurrentEditor.MainEditor, CurrentFilePath);
+            if (Printing.PageSetupDialog(CurrentEditor.SubEditor))
+            {
+                Printing.PrintPreviewDialog(CurrentEditor.SubEditor, PrintTitle);
+            }
         }
+
+        private string PrintTitle => Path.GetFileName(CurrentFilePath);
 
         private void OnDeleteEditorTab(object sender, DeleteEditorTabRequestedArg arg)
         {
@@ -481,7 +591,7 @@ namespace Gherkin.ViewModel
             if (TabPanels.Count == 1)
             {
                 CurrentEditor?.ChangeToEmptyFile();
-                base.OnPropertyChanged(nameof(CurrentFilePath));
+                NotifyCurrentFilePathChanged();
                 base.OnPropertyChanged(nameof(IsShowScenarioIndexEnabled));
             }
             else
@@ -543,19 +653,19 @@ namespace Gherkin.ViewModel
         private void SaveFile(EditorTabContentViewModel editor, bool saveAs)
         {
             editor.SaveFile(saveAs);
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
         }
 
         private void OnRenameDocumentRequested(object sender, RenameDocumentRequestedArg arg)
         {
             arg.SourceTabContentViewModel.Rename(arg.SourceTabContentViewModel.CurrentFilePath);
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
         }
 
         private void OnSaveAsDocumentRequested(object sender, SaveAsDocumentRequestedArg arg)
         {
             arg.SourceTabContentViewModel.SaveFile(saveAs: true);
-            base.OnPropertyChanged(nameof(CurrentFilePath));
+            NotifyCurrentFilePathChanged();
         }
 
         public bool IsAllowRunningMultiApps
@@ -650,7 +760,7 @@ namespace Gherkin.ViewModel
                     CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names = GenerateCPPTestCode(reader);
                     var message = BuildCPPTestCodeResultMessage(ref generated_file_names);
 
-                    WorkAreaEditor.MessageOfGenCPPTestCode = message;
+                    WorkAreaEditor.ShowMessageOfGenCPPTestCode(message, IsCodeGenerationSuccess: true);
                     m_MultiFilesOpener.OpenFileByReloading(generated_file_names.StepImplFilePath);
                 }
             }
@@ -689,7 +799,7 @@ namespace Gherkin.ViewModel
                 stringBuilder.AppendLine(stackTrace);
             }
 
-            WorkAreaEditor.MessageOfGenCPPTestCode = stringBuilder.ToString();
+            WorkAreaEditor.ShowMessageOfGenCPPTestCode(stringBuilder.ToString(), IsCodeGenerationSuccess: false);
             MoveCursorToErrorLine(errorMsg);
         }
 
@@ -725,11 +835,6 @@ namespace Gherkin.ViewModel
         private void OnIndentationCompleted(object sender, IndentationCompletedArg arg)
         {
             Status = Properties.Resources.Message_PrettyFormatCompleted;
-        }
-
-        private void OnSetGherkinHighlighting()
-        {
-            this.GherkinSettings.ShowGherkinHighlightSettingWindow();
         }
     }
 }

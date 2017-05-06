@@ -20,6 +20,7 @@ namespace Gherkin.Model
         public GherkinSimpleParser(TextDocument document)
         {
             m_Doc = document;
+            TokenMatcher.CurrentDialect = this.CurrentDialect;
         }
 
         public Tuple<TokenType, string> Format(string line)
@@ -93,7 +94,8 @@ namespace Gherkin.Model
                 TokenMatcher.Match_StepLine(token) ||
                 TokenMatcher.Match_TagLine(token) ||
                 TokenMatcher.Match_TableRow(token) ||
-                SimpleMatchLanguage(token))
+                SimpleMatchLanguage(token) ||
+                TokenMatcher.Match_DocStringSeparator(token))
             {
                 return token;
             }

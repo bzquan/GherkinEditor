@@ -17,6 +17,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Rendering;
 using Gherkin.Model;
 using Gherkin.Util;
+using ICSharpCode.AvalonEdit.Indentation.CSharp;
 
 namespace Gherkin.ViewModel
 {
@@ -25,7 +26,6 @@ namespace Gherkin.ViewModel
         static readonly Brush s_LineBackground = new SolidColorBrush(Color.FromArgb(22, 20, 220, 224));
         static readonly Pen s_CurrentLineBorderPen = new Pen(Brushes.LightGray, thickness: 1);
         static readonly Pen s_CurrentLineBorderTransparentPen = new Pen(Brushes.Transparent, thickness: 1);
-        private static FontSizeConverter s_FontSizeConv = new FontSizeConverter();
 
         private IAppSettings m_AppSettings;
         private ICSharpCode.AvalonEdit.Search.SearchPanel m_SearchPanel;
@@ -33,40 +33,78 @@ namespace Gherkin.ViewModel
         private bool m_ShowCurrentLineBorder = true;
         private bool m_HighlightCurrentLine = true;
 
-        public GherkinEditor(TextEditor editor, IAppSettings appSettings, FontFamily fontFamily, string fontSize)
+        public GherkinEditor(TextEditor editor, TextEditor subEditor, TextDocument document, IAppSettings appSettings, FontFamily fontFamily, string fontSize, bool installElementGenerators)
         {
             TextEditor = editor;
+            SubTextEditor = subEditor;
             m_AppSettings = appSettings;
 
-            ConfigTextEditor(editor, appSettings, fontFamily, fontSize);
-            editor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(editor);
+            ConfigTextEditor(editor, document, fontFamily, fontSize);
+            if (installElementGenerators)
+            {
+                InstallElementGenerators();
+            }
+
             m_GherkinCodeCompletion = new GherkinCodeCompletion(editor, appSettings);
 
-            HighlightCurrentLine = appSettings.HighlightCurrentLine;
-            ShowCurrentLineBorder = appSettings.ShowCurrentLineBorder;
-
+            editor.Document.FileNameChanged += OnFileNameChanged;
             EventAggregator<IndentationCompletedArg>.Instance.Event += OnIndentationCompleted;
         }
 
-        private void ConfigTextEditor(TextEditor editor, IAppSettings appSettings, FontFamily fontFamily, string fontSize)
+        private void OnFileNameChanged(object sender, EventArgs e)
         {
+            var indentationStrategy = TextEditor.TextArea.IndentationStrategy;
+            if (GherkinUtil.IsFeatureFile(Document.FileName))
+            {
+                if (!(indentationStrategy is GherkinIndentationStrategy))
+                {
+                    TextEditor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(TextEditor, SubTextEditor);
+                }
+            }
+            else if (GherkinUtil.IsCSharpFile(Document.FileName))
+            {
+                if (!(indentationStrategy is CSharpIndentationStrategy))
+                {
+                    TextEditor.TextArea.IndentationStrategy =  new CSharpIndentationStrategy(TextEditor.Options);
+                }
+            }
+        }
+
+        private void ConfigTextEditor(TextEditor editor, TextDocument document, FontFamily fontFamily, string fontSize)
+        {
+            editor.Document = document;
             editor.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             editor.ShowLineNumbers = true;
             editor.LineNumbersForeground = Brushes.DarkGray;
             editor.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             editor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             editor.Options.EnableRectangularSelection = true;
-            editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
+            editor.Options.HighlightCurrentLine = m_AppSettings.HighlightCurrentLine;
             editor.Options.ConvertTabsToSpaces = true;
             editor.Options.AllowToggleOverstrikeMode = true;
             editor.FontFamily = fontFamily;
-            editor.FontSize = ToFontSizeByPoint(fontSize);
+            editor.FontSize = Util.Util.ToFontSizeByPoint(fontSize);
+            HighlightCurrentLine = m_AppSettings.HighlightCurrentLine;
+            ShowCurrentLineBorder = m_AppSettings.ShowCurrentLineBorder;
 
             UpdateColumnRuler();
             UpdateRequireControlModifierForHyperlinkClick();
+            UpdateConvertTabsToSpaces();
+            UpdateIndentationSize();
+            UpdateShowEndOfLine();
+            UpdateShowSpaces();
+            UpdateShowTabs();
+            UpdateWordWrap();
+        }
+
+        private void InstallElementGenerators()
+        {
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new ImageElementGenerator(Document));
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new MathElementGenerator(Document));
         }
 
         public TextEditor TextEditor { get; set; }
+        public TextEditor SubTextEditor { get; set; }
         public FoldingManager FoldingManager { get; set; }
 
         public bool HasFocus
@@ -83,6 +121,36 @@ namespace Gherkin.ViewModel
         public void UpdateRequireControlModifierForHyperlinkClick()
         {
             TextEditor.Options.RequireControlModifierForHyperlinkClick = m_AppSettings.RequireControlModifierForHyperlinkClick;
+        }
+
+        public void UpdateConvertTabsToSpaces()
+        {
+            TextEditor.Options.ConvertTabsToSpaces = m_AppSettings.ConvertTabsToSpaces;
+        }
+
+        public void UpdateIndentationSize()
+        {
+            TextEditor.Options.IndentationSize = m_AppSettings.IndentationSize;
+        }
+
+        public void UpdateShowEndOfLine()
+        {
+            TextEditor.Options.ShowEndOfLine = m_AppSettings.ShowEndOfLine;
+        }
+
+        public void UpdateShowSpaces()
+        {
+            TextEditor.Options.ShowSpaces = m_AppSettings.ShowSpaces;
+        }
+
+        public void UpdateShowTabs()
+        {
+            TextEditor.Options.ShowTabs = m_AppSettings.ShowTabs;
+        }
+
+        public void UpdateWordWrap()
+        {
+            TextEditor.WordWrap = m_AppSettings.WordWrap;
         }
 
         public void ShowSearchPanel()
@@ -175,7 +243,7 @@ namespace Gherkin.ViewModel
 
         public string FontSize
         {
-            set { TextEditor.FontSize = ToFontSizeByPoint(value); }
+            set { TextEditor.FontSize = Util.Util.ToFontSizeByPoint(value); }
         }
 
         public Encoding Encoding
@@ -274,11 +342,6 @@ namespace Gherkin.ViewModel
             TextEditor.AppendText(text);
         }
 
-        private double ToFontSizeByPoint(string fontSize)
-        {
-            return (double)s_FontSizeConv.ConvertFromString(fontSize + "pt");
-        }
-
         /// <summary>
         /// Scroll cursor to original position if the document of this editor has been indented.
         /// </summary>
@@ -286,7 +349,7 @@ namespace Gherkin.ViewModel
         /// <param name="arg"></param>
         private void OnIndentationCompleted(object sender, IndentationCompletedArg arg)
         {
-            if (Document == sender)
+            if (sender == TextEditor)
             {
                 int lineNo = Math.Min(Document.LineCount, arg.Line);
                 var line = Document.GetLineByNumber(lineNo);

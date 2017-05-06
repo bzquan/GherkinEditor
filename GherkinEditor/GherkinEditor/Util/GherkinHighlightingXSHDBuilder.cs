@@ -23,7 +23,7 @@ namespace Gherkin.Util
                 WriteTextFile(language.key, content);
             }
 
-            string msg = string.Format("{0} Gherkin highliting xshd files are saved in {1}", languages.Length, Util.StartupFolder());
+            string msg = string.Format("{0} Gherkin highliting xshd files are saved in {1}", languages.Length, FileUtil.StartupFolder());
             EventAggregator<StatusChangedArg>.Instance.Publish(null, new StatusChangedArg(msg));
         }
 
@@ -94,7 +94,7 @@ namespace Gherkin.Util
 
         private static void WriteTextFile(string language_key, string content)
         {
-            string appDirectory = Util.StartupFolder();
+            string appDirectory = FileUtil.StartupFolder();
             string file = GherkinUtil.GherkinHighlightingName(language_key) + ".xshd";
             string outputFile = Path.Combine(appDirectory, file);
             File.WriteAllText(outputFile, content, Encoding.UTF8);

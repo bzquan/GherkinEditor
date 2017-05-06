@@ -1,0 +1,79 @@
+﻿<meta charset="UTF-8">
+<font face="FangSong">
+    <h3><font size="5">简易帮助</font></h3>
+
+    <font size="3">
+        <h4>功能</h4>
+        <ol>
+            <li>关键字亮显</li>
+            <li>编辑Gherkin中的IntelliSense</li>
+            <li>Gherkin表格的动态整形</li>
+            <li>Gherkin文档中显示图像</li>
+            <li>LaTex格式的数学公式</li>
+            <li>支持中文Gherkin文档</li>
+            <li>执行Gherkin需求的C++代码生成</li>
+        </ol>
+
+        <h4>编辑</h4>
+
+        <h5>中文Gherkin</h5>
+        <p>
+            要用中文编写Gherkin文档，在文档开头需要指定中文。<br />
+            <b>
+                <font color="green">#language: zh-CN
+                </font>
+            </b>
+        </p>
+
+        <h5>显示图像</h5>
+        <p>
+            用如下MarkDown可在Gherkin文档中显示图像。放大率的范围是10到500。放大率可省略，缺省放大率是100。
+            另外，图像的长宽将被调整到1024像素以内。不区分标识符”IMAGE”的大小写。<br />
+            <b>
+                <font color="blue">
+                    ![IMAGE](图像文件名 放大率)，例如，<br />
+                    ![IMAGE 50](Gherkin.png)
+                </font>
+            </b>
+            <br />
+            为了显示图像，需要把图像文件放在Gherkin文档所在的文件夹或其下属文件夹中。例如，Images/Gherkin.png。<br />
+            在分割窗口的状态下，副编辑器中显示包含图像的Gherkin文档。
+        </p>
+
+        <h5>LaTex格式的数学公式</h5>
+        <p>
+            用如下MarkDown可在Gherkin文档中显示数学公式。放大率的范围是10到100。放大率可省略，缺省放大率是20。
+            不区分标识符”LaTex”的大小写。<br />
+            <b>
+                <font color="blue">
+                    ![LaTex 放大率](LaTeX格式的文本)，例如，<br />
+                    ![LaTex 20](\sqrt[3]{\frac{ax^2+bx+\pi}{x^3}})
+                </font>
+            </b><br />
+            数学式在副编辑器中被显示。通常在主编辑器种输入LaTex文本,在副编辑器中确认其数学公式.
+        </p>
+        <p>
+            举例
+            <ul>
+                <li>对求和表达式可指定上下界，例如，\sum_{下界}^{上界}</li>
+            </ul>
+        </p>
+
+        <h5>拷贝自动生成的C++文件</h5>
+        <ol>
+            <li>如果所用的C++编译器支持中文标识符(例如，若用Visual Studio, 可用中文编写C++的类名或函数名)，选择"C++中使用Unicode名称"选项。</li>
+            <li>按"生成C++测试代码"按钮。</li>
+            <li>在界面最下面的临时工作区，通过上下文菜单可把被生成的C++文件拷贝到指定文件夹。</li>
+        </ol>
+
+        <h5>生成PDF等文档</h5>
+        <ul>
+            <li>用工具菜单可生成PDF,Word, RTF或XPS文件。<br/>
+                生成Word文本，需要安装Word。
+                用Word生成PDF文本，需要安装Word 2007以上的版本。
+            </li>
+            <li>如果使用Windows10，打印时用"Microsoft Print To PDF"虚拟打印机就可生成PDF文件。"Microsoft Print To PDF"是Windows10的标准件。</li>
+            <li>打印时用"Microsoft XPS Document Writer"虚拟打印机就可生成XPS文件。</li>
+        </ul>
+    </font>
+</font>

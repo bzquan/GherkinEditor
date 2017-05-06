@@ -21,6 +21,10 @@ namespace Gherkin
                     currentDialect = dialectProvider.DefaultDialect;
                 return currentDialect;
             }
+            set
+            {
+                currentDialect = value;
+            }
         }
 
         public TokenMatcher(IGherkinDialectProvider dialectProvider = null)
@@ -28,7 +32,9 @@ namespace Gherkin
             this.dialectProvider = dialectProvider ?? new GherkinDialectProvider();
         }
 
-        public TokenMatcher(string defaultLanguage) : this(new GherkinDialectProvider(defaultLanguage)) {
+        public TokenMatcher(string defaultLanguage) :
+            this(new GherkinDialectProvider(defaultLanguage))
+        {
         }
 
         public void Reset()

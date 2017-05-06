@@ -1,0 +1,52 @@
+﻿<Window x:Class="Gherkin.View.EditorSetting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gherkin.View"
+        xmlns:vm="clr-namespace:Gherkin.ViewModel"
+        xmlns:p="clr-namespace:Gherkin.Properties"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="{x:Static p:Resources.MenuSetting_SettingMenuHeader}"
+        Width="450"
+        MaxHeight="500">
+    <Window.Resources>
+        <ContextMenu x:Key="editorSettingContextMenu">
+            <MenuItem Click="OnResetSelectedProperty"
+                      Header="Reset">
+                <MenuItem.Icon>
+                    <Image Source="Images/Reset.png"
+                           Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="resetHighlightingColors">
+                <StackPanel Orientation="Horizontal">
+                    <local:AutoGreyableImage Source="Images/Reset.png"
+                           Width="24"
+                           Height="24" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="{x:Static p:Resources.MenuSetting_ResetHighlightingColor}" />
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+        <xctk:PropertyGrid Grid.Row="1"
+                           x:Name="editorPropertyGrid"
+                           Margin="3"
+                           NameColumnWidth="280"
+                           SelectedObject="{Binding}"
+                           ContextMenu="{StaticResource editorSettingContextMenu}">
+        </xctk:PropertyGrid>
+    </Grid>
+</Window>

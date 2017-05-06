@@ -265,7 +265,7 @@
     <value>Gherkin折畳み</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>Gherkin強調色の設定</value>
+    <value>Gherkin強調色</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>カレント行のハイライト</value>
@@ -277,7 +277,7 @@
     <value>Mock属性色</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>全てデフォルト強調色</value>
+    <value>強調色のリセット</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>設定</value>
@@ -292,7 +292,7 @@
     <value>デフォルトはウインドウズを分割</value>
   </data>
   <data name="MenuSetting_StepWordColor" xml:space="preserve">
-    <value>手順色</value>
+    <value>ステップ色</value>
   </data>
   <data name="MenuSetting_TableColor" xml:space="preserve">
     <value>テーブルの色</value>
@@ -380,8 +380,7 @@
     <value>保存確認</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
-    <value>C++テストコードを生成しました。
-"ファイルのコピー"メニューにて生成されたファイルを指定フォルダーにコピーできます。</value>
+    <value>C++テストコードを生成しました。</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>試験コードの生成時、下記エラーが発生しました。</value>
@@ -552,13 +551,89 @@
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>作業領域画面の表示</value>
   </data>
-  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
-    <value>列ルーラー</value>
+  <data name="MenuSetting_ShowColumnRuler" xml:space="preserve">
+    <value>列ルーラーの表示</value>
   </data>
   <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>(Ctrl + Click)にてブラウザーを開く</value>
   </data>
   <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>WebブラウザーからURLを開く場合、Ctrlキーを使用する</value>
+  </data>
+  <data name="Tooltip_CPPCodeGenResultUage" xml:space="preserve">
+    <value>1. 「ファイルのコピー」コンテキスト・メニューにてファイルをコピーできます。
+2. Ctrlキーにてファイルを開けます。</value>
+  </data>
+  <data name="Message_DlgCopyFileToTitle" xml:space="preserve">
+    <value>ファイルのコピー</value>
+  </data>
+  <data name="MenuSetting_SettingMenuHeader" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="Tooltip_FontSizeForGherkin" xml:space="preserve">
+    <value>Gherkinファイルのフォントサイズ</value>
+  </data>
+  <data name="Tooltip_FontSizeForNonGherkin" xml:space="preserve">
+    <value>Gherkin以外用フォントサイズ</value>
+  </data>
+  <data name="MenuSetting_ColumnRulerPosition" xml:space="preserve">
+    <value>列ルーラーの表示位置</value>
+  </data>
+  <data name="MenuSetting_ConvertTabsToSpaces" xml:space="preserve">
+    <value>タブをスペースに置き換える</value>
+  </data>
+  <data name="MenuSetting_ShowEndOfLine" xml:space="preserve">
+    <value>行終了の表示</value>
+  </data>
+  <data name="MenuSetting_ShowSpaces" xml:space="preserve">
+    <value>空白の表示</value>
+  </data>
+  <data name="MenuSetting_ShowTabs" xml:space="preserve">
+    <value>タブの表示</value>
+  </data>
+  <data name="MenuSetting_SpecialSymbols" xml:space="preserve">
+    <value>特殊記号</value>
+  </data>
+  <data name="MenuEdit_ContextShowCodeCompletion" xml:space="preserve">
+    <value>IntelliSenseの表示</value>
+  </data>
+  <data name="MenuEdit_ContextTabBackward" xml:space="preserve">
+    <value>タブの削除</value>
+  </data>
+  <data name="MenuHelp_GherkinHelp" xml:space="preserve">
+    <value>簡易ヘルプ</value>
+  </data>
+  <data name="MenuHelp_LaTeXSymbols" xml:space="preserve">
+    <value>LaTeX数学式シンボル</value>
+  </data>
+  <data name="Tooltip_HideSubEditor" xml:space="preserve">
+    <value>サブエディターの非表示</value>
+  </data>
+  <data name="Tooltip_ShowSubEditor" xml:space="preserve">
+    <value>サブエディターの表示</value>
+  </data>
+  <data name="Tooltip_ClearStatus" xml:space="preserve">
+    <value>状態メッセージのクリア</value>
+  </data>
+  <data name="MenuTool_SaveAsPDF" xml:space="preserve">
+    <value>PDFファイルに保存</value>
+  </data>
+  <data name="MenuTool_SaveAsXPS" xml:space="preserve">
+    <value>XPSファイルに保存</value>
+  </data>
+  <data name="MenuTool_Tools" xml:space="preserve">
+    <value>ツール</value>
+  </data>
+  <data name="MenuTool_SaveAsWord" xml:space="preserve">
+    <value>Wordファイルに保存(Word使用)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFByWord" xml:space="preserve">
+    <value>PDFファイルに保存(Word使用)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFBySharpPDF" xml:space="preserve">
+    <value>PDFファイルに保存(印刷)</value>
+  </data>
+  <data name="MenuTool_SaveAsRTF" xml:space="preserve">
+    <value>RTFファイルに保存</value>
   </data>
 </root>

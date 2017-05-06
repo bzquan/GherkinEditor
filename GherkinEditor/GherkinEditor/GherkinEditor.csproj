@@ -14,6 +14,24 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Gherkin Editor</ProductName>
+    <PublisherName>bzquan</PublisherName>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.1</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,6 +55,18 @@
   <PropertyGroup>
     <ApplicationIcon>Gherkin.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>D3923E1FC94A8CC7EA52E81E342715AE740FA6A3</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>GherkinEditor_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -54,11 +84,17 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NetOffice">
+      <HintPath>..\packages\NetOffice 1.7.3\NetOffice.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +108,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WordApi">
+      <HintPath>..\packages\NetOffice 1.7.3\WordApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="WPFFolderBrowser, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WPFFolderBrowser\WPFFolderBrowser.dll</HintPath>
@@ -82,7 +122,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\CustomElementGenerator\CustomElementGenerator.cs" />
+    <Compile Include="Model\CustomElementGenerator\TaTexImageCache.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy\CursorPosInTable.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
     <Compile Include="Model\HtmlConverter\HtmlCssParser.cs" />
     <Compile Include="Model\HtmlConverter\HtmlFromXamlConverter.cs" />
@@ -91,16 +134,24 @@
     <Compile Include="Model\HtmlConverter\HtmlSchema.cs" />
     <Compile Include="Model\HtmlConverter\HtmlTokenType.cs" />
     <Compile Include="Model\HtmlConverter\HtmlToXamlConverter.cs" />
+    <Compile Include="Model\CustomElementGenerator\ImageElementGenerator.cs" />
+    <Compile Include="Model\CustomElementGenerator\MathElementGenerator.cs" />
+    <Compile Include="Model\CustomElementGenerator\BitmapImageCache.cs" />
+    <Compile Include="Model\Printing\PrintSettings.cs" />
+    <Compile Include="Model\Printing\FlowDocumentSaver.cs" />
     <Compile Include="Util\CurrentGherkinLanguageArg.cs" />
     <Compile Include="Util\EditorViewInitializationCompleted.cs" />
     <Compile Include="Util\FailedToFindEditorControlArg.cs" />
     <Compile Include="Util\FileSavedAsArg.cs" />
+    <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Util\GherkinHighlightingXSHDBuilder.cs" />
     <Compile Include="Model\GherkinUtil.cs" />
     <Compile Include="Util\GherkinKeywordGenerator.cs" />
     <Compile Include="Util\HideScenarioIndexArg.cs" />
+    <Compile Include="Util\ForEachUtil.cs" />
     <Compile Include="Util\ProcessInterop.cs" />
     <Compile Include="Util\IndentationCompletedArg.cs" />
+    <Compile Include="Util\ShowSubEditorRequestArg.cs" />
     <Compile Include="Util\StatusChangedArg.cs" />
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
@@ -109,16 +160,18 @@
     <Compile Include="ViewModel\CloseWindowCommand.cs" />
     <Compile Include="ViewModel\CodePageListPopupViewModel.cs" />
     <Compile Include="ViewModel\DeleteAllEditorTabsRequestedArg.cs" />
+    <Compile Include="ViewModel\GherkinEditerCommand.cs" />
+    <Compile Include="ViewModel\HelpViewModel.cs" />
+    <Compile Include="ViewModel\SettingPropertyGridViewModel.cs" />
     <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
     <Compile Include="ViewModel\FileLoadedArg.cs" />
     <Compile Include="ViewModel\FindNextRequestedArg.cs" />
     <Compile Include="ViewModel\FindReplaceViewModel.cs" />
     <Compile Include="ViewModel\FoldingExecutor.cs" />
-    <Compile Include="ViewModel\FontViewModel.cs" />
-    <Compile Include="ViewModel\GherkinCodeCompletion.cs" />
-    <Compile Include="ViewModel\GherkinCodeCompletionWord.cs" />
-    <Compile Include="ViewModel\GherkinCodeCompletionWordsProvider.cs" />
+    <Compile Include="Model\CodeCompletion\GherkinCodeCompletion.cs" />
+    <Compile Include="Model\CodeCompletion\GherkinCodeCompletionWord.cs" />
+    <Compile Include="Model\CodeCompletion\GherkinCodeCompletionWordsProvider.cs" />
     <Compile Include="ViewModel\GherkinKeywordsCurrent.cs" />
     <Compile Include="ViewModel\GherkinKeywordsViewModel.cs" />
     <Compile Include="ViewModel\GherkinSettingViewModel.cs" />
@@ -148,6 +201,9 @@
     <Compile Include="View\CodePageListPopup.xaml.cs">
       <DependentUpon>CodePageListPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\EditorSetting.xaml.cs">
+      <DependentUpon>EditorSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FindReplacePopup.xaml.cs">
       <DependentUpon>FindReplacePopup.xaml</DependentUpon>
     </Compile>
@@ -156,6 +212,9 @@
     </Compile>
     <Compile Include="View\GrepDialog.xaml.cs">
       <DependentUpon>GrepDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
@@ -166,9 +225,6 @@
     </Compile>
     <Compile Include="View\RichTextBlockHtml\BrowserBehavior.cs" />
     <Compile Include="View\RichTextBlockHtml\HtmlRichTextBoxBehavior.cs" />
-    <Compile Include="View\SettingControlView.xaml.cs">
-      <DependentUpon>SettingControlView.xaml</DependentUpon>
-    </Compile>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -181,6 +237,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\EditorSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FindReplacePopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -190,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GrepDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,19 +285,19 @@
     <Compile Include="Model\BDD\BDDStepImplBuilderManager.cs" />
     <Compile Include="Model\BDD\BDDStepImplCppBuilder.cs" />
     <Compile Include="Model\BDD\BDDUtil.cs" />
-    <Compile Include="Model\GherkinFoldingBuilder.cs" />
+    <Compile Include="Model\GherkinFolding\GherkinFoldingBuilder.cs" />
     <Compile Include="Util\ConfigReader.cs" />
     <Compile Include="Util\EventAggregator.cs" />
     <Compile Include="Util\StringBuilderExtension.cs" />
     <Compile Include="ViewModel\DeleteEditorTabRequestedArg.cs" />
-    <Compile Include="ViewModel\DocumentPaginatorWrapper.cs" />
-    <Compile Include="ViewModel\Printing.cs" />
+    <Compile Include="Model\Printing\DocumentPaginatorWrapper.cs" />
+    <Compile Include="Model\Printing\Printing.cs" />
     <Compile Include="ViewModel\GherkinEditor.cs" />
-    <Compile Include="Model\GherkinFoldingStrategy.cs" />
+    <Compile Include="Model\GherkinFolding\GherkinFoldingStrategy.cs" />
     <Compile Include="Model\GherkinFormatUtil.cs" />
-    <Compile Include="Model\GherkinIndentationStrategy.cs" />
-    <Compile Include="Model\GherkinTable.cs" />
-    <Compile Include="Model\GherkinTableBuilder.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy\GherkinIndentationStrategy.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy\GherkinTable.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy\GherkinTableBuilder.cs" />
     <Compile Include="Model\GherkinSimpleParser.cs" />
     <Compile Include="Util\AppSettings.cs" />
     <Compile Include="ContainerBootstrapper.cs" />
@@ -242,8 +306,8 @@
     <Compile Include="Util\GherkinDefinitions.cs" />
     <Compile Include="Util\IAppSettings.cs" />
     <Compile Include="Util\Util.cs" />
-    <Compile Include="ViewModel\DelegateCommand.cs" />
-    <Compile Include="ViewModel\DelegateCommandNoArg.cs" />
+    <Compile Include="Util\DelegateCommand.cs" />
+    <Compile Include="Util\DelegateCommandNoArg.cs" />
     <Compile Include="ViewModel\GherkinViewModel.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedBase.cs" />
     <Compile Include="View\EditorTabItem.cs" />
@@ -255,10 +319,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\PrintPreview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\SettingControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -397,6 +457,18 @@
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PdfSharp.Xps\PdfSharp.Xps.csproj">
+      <Project>{0bc3964b-a3bc-49d5-9b7c-463299b5a166}</Project>
+      <Name>PdfSharp.Xps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PdfSharp\PdfSharp-WPF.csproj">
+      <Project>{02fcc0bb-2aa2-43ba-8d2f-66d168b87a1d}</Project>
+      <Name>PdfSharp-WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfMath\WpfMath.csproj">
+      <Project>{010a34f1-1f3e-4528-99b4-95054dd45729}</Project>
+      <Name>WpfMath</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Trim.png" />
@@ -474,6 +546,9 @@
     <Resource Include="View\Images\Highlight.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="References\LaTeXSymbols.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="View\Images\Gherkin.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -569,6 +644,68 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Browser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Help.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Help_ja.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Help_zh-CN.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\XPS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\PDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Word.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\RTF.png" />
+    <Resource Include="View\Images\WordWithImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".feature">
+      <Visible>False</Visible>
+      <Description>Gherkin document</Description>
+      <Progid>1</Progid>
+      <DefaultIcon>Gherkin.ico</DefaultIcon>
+    </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

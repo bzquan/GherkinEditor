@@ -1,0 +1,71 @@
+﻿<meta charset="UTF-8">
+<font face="Courier New">
+    <h3><font size="5">Simple Help</font></h3>
+
+    <font size="3">
+        <h4>Features</h4>
+        <ol>
+            <li>Syntax highlighting</li>
+            <li>IntelliSense for Gherkin</li>
+            <li>Dynamic pretty formatting Gherkin table</li>
+            <li>Displaying image files in Gherkin document</li>
+            <li>Mathematical formula in LaTex style</li>
+            <li>Internationalization supporting</li>
+            <li>C++ code generation for executing Gherkin</li>
+        </ol>
+
+        <h4>Editing</h4>
+
+        <h5>Displaying images</h5>
+        <p>
+            You can use following markdown to display images files.
+            The scale is a value between 10 to 500. It is optional and the default value is 100.
+            And maxium width or height would be scaled down to 1024 Pixels. The tag "IMAGE" is case insensitive.<br />
+            <b>
+                <font color="blue">
+                    ![IMAGE scale](image path),e.g. <br />
+                    ![IMAGE 50](Gherkin.png)
+                </font>
+            </b>
+            <br />
+            The base folder of the image is the folder where the Gherkin document is saved.It is possible to have a subfolder, e.g. Images/Gherkin.png.<br />
+            Images will be showen in the editor located bottom of split view. This editor is called sub editor.
+        </p>
+
+        <h5>Mathematical formula</h5>
+        <p>
+            You can use following markdown to describe TaTex mathematical formula.
+            The scale is a value between 10 to 100. It is optional and the default value is 20. The tag "LaTex" is case insensitive.<br />
+            <b>
+                <font color="blue">
+                    ![LaTex scale](LaTeX typsetting), e.g. <br />
+                    ![LaTex 20](\sqrt{\frac{ax^2+bx+\pi}{x^3}}))
+                </font>
+            </b><br />
+            Mathematical formula will be shown in sub editor.
+        </p>
+        <p>
+            Examples
+            <ul>
+                <li>Sum expression can be added using the lower and upper. For example, \sum_{lower}^{upper}</li>
+            </ul>
+        </p>
+
+        <h5>Copying generated C++ code to a folder</h5>
+        <ol>
+            <li>To check "Using unicode name in C++" if your C++ compiler support unicode symbols</li>
+            <li>Generating C++ test code by using "Generate C++ test code" menu</li>
+            <li>Copy generated C++ files to a folder by context menu in workspace window</li>
+        </ol>
+
+        <h5>How to convert to other format, e.g. PDF</h5>
+        <ul>
+            <li>You can use tool menu to save current document as PDF, XPS, RTF or Word file.<br />
+                To save as Word(docx) file you need Microsoft Word installed.<br />
+                To save as PDF by using Word you need Microsoft Word 2007 or above installed.<br />
+            </li>
+            <li>You can use "Microsoft Print To PDF" when printing to generate PDF file if you are using Windows 10. "Microsoft Print To PDF" would be installed by default in Windows 10.</li>
+            <li>You can use "Microsoft XPS Document Writer" when printing to generate XPS file</li>
+        </ul>
+    </font>
+</font>

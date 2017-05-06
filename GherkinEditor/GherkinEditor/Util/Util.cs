@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -11,6 +11,14 @@ namespace Gherkin.Util
 {
     public static class Util
     {
+        private static readonly Lazy<FontSizeConverter> s_FontSizeConv =
+                                new Lazy<FontSizeConverter>(() => new FontSizeConverter());
+
+        public static double ToFontSizeByPoint(string fontSize)
+        {
+            return (double)s_FontSizeConv.Value.ConvertFromString(fontSize + "pt");
+        }
+
         public static void SetLanguage(Languages language)
         {
             string shortDatePattern = "dd/MMM/yyyy";
@@ -42,49 +50,6 @@ namespace Gherkin.Util
             System.Threading.Thread.CurrentThread.CurrentUICulture = cultureInfo;
         }
 
-        public static bool ExistsOnPath(params string[] fileNames)
-        {
-            foreach (string fileName in fileNames)
-            {
-                if (GetFullPath(fileName) == null) return false;
-            }
-            return true;
-        }
-
-        public static string GetFullPath(string fileName)
-        {
-            if (File.Exists(fileName))
-                return Path.GetFullPath(fileName);
-
-            var values = Environment.GetEnvironmentVariable("PATH");
-            foreach (var path in values.Split(';'))
-            {
-                var fullPath = Path.Combine(path, fileName);
-                if (File.Exists(fullPath)) return fullPath;
-            }
-            return null;
-        }
-
-        public static bool ExistOnFolder(string folder, params string[] fileNames)
-        {
-            foreach (string fileName in fileNames)
-            {
-                string fullPath = Path.Combine(folder, fileName);
-                if (!File.Exists(fullPath)) return false;
-            }
-            return true;
-        }
-
-        public static string StartupFolder() => System.AppDomain.CurrentDomain.BaseDirectory;
-
-        public static bool ExistOnStartupFolder(params string[] fileNames)
-        {
-            foreach (string fileName in fileNames)
-            {
-                if (!ExistOnFolder(StartupFolder(), fileName)) return false;
-            }
-            return true;
-        }
 
         public static string TraceMessage(string message,
                              [CallerFilePath] string sourceFilePath = "",
@@ -259,6 +224,20 @@ namespace Gherkin.Util
         public static Color ToColor(this string name)
         {
             return (Color)ColorConverter.ConvertFromString(name);
+        }
+
+        /// <summary>
+        /// Remove last items after the max_num
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="max_num">max num to keep</param>
+        public static void RemoveLastItems<T>(List<T> list, int max_num)
+        {
+            if (list.Count > max_num)
+            {
+                list.RemoveRange(max_num, list.Count - max_num);
+            }
         }
     }
 }

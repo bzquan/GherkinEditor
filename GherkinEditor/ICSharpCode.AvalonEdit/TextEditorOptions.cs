@@ -203,7 +203,7 @@ namespace ICSharpCode.AvalonEdit
 		}
         #endregion
 
-        #region FilePathClick -- added by bzquan@gmail
+        #region Open file by mouse click and copy file -- added by bzquan@gmail
 
         /// <summary>
         /// A delegate which check whether text contains clickable file path 
@@ -256,8 +256,51 @@ namespace ICSharpCode.AvalonEdit
             }
         }
 
+        Action<string> copyFileToHandler { get; set; }
+
+        /// <summary>
+        /// Copy file to delegate. String is the file path to be copied.
+        /// Note: bzquan@gmail.com
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual Action<string> CopyFileToHandler
+        {
+            get { return copyFileToHandler; }
+            set
+            {
+                if (copyFileToHandler != value)
+                {
+                    copyFileToHandler = value;
+                    OnPropertyChanged(nameof(CopyFileToHandler));
+                }
+            }
+        }
+
         #endregion
 
+        #region Show code completion command -- added by bzquan@gmail
+
+        System.Windows.Input.ICommand showCodeCompletionCmd { get; set; }
+
+        /// <summary>
+        /// Copy file to delegate. String is the file path to be copied.
+        /// Note: bzquan@gmail.com
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual System.Windows.Input.ICommand ShowCodeCompletionCmd
+        {
+            get { return showCodeCompletionCmd; }
+            set
+            {
+                showCodeCompletionCmd = value;
+                OnPropertyChanged(nameof(ShowCodeCompletionCmd));
+            }
+        }
+        #endregion
 
         #region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString
         // I'm using '_' prefixes for the fields here to avoid confusion with the local variables

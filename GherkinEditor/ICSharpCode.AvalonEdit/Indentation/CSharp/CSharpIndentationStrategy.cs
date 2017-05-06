@@ -40,8 +40,12 @@ namespace ICSharpCode.AvalonEdit.Indentation.CSharp
 		{
 			this.IndentationString = options.IndentationString;
 		}
-		
-		string indentationString = "\t";
+
+
+        /// <inheritdoc/>
+        public override bool SupportMultiLinesIndent(TextDocument document) => true;
+
+        string indentationString = "\t";
 		
 		/// <summary>
 		/// Gets/Sets the indentation string.

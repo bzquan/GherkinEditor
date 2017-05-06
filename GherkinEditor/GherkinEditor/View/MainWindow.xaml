@@ -67,7 +67,8 @@
         <ContextMenu x:Key="editorContextMenu">
             <MenuItem Command="Undo"
                       Header="{x:Static p:Resources.MenuEdit_Undo}"
-                      InputGestureText="Ctrl+Z">
+                      InputGestureText="Ctrl+Z"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Undo.png"
                            Height="16" />
@@ -75,7 +76,8 @@
             </MenuItem>
             <MenuItem Command="Redo"
                       Header="{x:Static p:Resources.MenuEdit_Redo}"
-                      InputGestureText="Ctrl+Y">
+                      InputGestureText="Ctrl+Y"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Redo.png"
                            Height="16" />
@@ -84,7 +86,8 @@
             <Separator />
             <MenuItem Command="Copy"
                       Header="{x:Static p:Resources.MenuEdit_Copy}"
-                      InputGestureText="Ctrl+C">
+                      InputGestureText="Ctrl+C"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Copy.png"
                            Height="16" />
@@ -92,7 +95,8 @@
             </MenuItem>
             <MenuItem Command="Cut"
                       Header="{x:Static p:Resources.MenuEdit_Cut}"
-                      InputGestureText="Ctrl+X">
+                      InputGestureText="Ctrl+X"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Cut.png"
                            Height="16" />
@@ -100,7 +104,8 @@
             </MenuItem>
             <MenuItem Command="Paste"
                       Header="{x:Static p:Resources.MenuEdit_Paste}"
-                      InputGestureText="Ctrl+V">
+                      InputGestureText="Ctrl+V"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Paste.png"
                            Height="16" />
@@ -108,7 +113,8 @@
             </MenuItem>
             <MenuItem Command="SelectAll"
                       Header="{x:Static p:Resources.MenuEdit_SelectAll}"
-                      InputGestureText="Ctrl+A">
+                      InputGestureText="Ctrl+A"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/SelectAll.png"
                            Height="16" />
@@ -116,23 +122,40 @@
             </MenuItem>
             <MenuItem Command="Delete"
                       Header="{x:Static p:Resources.MenuEdit_Delete}"
-                      InputGestureText="Del">
+                      InputGestureText="Del"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Delete.png"
+                           Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="TabBackward"
+                      Header="{x:Static p:Resources.MenuEdit_ContextTabBackward}"
+                      InputGestureText="Shift + Tab"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+                <MenuItem.Icon>
+                    <Image Source="Images/DeleteTab.png"
                            Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
             <MenuItem Command="cmd:AvalonEditCommands.IndentSelection"
                       Header="{x:Static p:Resources.MenuEdit_Indentation}"
-                      InputGestureText="Ctrl+I">
+                      InputGestureText="Ctrl+I"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/Trim.png"
                            Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
+            <MenuItem Command="cmd:AvalonEditCommands.ShowCodeCompletion"
+                      Header="{x:Static p:Resources.MenuEdit_ContextShowCodeCompletion}"
+                      InputGestureText="Ctrl+Space"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
+            </MenuItem>
             <MenuItem Command="cmd:AvalonEditCommands.CopyFileTo"
-                      Header="{x:Static p:Resources.MenuEdit_ContextCopyFileTo}" >
+                      Header="{x:Static p:Resources.MenuEdit_ContextCopyFileTo}"
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem.Icon>
                     <Image Source="Images/CopyFileTo.png"
                            Height="16" />
@@ -163,37 +186,29 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="5">
-                            <Canvas RenderOptions.EdgeMode="Aliased"
-                                    UseLayoutRounding="True"
-                                    Height="6"
-                                    VerticalAlignment="Center"
-                                    Width="50"
-                                    HorizontalAlignment="Center">
-                                <Line X1="0"
-                                      X2="50"
-                                      Y1="0"
-                                      Y2="0"
-                                      Stroke="White"
-                                      StrokeThickness="1" />
-                                <Line X1="0"
-                                      X2="50"
-                                      Y1="1"
-                                      Y2="1"
-                                      Stroke="#A0A0A0"
-                                      StrokeThickness="1" />
-                                <Line X1="0"
-                                      X2="50"
-                                      Y1="4"
-                                      Y2="4"
-                                      Stroke="White"
-                                      StrokeThickness="1" />
-                                <Line X1="0"
-                                      X2="50"
-                                      Y1="5"
-                                      Y2="5"
-                                      Stroke="#A0A0A0"
-                                      StrokeThickness="1" />
-                            </Canvas>
+                            <Grid Height="Auto">
+                                <StackPanel x:Name="RowCollapsers"
+                                            VerticalAlignment="Stretch"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <bc:ImageButton x:Name="showSubEditorButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_ShowSubEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/Expand.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="vm:GherkinEditerCommand.ShowSubEditorCmd">
+                                    </bc:ImageButton>
+                                    <bc:ImageButton x:Name="hideSubEditorButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_HideSubEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/Collapse.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="vm:GherkinEditerCommand.HideSubEditorCmd">
+                                    </bc:ImageButton>
+                                </StackPanel>
+                            </Grid>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -219,7 +234,7 @@
                           InputGestureText="Ctrl+N">
                     <MenuItem.Icon>
                         <Image Source="Images/NewFile.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_Open}"
@@ -227,14 +242,14 @@
                           InputGestureText="Ctrl+O">
                     <MenuItem.Icon>
                         <Image Source="Images/Open.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_OpenNewWindow}"
                           Command="{Binding OpenFileInNewWindowCmd}">
                     <MenuItem.Icon>
                         <Image Source="Images/WindowsIcon.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_Save}"
@@ -242,34 +257,34 @@
                           InputGestureText="Ctrl+S">
                     <MenuItem.Icon>
                         <Image Source="Images/Save.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_SaveAs}"
                           Command="SaveAs">
                     <MenuItem.Icon>
                         <Image Source="Images/SaveAs.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_SaveAll}"
                           Command="{Binding SaveAllCmd}">
                     <MenuItem.Icon>
                         <Image Source="Images/SaveAll.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuFile_Print}">
                     <MenuItem.Icon>
                         <Image Source="Images/Print.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                     <MenuItem Header="{x:Static p:Resources.MenuFile_Print}"
                               Command="Print"
                               InputGestureText="Ctrl+P">
                         <MenuItem.Icon>
                             <Image Source="Images/Print.png"
-                                   Height="16" />
+                                   Height="24" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static p:Resources.MenuFile_PrintPreview}"
@@ -277,7 +292,7 @@
                               InputGestureText="Ctrl+F2">
                         <MenuItem.Icon>
                             <Image Source="Images/PrintPreview.png"
-                                   Height="16" />
+                                   Height="24" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -285,7 +300,7 @@
                           Command="{Binding OpenCurrentFolderCmd}">
                     <MenuItem.Icon>
                         <Image Source="Images/OpenExplorer.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Name="recentFilesMenuItem"
@@ -293,7 +308,7 @@
                           GotFocus="recentFilesMenuItem_GotFocus">
                     <MenuItem.Icon>
                         <Image Source="Images/Recent.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                     <MenuItem Header="dummy" />
                 </MenuItem>
@@ -304,7 +319,7 @@
                           InputGestureText="Ctrl+Z">
                     <MenuItem.Icon>
                         <Image Source="Images/Undo.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="Redo"
@@ -312,7 +327,7 @@
                           InputGestureText="Ctrl+Y">
                     <MenuItem.Icon>
                         <Image Source="Images/Redo.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
@@ -321,7 +336,7 @@
                           InputGestureText="Ctrl+C">
                     <MenuItem.Icon>
                         <Image Source="Images/Copy.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="Cut"
@@ -329,7 +344,7 @@
                           InputGestureText="Ctrl+X">
                     <MenuItem.Icon>
                         <Image Source="Images/Cut.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="Paste"
@@ -337,7 +352,7 @@
                           InputGestureText="Ctrl+V">
                     <MenuItem.Icon>
                         <Image Source="Images/Paste.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="SelectAll"
@@ -345,7 +360,7 @@
                           InputGestureText="Ctrl+A">
                     <MenuItem.Icon>
                         <Image Source="Images/SelectAll.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="Delete"
@@ -353,50 +368,55 @@
                           InputGestureText="Del">
                     <MenuItem.Icon>
                         <Image Source="Images/Delete.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="cmd:AvalonEditCommands.IndentSelection"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
                           Header="{x:Static p:Resources.MenuEdit_Indentation}"
                           InputGestureText="Ctrl+I">
                     <MenuItem.Icon>
                         <Image Source="Images/Trim.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuView_View}">
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_FoldTables}"
+                          Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding IsCloseTablesFolding}">
                     <MenuItem.Icon>
                         <Image Source="Images/Table.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_FoldScenario}"
+                          Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding IsCloseScenarioFolding}">
                     <MenuItem.Icon>
                         <Image Source="Images/Scenario.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="{Binding OpenAllFoldingsCmd}"
-                          Header="{x:Static p:Resources.MenuView_FoldOpenAll}">
+                          Header="{x:Static p:Resources.MenuView_FoldOpenAll}"
+                          Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}">
                     <MenuItem.Icon>
                         <Image Source="Images/OpenAllFoldings.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_ShowScenarioIndex}"
+                          Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding ShowScenarioIndex}"
                           IsEnabled="{Binding IsShowScenarioIndexEnabled}">
                     <MenuItem.Icon>
                         <Image Source="Images/Index.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
@@ -404,28 +424,20 @@
                           IsChecked="{Binding ShowSplitView}">
                     <MenuItem.Icon>
                         <Image Source="Images/HSplit.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuView_WorkAreaEditor}"
-                          IsChecked="{Binding Path=WorkAreaEditor.ShowMessageWindow}">
-                    <MenuItem.Icon>
-                        <Image Source="Images/MessageWindow.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           StaysOpenOnClick="True"
-                          IsChecked="{Binding Path=GherkinSettings.ShowColumnRuler}">
+                          IsChecked="{Binding Path=GherkinSettings.PropertyGridViewModel.ShowColumnRuler}">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.MenuSetting_ColumnRuler}" />
+                            <TextBlock Text="{x:Static p:Resources.MenuSetting_ShowColumnRuler}" />
                             <xctk:IntegerUpDown Margin="10, 0, 0, 0"
                                                 FormatString="N0"
                                                 AllowTextInput="False"
-                                                Value="{Binding Path=GherkinSettings.ColumnRulerPositon, Mode=TwoWay, FallbackValue=100}"
-                                                Visibility="{Binding Path=GherkinSettings.ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
+                                                Value="{Binding Path=GherkinSettings.PropertyGridViewModel.ColumnRulerPositon, Mode=TwoWay, FallbackValue=100}"
+                                                Visibility="{Binding Path=GherkinSettings.PropertyGridViewModel.ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
                                                 Increment="5"
                                                 Minimum="60"
                                                 Maximum="160"/>
@@ -439,214 +451,82 @@
                           InputGestureText="Ctrl+F">
                     <MenuItem.Icon>
                         <Image Source="Images/FindAndReplace.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="{Binding GrepCmd}"
                           Header="{x:Static p:Resources.MenuFind_Grep}">
                     <MenuItem.Icon>
                         <Image Source="Images/SearchFolder.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{x:Static p:Resources.MenuCompile_Comple}">
+            <MenuItem Header="{x:Static p:Resources.MenuCompile_Comple}"
+                      Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}">
                 <MenuItem Command="{Binding GenCPPTestCodeCmd}"
                           Header="{x:Static p:Resources.MenuCompile_GenCpp}">
                     <MenuItem.Icon>
                         <Image Source="Images/Gencode.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuCompile_SupportUnicode}"
-                          IsChecked="{Binding GherkinSettings.SupportUnicode}">
+                          IsChecked="{Binding GherkinSettings.PropertyGridViewModel.SupportUnicode}">
                     <MenuItem.Icon>
                         <Image Source="Images/Unicode.png"
-                               Height="16" />
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static p:Resources.MenuTool_Tools}">
+                <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsPDF}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/PDF.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsPDFBySharpPDF}"
+                              Command="{Binding SaveAsPDFBySharpPDFCmd}">
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsPDFByWord}"
+                              Command="{Binding SaveAsPDFByWordCmd}">
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsXPS}"
+                          Command="{Binding SaveAsXPSCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/XPS.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsRTF}"
+                          Command="{Binding SaveAsRTFCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/RTF.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsWord}"
+                          Command="{Binding SaveAsWordCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Word.png"
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuSetting_Setting}">
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_ShowScenarioIndexByDefault}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.ShowScenarioIndexByDefault}">
-                    <MenuItem.Icon>
-                        <Image Source="Images/Index.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_SplitEditorByDefault}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.ShowSplitViewByDefault}">
-                    <MenuItem.Icon>
-                        <Image Source="Images/HSplit.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_HighlightCurrentLine}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.HighlightCurrentLine}">
-                    <MenuItem.Icon>
-                        <Image Source="Images/Highlight.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_ShowCurrentLineBorder}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.ShowCurrentLineBorder}" />
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_RequireControlModifierForHyperlinkClick}"
-                          ToolTip="{x:Static p:Resources.Tooltip_RequireControlModifierForHyperlinkClick}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.RequireControlModifierForHyperlinkClick}">
-                    <MenuItem.Icon>
-                        <Image Source="Images/Browser.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinFolding}">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left"
-                                   Text="{x:Static p:Resources.MenuSetting_FoldTextColor}"
-                                   VerticalAlignment="Center"
-                                   Background="White"
-                                   Foreground="{Binding GherkinSettings.FoldingTextBrush}" />
-                        <Button DockPanel.Dock="Right"
-                                ToolTip="{x:Static p:Resources.Tooltip_DefaultHighlighingColor}"
-                                Command="{Binding Path=GherkinSettings.ResetFolderTextColorCmd}">
-                            <local:AutoGreyableImage Source="Images/Reset.png"
-                                                     Width="24"
-                                                     Height="24" />
-                        </Button>
-                        <xctk:ColorPicker Margin="6, 0, 6, 0"
-                                          AvailableColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerAvailableColorsHeader}"
-                                          StandardColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerStandardColorsHeader}"
-                                          RecentColorsHeader="{x:Static p:Resources.MenuSetting_ColorPickerRecentColorsHeader}"
-                                          ShowRecentColors="True"
-                                          ShowAdvancedButton="False"
-                                          SelectedColor="{Binding GherkinSettings.SelectedFoldingTextColor}" />
-                    </DockPanel>
-                    <MenuItem IsCheckable="True"
-                              Header="{x:Static p:Resources.MenuSetting_DefaultTableFolding}"
-                              StaysOpenOnClick="True"
-                              IsChecked="{Binding GherkinSettings.IsCloseTablesFoldingByDefault}">
-                        <MenuItem.Icon>
-                            <Image Source="Images/Table.png"
-                                   Height="16" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem IsCheckable="True"
-                              Header="{x:Static p:Resources.MenuSetting_DefaultScenarioFolding}"
-                              StaysOpenOnClick="True"
-                              IsChecked="{Binding GherkinSettings.IsCloseScenarioFoldingByDefault}">
-                        <MenuItem.Icon>
-                            <Image Source="Images/Scenario.png"
-                                   Height="16" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.MenuSetting_GherkinHighlighting}"
-                          Command="{Binding SetGherkinHighlightingCmd}">
+                <MenuItem Command="{Binding Path=GherkinSettings.ShowEditorSettingCmd}"
+                          Header="{x:Static p:Resources.MenuSetting_SettingMenuHeader}">
                     <MenuItem.Icon>
                         <Image Source="Images/Setting.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem StaysOpenOnClick="True">
-                    <MenuItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamilyText}"
-                                       ToolTip="{x:Static p:Resources.Tooltip_FontForGherkin}"
-                                       FontFamily="{Binding FontViewModel.DefaultFontFamily}"
-                                       VerticalAlignment="Center"
-                                       Margin="0, 0, 6, 0" />
-                            <ComboBox Name="defaultFontComboBox"
-                                      MinWidth="80"
-                                      SelectedItem="{Binding FontViewModel.DefaultFontFamily, Mode=TwoWay}"
-                                      ItemsSource="{Binding FontViewModel.SystemFonts}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center"
-                                                   Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <xctk:IntegerUpDown FormatString="N0"
-                                                Margin="3, 0, 0, 0"
-                                                AllowTextInput="False"
-                                                Value="{Binding FontViewModel.DefaultFontSize, Mode=TwoWay, FallbackValue=11}"
-                                                Increment="1"
-                                                Minimum="10"
-                                                Maximum="28"
-                                                ToolTip="{x:Static p:Resources.Tooltip_FontSize}" />
-                            <Button Margin="6, 0, 0, 0"
-                                    ToolTip="{x:Static p:Resources.Tooltip_FontFamilyDefault}"
-                                    Command="{Binding FontViewModel.ResetFontCmd}">
-                                <local:AutoGreyableImage Source="Images/Reset.png"
-                                                         Width="16"
-                                                         Height="16" />
-                            </Button>
-                        </StackPanel>
-                    </MenuItem.Header>
-                    <MenuItem.Icon>
-                        <Image Source="Images/Font.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem StaysOpenOnClick="True">
-                    <MenuItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static p:Resources.Tooltip_FontFamily4NonGherkinText}"
-                                       ToolTip="{x:Static p:Resources.Tooltip_FontForNonGherkin}"
-                                       FontFamily="{Binding FontViewModel.DefaultFontFamily4NonGherkin}"
-                                       VerticalAlignment="Center"
-                                       Margin="0, 0, 6, 0" />
-                            <ComboBox Name="defaultFont4NonGherkinComboBox"
-                                      MinWidth="80"
-                                      SelectedItem="{Binding FontViewModel.DefaultFontFamily4NonGherkin, Mode=TwoWay}"
-                                      ItemsSource="{Binding FontViewModel.SystemFonts}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center"
-                                                   Text="{Binding Converter={StaticResource FontFamilyToNameConverter}, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <xctk:IntegerUpDown FormatString="N0"
-                                                Margin="3, 0, 0, 0"
-                                                AllowTextInput="False"
-                                                Value="{Binding FontViewModel.DefaultFontSize4NonGherkin, Mode=TwoWay, FallbackValue=10}"
-                                                Increment="1"
-                                                Minimum="10"
-                                                Maximum="28"
-                                                ToolTip="{x:Static p:Resources.Tooltip_FontSize}" />
-                            <Button Margin="6, 0, 0, 0"
-                                    ToolTip="{x:Static p:Resources.Tooltip_FontFamilyDefault4NonGherkin}"
-                                    Command="{Binding FontViewModel.ResetFont4NonGherkinCmd}">
-                                <local:AutoGreyableImage Source="Images/Reset.png"
-                                                         Width="16"
-                                                         Height="16" />
-                            </Button>
-                        </StackPanel>
-                    </MenuItem.Header>
-                    <MenuItem.Icon>
-                        <Image Source="Images/Font.png"
-                               Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuSetting_AutoGenGUID}"
-                          StaysOpenOnClick="True"
-                          IsChecked="{Binding GherkinSettings.GenerateGUIDforScenario}" />
                 <MenuItem Header="{x:Static p:Resources.MenuSetting_ChangeLanguage}">
                     <MenuItem.Icon>
                         <Image Source="Images/LanguageChange.png"
-                               Height="16" />
+                               Height="24" />
                     </MenuItem.Icon>
                     <MenuItem Header="English"
                               Command="{Binding GherkinSettings.ChangeLanguageCmd}"
@@ -675,8 +555,12 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuHelp_Help}">
+                <MenuItem Header="{x:Static p:Resources.MenuHelp_GherkinHelp}"
+                          Command="{Binding ShowHelpCmd}" />
                 <MenuItem Header="{x:Static p:Resources.MenuHelp_GherkinKeywords}"
                           Click="OnGherkinKeywordsMenuClicked" />
+                <MenuItem Header="{x:Static p:Resources.MenuHelp_LaTeXSymbols}"
+                          Command="{Binding ShowLaTeXSymbolsCmd}" />
                 <MenuItem Header="{x:Static p:Resources.MenuHelp_About}"
                           Command="{Binding AboutViewModel.AboutGherkinCmd}" />
             </MenuItem>
@@ -754,12 +638,14 @@
                        Height="16" />
             </Button>
             <Button Command="cmd:AvalonEditCommands.IndentSelection"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
                     ToolTip="{x:Static p:Resources.MenuEdit_Indentation}">
                 <Image Source="Images/Trim.png"
                        Height="16" />
             </Button>
             <Separator />
             <CheckBox ToolTip="{x:Static p:Resources.Tooltip_ShowScenarioIndex}"
+                      Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                       IsChecked="{Binding ShowScenarioIndex}"
                       IsEnabled="{Binding IsShowScenarioIndexEnabled}">
                 <Image Source="{Binding ScenarioIndexIcon, FallbackValue={StaticResource scenarioIndexImage}}"
@@ -771,22 +657,19 @@
                        Height="16" />
             </CheckBox>
             <Button Command="{Binding GenCPPTestCodeCmd}"
+                    Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                     ToolTip="{x:Static p:Resources.MenuCompile_GenCpp}">
                 <Image Source="Images/Gencode.png"
                        Height="16" />
             </Button>
-            <CheckBox ToolTip="{x:Static p:Resources.MenuView_WorkAreaEditor}"
-                      IsChecked="{Binding Path=WorkAreaEditor.ShowMessageWindow}">
-                <Image Source="{Binding Path=WorkAreaEditor.MessageWindowIcon, FallbackValue={StaticResource messageWindowImage}}"
-                       Height="16" />
-            </CheckBox>
             <CheckBox ToolTip="{x:Static p:Resources.MenuCompile_SupportUnicode}"
-                      IsChecked="{Binding GherkinSettings.SupportUnicode}">
-                <Image Source="{Binding GherkinSettings.SupportUnicodeIcon, FallbackValue={StaticResource supportUnicodeImage}}"
+                      Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
+                      IsChecked="{Binding GherkinSettings.PropertyGridViewModel.SupportUnicode}">
+                <Image Source="{Binding GherkinSettings.PropertyGridViewModel.SupportUnicodeIcon, FallbackValue={StaticResource supportUnicodeImage}}"
                        Height="16" />
             </CheckBox>
             <Button Name="gherkinKeywordsButton"
-                    Visibility="{Binding Path=GherkinSettings.HasGherkinKeywords, Converter={StaticResource BoolToVisibility}}"
+                    Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                     ToolTip="{Binding GherkinSettings.GherkinKeywords}"
                     ToolTipService.ShowDuration="600000">
                 <Image Source="Images/WordIcon.png"
@@ -796,7 +679,7 @@
                       MinWidth="40"
                       ToolTip="{x:Static p:Resources.Tooltip_FontForGherkin}"
                       SelectedItem="{Binding CurrentFontFamily, Mode=TwoWay}"
-                      ItemsSource="{Binding FontViewModel.SystemFonts}">
+                      ItemsSource="{Binding SystemFonts}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock VerticalAlignment="Center"
@@ -848,18 +731,30 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem  Grid.Column="0">
-                <TextBlock Text="{Binding Status}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <bc:ImageButton x:Name="clearStatusButton"
+                                    Source="Images/Reset.png"
+                                    Height="20"
+                                    ToolTip="{x:Static p:Resources.Tooltip_ClearStatus}"
+                                    Command="{Binding Path=ClearStatusCmd}"/>
+
+                    <TextBlock Grid.Column="1" Text="{Binding Status}" />
+                </Grid>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1">
                 <Border BorderBrush="DarkGray" BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=Codepage}" VerticalAlignment="Center" />
                         <bc:ImageButton x:Name="codePageButton"
-                                ToolTip="{x:Static p:Resources.Status_CodePageListTitle}"
-                                Visibility="{Binding Path=CanShowCodePageList, Converter={StaticResource BoolToVisibility}}"
-                                Command="{Binding Path=ShowCodePageListCmd}"
+                                        ToolTip="{x:Static p:Resources.Status_CodePageListTitle}"
+                                        Visibility="{Binding Path=CanShowCodePageList, Converter={StaticResource BoolToVisibility}}"
+                                        Command="{Binding Path=ShowCodePageListCmd}"
                                         Source="Images/ReloadFile.png"
-                                        Height="16"/>
+                                        Height="16" />
                         <local:CodePageListPopup IsOpen="{Binding Path=CodePageListPopupViewModel.ShowCodePageList}"
                                                  PlacementTarget="{Binding ElementName=codePageButton}"
                                Placement="Top"
@@ -874,7 +769,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*" />
                 <RowDefinition Height="Auto" />
-                <vm:HiddenableRowDefinition Height="50*"
+                <vm:HiddenableRowDefinition Height="20*"
                                             IsHidden="{Binding Path=WorkAreaEditor.HideMessageWindow}" />
             </Grid.RowDefinitions>
             <bc:TabControl x:Name="editorTabControl"
@@ -1048,8 +943,7 @@
                                   Grid.Column="1">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*" />
-                                    <vm:HiddenableRowDefinition Height="Auto"
-                                                                IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideSplitView}" />
+                                    <RowDefinition Height="Auto"/>
                                     <vm:HiddenableRowDefinition Height="50*"
                                                                 IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideSplitView}" />
                                 </Grid.RowDefinitions>
@@ -1074,8 +968,9 @@
 
             <GridSplitter Name="bottomHSplitter"
                           Grid.Row="1"
+                          Height="10"
                           BorderBrush="DarkGoldenrod"
-                          Background="White"
+                          Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                           BorderThickness="1"
                           HorizontalAlignment="Stretch">
                 <GridSplitter.Style>
@@ -1097,7 +992,7 @@
                                                                 ToolTip="{x:Static p:Resources.Tooltip_ShowWorkAreaEditor}"
                                                                 Cursor="Arrow"
                                                                 Source="Images/Expand.png"
-                                                                Visibility="{Binding Path=WorkAreaEditor.HideMessageWindow, Converter={StaticResource BoolToVisibility}}"
+                                                                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
                                                                 Command="{Binding Path=WorkAreaEditor.ShowMessageWindowCmd}">
                                                 </bc:ImageButton>
                                                 <bc:ImageButton x:Name="hideWorkAreaButton"
@@ -1105,7 +1000,7 @@
                                                                 ToolTip="{x:Static p:Resources.Tooltip_HideWorkAreaEditor}"
                                                                 Cursor="Arrow"
                                                                 Source="Images/Collapse.png"
-                                                                Visibility="{Binding Path=WorkAreaEditor.ShowMessageWindow, Converter={StaticResource BoolToVisibility}}"
+                                                                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
                                                                 Command="{Binding Path=WorkAreaEditor.HideMessageWindowCmd}">
                                                 </bc:ImageButton>
                                             </StackPanel>
@@ -1117,7 +1012,33 @@
                     </Style>
                 </GridSplitter.Style>
             </GridSplitter>
-            
+
+            <Popup x:Name="cppCodeGenResultUagePopup"
+                   IsOpen="{Binding Path=WorkAreaEditor.ShowCPPCodeGenResultUsagePopup}"
+                   PlacementTarget="{Binding ElementName=bottomHSplitter}"
+                   Placement="Right"
+                   HorizontalOffset="-480"
+                   VerticalOffset="12"
+                   StaysOpen="True">
+
+                <Border BorderBrush="Goldenrod"
+                        BorderThickness="1">
+                    <StackPanel Background="LightGray"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <bc:ImageButton DockPanel.Dock="Right"
+                                        Source="Images/DeleteTab.png"
+                                        VerticalAlignment="Top"
+                                        Height="16"
+                                        Command="{Binding Path=WorkAreaEditor.CloseCPPCodeGenResultUagePopupCmd}">
+                        </bc:ImageButton>
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="Blue"
+                                   Text="{x:Static p:Resources.Tooltip_CPPCodeGenResultUage}" />
+                    </StackPanel>
+                </Border>
+            </Popup>
+
             <avalonEdit:TextEditor Name="messageTextEditor"
                                    Grid.Row="2"
                                    ContextMenu="{StaticResource editorContextMenu}" />

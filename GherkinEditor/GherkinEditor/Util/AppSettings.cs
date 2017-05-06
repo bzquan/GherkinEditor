@@ -353,14 +353,6 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("False")]
-        public bool ShowMessageWindow
-        {
-            get { return (bool)this["ShowMessageWindow"]; }
-            set { this["ShowMessageWindow"] = value; }
-        }
-
-        [UserScopedSetting()]
         [DefaultSettingValueAttribute("True")]
         public bool ShowColumnRuler
         {
@@ -385,7 +377,7 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("False")]
+        [DefaultSettingValueAttribute("True")]
         public bool SupportUnicode
         {
             get { return (bool)this["SupportUnicode"]; }
@@ -521,6 +513,54 @@ namespace Gherkin.Util
         {
             get { return (string)this["ColorOfHighlightingMockAttribute"]; }
             set { this["ColorOfHighlightingMockAttribute"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("True")]
+        public bool ConvertTabsToSpaces
+        {
+            get { return (bool)this["ConvertTabsToSpaces"]; }
+            set { this["ConvertTabsToSpaces"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("4")]
+        public int IndentationSize
+        {
+            get { return (int)this["IndentationSize"]; }
+            set { this["IndentationSize"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool ShowEndOfLine
+        {
+            get { return (bool)this["ShowEndOfLine"]; }
+            set { this["ShowEndOfLine"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool ShowSpaces
+        {
+            get { return (bool)this["ShowSpaces"]; }
+            set { this["ShowSpaces"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool ShowTabs
+        {
+            get { return (bool)this["ShowTabs"]; }
+            set { this["ShowTabs"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool WordWrap
+        {
+            get { return (bool)this["WordWrap"]; }
+            set { this["WordWrap"] = value; }
         }
 
         private void UpdateRecentFiles(string newFilePath)

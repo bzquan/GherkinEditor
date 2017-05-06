@@ -45,7 +45,7 @@ namespace Gherkin.ViewModel
         private IAppSettings m_AppSettings;
         private FoldingExecutor FoldingExecutor { get; set; }
 
-        public TextEditor MainEditor { get; private set; }
+        public TextEditor MainEditor => MainGherkinEditor?.TextEditor;
         public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
         public TextDocument Document => MainGherkinEditor?.Document;
         public string CurrentFilePath { get; set; }
@@ -59,25 +59,24 @@ namespace Gherkin.ViewModel
             m_IsCloseTablesFolding = m_AppSettings.IsCloseTablesFoldingByDefault;
             m_IsCloseScenarioFolding = m_AppSettings.IsCloseScenarioFoldingByDefault;
             m_IsScenarioIndexHidden = !m_AppSettings.ShowScenarioIndexByDefault;
-            m_IsSplitViewHidden = !m_AppSettings.ShowSplitViewByDefault;
             LoadFileInfo(filePath);
             HideScenarioIndex = !m_AppSettings.ShowScenarioIndexByDefault;
-            HideSplitView = !m_AppSettings.ShowSplitViewByDefault;
+            HideSplitView = !NeedShowSplitView(filePath);
         }
 
         public ObservableCollection<ScenarioIndex> ScenarioIndexes => m_ScenarioIndexList;
         public ICommand HideScenarioIndexCmd => new DelegateCommandNoArg(OnHideScenarioIndex);
 
         private bool IsEditorViewLoaded => MainEditor != null;
+        private bool NeedShowSplitView(string filePath) => m_AppSettings.ShowSplitViewByDefault && GherkinUtil.IsFeatureFile(filePath);
 
         public void InitializeEditorView(TextEditor mainEditor, TextEditor subEditor)
         {
-            MainEditor = mainEditor;
-            MainGherkinEditor = new GherkinEditor(MainEditor, m_AppSettings, FontFamily, FontSize);
+            TextDocument document = mainEditor.Document;
+            MainGherkinEditor = new GherkinEditor(mainEditor, subEditor, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: false);
             mainEditor.TextArea.IsKeyboardFocusedChanged += OnMainEditorKeyboardFocusedChanged;
 
-            SubGherkinEditor = new GherkinEditor(subEditor, m_AppSettings, FontFamily, FontSize);
-            SubEditor.Document = MainEditor.Document;
+            SubGherkinEditor = new GherkinEditor(subEditor, null/*subEditor*/, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: true);
             subEditor.TextArea.IsKeyboardFocusedChanged += OnSubEditorKeyboardFocusedChanged;
 
             FoldingExecutor = new FoldingExecutor(MainGherkinEditor, SubGherkinEditor);
@@ -106,9 +105,24 @@ namespace Gherkin.ViewModel
             FontSize = fileInfo.FontSize;
         }
 
-        public void ShowSearchPanel()
+        public bool ShowSearchPanel()
         {
-            FocusedGherkinEditor?.ShowSearchPanel();
+            var editor = FocusedGherkinEditor;
+            editor?.ShowSearchPanel();
+            return (editor != null);
+        }
+
+        private GherkinEditor FocusedGherkinEditor
+        {
+            get
+            {
+                if (MainGherkinEditor?.HasFocus == true)
+                    return MainGherkinEditor;
+                else if (SubGherkinEditor?.HasFocus == true)
+                    return SubGherkinEditor;
+                else
+                    return null;
+            }
         }
 
         public void UpdateColumnRuler()
@@ -123,17 +137,40 @@ namespace Gherkin.ViewModel
             SubGherkinEditor?.UpdateRequireControlModifierForHyperlinkClick();
         }
 
-        private GherkinEditor FocusedGherkinEditor
+        public void UpdateConvertTabsToSpaces()
         {
-            get
-            {
-                if (MainGherkinEditor?.HasFocus == true)
-                    return MainGherkinEditor;
-                else if (SubGherkinEditor?.HasFocus == true)
-                    return SubGherkinEditor;
-                else
-                    return MainGherkinEditor;
-            }
+            MainGherkinEditor?.UpdateConvertTabsToSpaces();
+            SubGherkinEditor?.UpdateConvertTabsToSpaces();
+        }
+
+        public void UpdateIndentationSize()
+        {
+            MainGherkinEditor?.UpdateIndentationSize();
+            SubGherkinEditor?.UpdateIndentationSize();
+        }
+
+        public void UpdateShowEndOfLine()
+        {
+            MainGherkinEditor?.UpdateShowEndOfLine();
+            SubGherkinEditor?.UpdateShowEndOfLine();
+        }
+
+        public void UpdateShowSpaces()
+        {
+            MainGherkinEditor?.UpdateShowSpaces();
+            SubGherkinEditor?.UpdateShowSpaces();
+        }
+
+        public void UpdateShowTabs()
+        {
+            MainGherkinEditor?.UpdateShowTabs();
+            SubGherkinEditor?.UpdateShowTabs();
+        }
+
+        public void UpdateWordWrap()
+        {
+            MainGherkinEditor?.UpdateWordWrap();
+            SubGherkinEditor?.UpdateWordWrap();
         }
 
         public bool HasSearchHighlightingTransformer()
@@ -235,6 +272,7 @@ namespace Gherkin.ViewModel
                 GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
                 MainEditor.Encoding = encoding ?? GetEncoding(fileInfo);
                 MainEditor.Load(filePath);
+                HideSplitView = !NeedShowSplitView(filePath);
                 m_AppSettings.UpdateCodePage(filePath, MainEditor.Encoding.CodePage);
                 ScrollCursorTo(fileInfo.CursorLine, fileInfo.CursorColumn);
                 EventAggregator<FileLoadedArg>.Instance.Publish(this, new FileLoadedArg());
@@ -337,9 +375,9 @@ namespace Gherkin.ViewModel
                         FoldingExecutor.InstallFoldingManager(CurrentFilePath);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                // do nothing
+                EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg(ex.Message));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Gherkin.ViewModel;
+﻿using Gherkin.Model;
+using Gherkin.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,7 +84,7 @@ namespace Gherkin.View
         public void LoadDocument(IDocumentPaginatorSource document)
         {
             m_Document = document;
-            documentViewer.Document = (IDocumentPaginatorSource)document;
+            documentViewer.Document = document;
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)

@@ -265,7 +265,7 @@
     <value>Gherkin folding</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>Setting keywords highlighting</value>
+    <value>Gherkin keywords highlighting</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>Highlight current line</value>
@@ -277,7 +277,7 @@
     <value>Mock color</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>Reset all highlighting colors</value>
+    <value>Reset highlighting colors</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>Setting</value>
@@ -380,8 +380,7 @@ It can generate C++ test code based on GoogleTest.</value>
     <value>Confirm save</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
-    <value>C++ test codes are generated.
-You can copy the generated files to a folder by "Copy file to" context menu.</value>
+    <value>C++ test codes are generated.</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>There is following error when generating C++ test code.</value>
@@ -552,13 +551,89 @@ Any change of the file would be discarded.</value>
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>Show work area window</value>
   </data>
-  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
-    <value>Column ruler</value>
+  <data name="MenuSetting_ShowColumnRuler" xml:space="preserve">
+    <value>Show column ruler</value>
   </data>
   <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>Open web browser in Ctrl + Click</value>
   </data>
   <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>Use Ctrl key to open URL by Web browser</value>
+  </data>
+  <data name="Tooltip_CPPCodeGenResultUage" xml:space="preserve">
+    <value>1. Copy file by "Copy file to" context menu.
+2. Use Ctr key to open a file.</value>
+  </data>
+  <data name="Message_DlgCopyFileToTitle" xml:space="preserve">
+    <value>Copy file to</value>
+  </data>
+  <data name="MenuSetting_SettingMenuHeader" xml:space="preserve">
+    <value>Detail settings</value>
+  </data>
+  <data name="Tooltip_FontSizeForGherkin" xml:space="preserve">
+    <value>Font size for Gherkin document</value>
+  </data>
+  <data name="Tooltip_FontSizeForNonGherkin" xml:space="preserve">
+    <value>Font size for Non Gherkin document</value>
+  </data>
+  <data name="MenuSetting_ColumnRulerPosition" xml:space="preserve">
+    <value>Column ruler position</value>
+  </data>
+  <data name="MenuSetting_ConvertTabsToSpaces" xml:space="preserve">
+    <value>Convert tabs to spaces</value>
+  </data>
+  <data name="MenuSetting_ShowEndOfLine" xml:space="preserve">
+    <value>Show end of line</value>
+  </data>
+  <data name="MenuSetting_ShowSpaces" xml:space="preserve">
+    <value>Show spaces</value>
+  </data>
+  <data name="MenuSetting_ShowTabs" xml:space="preserve">
+    <value>Show tabs</value>
+  </data>
+  <data name="MenuSetting_SpecialSymbols" xml:space="preserve">
+    <value>Special symbols</value>
+  </data>
+  <data name="MenuEdit_ContextShowCodeCompletion" xml:space="preserve">
+    <value>Show IntelliSense</value>
+  </data>
+  <data name="MenuEdit_ContextTabBackward" xml:space="preserve">
+    <value>Delete tab</value>
+  </data>
+  <data name="MenuHelp_GherkinHelp" xml:space="preserve">
+    <value>Basic Help</value>
+  </data>
+  <data name="MenuHelp_LaTeXSymbols" xml:space="preserve">
+    <value>LaTeX Math Symbols</value>
+  </data>
+  <data name="Tooltip_HideSubEditor" xml:space="preserve">
+    <value>Hide sub editor</value>
+  </data>
+  <data name="Tooltip_ShowSubEditor" xml:space="preserve">
+    <value>Show sub editor</value>
+  </data>
+  <data name="Tooltip_ClearStatus" xml:space="preserve">
+    <value>Clear status message</value>
+  </data>
+  <data name="MenuTool_SaveAsPDF" xml:space="preserve">
+    <value>Save as PDF</value>
+  </data>
+  <data name="MenuTool_SaveAsXPS" xml:space="preserve">
+    <value>Save as XPS</value>
+  </data>
+  <data name="MenuTool_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="MenuTool_SaveAsWord" xml:space="preserve">
+    <value>Save as word file(by Word)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFByWord" xml:space="preserve">
+    <value>Save as PDF(by Word)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFBySharpPDF" xml:space="preserve">
+    <value>Save as PDF(Print version)</value>
+  </data>
+  <data name="MenuTool_SaveAsRTF" xml:space="preserve">
+    <value>Save as RTF</value>
   </data>
 </root>

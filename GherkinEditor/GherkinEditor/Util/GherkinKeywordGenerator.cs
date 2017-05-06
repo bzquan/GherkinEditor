@@ -98,7 +98,7 @@ namespace Gherkin.Util
 
         private static string OutputFilePath()
         {
-            string appDirectory = Util.StartupFolder();
+            string appDirectory = FileUtil.StartupFolder();
             return Path.Combine(appDirectory, "GherkinKeyword.txt");
         }
     }

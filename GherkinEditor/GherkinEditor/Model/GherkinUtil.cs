@@ -11,6 +11,7 @@ namespace Gherkin.Model
         public const string DEFAULT_LANGUAGE = "en";
         public const string GherkinHighlightingBaseName = "GherkinHighlighting";
         public const string FEATURE_EXTENSION = ".feature";
+        public const string CSHARP_EXTENSION = ".cs";
 
         static GherkinDialectProviderExtention s_GherkinDialectcs = new GherkinDialectProviderExtention();
         static List<string> s_LoadedHighlitings = new List<string>();
@@ -92,11 +93,18 @@ namespace Gherkin.Model
 
         public static bool IsFeatureFile(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath)) return false;
             return HasExtension(filePath, FEATURE_EXTENSION);
         }
 
-        public static bool HasExtension(string filePath, string ext) =>
-            filePath.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase);
+        public static bool IsCSharpFile(string filePath)
+        {
+            return HasExtension(filePath, CSHARP_EXTENSION);
+        }
+
+        public static bool HasExtension(string filePath, string ext)
+        {
+            if (string.IsNullOrEmpty(filePath)) return false;
+            return filePath.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

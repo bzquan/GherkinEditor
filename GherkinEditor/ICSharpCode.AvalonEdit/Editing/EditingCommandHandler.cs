@@ -91,9 +91,10 @@ namespace ICSharpCode.AvalonEdit.Editing
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertSpacesToTabs, OnConvertSpacesToTabs));
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertLeadingTabsToSpaces, OnConvertLeadingTabsToSpaces));
 			CommandBindings.Add(new CommandBinding(AvalonEditCommands.ConvertLeadingSpacesToTabs, OnConvertLeadingSpacesToTabs));
-			CommandBindings.Add(new CommandBinding(AvalonEditCommands.IndentSelection, OnIndentSelection));
+			CommandBindings.Add(new CommandBinding(AvalonEditCommands.IndentSelection, OnIndentSelection, CanIndentSelection));
             // Note: added by bzquan@gmail.com
             CommandBindings.Add(new CommandBinding(AvalonEditCommands.CopyFileTo, OnCopyFileTo, CanCopyFileTo));
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.ShowCodeCompletion, OnShowCodeCompletion, CanShowCodeCompletion));
 
             TextAreaDefaultInputHandler.WorkaroundWPFMemoryLeak(InputBindings);
 		}
@@ -416,43 +417,64 @@ namespace ICSharpCode.AvalonEdit.Editing
 		static void OnPaste(object target, ExecutedRoutedEventArgs args)
 		{
 			TextArea textArea = GetTextArea(target);
-			if (textArea != null && textArea.Document != null) {
-				IDataObject dataObject;
-				try {
-					dataObject = Clipboard.GetDataObject();
-				} catch (ExternalException) {
-					return;
-				}
-				if (dataObject == null)
-					return;
-				
-				var pastingEventArgs = new DataObjectPastingEventArgs(dataObject, false, DataFormats.UnicodeText);
-				textArea.RaiseEvent(pastingEventArgs);
-				if (pastingEventArgs.CommandCancelled)
-					return;
-				
-				string text = GetTextToPaste(pastingEventArgs, textArea);
-				
-				if (!string.IsNullOrEmpty(text)) {
-					dataObject = pastingEventArgs.DataObject;
-					bool fullLine = textArea.Options.CutCopyWholeLine && dataObject.GetDataPresent(LineSelectedType);
-					bool rectangular = dataObject.GetDataPresent(RectangleSelection.RectangularSelectionDataType);
-					
-					if (fullLine) {
-						DocumentLine currentLine = textArea.Document.GetLineByNumber(textArea.Caret.Line);
-						if (textArea.ReadOnlySectionProvider.CanInsert(currentLine.Offset)) {
-							textArea.Document.Insert(currentLine.Offset, text);
-						}
-					} else if (rectangular && textArea.Selection.IsEmpty && !(textArea.Selection is RectangleSelection)) {
-						if (!RectangleSelection.PerformRectangularPaste(textArea, textArea.Caret.Position, text, false))
-							textArea.ReplaceSelectionWithText(text);
-					} else {
-						textArea.ReplaceSelectionWithText(text);
-					}
-				}
-				textArea.Caret.BringCaretToView();
-				args.Handled = true;
-			}
+            if (textArea != null && textArea.Document != null)
+            {
+                IDataObject dataObject;
+                try
+                {
+                    dataObject = Clipboard.GetDataObject();
+                }
+                catch (ExternalException)
+                {
+                    return;
+                }
+                if (dataObject == null)
+                    return;
+
+                var pastingEventArgs = new DataObjectPastingEventArgs(dataObject, false, DataFormats.UnicodeText);
+                textArea.RaiseEvent(pastingEventArgs);
+                if (pastingEventArgs.CommandCancelled)
+                    return;
+
+                string text = GetTextToPaste(pastingEventArgs, textArea);
+
+                if (string.IsNullOrEmpty(text)) return;
+
+                dataObject = pastingEventArgs.DataObject;
+                bool fullLine = textArea.Options.CutCopyWholeLine && dataObject.GetDataPresent(LineSelectedType);
+                bool rectangular = dataObject.GetDataPresent(RectangleSelection.RectangularSelectionDataType);
+
+                bool isTextPasted = false;
+                if (fullLine)
+                {
+                    DocumentLine currentLine = textArea.Document.GetLineByNumber(textArea.Caret.Line);
+                    if (textArea.ReadOnlySectionProvider.CanInsert(currentLine.Offset))
+                    {
+                        textArea.Document.Insert(currentLine.Offset, text);
+                        isTextPasted = true;
+                    }
+                }
+                else if (rectangular && textArea.Selection.IsEmpty && !(textArea.Selection is RectangleSelection))
+                {
+                    if (!RectangleSelection.PerformRectangularPaste(textArea, textArea.Caret.Position, text, false))
+                    {
+                        textArea.ReplaceSelectionWithText(text);
+                        isTextPasted = true;
+                    }
+                }
+                else
+                {
+                    textArea.ReplaceSelectionWithText(text);
+                    isTextPasted = true;
+                }
+
+                if (isTextPasted)
+                {
+                    textArea.Caret.BringCaretToView();
+                    textArea.OnTextPasted(new TextEventArgs(text));
+                }
+                args.Handled = true;
+            }
 		}
 		
 		internal static string GetTextToPaste(DataObjectPastingEventArgs pastingEventArgs, TextArea textArea)
@@ -660,6 +682,18 @@ namespace ICSharpCode.AvalonEdit.Editing
 			}
 		}
 
+        static void CanIndentSelection(object target, CanExecuteRoutedEventArgs args)
+        {
+            // HasSomethingSelected for copy and cut commands
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null && textArea.Document != null)
+            {
+                args.CanExecute = textArea.IndentationStrategy.SupportMultiLinesIndent(textArea.Document);
+                args.Handled = true;
+            }
+        }
+
+        #region copy file to
         /// <summary>
         /// Copy cursor line file to a folder
         /// Note: added by bzquan@gmail.com
@@ -671,7 +705,7 @@ namespace ICSharpCode.AvalonEdit.Editing
             TextArea textArea = GetTextArea(target);
             if (textArea != null)
             {
-                textArea.CopyFileToHandler?.Invoke(LineTextInCurrentCursor(textArea));
+                textArea.Options.CopyFileToHandler?.Invoke(LineTextInCurrentCursor(textArea));
                 args.Handled = true;
             }
         }
@@ -685,7 +719,7 @@ namespace ICSharpCode.AvalonEdit.Editing
         static void CanCopyFileTo(object target, CanExecuteRoutedEventArgs args)
         {
             TextArea textArea = GetTextArea(target);
-            if ((textArea != null) && (textArea.CopyFileToHandler != null))
+            if ((textArea != null) && (textArea.Options.CopyFileToHandler != null))
             {
                 var line_text = LineTextInCurrentCursor(textArea);
                 args.CanExecute = File.Exists(line_text);
@@ -702,5 +736,40 @@ namespace ICSharpCode.AvalonEdit.Editing
                            .GetText(line.Offset, line.TotalLength)
                            .Trim();
         }
+        #endregion
+
+        #region Show code completion.
+        /// <summary>
+        /// Show code completion.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void OnShowCodeCompletion(object target, ExecutedRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                textArea.Options.ShowCodeCompletionCmd?.Execute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Check if it could show code completion.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void CanShowCodeCompletion(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if ((textArea != null) && (textArea.Options.ShowCodeCompletionCmd != null))
+            {
+                args.CanExecute = textArea.Options.ShowCodeCompletionCmd.CanExecute(parameter: null);
+                args.Handled = true;
+            }
+        }
+        #endregion
     }
 }

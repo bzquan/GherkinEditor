@@ -28,8 +28,11 @@ namespace ICSharpCode.AvalonEdit.Indentation
 	/// </summary>
 	public class DefaultIndentationStrategy : IIndentationStrategy
 	{
-		/// <inheritdoc/>
-		public virtual void IndentLine(TextDocument document, DocumentLine line)
+        /// <inheritdoc/>
+        public virtual bool SupportMultiLinesIndent(TextDocument document) => false;
+
+        /// <inheritdoc/>
+        public virtual void IndentLine(TextDocument document, DocumentLine line)
 		{
 			if (document == null)
 				throw new ArgumentNullException("document");

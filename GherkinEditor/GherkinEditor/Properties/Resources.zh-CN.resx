@@ -214,7 +214,7 @@
     <value>全部保存</value>
   </data>
   <data name="MenuFile_SaveAs" xml:space="preserve">
-    <value>取名保存(_A)</value>
+    <value>按名保存(_A)</value>
   </data>
   <data name="MenuFind_FindReplace" xml:space="preserve">
     <value>检索 &amp; 替换</value>
@@ -265,7 +265,7 @@
     <value>Gherkin折叠</value>
   </data>
   <data name="MenuSetting_GherkinHighlighting" xml:space="preserve">
-    <value>设置关键字亮显</value>
+    <value>Gherkin关键字亮显</value>
   </data>
   <data name="MenuSetting_HighlightCurrentLine" xml:space="preserve">
     <value>亮显当前行</value>
@@ -277,7 +277,7 @@
     <value>Mock属性颜色</value>
   </data>
   <data name="MenuSetting_ResetHighlightingColor" xml:space="preserve">
-    <value>全部缺省亮显颜色</value>
+    <value>恢复亮显颜色</value>
   </data>
   <data name="MenuSetting_Setting" xml:space="preserve">
     <value>设定</value>
@@ -380,8 +380,7 @@
     <value>确认保存</value>
   </data>
   <data name="Message_CppTestCodeGeneration" xml:space="preserve">
-    <value>生成了如下C++测试代码。
-用"拷贝文件到"菜单可把文件拷贝到指定文件夹。</value>
+    <value>生成了如下C++测试代码。</value>
   </data>
   <data name="Message_HasErrorInCodeGeneration" xml:space="preserve">
     <value>生成C++测试代码时，发生了如下错误。</value>
@@ -552,13 +551,89 @@
   <data name="Tooltip_ShowWorkAreaEditor" xml:space="preserve">
     <value>显示工作区窗口</value>
   </data>
-  <data name="MenuSetting_ColumnRuler" xml:space="preserve">
-    <value>列尺</value>
+  <data name="MenuSetting_ShowColumnRuler" xml:space="preserve">
+    <value>显示列尺</value>
   </data>
   <data name="MenuSetting_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>用(Ctrl + Click)打开浏览器</value>
   </data>
   <data name="Tooltip_RequireControlModifierForHyperlinkClick" xml:space="preserve">
     <value>对于文本中的URL，打开Web浏览器时，需要用Ctrl键</value>
+  </data>
+  <data name="Tooltip_CPPCodeGenResultUage" xml:space="preserve">
+    <value>1. 用「拷贝文件到」上下文菜单可拷贝自动生成的C++代码。
+2. 用Ctr键打开文件。</value>
+  </data>
+  <data name="Message_DlgCopyFileToTitle" xml:space="preserve">
+    <value>文件拷贝</value>
+  </data>
+  <data name="MenuSetting_SettingMenuHeader" xml:space="preserve">
+    <value>详细设定</value>
+  </data>
+  <data name="Tooltip_FontSizeForGherkin" xml:space="preserve">
+    <value>Gherkin文档的字体大小</value>
+  </data>
+  <data name="Tooltip_FontSizeForNonGherkin" xml:space="preserve">
+    <value>非Gherkin文档的字体大小</value>
+  </data>
+  <data name="MenuSetting_ColumnRulerPosition" xml:space="preserve">
+    <value>列尺显示位置</value>
+  </data>
+  <data name="MenuSetting_ConvertTabsToSpaces" xml:space="preserve">
+    <value>用空格替换tab</value>
+  </data>
+  <data name="MenuSetting_ShowEndOfLine" xml:space="preserve">
+    <value>显示行结束符</value>
+  </data>
+  <data name="MenuSetting_ShowSpaces" xml:space="preserve">
+    <value>显示空格符</value>
+  </data>
+  <data name="MenuSetting_ShowTabs" xml:space="preserve">
+    <value>显示Tab符</value>
+  </data>
+  <data name="MenuSetting_SpecialSymbols" xml:space="preserve">
+    <value>特殊符号</value>
+  </data>
+  <data name="MenuEdit_ContextShowCodeCompletion" xml:space="preserve">
+    <value>显示IntelliSense</value>
+  </data>
+  <data name="MenuEdit_ContextTabBackward" xml:space="preserve">
+    <value>删除Tab</value>
+  </data>
+  <data name="MenuHelp_GherkinHelp" xml:space="preserve">
+    <value>简易帮助</value>
+  </data>
+  <data name="MenuHelp_LaTeXSymbols" xml:space="preserve">
+    <value>LaTeX数学符号</value>
+  </data>
+  <data name="Tooltip_HideSubEditor" xml:space="preserve">
+    <value>隐藏副编辑器</value>
+  </data>
+  <data name="Tooltip_ShowSubEditor" xml:space="preserve">
+    <value>显示副编辑器</value>
+  </data>
+  <data name="Tooltip_ClearStatus" xml:space="preserve">
+    <value>清除状态信息</value>
+  </data>
+  <data name="MenuTool_SaveAsPDF" xml:space="preserve">
+    <value>保存为PDF文件</value>
+  </data>
+  <data name="MenuTool_SaveAsXPS" xml:space="preserve">
+    <value>保存为XPS文件</value>
+  </data>
+  <data name="MenuTool_Tools" xml:space="preserve">
+    <value>工具</value>
+  </data>
+  <data name="MenuTool_SaveAsWord" xml:space="preserve">
+    <value>保存为Word文件(用Word)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFByWord" xml:space="preserve">
+    <value>保存为PDF文件(Word格式)</value>
+  </data>
+  <data name="MenuTool_SaveAsPDFBySharpPDF" xml:space="preserve">
+    <value>保存为PDF文件(打印格式)</value>
+  </data>
+  <data name="MenuTool_SaveAsRTF" xml:space="preserve">
+    <value>保存为RTF文件</value>
   </data>
 </root>

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ICSharpCode.AvalonEdit;
 using System.Windows.Input;
 using System.Windows;
-using static Gherkin.Util.Util;
 using System.Collections.ObjectModel;
 using Gherkin.View;
 using System.IO;
@@ -14,6 +13,9 @@ using System.Diagnostics;
 using Gherkin.Model;
 using ICSharpCode.AvalonEdit.Rendering;
 using System.Windows.Media;
+
+using static Gherkin.Util.Util;
+using Gherkin.Util;
 
 namespace Gherkin.ViewModel
 {

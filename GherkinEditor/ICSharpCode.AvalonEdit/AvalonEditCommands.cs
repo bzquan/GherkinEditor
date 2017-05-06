@@ -17,6 +17,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace ICSharpCode.AvalonEdit
@@ -110,10 +112,20 @@ namespace ICSharpCode.AvalonEdit
 			});
 
         /// <summary>
-        /// Copy cursor line file to a folder.
+        /// Copy file(file name on cursor line) to a folder.
         /// Note: added by bzquan@gmail.com
         /// </summary>
         public static readonly RoutedCommand CopyFileTo =
             new RoutedCommand("CopyFileTo", typeof(TextEditor));
+
+        /// <summary>
+        /// Show code completion.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        public static readonly RoutedCommand ShowCodeCompletion = new RoutedCommand(
+            "ShowCodeCompletion", typeof(TextEditor),
+            new InputGestureCollection {
+                new KeyGesture(Key.Space, ModifierKeys.Control)
+            });
     }
 }

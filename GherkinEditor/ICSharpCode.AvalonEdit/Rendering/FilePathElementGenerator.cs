@@ -15,8 +15,14 @@ namespace ICSharpCode.AvalonEdit.Rendering
         {
             ContainOpenableFilePath = options.ContainOpenableFilePath;
             FilePathClickedHandler = options.FilePathClickedHandler;
+            this.RequireControlModifierForClick = options.RequireControlModifierForHyperlinkClick;
         }
 
+        /// <summary>
+        /// Gets/Sets whether the user needs to press Control to click the link.
+        /// The default value is false.
+        /// </summary>
+        public bool RequireControlModifierForClick { get; set; }
         /// <inheritdoc/>
         public override int GetFirstInterestedOffset(int startOffset)
         {
@@ -58,6 +64,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
                 VisualLineFilePathText filePathText = new VisualLineFilePathText(CurrentContext.VisualLine, matched_length);
                 filePathText.FilePath = GetText(matchOffset);
                 filePathText.FilePathClickedHandler = this.FilePathClickedHandler;
+                filePathText.RequireControlModifierForClick = this.RequireControlModifierForClick;
 
                 return filePathText;
             }

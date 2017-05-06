@@ -52,7 +52,6 @@ namespace Gherkin.Util
         void UpdateCodePage(string filePath, int codePage);
         GherkinFileInfo GetFileInfo(string filePath);
         bool IsMainWindowStateMaximized { get; set; }
-        bool ShowMessageWindow { get; set; }
         bool ShowColumnRuler { get; set; }
         int ColumnRulerPositon { get; set; }
         bool SupportUnicode { get; set; }
@@ -74,6 +73,13 @@ namespace Gherkin.Util
         // Digits, string, table cell
         string ColorOfHighlightingConstants { get; set; }
         string ColorOfHighlightingMockAttribute { get; set; }
+
+        bool ConvertTabsToSpaces { get; set; }
+        int IndentationSize { get; set; }
+        bool ShowEndOfLine { get; set; }
+        bool ShowSpaces { get; set; }
+        bool ShowTabs { get; set; }
+        bool WordWrap { get; set; }
 
         void Save();
     }
