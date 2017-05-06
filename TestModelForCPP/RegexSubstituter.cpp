@@ -6,7 +6,7 @@ using namespace bdd;
 void RegexSubstituter::ExpandRegex(std::wstring& step_pattern)
 {
     StringUtility::ReplaceAll(step_pattern, IntRegexSymbol(), IntRegex());
-    StringUtility::ReplaceAll(step_pattern, FloatRegexSymbol(), FloatRegex());
+    StringUtility::ReplaceAll(step_pattern, doubleRegexSymbol(), doubleRegex());
     StringUtility::ReplaceAll(step_pattern, StringRegexSymbol(), StringRegex());
     StringUtility::ReplaceAll(step_pattern, MockAttrSymbol(), MockAttrRegex());
 }
@@ -14,7 +14,7 @@ void RegexSubstituter::ExpandRegex(std::wstring& step_pattern)
 void RegexSubstituter::CurryRegex(std::wstring& step_pattern)
 {
     StringUtility::ReplaceAll(step_pattern, IntRegex(), IntRegexSymbol());
-    StringUtility::ReplaceAll(step_pattern, FloatRegex(), FloatRegexSymbol());
+    StringUtility::ReplaceAll(step_pattern, doubleRegex(), doubleRegexSymbol());
     StringUtility::ReplaceAll(step_pattern, StringRegex(), StringRegexSymbol());
     StringUtility::ReplaceAll(step_pattern, MockAttrRegex(), MockAttrSymbol());
 }
@@ -34,12 +34,12 @@ std::wstring RegexSubstituter::IntRegex()
 	SINGLETON_SYMBOL(L"([-+]?\\d[\\d,]*)");
 }
 
-std::wstring RegexSubstituter::FloatRegexSymbol()
+std::wstring RegexSubstituter::doubleRegexSymbol()
 {
 	SINGLETON_SYMBOL(L"(_DOUBLE_)");
 }
 
-std::wstring RegexSubstituter::FloatRegex()
+std::wstring RegexSubstituter::doubleRegex()
 {
 	SINGLETON_SYMBOL(L"([-+]?\\d[\\d,]*\\.\\d+)");
 }
@@ -71,5 +71,5 @@ std::wstring RegexSubstituter::RowParamRegex()
 
 std::wstring RegexSubstituter::StepPattern()
 {
-	SINGLETON_SYMBOL(StringRegex() + L"|" + FloatRegex() + L"|" + RowParamRegex());
+	SINGLETON_SYMBOL(StringRegex() + L"|" + doubleRegex() + L"|" + RowParamRegex());
 }

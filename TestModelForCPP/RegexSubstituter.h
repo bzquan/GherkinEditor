@@ -8,7 +8,7 @@ namespace bdd
     {
     public:
         static std::wstring IntRegex();
-        static std::wstring FloatRegex();
+        static std::wstring doubleRegex();
         static std::wstring StringRegex();
         static std::wstring RowParamRegex();
         static std::wstring StepPattern();
@@ -19,7 +19,7 @@ namespace bdd
 
     private:
         static std::wstring IntRegexSymbol();
-        static std::wstring FloatRegexSymbol();
+        static std::wstring doubleRegexSymbol();
         static std::wstring StringRegexSymbol();
         static std::wstring MockAttrSymbol();
         static std::wstring MockAttrRegex();

@@ -6,7 +6,7 @@ namespace bdd
 {
     struct BDDStepArgType
     {
-        enum Enum { TableArg, DocStringArg, IntArg, FloatArg, StringArg, TableColumnArg };
+        enum Enum { TableArg, DocStringArg, IntArg, doubleArg, StringArg, TableColumnArg };
     };
 
     class BDDStepArg

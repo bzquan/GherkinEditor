@@ -96,7 +96,7 @@ void StepParser::ParseParams(std::wstring step_text, std::vector<BDDStepArg>& ar
     while (regex_search(text, match, stepRegex)) {
         BDDStepArg arg(match[0]);
         if ((arg.ArgType() == BDDStepArgType::IntArg) ||
-            (arg.ArgType() == BDDStepArgType::FloatArg))
+            (arg.ArgType() == BDDStepArgType::doubleArg))
         {
             arg.ArgIndex = numArg++;
         }
@@ -124,7 +124,7 @@ std::wstring StepParser::CreateStepPattern(std::wstring step_text, std::vector<B
         {
         case BDDStepArgType::TableColumnArg:
         case BDDStepArgType::IntArg:
-        case BDDStepArgType::FloatArg:
+        case BDDStepArgType::doubleArg:
         case BDDStepArgType::StringArg:
             StringUtility::ReplaceFirst(stepRegexText, paramIndicator, stepArg.RegexPattern());
             break;

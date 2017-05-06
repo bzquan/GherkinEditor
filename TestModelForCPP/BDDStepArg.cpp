@@ -28,7 +28,7 @@ wstring BDDStepArg::GetStepParam()
         return L"std::wstring, docStr";
     case BDDStepArgType::IntArg:
         return wstring(L"int, num") + StringUtility::itows(ArgIndex);
-    case BDDStepArgType::FloatArg:
+    case BDDStepArgType::doubleArg:
         return wstring(L"double, num") + StringUtility::itows(ArgIndex);
     case BDDStepArgType::StringArg:
         return wstring(L"std::wstring, str") + StringUtility::itows(ArgIndex);
@@ -64,7 +64,7 @@ void BDDStepArg::DeduceArgType(wstring arg)
     }
     else
     {
-        m_ArgType = BDDStepArgType::FloatArg;
-        m_RegexPattern = RegexSubstituter::FloatRegex();
+        m_ArgType = BDDStepArgType::doubleArg;
+        m_RegexPattern = RegexSubstituter::doubleRegex();
     }
 }
