@@ -27,6 +27,7 @@ namespace Gherkin.View
             InitializeComponent();
 
             m_ViewModel = viewModel;
+            this.Owner = Application.Current.MainWindow;
             this.DataContext = viewModel;
         }
 

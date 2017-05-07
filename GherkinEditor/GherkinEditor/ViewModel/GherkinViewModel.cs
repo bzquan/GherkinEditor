@@ -54,6 +54,7 @@ namespace Gherkin.ViewModel
         public ICommand ShowLaTeXSymbolsCmd => new DelegateCommandNoArg(OnShowLaTeXSymbols);
         public ICommand ShowHelpCmd => new DelegateCommandNoArg(OnShowHelp);
         public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus);
+        public ICommand PreviewDocumentCmd => new DelegateCommandNoArg(OnPreviewDocument);
 
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
@@ -531,37 +532,90 @@ namespace Gherkin.ViewModel
         private void OnSaveAsPDFByWord()
         {
             var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
-            pdfFileSaver.SaveAsPDFByWord();
+            string filePath = pdfFileSaver.SaveAsPDFByWord();
+            ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsPDFBySharpPDF()
         {
             var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
-            pdfFileSaver.SaveAsPDFBySharpPDF();
+            string filePath = pdfFileSaver.SaveAsPDFBySharpPDF();
+            ShowPreviewWindow(filePath);
         }
 
 
         private void OnSaveAsXPS()
         {
             var xpsFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
-            xpsFileSaver.SaveAsXPS();
+            string filePath = xpsFileSaver.SaveAsXPS();
+            ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsRTF()
         {
             var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
-            fileSaver.SaveAsRTF();
+            string filePath = fileSaver.SaveAsRTF();
+            ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsWord()
         {
             var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
-            fileSaver.SaveAsDocx();
+            string filePath = fileSaver.SaveAsDocx();
+            ShowPreviewWindow(filePath);
         }
 
         private bool CanSaveAsOtherFormat()
         {
             return string.IsNullOrEmpty(CurrentEditor?.Document.FileName) == false;
+        }
+
+        public bool OpenDocumentByNativeApplication
+        {
+            get { return m_AppSettings.OpenDocumentByNativeApplication; }
+            set
+            {
+                m_AppSettings.OpenDocumentByNativeApplication = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void ShowPreviewWindow(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            if (OpenDocumentByNativeApplication || GherkinUtil.IsPDFFile(filePath))
+            {
+                ShowPreviewByNativeApplication(filePath);
+            }
+            else
+            {
+                var viewModel = new DocumentPreviewViewModel();
+                var preview = new DocumentPreviewWindow(viewModel);
+                viewModel.FilePath = filePath;
+                preview.Show();
+            }
+        }
+
+        private void ShowPreviewByNativeApplication(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return;
+
+            try
+            {
+                Process.Start(filePath);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void OnPreviewDocument()
+        {
+            var viewModel = new DocumentPreviewViewModel();
+            var preview = new DocumentPreviewWindow(viewModel);
+            preview.Show();
         }
 
         public void OnPrint()

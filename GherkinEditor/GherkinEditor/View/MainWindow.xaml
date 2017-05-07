@@ -385,6 +385,7 @@
             <MenuItem Header="{x:Static p:Resources.MenuView_View}">
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_FoldTables}"
+                          StaysOpenOnClick="true"
                           Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding IsCloseTablesFolding}">
                     <MenuItem.Icon>
@@ -394,6 +395,7 @@
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_FoldScenario}"
+                          StaysOpenOnClick="true"
                           Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding IsCloseScenarioFolding}">
                     <MenuItem.Icon>
@@ -403,6 +405,7 @@
                 </MenuItem>
                 <MenuItem Command="{Binding OpenAllFoldingsCmd}"
                           Header="{x:Static p:Resources.MenuView_FoldOpenAll}"
+                          StaysOpenOnClick="true"
                           Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}">
                     <MenuItem.Icon>
                         <Image Source="Images/OpenAllFoldings.png"
@@ -411,6 +414,7 @@
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_ShowScenarioIndex}"
+                          StaysOpenOnClick="true"
                           Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
                           IsChecked="{Binding ShowScenarioIndex}"
                           IsEnabled="{Binding IsShowScenarioIndexEnabled}">
@@ -421,6 +425,7 @@
                 </MenuItem>
                 <MenuItem IsCheckable="True"
                           Header="{x:Static p:Resources.MenuView_SplitEditor}"
+                          StaysOpenOnClick="true"
                           IsChecked="{Binding ShowSplitView}">
                     <MenuItem.Icon>
                         <Image Source="Images/HSplit.png"
@@ -514,6 +519,19 @@
                                Height="24" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuTool_PreviewDocument}"
+                          Command="{Binding PreviewDocumentCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Preview.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuView_UseNativeDocumentApplication}"
+                          ToolTip="{x:Static p:Resources.Tooltip_UseNativeDocumentApplication}"
+                          StaysOpenOnClick="true"
+                          IsChecked="{Binding OpenDocumentByNativeApplication}">
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuSetting_Setting}">
                 <MenuItem Command="{Binding Path=GherkinSettings.ShowEditorSettingCmd}"
@@ -568,7 +586,8 @@
         <ToolBar x:Name="toolBar"
                  DockPanel.Dock="Top"
                  BorderBrush="LightGray"
-                 BorderThickness="1">
+                 BorderThickness="1"
+                 Margin="-1,0,1,0">
             <ToolBar.Resources>
                 <Style TargetType="{x:Type Image}">
                     <Style.Triggers>

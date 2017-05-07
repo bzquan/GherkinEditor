@@ -47,7 +47,6 @@ namespace PdfSharp.Xps.Rendering
         {
             // Bounding box lays always at (0,0)
             XRect bbox = new XRect(0, 0, brush.Viewport.Width, brush.Viewport.Height);
-#if true
             XMatrix matrix = transform;
             matrix.Prepend(new XMatrix(1, 0, 0, 1, brush.Viewport.X, brush.Viewport.Y));
             if (brush.Transform != null)
@@ -55,53 +54,12 @@ namespace PdfSharp.Xps.Rendering
                 matrix.Prepend(new XMatrix(brush.Transform.Matrix.m11, brush.Transform.Matrix.m12, brush.Transform.Matrix.m21,
                 brush.Transform.Matrix.m22, brush.Transform.Matrix.offsetX, brush.Transform.Matrix.offsetY));
             }
-#else
-      double c = 1;
-      XMatrix matrix = new XMatrix(1 * c, 0, 0, 1 * c, brush.Viewport.X * c, brush.Viewport.Y * c); // HACK: 480
-      XMatrix t = transform;
-      //t.Invert();
-      t.Prepend(matrix);
-      //t.TranslateAppend(brush.Viewport.X , brush.Viewport.Y);
-      //matrix.Append(t);
-      matrix = t;
-#endif
-            double xStep = brush.Viewport.Width;
-            double yStep = brush.Viewport.Height;
 
-            // PdfTilingPattern
-            //<<
-            //  /BBox [0 0 240 120]
-            //  /Length 74
-            //  /Matrix [0.75 0 0 -0.75 0 480]
-            //  /PaintType 1
-            //  /PatternType 1
-            //  /Resources
-            //  <<
-            //    /ExtGState
-            //    <<
-            //      /GS0 10 0 R
-            //    >>
-            //    /XObject
-            //    <<
-            //      /Fm0 17 0 R
-            //    >>
-            //  >>
-            //  /TilingType 3
-            //  /Type /Pattern
-            //  /XStep 480
-            //  /YStep 640
-            //>>
-            //stream
-            //  q
-            //  0 0 240 120 re
-            //  W n
-            //  q
-            //    2.3999939 0 0 1.1999969 0 0 cm
-            //    /GS0 gs
-            //    /Fm0 Do
-            //  Q
-            //Q
-            //endstream
+            // HACK by bzquan@gmail.com
+            // Avoid extra thin lines at the right and at the bottom of original image
+            double xStep = brush.Viewport.Width + 1;
+            double yStep = brush.Viewport.Height + 1;
+
             PdfTilingPattern pattern = Context.PdfDocument.Internals.CreateIndirectObject<PdfTilingPattern>();
             pattern.Elements.SetInteger(PdfTilingPattern.Keys.PatternType, 1);  // Tiling
             pattern.Elements.SetInteger(PdfTilingPattern.Keys.PaintType, 1);  // Color
@@ -116,7 +74,6 @@ namespace PdfSharp.Xps.Rendering
             pdfExtGState.SetDefault1();
 
             PdfFormXObject pdfForm = BuildForm(brush);
-            //XRect viewBoxForm = new XRect(0, 0, 640, 480);
 
             PdfContentWriter writer = new PdfContentWriter(Context, pattern);
             writer.BeginContentRaw();

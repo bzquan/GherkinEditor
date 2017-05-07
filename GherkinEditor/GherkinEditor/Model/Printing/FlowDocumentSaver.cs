@@ -31,10 +31,10 @@ namespace Gherkin.Model
             TextEditor = textEditor;
         }
         
-        public void SaveAsPDFByWord()
+        public string SaveAsPDFByWord()
         {
             string pdfFilePath = ShowSaveAsDialog("PDF files(*.pdf)|*.pdf", ".pdf");
-            if (pdfFilePath == null) return;
+            if (pdfFilePath == null) return null;
 
             try
             {
@@ -45,128 +45,101 @@ namespace Gherkin.Model
                 ConvertFormatByNetOffice(tempRTFfilePath, pdfFilePath, WdSaveFormat.wdFormatPDF);
                 File.Delete(tempRTFfilePath);
 
-                Process.Start(pdfFilePath);    // open the Word file
                 InvalidateWaitCursor();
+                return pdfFilePath;
             }
             catch (Exception ex)
             {
                 InvalidateWaitCursor();
                 MessageBox.Show(ex.Message);
+                return null;
             }
         }
 
-        public void SaveAsPDFBySharpPDF()
+        public string SaveAsPDFBySharpPDF()
         {
             string pdfFilePath = ShowSaveAsDialog("PDF files(*.pdf)|*.pdf", ".pdf");
-            if (pdfFilePath == null) return;
+            if (pdfFilePath == null) return null;
 
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                //SaveAsPDF(pdfFilePath);
-                SaveAsPDFByInMemory(pdfFilePath);
-                Process.Start(pdfFilePath);    // open the PDF file
+                SaveAsPDFBySharpPDF(pdfFilePath);
                 InvalidateWaitCursor();
+                return pdfFilePath;
             }
             catch (Exception ex)
             {
                 InvalidateWaitCursor();
                 MessageBox.Show(ex.Message);
+                return null;
             }
         }
 
         private void InvalidateWaitCursor() => Mouse.OverrideCursor = null;
 
         /// <summary>
-        /// Create PDF file by using PdfSharp. It create a temporary XPS file internally,
-        /// then convert the XPS file to PDF file. Slower but use less memory
-        /// </summary>
-        /// <param name="pdfFilePath"></param>
-        private void SaveAsPDFByXPSFile(string pdfFilePath)
-        {
-            string tempXPSfilePath = Path.GetTempPath() + Guid.NewGuid().ToString() + ".xps";
-            string title = FilePath2Title(pdfFilePath);
-            SaveAsXps(TextEditor, tempXPSfilePath, title);
-
-            using (PdfSharp.Xps.XpsModel.XpsDocument pdfXpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(tempXPSfilePath))
-            {
-                PdfSharp.Xps.XpsConverter.Convert(pdfXpsDoc, pdfFilePath, 0);
-            }
-            File.Delete(tempXPSfilePath);
-        }
-
-        /// <summary>
         /// Create PDF file by using PdfSharp. It create a InMemory XPS file internally,
-        /// then convert the XPS stream to PDF file. Faster but use more memory
+        /// then convert the XPS stream to PDF file.
         /// </summary>
         /// <param name="pdfFilePath"></param>
-        private void SaveAsPDFByInMemory(string pdfFilePath)
+        private void SaveAsPDFBySharpPDF(string pdfFilePath)
         {
-            string title = FilePath2Title(pdfFilePath);
-            using (Stream xpsStream = CreateInMemoryXpsDocument(title))
+            using (MemoryStream xpsStream = new MemoryStream())
             {
-                PdfSharp.Xps.XpsConverter.Convert(xpsStream, pdfFilePath, 0);
+                Package package = Package.Open(xpsStream, FileMode.Create);
+                XpsDocument xpsDocInMemory = new XpsDocument(package);
+                XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(xpsDocInMemory);
+
+                DocumentPaginatorWrapper paginator = Printing.CreateDocumentPaginatorToPrint(TextEditor);
+                paginator.Title = FilePath2Title(pdfFilePath);
+
+                writer.Write(paginator);
+                xpsDocInMemory.Close();
+                package.Close();
+
+                var xpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(xpsStream);
+                PdfSharp.Xps.XpsConverter.Convert(xpsDoc, pdfFilePath, 0);
             }
         }
 
-        private Stream CreateInMemoryXpsDocument(string title)
-        {
-            MemoryStream ms = new MemoryStream();
-            Package package = Package.Open(ms, FileMode.Create, FileAccess.ReadWrite);
-            Uri documentUri = new Uri("pack://InMemoryDocument.xps"); // Every package needs a URI. Use the pack:// syntax.  The actual file name is unimportant.
-            PackageStore.AddPackage(documentUri, package);
-            XpsDocument xpsDocument = new XpsDocument(package, CompressionOption.NotCompressed, documentUri.AbsoluteUri);
-            XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
-
-            DocumentPaginatorWrapper paginator = Printing.CreateDocumentPaginatorToPrint(TextEditor);
-            paginator.Title = title;
-
-            writer.Write(paginator);
-            package.Flush();
-
-            // Close the package and remove temporary URI
-            package.Close();
-            PackageStore.RemovePackage(documentUri);
-
-            return ms;
-        }
-
-        public void SaveAsXPS()
+        public string SaveAsXPS()
         {
             string xpsFilePath = ShowSaveAsDialog("XPS files(*.xps)|*.xps", ".xps");
-            if (xpsFilePath == null) return;
+            if (xpsFilePath == null) return null;
 
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 SaveAsXps(TextEditor, xpsFilePath, FilePath2Title(xpsFilePath));
-                Process.Start(xpsFilePath);    // open the XPS file
                 InvalidateWaitCursor();
+                return xpsFilePath;
             }
             catch (Exception ex)
             {
                 InvalidateWaitCursor();
                 MessageBox.Show(ex.Message);
+                return null;
             }
         }
 
-        public void SaveAsRTF()
+        public string SaveAsRTF()
         {
             string rtfFilePath = ShowSaveAsDialog("RTF files(*.rtf)|*.rtf", ".rtf");
-            if (rtfFilePath == null) return;
+            if (rtfFilePath == null) return null;
 
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 SaveToRTF(rtfFilePath);
-
-                Process.Start(rtfFilePath);    // open the RTF file
                 InvalidateWaitCursor();
+                return rtfFilePath;
             }
             catch (Exception ex)
             {
                 InvalidateWaitCursor();
                 MessageBox.Show(ex.Message);
+                return null;
             }
         }
 
@@ -180,10 +153,10 @@ namespace Gherkin.Model
             }
         }
         
-        public void SaveAsDocx()
+        public string SaveAsDocx()
         {
             string docxFilePath = ShowSaveAsDialog("Word files(*.docx)|*.docx", ".docx");
-            if (docxFilePath == null) return;
+            if (docxFilePath == null) return null;
 
             try
             {
@@ -194,13 +167,14 @@ namespace Gherkin.Model
                 ConvertFormatByNetOffice(tempRTFfilePath, docxFilePath, WdSaveFormat.wdFormatDocumentDefault);
                 File.Delete(tempRTFfilePath);
 
-                Process.Start(docxFilePath);    // open the Word file
                 InvalidateWaitCursor();
+                return docxFilePath;
             }
             catch (Exception ex)
             {
                 InvalidateWaitCursor();
                 MessageBox.Show(ex.Message);
+                return null;
             }
         }
 

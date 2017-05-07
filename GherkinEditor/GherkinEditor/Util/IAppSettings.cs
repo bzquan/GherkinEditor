@@ -82,6 +82,7 @@ namespace Gherkin.Util
         bool WordWrap { get; set; }
 
         int ImageCacheSize { get; set; }
+        bool OpenDocumentByNativeApplication { get; set; }
 
         void Save();
     }

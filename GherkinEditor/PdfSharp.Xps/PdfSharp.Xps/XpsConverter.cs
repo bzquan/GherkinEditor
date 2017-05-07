@@ -317,37 +317,6 @@ namespace PdfSharp.Xps
             }
         }
 
-        /// <summary>
-        /// Implements the PDF file to XPS file conversion.
-        /// by bzquan@gmail.com
-        /// </summary>
-        public static void Convert(Stream xpsStream, string pdfFilename, int docIndex)
-        {
-            try
-            {
-                XpsDocument xpsDocument = XpsDocument.Open(xpsStream);
-                FixedDocument fixedDocument = xpsDocument.GetDocument();
-                PdfDocument pdfDocument = new PdfDocument();
-                PdfRenderer renderer = new PdfRenderer();
-
-                int pageIndex = 0;
-                foreach (FixedPage page in fixedDocument.Pages)
-                {
-                    if (page == null)
-                        continue;
-                    PdfPage pdfPage = renderer.CreatePage(pdfDocument, page);
-                    renderer.RenderPage(pdfPage, page);
-                    pageIndex++;
-                }
-                pdfDocument.Save(pdfFilename);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
         public static void ConvertToPdfInMemory(XpsDocument xpsDocument, MemoryStream pdfMemoryStream, int docIndex)
         {
             if (xpsDocument == null)

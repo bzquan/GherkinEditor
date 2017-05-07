@@ -571,6 +571,14 @@ namespace Gherkin.Util
             set { this["ImageCacheSize"] = value; }
         }
 
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool OpenDocumentByNativeApplication
+        {
+            get { return (bool)this["OpenDocumentByNativeApplication"]; }
+            set { this["OpenDocumentByNativeApplication"] = value; }
+        }
+
         private void UpdateRecentFiles(string newFilePath)
         {
             List<GherkinFileInfo> files = new List<GherkinFileInfo>();

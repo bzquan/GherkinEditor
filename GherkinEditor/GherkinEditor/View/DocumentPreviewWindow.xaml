@@ -1,0 +1,50 @@
+﻿<Window x:Class="Gherkin.View.DocumentPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gherkin.View"
+        mc:Ignorable="d"
+        xmlns:pv="clr-namespace:C4F.DevKit.PreviewHandler.PreviewHandlerHost;assembly=C4F.DevKit.PreviewHandler.PreviewHandlerFramework"
+        xmlns:p="clr-namespace:Gherkin.Properties"
+        WindowStartupLocation="CenterOwner"
+        Closing="OnWindowClosing"
+        Title="{Binding PreviewTitle}"
+        Height="300"
+        Width="300">
+    <Border BorderBrush="DarkGray"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ToolBar x:Name="toolBar"
+                     DockPanel.Dock="Top"
+                     BorderBrush="LightGray"
+                     BorderThickness="1"
+                     Margin="-1,0,1,0">
+                <ToolBar.Resources>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ButtonBase}, AncestorLevel=1}, Path=IsEnabled}"
+                                         Value="False">
+                                <Setter Property="Opacity"
+                                        Value="0.30" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToolBar.Resources>
+                <Button ToolTip="{x:Static p:Resources.Tooltip_OpenFile}"
+                        Command="{Binding OpenPreviewDocumentCmd}">
+                    <Image Source="Images/Open.png"
+                           Height="16" />
+                </Button>
+            </ToolBar>
+            <WindowsFormsHost Grid.Row="1"
+                              Margin="5">
+                <pv:PreviewHandlerHostControl x:Name="previewHandlerHostControlInstance" />
+            </WindowsFormsHost>
+        </Grid>
+    </Border>
+</Window>

@@ -636,4 +636,16 @@
   <data name="MenuTool_SaveAsRTF" xml:space="preserve">
     <value>RTFファイルに保存</value>
   </data>
+  <data name="MenuView_UseNativeDocumentApplication" xml:space="preserve">
+    <value>既定アプリにてドキュメントを開く</value>
+  </data>
+  <data name="Preview_Title" xml:space="preserve">
+    <value>プレビュー</value>
+  </data>
+  <data name="Tooltip_UseNativeDocumentApplication" xml:space="preserve">
+    <value>PDF, XPS, RTF, Wordなどのに保存した後、Windows既定アプリにてドキュメントを開く</value>
+  </data>
+  <data name="MenuTool_PreviewDocument" xml:space="preserve">
+    <value>ドキュメントのプレビュー</value>
+  </data>
 </root>

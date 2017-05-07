@@ -108,6 +108,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WordApi">
       <HintPath>..\packages\NetOffice 1.7.3\WordApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -162,6 +163,7 @@
     <Compile Include="ViewModel\CloseWindowCommand.cs" />
     <Compile Include="ViewModel\CodePageListPopupViewModel.cs" />
     <Compile Include="ViewModel\DeleteAllEditorTabsRequestedArg.cs" />
+    <Compile Include="ViewModel\DocumentPreviewViewModel.cs" />
     <Compile Include="ViewModel\GherkinEditerCommand.cs" />
     <Compile Include="ViewModel\HelpViewModel.cs" />
     <Compile Include="ViewModel\SettingPropertyGridViewModel.cs" />
@@ -202,6 +204,9 @@
     <Compile Include="View\CodePageListPopup.xaml.cs">
       <DependentUpon>CodePageListPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DocumentPreviewWindow.xaml.cs">
+      <DependentUpon>DocumentPreviewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditorSetting.xaml.cs">
       <DependentUpon>EditorSetting.xaml</DependentUpon>
     </Compile>
@@ -235,6 +240,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CodePageListPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DocumentPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -465,6 +474,10 @@
     <ProjectReference Include="..\PdfSharp\PdfSharp-WPF.csproj">
       <Project>{02fcc0bb-2aa2-43ba-8d2f-66d168b87a1d}</Project>
       <Name>PdfSharp-WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PreviewHandlerFramework\PreviewHandlerFramework.csproj">
+      <Project>{f27001c1-fe96-4268-bdd8-ec96ab50d2d6}</Project>
+      <Name>PreviewHandlerFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfMath\WpfMath.csproj">
       <Project>{010a34f1-1f3e-4528-99b4-95054dd45729}</Project>
@@ -707,6 +720,9 @@
       <Progid>1</Progid>
       <DefaultIcon>Gherkin.ico</DefaultIcon>
     </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Preview.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

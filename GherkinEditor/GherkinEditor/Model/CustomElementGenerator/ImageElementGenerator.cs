@@ -10,6 +10,9 @@ using System.Text.RegularExpressions;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using System.Windows.Input;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows;
 
 namespace Gherkin.Model
 {
@@ -35,12 +38,9 @@ namespace Gherkin.Model
         {
         }
 
-        /// Gets the first offset >= startOffset where the generator wants to construct
-        /// an element.
-        /// Return -1 to signal no interest.
-        public override int GetFirstInterestedOffset(int startOffset)
+        protected override Regex GetRegex()
         {
-            return (BasePath != null) ? base.GetFirstInterestedOffset(startOffset) : -1;
+            return s_ImageRegex;
         }
 
         /// Constructs an element at the specified offset.
@@ -51,24 +51,46 @@ namespace Gherkin.Model
             // check whether there's a match exactly at offset
             if (m.Success && m.Index == 0)
             {
-                string scale = m.Groups[1].Value;
                 BitmapImage bitmap = LoadBitmap(m.Groups[2].Value);
+                UIElement uiElement;
                 if (bitmap != null)
                 {
-                    Image image = new Image();
-                    image.Source = bitmap;
-
-                    double zoom = CalcZoom(bitmap, scale);
-                    image.Width = bitmap.PixelWidth * zoom;
-                    image.Height = bitmap.PixelHeight * zoom;
-                    image.Cursor = Cursors.Arrow;
-
-                    // Pass the length of the match to the 'documentLength' parameter
-                    // of InlineObjectElement.
-                    return new InlineObjectElement(m.Length, image);
+                    string scale = m.Groups[1].Value;
+                    uiElement = CreateImageControl(scale, bitmap);
                 }
+                else
+                {
+                    uiElement = CreateErrorMesageTextBlock();
+                }
+
+                // Pass the length of the match to the 'documentLength' parameter of InlineObjectElement.
+                return new InlineObjectElement(m.Length, uiElement);
             }
             return null;
+        }
+
+        private BitmapImage LoadBitmap(string fileName)
+        {
+            if (BasePath != null)
+            {
+                string fullFileName = Path.Combine(BasePath, fileName);
+                return BitmapImageCache.Instance.LoadImage(fullFileName);
+            }
+
+            return null;
+        }
+
+        private static Image CreateImageControl(string scale, BitmapImage bitmap)
+        {
+            Image image = new Image();
+            image.Source = bitmap;
+
+            double zoom = CalcZoom(bitmap, scale);
+            image.Width = bitmap.PixelWidth * zoom;
+            image.Height = bitmap.PixelHeight * zoom;
+            image.Cursor = Cursors.Arrow;
+
+            return image;
         }
 
         private static double CalcZoom(BitmapImage bitmap, string scale)
@@ -101,6 +123,18 @@ namespace Gherkin.Model
             return scale_value;
         }
 
+        private TextBlock CreateErrorMesageTextBlock()
+        {
+            TextBlock textBlock = new TextBlock()
+            {
+                Text = (BasePath == null) ? "File not saved" : "Image file not found",
+                Foreground = new SolidColorBrush(Colors.Red),
+                Cursor = Cursors.Arrow
+            };
+
+            return textBlock;
+        }
+
         private string BasePath
         {
             get
@@ -111,17 +145,6 @@ namespace Gherkin.Model
                 else
                     return null;
             }
-        }
-
-        protected override Regex GetRegex()
-        {
-            return s_ImageRegex;
-        }
-
-        BitmapImage LoadBitmap(string fileName)
-        {
-            string fullFileName = Path.Combine(BasePath, fileName);
-            return BitmapImageCache.Instance.LoadImage(fullFileName);
         }
     }
 }

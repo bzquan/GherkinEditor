@@ -12,6 +12,7 @@ namespace Gherkin.Model
         public const string GherkinHighlightingBaseName = "GherkinHighlighting";
         public const string FEATURE_EXTENSION = ".feature";
         public const string CSHARP_EXTENSION = ".cs";
+        public const string PDF_EXTENSION = ".pdf";
 
         static GherkinDialectProviderExtention s_GherkinDialectcs = new GherkinDialectProviderExtention();
         static List<string> s_LoadedHighlitings = new List<string>();
@@ -99,6 +100,11 @@ namespace Gherkin.Model
         public static bool IsCSharpFile(string filePath)
         {
             return HasExtension(filePath, CSHARP_EXTENSION);
+        }
+
+        public static bool IsPDFFile(string filePath)
+        {
+            return HasExtension(filePath, PDF_EXTENSION);
         }
 
         public static bool HasExtension(string filePath, string ext)

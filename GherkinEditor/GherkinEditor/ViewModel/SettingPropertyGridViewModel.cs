@@ -250,8 +250,8 @@ namespace Gherkin.ViewModel
         }
 
         [Category("Font")]
-        [ItemsSource(typeof(FontFamilyItemsSource))]
         [LocalizedDisplayName("Tooltip_FontForNonGherkin", typeof(Resources))]
+        [ItemsSource(typeof(FontFamilyItemsSource))]
         public FontFamily FontFamily4NonGherkin
         {
             get { return GetFontFamily(m_AppSettings.FontFamilyName4NonGherkin); }
@@ -522,6 +522,18 @@ namespace Gherkin.ViewModel
                     Model.BitmapImageCache.CacheSizee = value;
                     Model.LaTexImageCache.CacheSizee = value;
                 }
+                base.OnPropertyChanged();
+            }
+        }
+
+        [LocalizedDisplayName("MenuView_UseNativeDocumentApplication", typeof(Resources))]
+        [LocalizedDescription("Tooltip_UseNativeDocumentApplication", typeof(Resources))]
+        public bool OpenDocumentByNativeApplication
+        {
+            get { return m_AppSettings.OpenDocumentByNativeApplication; }
+            set
+            {
+                m_AppSettings.OpenDocumentByNativeApplication = value;
                 base.OnPropertyChanged();
             }
         }

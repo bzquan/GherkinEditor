@@ -943,6 +943,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview document.
+        /// </summary>
+        public static string MenuTool_PreviewDocument {
+            get {
+                return ResourceManager.GetString("MenuTool_PreviewDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save as PDF.
         /// </summary>
         public static string MenuTool_SaveAsPDF {
@@ -1047,6 +1056,15 @@ namespace Gherkin.Properties {
         public static string MenuView_SplitEditor {
             get {
                 return ResourceManager.GetString("MenuView_SplitEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open document by native application .
+        /// </summary>
+        public static string MenuView_UseNativeDocumentApplication {
+            get {
+                return ResourceManager.GetString("MenuView_UseNativeDocumentApplication", resourceCulture);
             }
         }
         
@@ -1341,6 +1359,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string Preview_Title {
+            get {
+                return ResourceManager.GetString("Preview_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string PrintButton_Cancel {
@@ -1608,6 +1635,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_SplitEditor {
             get {
                 return ResourceManager.GetString("Tooltip_SplitEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After saving as PDF, XPS, RTF or Word, open the document by Windows native application.
+        /// </summary>
+        public static string Tooltip_UseNativeDocumentApplication {
+            get {
+                return ResourceManager.GetString("Tooltip_UseNativeDocumentApplication", resourceCulture);
             }
         }
     }
