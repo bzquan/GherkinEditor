@@ -123,7 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\CustomElementGenerator\CustomElementGenerator.cs" />
-    <Compile Include="Model\CustomElementGenerator\TaTexImageCache.cs" />
+    <Compile Include="Model\CustomElementGenerator\ErrorMessageDrawingVisual.cs" />
+    <Compile Include="Model\CustomElementGenerator\LaTexImageCache.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
     <Compile Include="Model\GherkinIndentationStrategy\CursorPosInTable.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Model\Printing\PrintSettings.cs" />
     <Compile Include="Model\Printing\FlowDocumentSaver.cs" />
     <Compile Include="Util\CurrentGherkinLanguageArg.cs" />
+    <Compile Include="Util\DrawingVisualUtil.cs" />
     <Compile Include="Util\EditorViewInitializationCompleted.cs" />
     <Compile Include="Util\FailedToFindEditorControlArg.cs" />
     <Compile Include="Util\FileSavedAsArg.cs" />
@@ -184,7 +186,6 @@
     <Compile Include="ViewModel\OpenNewGherkinEditorRequestedArg.cs" />
     <Compile Include="ViewModel\RegexDocument.cs" />
     <Compile Include="ViewModel\RenameDocumentRequestedArg.cs" />
-    <Compile Include="ViewModel\RichTextBoxHelper.cs" />
     <Compile Include="ViewModel\SaveAsDocumentRequestedArg.cs" />
     <Compile Include="ViewModel\ScenarioIndex.cs" />
     <Compile Include="ViewModel\EditorLoadedArg.cs" />

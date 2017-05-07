@@ -32,7 +32,7 @@ namespace Gherkin.ViewModel
         private readonly Color FolderTextColorDefault = Colors.Blue;
 
         private ObservableCollection<EditorTabItem> m_TabPanels;
-        private Util.IAppSettings m_AppSettings;
+        private IAppSettings m_AppSettings;
 
         /// <summary>
         /// Reset Gherkin keywords highlighting.
@@ -43,6 +43,9 @@ namespace Gherkin.ViewModel
         public SettingPropertyGridViewModel(IAppSettings appSettings)
         {
             m_AppSettings = appSettings;
+
+            Model.BitmapImageCache.CacheSizee = appSettings.ImageCacheSize;
+            Model.LaTexImageCache.CacheSizee = appSettings.ImageCacheSize;
         }
 
         public void SetTabPanels(ObservableCollection<EditorTabItem> tabPanels)
@@ -503,6 +506,22 @@ namespace Gherkin.ViewModel
             {
                 m_AppSettings.ShowTabs = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateShowTabs());
+                base.OnPropertyChanged();
+            }
+        }
+
+        [DisplayName("Image Cache Size")]
+        public int ImageCacheSize
+        {
+            get { return m_AppSettings.ImageCacheSize; }
+            set
+            {
+                if ((value >= 10) && (value <=200))
+                {
+                    m_AppSettings.ImageCacheSize = value;
+                    Model.BitmapImageCache.CacheSizee = value;
+                    Model.LaTexImageCache.CacheSizee = value;
+                }
                 base.OnPropertyChanged();
             }
         }

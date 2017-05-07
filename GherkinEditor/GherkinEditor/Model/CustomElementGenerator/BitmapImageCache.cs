@@ -17,6 +17,8 @@ namespace Gherkin.Model
 
         public static BitmapImageCache Instance => s_Singleton.Value;
 
+        public static int CacheSizee { get; set; } = 50;
+
         private BitmapImageCache() { }
 
         public BitmapImage LoadImage(string filePath)
@@ -28,7 +30,7 @@ namespace Gherkin.Model
                 bitmapFile = new BitmapImageFile(filePath);
 
             m_BitmapImages.Insert(0, bitmapFile);
-            Util.Util.RemoveLastItems(m_BitmapImages, max_num: 50);
+            Util.Util.RemoveLastItems(m_BitmapImages, max_num: CacheSizee);
 
             return bitmapFile.LoadImage();
         }

@@ -49,7 +49,7 @@ namespace Gherkin.Model
             {
                 string scale = m.Groups[1].Value;
                 string laTex = m.Groups[2].Value;
-                BitmapImage bitmap = TaTexImageCache.Instance.LoadImage(laTex, scale);
+                BitmapImage bitmap = LaTexImageCache.Instance.LoadImage(laTex, scale);
                 if (bitmap != null)
                 {
                     Image image = new Image();

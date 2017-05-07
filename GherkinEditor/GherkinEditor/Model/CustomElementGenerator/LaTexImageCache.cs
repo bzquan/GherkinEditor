@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using WpfMath;
+using Gherkin.Util;
 
 namespace Gherkin.Model
 {
@@ -16,16 +15,17 @@ namespace Gherkin.Model
         public BitmapImage BitmapImage { get; set; }
     }
 
-    class TaTexImageCache
+    class LaTexImageCache
     {
-        private static readonly Lazy<TaTexImageCache> s_Singleton =
-            new Lazy<TaTexImageCache>(() => new TaTexImageCache());
+        private static readonly Lazy<LaTexImageCache> s_Singleton =
+            new Lazy<LaTexImageCache>(() => new LaTexImageCache());
 
         private List<LaTexBitmapImage> m_BitmapImages = new List<LaTexBitmapImage>();
 
-        public static TaTexImageCache Instance => s_Singleton.Value;
+        public static LaTexImageCache Instance => s_Singleton.Value;
+        public static int CacheSizee { get; set; } = 50;
 
-        private TaTexImageCache() { }
+        private LaTexImageCache() { }
 
         public BitmapImage LoadImage(string laTex, string scale)
         {
@@ -45,7 +45,7 @@ namespace Gherkin.Model
                 {
                     laTexBitmap = new LaTexBitmapImage() { Key = key, BitmapImage = bitmapImage };
                     m_BitmapImages.Insert(0, laTexBitmap);
-                    Util.Util.RemoveLastItems(m_BitmapImages, max_num: 50);
+                    Util.Util.RemoveLastItems(m_BitmapImages, max_num: CacheSizee);
                 }
             }
 
@@ -88,51 +88,21 @@ namespace Gherkin.Model
             m_scale = scale;
         }
 
-        private static string s_LastExceptionMessage;
-
         public BitmapImage ParseLaTex()
         {
-            BitmapImage bitmapImage = null;
             try
             {
                 var formula = s_FormulaParser.Value.Parse(m_LaTex);
                 var renderer = formula.GetRenderer(TexStyle.Display, m_scale);
                 var bitmapsource = renderer.RenderToBitmap(0, 0);
 
-                bitmapImage = ToPNGImage(bitmapsource);
+                return bitmapsource.ToPNGImage();
             }
             catch (Exception ex)
             {
-                if (ex.Message != s_LastExceptionMessage)
-                {
-                    s_LastExceptionMessage = ex.Message;
-                    Util.EventAggregator<Util.StatusChangedArg>.Instance.Publish(this, new Util.StatusChangedArg(ex.Message));
-                }
-                bitmapImage = null;
+                var err = new ErrorMessageDrawingVisual(ex.Message);
+                return DrawingVisualUtil.ToPNGImage(err);
             }
-
-            return bitmapImage;
-        }
-
-        private BitmapImage ToPNGImage(BitmapSource bitmapsource)
-        {
-            BitmapImage bitmapImage;
-            var bitmapEncoder = new PngBitmapEncoder();
-            bitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapsource));
-
-            using (var stream = new MemoryStream())
-            {
-                bitmapEncoder.Save(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.StreamSource = stream;
-                bitmapImage.EndInit();
-            }
-
-            return bitmapImage;
         }
     }
 }

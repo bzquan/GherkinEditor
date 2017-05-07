@@ -563,6 +563,14 @@ namespace Gherkin.Util
             set { this["WordWrap"] = value; }
         }
 
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("50")]
+        public int ImageCacheSize
+        {
+            get { return (int)this["ImageCacheSize"]; }
+            set { this["ImageCacheSize"] = value; }
+        }
+
         private void UpdateRecentFiles(string newFilePath)
         {
             List<GherkinFileInfo> files = new List<GherkinFileInfo>();

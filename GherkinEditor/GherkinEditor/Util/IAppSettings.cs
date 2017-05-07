@@ -81,6 +81,8 @@ namespace Gherkin.Util
         bool ShowTabs { get; set; }
         bool WordWrap { get; set; }
 
+        int ImageCacheSize { get; set; }
+
         void Save();
     }
 }
