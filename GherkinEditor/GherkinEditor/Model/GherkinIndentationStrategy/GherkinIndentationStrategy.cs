@@ -17,12 +17,12 @@ namespace Gherkin.Model
     public class GherkinIndentationStrategy : DefaultIndentationStrategy
     {
         private TextEditor MainEditor { get; set; }
-        private TextEditor SubEditor { get; set; }
+        private TextEditor ViewerEditor { get; set; }
 
-        public GherkinIndentationStrategy(TextEditor editor, TextEditor subeditor)
+        public GherkinIndentationStrategy(TextEditor editor, TextEditor viewerEditor)
         {
             MainEditor = editor;
-            SubEditor = subeditor;
+            ViewerEditor = viewerEditor;
             editor.TextArea.TextEntered += OnTextEntered;
             editor.TextArea.KeyUp += OnKeyUp;
             editor.TextArea.TextPasted += OnTextPasted;
@@ -157,6 +157,7 @@ namespace Gherkin.Model
         {
             var line_no = MainEditor.TextArea.Caret.Line;
             var line = Document.GetLineByNumber(line_no);
+
             if (!FormatTable(Document, line, isEnteredNewLine: false))
             {
                 TryMoveCursorToImageOrLaTex(line);
@@ -165,7 +166,7 @@ namespace Gherkin.Model
 
         private bool FormatTable(TextDocument document, DocumentLine line, bool isEnteredNewLine)
         {
-            if (isEnteredNewLine || CanFormatTable(MainEditor.TextArea, document, line))
+            if (isEnteredNewLine || CanFormatTable(document, line))
             {
                 CursorPosInTable pos = new CursorPosInTable(MainEditor.TextArea, document, line);
                 if (MakeFormattedTable(document, line, isEnteredNewLine))
@@ -203,11 +204,14 @@ namespace Gherkin.Model
             return true;
         }
 
-        private bool CanFormatTable(TextArea textArea, TextDocument document, DocumentLine line)
+        private bool CanFormatTable(TextDocument document, DocumentLine line)
         {
             if (!GherkinUtil.IsFeatureFile(Document.FileName)) return false;
 
             GherkinSimpleParser parser = new GherkinSimpleParser(document);
+            Tuple<TokenType, string> lineType = parser.Format(GetText(document, line));
+            if (lineType.Item1 != TokenType.TableRow) return false;
+
             var previousLine = line?.PreviousLine;
             if (previousLine == null) return false;
 
@@ -241,12 +245,12 @@ namespace Gherkin.Model
 
         private void TryMoveCursorToImageOrLaTex(DocumentLine line)
         {
-            if ((MainEditor == SubEditor) || (SubEditor == null) || !HasImageOrLaTex(line)) return;
+            if ((MainEditor == ViewerEditor) || (ViewerEditor == null) || !HasImageOrLaTex(line)) return;
 
             int offset = line.Offset;
-            SubEditor.TextArea.Caret.Offset = offset;
-            SubEditor.TextArea.Caret.BringCaretToView();
-            EventAggregator<ShowSubEditorRequestArg>.Instance.Publish(this, new ShowSubEditorRequestArg());
+            ViewerEditor.TextArea.Caret.Offset = offset;
+            ViewerEditor.TextArea.Caret.BringCaretToView();
+            EventAggregator<ShowViewerEditorRequestArg>.Instance.Publish(this, new ShowViewerEditorRequestArg());
         }
 
         private bool HasImageOrLaTex(DocumentLine line)

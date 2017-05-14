@@ -47,8 +47,10 @@ namespace Gherkin.ViewModel
 
                     PreviewHandlerHostControl.FilePath = value;
                 }
-                catch
+                catch(Exception ex)
                 {
+                    string message = ex.Message + "\n Previewing by native apllication";
+                    MessageBox.Show(message, "Fail to preview document", MessageBoxButton.OK, MessageBoxImage.Information);
                     ShowPreviewByNativeApplication(m_FilePath);
                 }
             }
@@ -60,7 +62,7 @@ namespace Gherkin.ViewModel
             dlg.CheckFileExists = true;
             dlg.Multiselect = false;
             dlg.FilterIndex = 1;
-            dlg.Filter = "XPS File(*.xps)|*.xps|RTF File(*.rtf)|*.rtf|Word File(*.doc;docx)|*.doc;*.docx|All Files (*.*)|*.*";
+            dlg.Filter = "PDF File(*.pdf)|*.pdf|XPS File(*.xps)|*.xps|RTF File(*.rtf)|*.rtf|Word File(*.doc;docx)|*.doc;*.docx|All Files (*.*)|*.*";
             bool? result = dlg.ShowDialog();
             if ((result == true) && (dlg.FileNames.Length > 0))
             {

@@ -32,7 +32,8 @@ namespace Gherkin.View
                 {
                     MainEditor = VisualChildrenFinder.FindControl<EditorTabContent, TextEditor>(this, "mainEditor");
                     TextEditor subEditor = VisualChildrenFinder.FindControl<EditorTabContent, TextEditor>(this, "subEditor");
-                    EditorTabContentViewModel.InitializeEditorView(MainEditor, subEditor);
+                    TextEditor viewerEditor = VisualChildrenFinder.FindControl<EditorTabContent, TextEditor>(this, "viewerEditor");
+                    EditorTabContentViewModel.InitializeEditorView(MainEditor, subEditor, viewerEditor);
                 }
                 catch (Exception ex)
                 {

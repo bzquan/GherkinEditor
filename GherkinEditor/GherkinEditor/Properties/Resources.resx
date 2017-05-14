@@ -288,8 +288,8 @@
   <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
     <value>Show scenario index by default</value>
   </data>
-  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
-    <value>Split editor by default</value>
+  <data name="MenuSetting_SplitHorizontalEditorByDefault" xml:space="preserve">
+    <value>Split horizontal editor by default</value>
   </data>
   <data name="MenuSetting_StepWordColor" xml:space="preserve">
     <value>Step word color</value>
@@ -330,8 +330,8 @@
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>Show scenario index</value>
   </data>
-  <data name="MenuView_SplitEditor" xml:space="preserve">
-    <value>Split editor</value>
+  <data name="MenuView_SplitHorizontalEditor" xml:space="preserve">
+    <value>Split editor horizontal</value>
   </data>
   <data name="MenuView_View" xml:space="preserve">
     <value>_View</value>
@@ -448,8 +448,8 @@ It can generate C++ test code based on GoogleTest.</value>
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>Show scenario index</value>
   </data>
-  <data name="Tooltip_SplitEditor" xml:space="preserve">
-    <value>Split editor</value>
+  <data name="Tooltip_SplitHorizontalEditor" xml:space="preserve">
+    <value>Split editor horizontal</value>
   </data>
   <data name="Message_RenameFailedTitle" xml:space="preserve">
     <value>Rename failed</value>
@@ -647,5 +647,32 @@ Any change of the file would be discarded.</value>
   </data>
   <data name="MenuTool_PreviewDocument" xml:space="preserve">
     <value>Preview document</value>
+  </data>
+  <data name="MenuView_SynchronizeCursorPositions" xml:space="preserve">
+    <value>Synchronize cursor positions</value>
+  </data>
+  <data name="Tooltip_SynchronizeCursorPositions" xml:space="preserve">
+    <value>Synchronize cursor positions of main and sub editors</value>
+  </data>
+  <data name="MenuView_ShowCurvePlotMarker" xml:space="preserve">
+    <value>Show plot marker</value>
+  </data>
+  <data name="Tooltip_ShowCurvePlotMarker" xml:space="preserve">
+    <value>Show Gherkin table plot marker</value>
+  </data>
+  <data name="MenuSetting_SplitVerticalEditorByDefault" xml:space="preserve">
+    <value>Split vertical editor by default</value>
+  </data>
+  <data name="MenuView_SplitVerticalEditor" xml:space="preserve">
+    <value>Split editor vertical</value>
+  </data>
+  <data name="Tooltip_HideViewerEditor" xml:space="preserve">
+    <value>Hide viewer editor</value>
+  </data>
+  <data name="Tooltip_ShowViewerEditor" xml:space="preserve">
+    <value>Show viewer editor</value>
+  </data>
+  <data name="Tooltip_SplitVerticalEditor" xml:space="preserve">
+    <value>Split editor vertical</value>
   </data>
 </root>

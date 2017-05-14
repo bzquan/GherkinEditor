@@ -10,6 +10,7 @@
             <li>Dynamic pretty formatting Gherkin table</li>
             <li>Displaying image files in Gherkin document</li>
             <li>Mathematical formula in LaTex style</li>
+            <li>Plotting Gherkin table data</li>
             <li>Internationalization supporting</li>
             <li>C++ code generation for executing Gherkin</li>
         </ol>
@@ -21,34 +22,51 @@
             You can use following markdown to display images files.
             The scale is a value between 10 to 500. It is optional and the default value is 100.
             And maxium width or height would be scaled down to 1024 Pixels. The tag "IMAGE" is case insensitive.<br />
+            And the markdown can have an optional description.<br />
             <b>
                 <font color="blue">
-                    ![IMAGE scale](image path),e.g. <br />
-                    ![IMAGE 50](Gherkin.png)
+                    #[IMAGE scale description](image path),e.g. <br />
+                    #[IMAGE 50 this is a Gherkin](Gherkin.png)
                 </font>
             </b>
             <br />
             The base folder of the image is the folder where the Gherkin document is saved.It is possible to have a subfolder, e.g. Images/Gherkin.png.<br />
-            Images will be showen in the editor located bottom of split view. This editor is called sub editor.
+            Images will be showen in the editor located right of split view. This editor is called viewer editor.
         </p>
 
         <h5>Mathematical formula</h5>
         <p>
             You can use following markdown to describe TaTex mathematical formula.
             The scale is a value between 10 to 100. It is optional and the default value is 20. The tag "LaTex" is case insensitive.<br />
+            And the markdown can have an optional description.<br />
             <b>
                 <font color="blue">
-                    ![LaTex scale](LaTeX typsetting), e.g. <br />
-                    ![LaTex 20](\sqrt{\frac{ax^2+bx+\pi}{x^3}}))
+                    #[LaTex scale description](LaTeX typsetting), e.g. <br />
+                    #[LaTex 20 this is an equation](\sqrt{\frac{ax^2+bx+\pi}{x^3}}))
                 </font>
             </b><br />
-            Mathematical formula will be shown in sub editor.
+            Mathematical formula will be shown in viewer editor.
         </p>
         <p>
             Examples
             <ul>
                 <li>Sum expression can be added using the lower and upper. For example, \sum_{lower}^{upper}</li>
             </ul>
+        </p>
+
+        <h5>Plotting Gherkin table data</h5>
+        <p>
+            You can use following markdown to plot curve by using Gherkin table data.
+            The next line must be starting of Gherkin table except an empty line and comment line.
+            The tag "Plot" is case insensitive.<br />
+            And the markdown can have an optional spline and description, which will be displayed as title of the plot.<br />
+            <b>
+                <font color="blue">
+                    #[Plot spline description](Table column name for X axis, Table column name for Y axis), e.g. <br />
+                    #[Plot spline this is sample graph](X Column, Y Column)
+                </font>
+            </b><br />
+            The plot size is 600 * 400 and will be shown in viewer editor.
         </p>
 
         <h5>Copying generated C++ code to a folder</h5>

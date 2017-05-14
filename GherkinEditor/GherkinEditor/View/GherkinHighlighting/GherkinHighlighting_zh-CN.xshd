@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,21 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(功能|背景|场景|剧本|场景大纲|剧本大纲|例子)\s*:
+      ^\s*(功能|背景|场景|剧本|场景大纲|剧本大纲|例子)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  假如 </Word>
-      <Word>  假设 </Word>
-      <Word>  假定 </Word>
-      <Word>  当 </Word>
-      <Word>  那么 </Word>
-      <Word>  而且 </Word>
-      <Word>  并且 </Word>
-      <Word>  同时 </Word>
-      <Word>  但是 </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(假如|假设|假定|当|那么|而且|并且|同时|但是)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

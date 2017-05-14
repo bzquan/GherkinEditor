@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Feature|Business\s+Need|Ability|Background|Scenario|Scenario\s+Outline|Scenario\s+Template|Examples|Scenarios)\s*:
+      ^\s*(Feature|Business\s+Need|Ability|Background|Scenario|Scenario\s+Outline|Scenario\s+Template|Examples|Scenarios)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Given </Word>
-      <Word>  When </Word>
-      <Word>  Then </Word>
-      <Word>  And </Word>
-      <Word>  But </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Given|When|Then|And|But)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

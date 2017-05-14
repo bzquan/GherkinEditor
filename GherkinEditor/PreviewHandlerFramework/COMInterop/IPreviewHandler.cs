@@ -19,6 +19,6 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerFramework
         void SetFocus();
         void QueryFocus(out IntPtr phwnd);
         [PreserveSig]
-        uint TranslateAccelerator(ref MSG pmsg);
+        int TranslateAccelerator(ref MSG pmsg);
     }
 }

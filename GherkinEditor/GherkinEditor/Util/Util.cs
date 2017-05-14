@@ -176,6 +176,18 @@ namespace Gherkin.Util
             return new DrawingImage(visual.Drawing);
         }
 
+        public static BitmapImage BitmapImageFromFile(string filePath)
+        {
+            BitmapImage bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.UriSource = new Uri(filePath);
+            bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapImage.EndInit();
+
+            return bitmapImage;
+        }
+
         /// <summary>
         /// Usage sample :  obj.IfNotNull(x => statements);
         /// </summary>

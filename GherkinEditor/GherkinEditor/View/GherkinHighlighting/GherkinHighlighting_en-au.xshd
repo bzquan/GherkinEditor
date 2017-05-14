@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Pretty\s+much|First\s+off|Awww,\s+look\s+mate|Reckon\s+it's\s+like|You'll\s+wanna)\s*:
+      ^\s*(Pretty\s+much|First\s+off|Awww,\s+look\s+mate|Reckon\s+it's\s+like|You'll\s+wanna)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Y'know </Word>
-      <Word>  It's just unbelievable </Word>
-      <Word>  But at the end of the day I reckon </Word>
-      <Word>  Too right </Word>
-      <Word>  Yeah nah </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Y'know|It's\s+just\s+unbelievable|But\s+at\s+the\s+end\s+of\s+the\s+day\s+I\s+reckon|Too\s+right|Yeah\s+nah)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

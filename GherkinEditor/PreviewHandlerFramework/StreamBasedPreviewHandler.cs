@@ -11,7 +11,7 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerFramework
     public abstract class StreamBasedPreviewHandler : PreviewHandler, IInitializeWithStream
     {
         private IStream _stream;
-        void IInitializeWithStream.Initialize(IStream pstream, uint grfMode)
+        void IInitializeWithStream.Initialize(IStream pstream, int grfMode)
         {
             _stream = pstream;
         }

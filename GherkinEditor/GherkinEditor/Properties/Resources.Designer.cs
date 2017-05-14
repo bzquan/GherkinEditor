@@ -853,11 +853,20 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Split editor by default.
+        ///   Looks up a localized string similar to Split horizontal editor by default.
         /// </summary>
-        public static string MenuSetting_SplitEditorByDefault {
+        public static string MenuSetting_SplitHorizontalEditorByDefault {
             get {
-                return ResourceManager.GetString("MenuSetting_SplitEditorByDefault", resourceCulture);
+                return ResourceManager.GetString("MenuSetting_SplitHorizontalEditorByDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split vertical editor by default.
+        /// </summary>
+        public static string MenuSetting_SplitVerticalEditorByDefault {
+            get {
+                return ResourceManager.GetString("MenuSetting_SplitVerticalEditorByDefault", resourceCulture);
             }
         }
         
@@ -1042,6 +1051,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show plot marker.
+        /// </summary>
+        public static string MenuView_ShowCurvePlotMarker {
+            get {
+                return ResourceManager.GetString("MenuView_ShowCurvePlotMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show scenario index.
         /// </summary>
         public static string MenuView_ShowScenarioIndex {
@@ -1051,11 +1069,29 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Split editor.
+        ///   Looks up a localized string similar to Split editor horizontal.
         /// </summary>
-        public static string MenuView_SplitEditor {
+        public static string MenuView_SplitHorizontalEditor {
             get {
-                return ResourceManager.GetString("MenuView_SplitEditor", resourceCulture);
+                return ResourceManager.GetString("MenuView_SplitHorizontalEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split editor vertical.
+        /// </summary>
+        public static string MenuView_SplitVerticalEditor {
+            get {
+                return ResourceManager.GetString("MenuView_SplitVerticalEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize cursor positions.
+        /// </summary>
+        public static string MenuView_SynchronizeCursorPositions {
+            get {
+                return ResourceManager.GetString("MenuView_SynchronizeCursorPositions", resourceCulture);
             }
         }
         
@@ -1522,6 +1558,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide viewer editor.
+        /// </summary>
+        public static string Tooltip_HideViewerEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_HideViewerEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide work area window.
         /// </summary>
         public static string Tooltip_HideWorkAreaEditor {
@@ -1603,6 +1648,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Gherkin table plot marker.
+        /// </summary>
+        public static string Tooltip_ShowCurvePlotMarker {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowCurvePlotMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show scenario index.
         /// </summary>
         public static string Tooltip_ShowScenarioIndex {
@@ -1621,6 +1675,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show viewer editor.
+        /// </summary>
+        public static string Tooltip_ShowViewerEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowViewerEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show work area window.
         /// </summary>
         public static string Tooltip_ShowWorkAreaEditor {
@@ -1630,11 +1693,29 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Split editor.
+        ///   Looks up a localized string similar to Split editor horizontal.
         /// </summary>
-        public static string Tooltip_SplitEditor {
+        public static string Tooltip_SplitHorizontalEditor {
             get {
-                return ResourceManager.GetString("Tooltip_SplitEditor", resourceCulture);
+                return ResourceManager.GetString("Tooltip_SplitHorizontalEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split editor vertical.
+        /// </summary>
+        public static string Tooltip_SplitVerticalEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_SplitVerticalEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize cursor positions of main and sub editors.
+        /// </summary>
+        public static string Tooltip_SynchronizeCursorPositions {
+            get {
+                return ResourceManager.GetString("Tooltip_SynchronizeCursorPositions", resourceCulture);
             }
         }
         

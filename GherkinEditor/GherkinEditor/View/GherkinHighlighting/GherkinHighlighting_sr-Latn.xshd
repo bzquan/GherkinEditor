@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,20 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Funkcionalnost|Mogućnost|Mogucnost|Osobina|Kontekst|Osnova|Pozadina|Scenario|Primer|Struktura\s+scenarija|Skica|Koncept|Primeri|Scenariji)\s*:
+      ^\s*(Funkcionalnost|Mogućnost|Mogucnost|Osobina|Kontekst|Osnova|Pozadina|Scenario|Primer|Struktura\s+scenarija|Skica|Koncept|Primeri|Scenariji)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Za dato </Word>
-      <Word>  Za date </Word>
-      <Word>  Za dati </Word>
-      <Word>  Kada </Word>
-      <Word>  Kad </Word>
-      <Word>  Onda </Word>
-      <Word>  I </Word>
-      <Word>  Ali </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Za\s+dato|Za\s+date|Za\s+dati|Kada|Kad|Onda|I|Ali)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

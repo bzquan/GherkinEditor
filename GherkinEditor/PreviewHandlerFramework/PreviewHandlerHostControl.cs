@@ -4,6 +4,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using C4F.DevKit.PreviewHandler.PreviewHandlerFramework;
 
@@ -43,7 +44,10 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerHost
             set { 
                 _filePath = value;
                 if(value != null && !IsDesignTime())
+                {
+                    CleanupComInstance();
                     GeneratePreview();
+                }
             }
         }
 
@@ -62,81 +66,102 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerHost
         /// </summary>
         private void GeneratePreview()
         {
-            lblMessage.Visible = false;
-            if (_comInstance != null)
-            {
-                ((IPreviewHandler)_comInstance).Unload();
-            }
-
-            RECT r;
-            r.top = 0;
-            r.bottom = this.Height;
-            r.left = 0;
-            r.right = this.Width;
-
-            RegistrationData data = PreviewHandlerRegistryAccessor.LoadRegistrationInformation();
-            PreviewHandlerInfo handler = null;
-
-            foreach (ExtensionInfo ei in data.Extensions)
-            {
-                if (_filePath.ToUpper().EndsWith(ei.Extension.ToUpper()))
-                {
-                    handler = ei.Handler;
-                    if (handler != null)
-                        break;
-                }
-            }
-            if (handler == null)
-            {
-                lblMessage.Visible = true;
-                lblMessage.Text = "No Preview Available";
-                return;
-            }
-
-            Type comType = Type.GetTypeFromCLSID(new Guid(handler.ID));
             try
             {
-                // Create an instance of the preview handler
-                _comInstance = Activator.CreateInstance(comType);
+                if (!File.Exists(_filePath))
+                {
+                    ShowMessage("File not found");
+                    return;
+                }
 
-                // Check if it is a stream or file handler
-                if (_comInstance is IInitializeWithFile)
+                PreviewHandlerInfo handler = LookupPreviewHandler();
+                if (handler == null)
                 {
-                    ((IInitializeWithFile)_comInstance).Initialize(_filePath, 0);
+                    ShowMessage("No Preview Available");
+                    return;
                 }
-                else if (_comInstance is IInitializeWithStream)
-                {
-                    if (File.Exists(_filePath))
-                    {
-                        _fileStream = File.Open(_filePath, FileMode.Open);
-                        StreamWrapper stream = new StreamWrapper(_fileStream);
-                        ((C4F.DevKit.PreviewHandler.PreviewHandlerFramework.IInitializeWithStream)_comInstance).Initialize(stream, 0);
-                    }
-                    else
-                    {
-                        throw new Exception("File not found");
-                    }
-                }
-                ((IPreviewHandler)_comInstance).SetWindow(this.Handle, ref r);
+
+                lblMessage.Visible = false;
+                CreateComInstance(handler);
+                InitializeComInstance();
+                SetWindow();
                 ((IPreviewHandler)_comInstance).DoPreview();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                CloseFileStream();
-                _comInstance = null;
-                lblMessage.Visible = true;
-                lblMessage.Text = "Preview Generation Failed - " + ex.Message;
+                CleanupComInstance();
+                ShowMessage("Preview Generation Failed - " + ex.Message);
 
                 throw ex;
             }
         }
 
-        public void CloseFileStream()
+        private void ShowMessage(string message)
+        {
+            lblMessage.Visible = true;
+            lblMessage.Text = message;
+        }
+
+        /// <summary>
+        /// Look up the preview handler associated with the file extension
+        /// </summary>
+        /// <returns></returns>
+        private PreviewHandlerInfo LookupPreviewHandler()
+        {
+            RegistrationData data = PreviewHandlerRegistryAccessor.LoadRegistrationInformation();
+            var extension = data.Extensions.FirstOrDefault(x => HasExtension(_filePath, x.Extension) && (x.Handler != null));
+
+            return extension?.Handler;
+        }
+
+        private bool HasExtension(string filePath, string ext)
+        {
+            if (string.IsNullOrEmpty(filePath)) return false;
+            return filePath.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private void CreateComInstance(PreviewHandlerInfo handler)
+        {
+            Type comType = Type.GetTypeFromCLSID(new Guid(handler.ID));
+            _comInstance = Activator.CreateInstance(comType);
+        }
+
+        /// <summary>
+        /// Initialize with File or Stream using Initialize from the appropriate interface
+        /// </summary>
+        private void InitializeComInstance()
+        {
+            // Check if it is a stream or file handler
+            if (_comInstance is IInitializeWithFile)
+            {
+                ((IInitializeWithFile)_comInstance).Initialize(_filePath, 0);
+            }
+            else if (_comInstance is IInitializeWithStream)
+            {
+                _fileStream = File.Open(_filePath, FileMode.Open);
+                StreamWrapper stream = new StreamWrapper(_fileStream);
+                ((IInitializeWithStream)_comInstance).Initialize(stream, 0);
+            }
+        }
+
+        private void SetWindow()
+        {
+            RECT r = new RECT() { top = 0, bottom = this.Height, left = 0, right = this.Width };
+            ((IPreviewHandler)_comInstance).SetWindow(this.Handle, ref r);
+        }
+
+        public void CleanupComInstance()
         {
             if (_fileStream != null)
             {
                 _fileStream.Close();
                 _fileStream = null;
+            }
+
+            if (_comInstance != null)
+            {
+                ((IPreviewHandler)_comInstance).Unload();
+                _comInstance = null;
             }
         }
 
@@ -144,11 +169,7 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerHost
         {
             if(_comInstance != null)
             {
-                RECT r;
-                r.top = 0;
-                r.bottom = this.Height;
-                r.left = 0;
-                r.right = this.Width;
+                RECT r = new RECT() { top = 0, bottom = this.Height, left = 0, right = this.Width };
                 ((IPreviewHandler)_comInstance).SetRect(ref r);
             }
         }

@@ -288,8 +288,8 @@
   <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
     <value>缺省显示场景目录</value>
   </data>
-  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
-    <value>缺省分割窗口</value>
+  <data name="MenuSetting_SplitHorizontalEditorByDefault" xml:space="preserve">
+    <value>缺省上下分割窗口</value>
   </data>
   <data name="MenuSetting_StepWordColor" xml:space="preserve">
     <value>步骤关键字颜色</value>
@@ -330,8 +330,8 @@
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>显示场景目录</value>
   </data>
-  <data name="MenuView_SplitEditor" xml:space="preserve">
-    <value>分割窗口</value>
+  <data name="MenuView_SplitHorizontalEditor" xml:space="preserve">
+    <value>上下分割窗口</value>
   </data>
   <data name="MenuView_View" xml:space="preserve">
     <value>显示(_V)</value>
@@ -448,8 +448,8 @@
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>显示场景目录</value>
   </data>
-  <data name="Tooltip_SplitEditor" xml:space="preserve">
-    <value>分割窗口</value>
+  <data name="Tooltip_SplitHorizontalEditor" xml:space="preserve">
+    <value>上下分割窗口</value>
   </data>
   <data name="Message_RenameFailedTitle" xml:space="preserve">
     <value>换名失败</value>
@@ -647,5 +647,32 @@
   </data>
   <data name="MenuTool_PreviewDocument" xml:space="preserve">
     <value>预览文档</value>
+  </data>
+  <data name="MenuView_SynchronizeCursorPositions" xml:space="preserve">
+    <value>同步光标位置</value>
+  </data>
+  <data name="Tooltip_SynchronizeCursorPositions" xml:space="preserve">
+    <value>同步主副编辑器的光标位置</value>
+  </data>
+  <data name="MenuView_ShowCurvePlotMarker" xml:space="preserve">
+    <value>显示绘图标识点</value>
+  </data>
+  <data name="Tooltip_ShowCurvePlotMarker" xml:space="preserve">
+    <value>显示Gherkin表格的绘图标识点</value>
+  </data>
+  <data name="MenuSetting_SplitVerticalEditorByDefault" xml:space="preserve">
+    <value>缺省左右分割窗口</value>
+  </data>
+  <data name="MenuView_SplitVirticalEditor" xml:space="preserve">
+    <value>左右分割窗口</value>
+  </data>
+  <data name="Tooltip_HideViewerEditor" xml:space="preserve">
+    <value>隐藏浏览器</value>
+  </data>
+  <data name="Tooltip_ShowViewerEditor" xml:space="preserve">
+    <value>显示浏览器</value>
+  </data>
+  <data name="Tooltip_SplitVerticalEditor" xml:space="preserve">
+    <value>左右分割窗口</value>
   </data>
 </root>

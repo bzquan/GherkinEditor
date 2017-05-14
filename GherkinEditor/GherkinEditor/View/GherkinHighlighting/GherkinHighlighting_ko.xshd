@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,20 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(기능|배경|시나리오|시나리오\s+개요|예)\s*:
+      ^\s*(기능|배경|시나리오|시나리오\s+개요|예)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  조건 </Word>
-      <Word>  먼저 </Word>
-      <Word>  만일 </Word>
-      <Word>  만약 </Word>
-      <Word>  그러면 </Word>
-      <Word>  그리고 </Word>
-      <Word>  하지만 </Word>
-      <Word>  단 </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(조건|먼저|만일|만약|그러면|그리고|하지만|단)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

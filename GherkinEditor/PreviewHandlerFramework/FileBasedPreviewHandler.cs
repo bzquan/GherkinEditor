@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace C4F.DevKit.PreviewHandler.PreviewHandlerFramework
 {
@@ -11,9 +12,10 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerFramework
     {
         private string _filePath;
 
-        void IInitializeWithFile.Initialize(string pszFilePath, uint grfMode)
+        int IInitializeWithFile.Initialize(string pszFilePath, int grfMode)
         {
             _filePath = pszFilePath;
+            return 0;
         }
 
         protected override void Load(PreviewHandlerControl c)

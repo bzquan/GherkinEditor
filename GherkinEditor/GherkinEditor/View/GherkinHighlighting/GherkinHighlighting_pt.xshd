@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,21 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Funcionalidade|Característica|Caracteristica|Contexto|Cenário\s+de\s+Fundo|Cenario\s+de\s+Fundo|Fundo|Cenário|Cenario|Esquema\s+do\s+Cenário|Esquema\s+do\s+Cenario|Delineação\s+do\s+Cenário|Delineacao\s+do\s+Cenario|Exemplos|Cenários|Cenarios)\s*:
+      ^\s*(Funcionalidade|Característica|Caracteristica|Contexto|Cenário\s+de\s+Fundo|Cenario\s+de\s+Fundo|Fundo|Cenário|Cenario|Esquema\s+do\s+Cenário|Esquema\s+do\s+Cenario|Delineação\s+do\s+Cenário|Delineacao\s+do\s+Cenario|Exemplos|Cenários|Cenarios)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Dado </Word>
-      <Word>  Dada </Word>
-      <Word>  Dados </Word>
-      <Word>  Dadas </Word>
-      <Word>  Quando </Word>
-      <Word>  Então </Word>
-      <Word>  Entao </Word>
-      <Word>  E </Word>
-      <Word>  Mas </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Dado|Dada|Dados|Dadas|Quando|Então|Entao|E|Mas)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

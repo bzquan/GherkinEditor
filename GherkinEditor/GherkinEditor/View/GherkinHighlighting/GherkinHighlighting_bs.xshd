@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Karakteristika|Pozadina|Scenariju|Scenario|Scenariju-obris|Scenario-outline|Primjeri)\s*:
+      ^\s*(Karakteristika|Pozadina|Scenariju|Scenario|Scenariju-obris|Scenario-outline|Primjeri)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Dato </Word>
-      <Word>  Kada </Word>
-      <Word>  Zatim </Word>
-      <Word>  I </Word>
-      <Word>  A </Word>
-      <Word>  Ali </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Dato|Kada|Zatim|I|A|Ali)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

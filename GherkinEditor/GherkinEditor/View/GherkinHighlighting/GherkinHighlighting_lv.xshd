@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Funkcionalitāte|Fīča|Konteksts|Situācija|Scenārijs|Scenārijs\s+pēc\s+parauga|Piemēri|Paraugs)\s*:
+      ^\s*(Funkcionalitāte|Fīča|Konteksts|Situācija|Scenārijs|Scenārijs\s+pēc\s+parauga|Piemēri|Paraugs)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Kad </Word>
-      <Word>  Ja </Word>
-      <Word>  Tad </Word>
-      <Word>  Un </Word>
-      <Word>  Bet </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Kad|Ja|Tad|Un|Bet)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

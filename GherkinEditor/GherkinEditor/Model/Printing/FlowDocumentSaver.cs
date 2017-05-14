@@ -182,6 +182,7 @@ namespace Gherkin.Model
         /// Convert to docx or PDF by using "NetOffice - MS Office in .NET", which uses Word application internal
         /// without version limitations.
         /// Note:
+        /// http://netoffice.codeplex.com/
         /// You need to add NetOffice.dll and WordApi.dll "References".
         /// To avoid error CS1752: Interop type 'Application' cannot be embedded. Use the applicable interface instead,
         /// in your Project, expand the "References", find the NetOffice and WordApi reference.
@@ -232,9 +233,9 @@ namespace Gherkin.Model
 
         private void SaveAsXps(TextEditor textEditor, string fileName, string title)
         {
-            using (Package container = Package.Open(fileName, FileMode.Create))
+            using (Package package = Package.Open(fileName, FileMode.Create))
             {
-                using (XpsDocument xpsDoc = new XpsDocument(container, CompressionOption.Fast))
+                using (XpsDocument xpsDoc = new XpsDocument(package, CompressionOption.Fast))
                 {
                     XpsSerializationManager xpsSerializationManager = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
                     DocumentPaginatorWrapper paginator = Printing.CreateDocumentPaginatorToPrint(textEditor);

@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Δυνατότητα|Λειτουργία|Υπόβαθρο|Σενάριο|Περιγραφή\s+Σεναρίου|Παραδείγματα|Σενάρια)\s*:
+      ^\s*(Δυνατότητα|Λειτουργία|Υπόβαθρο|Σενάριο|Περιγραφή\s+Σεναρίου|Παραδείγματα|Σενάρια)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Δεδομένου </Word>
-      <Word>  Όταν </Word>
-      <Word>  Τότε </Word>
-      <Word>  Και </Word>
-      <Word>  Αλλά </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Δεδομένου|Όταν|Τότε|Και|Αλλά)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

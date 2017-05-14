@@ -62,10 +62,16 @@
     <ManifestKeyFile>GherkinEditor_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -123,9 +129,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\CustomElementGenerator\CacheBase.cs" />
+    <Compile Include="Model\CustomElementGenerator\CurveElementGenerator.cs" />
+    <Compile Include="Model\CustomElementGenerator\CurveViewCache.cs" />
+    <Compile Include="Model\CustomElementGenerator\CurvePlotModel.cs" />
+    <Compile Include="Model\CustomElementGenerator\CurveViewItem.cs" />
     <Compile Include="Model\CustomElementGenerator\CustomElementGenerator.cs" />
+    <Compile Include="Model\CustomElementGenerator\CustomImageControl.cs" />
     <Compile Include="Model\CustomElementGenerator\ErrorMessageDrawingVisual.cs" />
     <Compile Include="Model\CustomElementGenerator\LaTexImageCache.cs" />
+    <Compile Include="Model\CustomElementGenerator\Spline\BandMatrix.cs" />
+    <Compile Include="Model\CustomElementGenerator\Spline\CubicSpline.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
     <Compile Include="Model\GherkinIndentationStrategy\CursorPosInTable.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
@@ -142,6 +156,7 @@
     <Compile Include="Model\Printing\PrintSettings.cs" />
     <Compile Include="Model\Printing\FlowDocumentSaver.cs" />
     <Compile Include="Util\CurrentGherkinLanguageArg.cs" />
+    <Compile Include="Util\CustomImageClickedArg.cs" />
     <Compile Include="Util\DrawingVisualUtil.cs" />
     <Compile Include="Util\EditorViewInitializationCompleted.cs" />
     <Compile Include="Util\FailedToFindEditorControlArg.cs" />
@@ -154,7 +169,9 @@
     <Compile Include="Util\ForEachUtil.cs" />
     <Compile Include="Util\ProcessInterop.cs" />
     <Compile Include="Util\IndentationCompletedArg.cs" />
-    <Compile Include="Util\ShowSubEditorRequestArg.cs" />
+    <Compile Include="Util\ShowCurvePlotMarker4GherkinTableArg.cs" />
+    <Compile Include="Util\ShowViewerEditorRequestArg.cs" />
+    <Compile Include="Model\CustomElementGenerator\Spline\VectorHelper.cs" />
     <Compile Include="Util\StatusChangedArg.cs" />
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
@@ -225,6 +242,7 @@
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\InverseBooleanConverter.cs" />
     <Compile Include="View\PrintPreviewDocumentViewer.cs" />
     <Compile Include="View\PrintPreview.xaml.cs">
       <DependentUpon>PrintPreview.xaml</DependentUpon>
@@ -357,6 +375,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -467,6 +486,14 @@
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OxyPlot.Wpf\OxyPlot.Wpf.csproj">
+      <Project>{698ccd8e-adcc-4565-8517-5edd36f07155}</Project>
+      <Name>OxyPlot.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OxyPlot\OxyPlot.csproj">
+      <Project>{7a0b35c0-dd17-4964-8e9a-44d6cecdc692}</Project>
+      <Name>OxyPlot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PdfSharp.Xps\PdfSharp.Xps.csproj">
       <Project>{0bc3964b-a3bc-49d5-9b7c-463299b5a166}</Project>
       <Name>PdfSharp.Xps</Name>
@@ -486,9 +513,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Trim.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\HSplit.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\NewFile.png" />
@@ -627,10 +651,6 @@
     <Resource Include="View\Images\StartGrep.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\EditorLower.png" />
-    <Resource Include="View\Images\EditorUpper.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\Question.png" />
   </ItemGroup>
   <ItemGroup>
@@ -675,15 +695,6 @@
     <Resource Include="View\Images\PDF.png" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>7</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>5</VersionMajor>
@@ -723,6 +734,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Synchronize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\PlotMarker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\CollapseV.png" />
+    <Resource Include="View\Images\ExpandV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\SplitHorizontal.png" />
+    <Resource Include="View\Images\SplitVertical.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

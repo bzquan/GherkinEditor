@@ -198,17 +198,6 @@ namespace Gherkin.View
                                         .Template
                                         .FindName("PART_QuickLinksHost", editorTabControl) as BetterWpfControls.MenuButton;
             m_ShowQuickLinksButton.ToolTip = Properties.Resources.Tooltip_OpenedDocuments;
-
-            //ForceToolTipStayOn();
-        }
-
-        /// <summary>
-        /// Forcing a WPF tooltip to stay on the screen when window is loaded
-        /// </summary>
-        private void ForceToolTipStayOn()
-        {
-            ToolTipService.ShowDurationProperty.OverrideMetadata(
-                typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
         }
 
         /// <summary>

@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(თვისება|კონტექსტი|სცენარის|სცენარის\s+ნიმუში|მაგალითები)\s*:
+      ^\s*(თვისება|კონტექსტი|სცენარის|სცენარის\s+ნიმუში|მაგალითები)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  მოცემული </Word>
-      <Word>  როდესაც </Word>
-      <Word>  მაშინ </Word>
-      <Word>  და </Word>
-      <Word>  მაგ­რამ </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(მოცემული|როდესაც|მაშინ|და|მაგ­რამ)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

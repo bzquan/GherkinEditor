@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(ਖਾਸੀਅਤ|ਮੁਹਾਂਦਰਾ|ਨਕਸ਼\s+ਨੁਹਾਰ|ਪਿਛੋਕੜ|ਪਟਕਥਾ|ਪਟਕਥਾ\s+ਢਾਂਚਾ|ਪਟਕਥਾ\s+ਰੂਪ\s+ਰੇਖਾ|ਉਦਾਹਰਨਾਂ)\s*:
+      ^\s*(ਖਾਸੀਅਤ|ਮੁਹਾਂਦਰਾ|ਨਕਸ਼\s+ਨੁਹਾਰ|ਪਿਛੋਕੜ|ਪਟਕਥਾ|ਪਟਕਥਾ\s+ਢਾਂਚਾ|ਪਟਕਥਾ\s+ਰੂਪ\s+ਰੇਖਾ|ਉਦਾਹਰਨਾਂ)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  ਜੇਕਰ </Word>
-      <Word>  ਜਿਵੇਂ ਕਿ </Word>
-      <Word>  ਜਦੋਂ </Word>
-      <Word>  ਤਦ </Word>
-      <Word>  ਅਤੇ </Word>
-      <Word>  ਪਰ </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(ਜੇਕਰ|ਜਿਵੇਂ\s+ਕਿ|ਜਦੋਂ|ਤਦ|ਅਤੇ|ਪਰ)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

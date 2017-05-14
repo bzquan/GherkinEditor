@@ -44,8 +44,7 @@ namespace Gherkin.ViewModel
         {
             m_AppSettings = appSettings;
 
-            Model.BitmapImageCache.CacheSizee = appSettings.ImageCacheSize;
-            Model.LaTexImageCache.CacheSizee = appSettings.ImageCacheSize;
+            Model.CacheBase.CacheSize = appSettings.ImageCacheSize;
         }
 
         public void SetTabPanels(ObservableCollection<EditorTabItem> tabPanels)
@@ -418,15 +417,27 @@ namespace Gherkin.ViewModel
                 base.OnPropertyChanged();
             }
         }
-
+        
         [Category("Editor window")]
-        [LocalizedDisplayName("MenuSetting_SplitEditorByDefault", typeof(Resources))]
-        public bool ShowSplitViewByDefault
+        [LocalizedDisplayName("MenuSetting_SplitHorizontalEditorByDefault", typeof(Resources))]
+        public bool ShowSplitHorizontalViewByDefault
         {
-            get { return m_AppSettings.ShowSplitViewByDefault; }
+            get { return m_AppSettings.ShowSplitHorizontalViewByDefault; }
             set
             {
-                m_AppSettings.ShowSplitViewByDefault = value;
+                m_AppSettings.ShowSplitHorizontalViewByDefault = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        [Category("Editor window")]
+        [LocalizedDisplayName("MenuSetting_SplitVerticalEditorByDefault", typeof(Resources))]
+        public bool ShowSplitVertiViewByDefault
+        {
+            get { return m_AppSettings.ShowSplitVerticalViewByDefault; }
+            set
+            {
+                m_AppSettings.ShowSplitVerticalViewByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -519,8 +530,7 @@ namespace Gherkin.ViewModel
                 if ((value >= 10) && (value <=200))
                 {
                     m_AppSettings.ImageCacheSize = value;
-                    Model.BitmapImageCache.CacheSizee = value;
-                    Model.LaTexImageCache.CacheSizee = value;
+                    Model.CacheBase.CacheSize = value;
                 }
                 base.OnPropertyChanged();
             }

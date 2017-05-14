@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,17 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(గుణము|నేపథ్యం|సన్నివేశం|కథనం|ఉదాహరణలు)\s*:
+      ^\s*(గుణము|నేపథ్యం|సన్నివేశం|కథనం|ఉదాహరణలు)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  చెప్పబడినది </Word>
-      <Word>  ఈ పరిస్థితిలో </Word>
-      <Word>  అప్పుడు </Word>
-      <Word>  మరియు </Word>
-      <Word>  కాని </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(చెప్పబడినది|ఈ\s+పరిస్థితిలో|అప్పుడు|మరియు|కాని)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

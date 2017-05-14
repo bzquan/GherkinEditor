@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(תכונה|רקע|תרחיש|תבנית\s+תרחיש|דוגמאות)\s*:
+      ^\s*(תכונה|רקע|תרחיש|תבנית\s+תרחיש|דוגמאות)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  בהינתן </Word>
-      <Word>  כאשר </Word>
-      <Word>  אז </Word>
-      <Word>  אזי </Word>
-      <Word>  וגם </Word>
-      <Word>  אבל </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(בהינתן|כאשר|אז|אזי|וגם|אבל)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

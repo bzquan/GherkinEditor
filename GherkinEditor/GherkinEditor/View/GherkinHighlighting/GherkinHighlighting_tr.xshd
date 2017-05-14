@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Özellik|Geçmiş|Senaryo|Senaryo\s+taslağı|Örnekler)\s*:
+      ^\s*(Özellik|Geçmiş|Senaryo|Senaryo\s+taslağı|Örnekler)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Diyelim ki </Word>
-      <Word>  Eğer ki </Word>
-      <Word>  O zaman </Word>
-      <Word>  Ve </Word>
-      <Word>  Fakat </Word>
-      <Word>  Ama </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Diyelim\s+ki|Eğer\s+ki|O\s+zaman|Ve|Fakat|Ama)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

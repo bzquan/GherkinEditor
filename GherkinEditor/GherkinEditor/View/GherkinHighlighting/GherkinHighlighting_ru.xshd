@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,25 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Функция|Функциональность|Функционал|Свойство|Предыстория|Контекст|Сценарий|Структура\s+сценария|Примеры)\s*:
+      ^\s*(Функция|Функциональность|Функционал|Свойство|Предыстория|Контекст|Сценарий|Структура\s+сценария|Примеры)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Допустим </Word>
-      <Word>  Дано </Word>
-      <Word>  Пусть </Word>
-      <Word>  Если </Word>
-      <Word>  Когда </Word>
-      <Word>  То </Word>
-      <Word>  Затем </Word>
-      <Word>  Тогда </Word>
-      <Word>  И </Word>
-      <Word>  К тому же </Word>
-      <Word>  Также </Word>
-      <Word>  Но </Word>
-      <Word>  А </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Допустим|Дано|Пусть|Если|Когда|То|Затем|Тогда|И|К\s+тому\s+же|Также|Но|А)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

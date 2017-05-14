@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,35 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Fonctionnalité|Contexte|Scénario|Plan\s+du\s+scénario|Plan\s+du\s+Scénario|Exemples)\s*:
+      ^\s*(Fonctionnalité|Contexte|Scénario|Plan\s+du\s+scénario|Plan\s+du\s+Scénario|Exemples)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Soit </Word>
-      <Word>  Etant donné que </Word>
-      <Word>  Etant donné qu' </Word>
-      <Word>  Etant donné </Word>
-      <Word>  Etant donnée </Word>
-      <Word>  Etant donnés </Word>
-      <Word>  Etant données </Word>
-      <Word>  Étant donné que </Word>
-      <Word>  Étant donné qu' </Word>
-      <Word>  Étant donné </Word>
-      <Word>  Étant donnée </Word>
-      <Word>  Étant donnés </Word>
-      <Word>  Étant données </Word>
-      <Word>  Quand </Word>
-      <Word>  Lorsque </Word>
-      <Word>  Lorsqu' </Word>
-      <Word>  Alors </Word>
-      <Word>  Et que </Word>
-      <Word>  Et qu' </Word>
-      <Word>  Et </Word>
-      <Word>  Mais que </Word>
-      <Word>  Mais qu' </Word>
-      <Word>  Mais </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Soit|Etant\s+donné\s+que|Etant\s+donné\s+qu'|Etant\s+donné|Etant\s+donnée|Etant\s+donnés|Etant\s+données|Étant\s+donné\s+que|Étant\s+donné\s+qu'|Étant\s+donné|Étant\s+donnée|Étant\s+donnés|Étant\s+données|Quand|Lorsque|Lorsqu'|Alors|Et\s+que|Et\s+qu'|Et|Mais\s+que|Mais\s+qu'|Mais)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

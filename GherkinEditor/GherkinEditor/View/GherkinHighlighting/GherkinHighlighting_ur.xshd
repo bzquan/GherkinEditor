@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,20 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(صلاحیت|کاروبار\s+کی\s+ضرورت|خصوصیت|پس\s+منظر|منظرنامہ|منظر\s+نامے\s+کا\s+خاکہ|مثالیں)\s*:
+      ^\s*(صلاحیت|کاروبار\s+کی\s+ضرورت|خصوصیت|پس\s+منظر|منظرنامہ|منظر\s+نامے\s+کا\s+خاکہ|مثالیں)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  اگر </Word>
-      <Word>  بالفرض </Word>
-      <Word>  فرض کیا </Word>
-      <Word>  جب </Word>
-      <Word>  پھر </Word>
-      <Word>  تب </Word>
-      <Word>  اور </Word>
-      <Word>  لیکن </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(اگر|بالفرض|فرض\s+کیا|جب|پھر|تب|اور|لیکن)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

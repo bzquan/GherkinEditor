@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Trajto|Fono|Scenaro|Kazo|Konturo\s+de\s+la\s+scenaro|Skizo|Kazo-skizo|Ekzemploj)\s*:
+      ^\s*(Trajto|Fono|Scenaro|Kazo|Konturo\s+de\s+la\s+scenaro|Skizo|Kazo-skizo|Ekzemploj)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Donitaĵo </Word>
-      <Word>  Komence </Word>
-      <Word>  Se </Word>
-      <Word>  Do </Word>
-      <Word>  Kaj </Word>
-      <Word>  Sed </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Donitaĵo|Komence|Se|Do|Kaj|Sed)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

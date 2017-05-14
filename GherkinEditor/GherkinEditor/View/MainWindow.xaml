@@ -49,13 +49,19 @@
         <BitmapImage x:Key="scenarioIndexImage"
                      UriSource="Images/Index.png" />
         <BitmapImage x:Key="horizontalSplitImage"
-                     UriSource="Images/HSplit.png" />
+                     UriSource="Images/SplitHorizontal.png" />
+        <BitmapImage x:Key="verticalSplitImage"
+                     UriSource="Images/SplitVertical.png" />
         <BitmapImage x:Key="supportUnicodeImage"
                      UriSource="Images/Unicode.png" />
         <BitmapImage x:Key="messageWindowImage"
                      UriSource="Images/MessageWindow.png" />
         <BitmapImage x:Key="findAndReplaceImage"
                      UriSource="Images/FindAndReplace.png" />
+        <BitmapImage x:Key="synchronizeImage"
+                     UriSource="Images/Synchronize.png" />
+        <BitmapImage x:Key="showCurvePlotMarker4GherkinTableImage"
+                     UriSource="Images/PlotMarker.png" />
 
         <!-- local:TabSizeConverter x:Key="tabSizeConverter" / -->
         <local:FontFamilyToNameConverter x:Key="FontFamilyToNameConverter" />
@@ -162,7 +168,7 @@
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
-        
+
         <Style x:Key="GridSplitterPreviewStyle">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -173,7 +179,49 @@
             </Setter>
         </Style>
 
-        <Style x:Key="GridSplitterStyle"
+        <Style x:Key="GridVSplitterStyle"
+               TargetType="{x:Type GridSplitter}">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="PreviewStyle"
+                    Value="{StaticResource GridSplitterPreviewStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                            <Grid Height="Auto">
+                                <StackPanel x:Name="RowCollapsers"
+                                            VerticalAlignment="Stretch"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <bc:ImageButton x:Name="showSubEditorButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_ShowViewerEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/ExpandV.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="vm:GherkinEditerCommand.ShowViewerEditorCmd">
+                                    </bc:ImageButton>
+                                    <bc:ImageButton x:Name="hideSubEditorButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_HideViewerEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/CollapseV.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="vm:GherkinEditerCommand.HideViewerEditorCmd">
+                                    </bc:ImageButton>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GridHSplitterStyle"
                TargetType="{x:Type GridSplitter}">
             <Setter Property="Background"
                     Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
@@ -206,6 +254,48 @@
                                                     Source="Images/Collapse.png"
                                                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
                                                     Command="vm:GherkinEditerCommand.HideSubEditorCmd">
+                                    </bc:ImageButton>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GridWorkAreaSplitterStyle"
+               TargetType="{x:Type GridSplitter}">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="PreviewStyle"
+                    Value="{StaticResource GridSplitterPreviewStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                            <Grid Height="Auto">
+                                <StackPanel x:Name="RowCollapsers"
+                                            VerticalAlignment="Stretch"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <bc:ImageButton x:Name="showWorkAreaButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_ShowWorkAreaEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/Expand.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="{Binding Path=WorkAreaEditor.ShowMessageWindowCmd}">
+                                    </bc:ImageButton>
+                                    <bc:ImageButton x:Name="hideWorkAreaButton"
+                                                    Height="10"
+                                                    ToolTip="{x:Static p:Resources.Tooltip_HideWorkAreaEditor}"
+                                                    Cursor="Arrow"
+                                                    Source="Images/Collapse.png"
+                                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="{Binding Path=WorkAreaEditor.HideMessageWindowCmd}">
                                     </bc:ImageButton>
                                 </StackPanel>
                             </Grid>
@@ -424,12 +514,42 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuView_SplitEditor}"
+                          Header="{x:Static p:Resources.MenuView_SplitHorizontalEditor}"
                           StaysOpenOnClick="true"
-                          IsChecked="{Binding ShowSplitView}">
+                          IsChecked="{Binding ShowHSplitView}">
                     <MenuItem.Icon>
-                        <Image Source="Images/HSplit.png"
+                        <Image Source="Images/SplitHorizontal.png"
                                Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuView_SplitVerticalEditor}"
+                          StaysOpenOnClick="true"
+                          IsChecked="{Binding ShowVSplitView}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/SplitVertical.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuView_SynchronizeCursorPositions}"
+                          ToolTip="{x:Static p:Resources.Tooltip_SynchronizeCursorPositions}"
+                          StaysOpenOnClick="true"
+                          IsChecked="{Binding SynchronizeCursorPositions}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Synchronize.png"
+                               Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuView_ShowCurvePlotMarker}"
+                          ToolTip="{x:Static p:Resources.Tooltip_ShowCurvePlotMarker}"
+                          StaysOpenOnClick="true"
+                          Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
+                          IsChecked="{Binding ShowCurvePlotMarker4GherkinTable}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/PlotMarker.png"
+                               Height="20" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem IsCheckable="True"
@@ -445,7 +565,7 @@
                                                 Visibility="{Binding Path=GherkinSettings.PropertyGridViewModel.ShowColumnRuler, Converter={StaticResource BoolToVisibility}}"
                                                 Increment="5"
                                                 Minimum="60"
-                                                Maximum="160"/>
+                                                Maximum="160" />
                         </StackPanel>
                     </MenuItem.Header>
                 </MenuItem>
@@ -670,9 +790,25 @@
                 <Image Source="{Binding ScenarioIndexIcon, FallbackValue={StaticResource scenarioIndexImage}}"
                        Height="16" />
             </CheckBox>
-            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SplitEditor}"
-                      IsChecked="{Binding ShowSplitView}">
+            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SplitHorizontalEditor}"
+                      IsChecked="{Binding ShowHSplitView}">
                 <Image Source="{Binding HorizontalSplitIcon, FallbackValue={StaticResource horizontalSplitImage}}"
+                       Height="16" />
+            </CheckBox>
+            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SplitVerticalEditor}"
+                      IsChecked="{Binding ShowVSplitView}">
+                <Image Source="{Binding VerticalSplitIcon, FallbackValue={StaticResource verticalSplitImage}}"
+                       Height="16" />
+            </CheckBox>
+            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_SynchronizeCursorPositions}"
+                      IsChecked="{Binding SynchronizeCursorPositions}">
+                <Image Source="{Binding SynchronizeCursorPositionsIcon, FallbackValue={StaticResource synchronizeImage}}"
+                       Height="16" />
+            </CheckBox>
+            <CheckBox ToolTip="{x:Static p:Resources.Tooltip_ShowCurvePlotMarker}"
+                      Visibility="{Binding Path=IsFeatureFile, Converter={StaticResource BoolToVisibility}}"
+                      IsChecked="{Binding ShowCurvePlotMarker4GherkinTable}">
+                <Image Source="{Binding ShowCurvePlotMarker4GherkinTableIcon, FallbackValue={StaticResource showCurvePlotMarker4GherkinTableImage}}"
                        Height="16" />
             </CheckBox>
             <Button Command="{Binding GenCPPTestCodeCmd}"
@@ -759,15 +895,19 @@
                                     Source="Images/Reset.png"
                                     Height="20"
                                     ToolTip="{x:Static p:Resources.Tooltip_ClearStatus}"
-                                    Command="{Binding Path=ClearStatusCmd}"/>
+                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
+                                    Command="{Binding Path=ClearStatusCmd}" />
 
-                    <TextBlock Grid.Column="1" Text="{Binding Status}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Status}" />
                 </Grid>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1">
-                <Border BorderBrush="DarkGray" BorderThickness="1">
+                <Border BorderBrush="DarkGray"
+                        BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=Codepage}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Path=Codepage}"
+                                   VerticalAlignment="Center" />
                         <bc:ImageButton x:Name="codePageButton"
                                         ToolTip="{x:Static p:Resources.Status_CodePageListTitle}"
                                         Visibility="{Binding Path=CanShowCodePageList, Converter={StaticResource BoolToVisibility}}"
@@ -776,8 +916,8 @@
                                         Height="16" />
                         <local:CodePageListPopup IsOpen="{Binding Path=CodePageListPopupViewModel.ShowCodePageList}"
                                                  PlacementTarget="{Binding ElementName=codePageButton}"
-                               Placement="Top"
-                               StaysOpen="True">
+                                                 Placement="Top"
+                                                 StaysOpen="True">
                         </local:CodePageListPopup>
                     </StackPanel>
                 </Border>
@@ -785,6 +925,10 @@
         </StatusBar>
         <Grid x:Name="mainGrid"
               Margin="2, 0, 2, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="161*" />
+                <ColumnDefinition Width="213*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*" />
                 <RowDefinition Height="Auto" />
@@ -795,7 +939,8 @@
                            Grid.Row="0"
                            ItemsSource="{Binding TabPanels}"
                            ShowQuickLinksButton="True"
-                           SelectedIndex="{Binding SelectedTabIndex}">
+                           SelectedIndex="{Binding SelectedTabIndex}"
+                           Grid.ColumnSpan="2">
                 <bc:TabControl.ItemContainerStyle>
                     <Style TargetType="{x:Type bc:TabItem}"
                            BasedOn="{StaticResource {x:Type bc:TabItem}}">
@@ -960,25 +1105,48 @@
                                           VerticalAlignment="Stretch" />
                             <Grid Name="editGrid"
                                   Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="50*" />
-                                    <RowDefinition Height="Auto"/>
-                                    <vm:HiddenableRowDefinition Height="50*"
-                                                                IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideSplitView}" />
-                                </Grid.RowDefinitions>
-                                <avalonEdit:TextEditor Name="mainEditor"
-                                                       Grid.Row="0"
-                                                       ContextMenu="{StaticResource editorContextMenu}" />
-                                <GridSplitter Name="hsplitter"
-                                              Grid.Row="1"
-                                              Height="10"
-                                              BorderBrush="DarkGoldenrod"
-                                              BorderThickness="1"
-                                              HorizontalAlignment="Stretch"
-                                              Style="{DynamicResource GridSplitterStyle}" />
-                                <avalonEdit:TextEditor Name="subEditor"
-                                                       Grid.Row="2"
-                                                       ContextMenu="{StaticResource editorContextMenu}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*" />
+                                        <vm:HiddenableColumnDefinition Width="Auto"
+                                                                       IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideVSplitView}"/>
+                                        <vm:HiddenableColumnDefinition Width="50*"
+                                                                       IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideVSplitView}" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Name="mainSubEditorGrid"
+                                          Grid.Column="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="50*" />
+                                            <vm:HiddenableRowDefinition Height="Auto"
+                                                                        IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideHSplitView}"/>
+                                            <vm:HiddenableRowDefinition Height="50*"
+                                                                        IsHidden="{Binding RelativeSource={RelativeSource AncestorType=local:EditorTabContent}, Path=DataContext.HideHSplitView}" />
+                                        </Grid.RowDefinitions>
+                                        <avalonEdit:TextEditor Name="mainEditor"
+                                                               Grid.Row="0"
+                                                               ContextMenu="{StaticResource editorContextMenu}" />
+                                        <GridSplitter Name="hsplitter"
+                                                      Grid.Row="1"
+                                                      Height="10"
+                                                      BorderBrush="DarkGoldenrod"
+                                                      BorderThickness="1"
+                                                      HorizontalAlignment="Stretch"
+                                                      Style="{DynamicResource GridHSplitterStyle}" />
+                                        <avalonEdit:TextEditor Name="subEditor"
+                                                               Grid.Row="2"
+                                                               ContextMenu="{StaticResource editorContextMenu}" />
+                                    </Grid>
+                                    <GridSplitter Name="editorVSplitter"
+                                                  Grid.Column="1"
+                                                  Width="10"
+                                                  BorderBrush="DarkGoldenrod"
+                                                  BorderThickness="1"
+                                                  HorizontalAlignment="Stretch"
+                                                  Style="{DynamicResource GridVSplitterStyle}" />
+                                    <avalonEdit:TextEditor Name="viewerEditor"
+                                                           Grid.Column="2"
+                                                           ContextMenu="{StaticResource editorContextMenu}" />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </DataTemplate>
@@ -987,49 +1155,13 @@
 
             <GridSplitter Name="bottomHSplitter"
                           Grid.Row="1"
+                          Grid.ColumnSpan="2"
                           Height="10"
                           BorderBrush="DarkGoldenrod"
                           Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                           BorderThickness="1"
-                          HorizontalAlignment="Stretch">
-                <GridSplitter.Style>
-                    <Style TargetType="{x:Type GridSplitter}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type GridSplitter}">
-                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Background="{TemplateBinding Background}"
-                                            CornerRadius="5">
-                                        <Grid Height="Auto">
-                                            <StackPanel x:Name="RowCollapsers"
-                                                        VerticalAlignment="Stretch"
-                                                        Orientation="Horizontal"
-                                                        HorizontalAlignment="Center">
-                                                <bc:ImageButton x:Name="showWorkAreaButton"
-                                                                Height="10"
-                                                                ToolTip="{x:Static p:Resources.Tooltip_ShowWorkAreaEditor}"
-                                                                Cursor="Arrow"
-                                                                Source="Images/Expand.png"
-                                                                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
-                                                                Command="{Binding Path=WorkAreaEditor.ShowMessageWindowCmd}">
-                                                </bc:ImageButton>
-                                                <bc:ImageButton x:Name="hideWorkAreaButton"
-                                                                Height="10"
-                                                                ToolTip="{x:Static p:Resources.Tooltip_HideWorkAreaEditor}"
-                                                                Cursor="Arrow"
-                                                                Source="Images/Collapse.png"
-                                                                Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}"
-                                                                Command="{Binding Path=WorkAreaEditor.HideMessageWindowCmd}">
-                                                </bc:ImageButton>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </GridSplitter.Style>
+                          HorizontalAlignment="Stretch"
+                          Style="{DynamicResource GridWorkAreaSplitterStyle}">
             </GridSplitter>
 
             <Popup x:Name="cppCodeGenResultUagePopup"
@@ -1038,7 +1170,8 @@
                    Placement="Right"
                    HorizontalOffset="-480"
                    VerticalOffset="12"
-                   StaysOpen="True">
+                   StaysOpen="True"
+                   Grid.ColumnSpan="2">
 
                 <Border BorderBrush="Goldenrod"
                         BorderThickness="1">
@@ -1060,7 +1193,8 @@
 
             <avalonEdit:TextEditor Name="messageTextEditor"
                                    Grid.Row="2"
-                                   ContextMenu="{StaticResource editorContextMenu}" />
+                                   ContextMenu="{StaticResource editorContextMenu}"
+                                   Grid.ColumnSpan="2" />
         </Grid>
     </DockPanel>
 </Window>

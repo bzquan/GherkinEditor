@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,23 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Gné|Cúlra|Cás|Cás\s+Achomair|Samplaí)\s*:
+      ^\s*(Gné|Cúlra|Cás|Cás\s+Achomair|Samplaí)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Cuir i gcás go </Word>
-      <Word>  Cuir i gcás nach </Word>
-      <Word>  Cuir i gcás gur </Word>
-      <Word>  Cuir i gcás nár </Word>
-      <Word>  Nuair a </Word>
-      <Word>  Nuair nach </Word>
-      <Word>  Nuair ba </Word>
-      <Word>  Nuair nár </Word>
-      <Word>  Ansin </Word>
-      <Word>  Agus </Word>
-      <Word>  Ach </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Cuir\s+i\s+gcás\s+go|Cuir\s+i\s+gcás\s+nach|Cuir\s+i\s+gcás\s+gur|Cuir\s+i\s+gcás\s+nár|Nuair\s+a|Nuair\s+nach|Nuair\s+ba|Nuair\s+nár|Ansin|Agus|Ach)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

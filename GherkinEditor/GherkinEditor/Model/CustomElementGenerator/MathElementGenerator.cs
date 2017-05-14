@@ -13,6 +13,7 @@ using Gherkin.Util;
 using WpfMath;
 using System.Windows;
 using System.Windows.Input;
+using ICSharpCode.AvalonEdit;
 
 namespace Gherkin.Model
 {
@@ -23,19 +24,19 @@ namespace Gherkin.Model
     /// textEditor.TextArea.TextView.ElementGenerators.Add(new MathElementGenerator());
     /// 
     /// Image must be specified by following mark down.
-    /// mark down syntax: ![LaTex scale](LaTeX typsetting), e.g. ![LaTex 20](\sqrt{\frac{ax^2+bx+\pi}{x^3}})
+    /// mark down syntax: #[LaTex scale description](LaTeX typsetting), e.g. #[LaTex 20 this is an equation](\sqrt{\frac{ax^2+bx+\pi}{x^3}})
     /// The scale is a value between 10 to 100. It is optional and the default value is 20. 
-    /// 
+    /// Description is optional.
     /// http://danielgrunwald.de/coding/AvalonEdit/rendering.php
     /// https://github.com/ForNeVeR/wpf-math
     /// </summary>
     public class MathElementGenerator : CustomElementGenerator
     {
-        public static readonly string LaTexPrefix = "![LaTex";
-        // mark down syntax: ![LaTex scale](LaTeX typsetting), e.g. ![LaTex 20](\sqrt{\frac{ax^2+bx+\pi}{x^3}})
-        private readonly static Regex s_MathRegex = new Regex(@"!\[LaTex\s*([0-9]*)\]\((.+)\)", RegexOptions.IgnoreCase);
+        public static readonly string LaTexPrefix = "#[LaTex";
+        /// mark down syntax: #[LaTex scale description](LaTeX typsetting), e.g. #[LaTex 20 this is an equation](\sqrt{\frac{ax^2+bx+\pi}{x^3}})
+        private readonly static Regex s_MathRegex = new Regex(@"#\[LaTex\s*([0-9]*)[^\]]*\]\((.+)\)", RegexOptions.IgnoreCase);
 
-        public MathElementGenerator(TextDocument document) : base(document)
+        public MathElementGenerator(TextEditor textEditor) : base(textEditor)
         {
         }
 
@@ -52,7 +53,7 @@ namespace Gherkin.Model
                 BitmapImage bitmap = LaTexImageCache.Instance.LoadImage(laTex, scale);
                 if (bitmap != null)
                 {
-                    Image image = new Image();
+                    CustomImageControl image = new CustomImageControl(offset, TextEditor);
                     image.Source = bitmap;
 
                     image.Width = bitmap.PixelWidth;

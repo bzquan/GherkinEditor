@@ -14,14 +14,16 @@ namespace Gherkin.ViewModel
     {
         private GherkinEditor MainGherkinEditor { get; set; }
         private GherkinEditor SubGherkinEditor { get; set; }
+        private GherkinEditor ViewerGherkinEditor { get; set; }
         private GherkinFoldingStrategy GherkinFoldingStrategy { get; set; }
         private XmlFoldingStrategy XmlFoldingStrategy { get; set; }
         private TextDocument Document => MainGherkinEditor.Document;
 
-        public FoldingExecutor(GherkinEditor mainEditor, GherkinEditor subEditor)
+        public FoldingExecutor(GherkinEditor mainEditor, GherkinEditor subEditor, GherkinEditor viewerEditor)
         {
             MainGherkinEditor = mainEditor;
             SubGherkinEditor = subEditor;
+            ViewerGherkinEditor = viewerEditor;
         }
 
         public void InstallFoldingManager(string filePath)
@@ -30,12 +32,14 @@ namespace Gherkin.ViewModel
             {
                 MainGherkinEditor.InstallFoldingManager();
                 SubGherkinEditor.InstallFoldingManager();
+                ViewerGherkinEditor.InstallFoldingManager();
                 CreateFoldingStrategy(filePath);
             }
             else
             {
                 MainGherkinEditor.UnnstallFoldingManager();
                 SubGherkinEditor.UnnstallFoldingManager();
+                ViewerGherkinEditor.UnnstallFoldingManager();
                 GherkinFoldingStrategy = null;
                 XmlFoldingStrategy = null;
             }
@@ -50,6 +54,8 @@ namespace Gherkin.ViewModel
                 managers.Add(MainGherkinEditor.FoldingManager);
             if (SubGherkinEditor.FoldingManager != null)
                 managers.Add(SubGherkinEditor.FoldingManager);
+            if (ViewerGherkinEditor.FoldingManager != null)
+                managers.Add(ViewerGherkinEditor.FoldingManager);
 
             return GherkinFoldingStrategy.UpdateFoldings(managers, Document, isCloseTablesFolding, isCloseScenarioFolding, refresh);
         }
@@ -63,6 +69,8 @@ namespace Gherkin.ViewModel
                 managers.Add(MainGherkinEditor.FoldingManager);
             if (SubGherkinEditor.FoldingManager != null)
                 managers.Add(SubGherkinEditor.FoldingManager);
+            if (ViewerGherkinEditor.FoldingManager != null)
+                managers.Add(ViewerGherkinEditor.FoldingManager);
 
             foreach (var manager in managers)
             {

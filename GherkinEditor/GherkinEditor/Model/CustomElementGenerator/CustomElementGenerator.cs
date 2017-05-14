@@ -16,6 +16,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Globalization;
 using System.Diagnostics;
+using ICSharpCode.AvalonEdit;
 
 namespace Gherkin.Model
 {
@@ -26,11 +27,12 @@ namespace Gherkin.Model
     /// </summary>
     public abstract class CustomElementGenerator : VisualLineElementGenerator
     {
-        protected TextDocument Document { get; set; }
+        protected TextEditor TextEditor { get; set; }
+        protected TextDocument Document => TextEditor.Document;
 
-        public CustomElementGenerator(TextDocument document)
+        public CustomElementGenerator(TextEditor textEditor)
         {
-            Document = document;
+            TextEditor = textEditor;
         }
 
         /// Gets the first offset >= startOffset where the generator wants to construct
@@ -38,8 +40,18 @@ namespace Gherkin.Model
         /// Return -1 to signal no interest.
         public override int GetFirstInterestedOffset(int startOffset)
         {
-            Match m = FindMatch(startOffset);
-            return m.Success ? (startOffset + m.Index) : -1;
+            if (CanApplyGenerator())
+            {
+                Match m = FindMatch(startOffset);
+                return m.Success ? (startOffset + m.Index) : -1;
+            }
+            else
+                return -1;
+        }
+
+        protected virtual bool CanApplyGenerator()
+        {
+            return true;
         }
 
         protected abstract Regex GetRegex();

@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,22 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Fitur|Dasar|Skenario|Konsep\s+skenario|Conto|Contone)\s*:
+      ^\s*(Fitur|Dasar|Skenario|Konsep\s+skenario|Conto|Contone)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Nalika </Word>
-      <Word>  Nalikaning </Word>
-      <Word>  Manawa </Word>
-      <Word>  Menawa </Word>
-      <Word>  Njuk </Word>
-      <Word>  Banjur </Word>
-      <Word>  Lan </Word>
-      <Word>  Tapi </Word>
-      <Word>  Nanging </Word>
-      <Word>  Ananging </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Nalika|Nalikaning|Manawa|Menawa|Njuk|Banjur|Lan|Tapi|Nanging|Ananging)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

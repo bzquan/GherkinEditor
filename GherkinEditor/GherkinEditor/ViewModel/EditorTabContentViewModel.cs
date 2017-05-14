@@ -37,16 +37,19 @@ namespace Gherkin.ViewModel
         private string m_FontSize;
         private FontFamily m_FontFamily;
         private bool m_IsScenarioIndexHidden;
-        private bool m_IsSplitViewHidden;
+        private bool m_IsHSplitViewHidden;
+        private bool m_IsVSplitViewHidden;
         private int m_SelectedScenarioIndex;
 
         public GherkinEditor MainGherkinEditor { get; set; }
         private GherkinEditor SubGherkinEditor { get; set; }
+        private GherkinEditor ViewerGherkinEditor { get; set; }
         private IAppSettings m_AppSettings;
         private FoldingExecutor FoldingExecutor { get; set; }
 
         public TextEditor MainEditor => MainGherkinEditor?.TextEditor;
-        public TextEditor SubEditor => SubGherkinEditor?.TextEditor;
+        private TextEditor SubEditor => SubGherkinEditor?.TextEditor;
+        public TextEditor ViewerEditor => ViewerGherkinEditor?.TextEditor;
         public TextDocument Document => MainGherkinEditor?.Document;
         public string CurrentFilePath { get; set; }
         public GherkinEditor LastUsedGherkinEditor { get; set; }
@@ -61,29 +64,54 @@ namespace Gherkin.ViewModel
             m_IsScenarioIndexHidden = !m_AppSettings.ShowScenarioIndexByDefault;
             LoadFileInfo(filePath);
             HideScenarioIndex = !m_AppSettings.ShowScenarioIndexByDefault;
-            HideSplitView = !NeedShowSplitView(filePath);
+            HideHSplitView = !NeedShowHSplitView(filePath);
+            HideVSplitView = !NeedShowVSplitView(filePath);
         }
 
         public ObservableCollection<ScenarioIndex> ScenarioIndexes => m_ScenarioIndexList;
         public ICommand HideScenarioIndexCmd => new DelegateCommandNoArg(OnHideScenarioIndex);
 
         private bool IsEditorViewLoaded => MainEditor != null;
-        private bool NeedShowSplitView(string filePath) => m_AppSettings.ShowSplitViewByDefault && GherkinUtil.IsFeatureFile(filePath);
+        private bool NeedShowHSplitView(string filePath) => m_AppSettings.ShowSplitHorizontalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
+        private bool NeedShowVSplitView(string filePath) => m_AppSettings.ShowSplitVerticalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
 
-        public void InitializeEditorView(TextEditor mainEditor, TextEditor subEditor)
+        public void InitializeEditorView(TextEditor mainEditor, TextEditor subEditor, TextEditor viewerEditor)
         {
             TextDocument document = mainEditor.Document;
-            MainGherkinEditor = new GherkinEditor(mainEditor, subEditor, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: false);
+            MainGherkinEditor = new GherkinEditor(mainEditor, viewerEditor, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: false);
             mainEditor.TextArea.IsKeyboardFocusedChanged += OnMainEditorKeyboardFocusedChanged;
 
-            SubGherkinEditor = new GherkinEditor(subEditor, null/*subEditor*/, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: true);
+            SubGherkinEditor = new GherkinEditor(subEditor, null/*viewerEditor*/, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: false);
             subEditor.TextArea.IsKeyboardFocusedChanged += OnSubEditorKeyboardFocusedChanged;
 
-            FoldingExecutor = new FoldingExecutor(MainGherkinEditor, SubGherkinEditor);
+            ViewerGherkinEditor = new GherkinEditor(viewerEditor, null/*viewerEditor*/, document, m_AppSettings, FontFamily, FontSize, installElementGenerators: true);
+            viewerEditor.TextArea.IsKeyboardFocusedChanged += OnViewerEditorKeyboardFocusedChanged;
+
+            FoldingExecutor = new FoldingExecutor(MainGherkinEditor, SubGherkinEditor, ViewerGherkinEditor);
             Load(CurrentFilePath);
+
             EventAggregator<EditorViewInitializationCompleted>.Instance.Publish(this, new EditorViewInitializationCompleted());
-            EventAggregator<StatusChangedArg>.Instance.Publish(this, new StatusChangedArg("Ready"));
             TextEditorLoadedEvent?.Invoke();
+            mainEditor.TextArea.Caret.PositionChanged += OnMainEditorCaretPositionChanged;
+            viewerEditor.TextArea.Caret.PositionChanged += OnViewerEditorCaretPositionChanged;
+        }
+
+        private void OnMainEditorCaretPositionChanged(object sender, EventArgs e)
+        {
+            if (m_AppSettings.SynchronizeCursorPositions)
+            {
+                SubGherkinEditor.ScrollCursorTo(MainEditor.TextArea.Caret.Offset, focus: false);
+                ViewerGherkinEditor.ScrollCursorTo(MainEditor.TextArea.Caret.Offset, focus: false);
+            }
+        }
+
+        private void OnViewerEditorCaretPositionChanged(object sender, EventArgs e)
+        {
+            if (m_AppSettings.SynchronizeCursorPositions)
+            {
+                MainGherkinEditor.ScrollCursorTo(ViewerEditor.TextArea.Caret.Offset, focus: false);
+                SubGherkinEditor.ScrollCursorTo(ViewerEditor.TextArea.Caret.Offset, focus: false);
+            }
         }
 
         private void OnMainEditorKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -96,6 +124,11 @@ namespace Gherkin.ViewModel
         {
             if (SubGherkinEditor?.HasFocus == true)
                 LastUsedGherkinEditor = SubGherkinEditor;
+        }
+        private void OnViewerEditorKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (ViewerGherkinEditor?.HasFocus == true)
+                LastUsedGherkinEditor = ViewerGherkinEditor;
         }
 
         private void LoadFileInfo(string filePath)
@@ -120,6 +153,8 @@ namespace Gherkin.ViewModel
                     return MainGherkinEditor;
                 else if (SubGherkinEditor?.HasFocus == true)
                     return SubGherkinEditor;
+                else if (ViewerGherkinEditor?.HasFocus == true)
+                    return ViewerGherkinEditor;
                 else
                     return null;
             }
@@ -127,62 +162,54 @@ namespace Gherkin.ViewModel
 
         public void UpdateColumnRuler()
         {
-            MainGherkinEditor?.UpdateColumnRuler();
-            SubGherkinEditor?.UpdateColumnRuler();
+            UpdateEditors(nameof(GherkinEditor.UpdateColumnRuler));
         }
 
         public void UpdateRequireControlModifierForHyperlinkClick()
         {
-            MainGherkinEditor?.UpdateRequireControlModifierForHyperlinkClick();
-            SubGherkinEditor?.UpdateRequireControlModifierForHyperlinkClick();
+            UpdateEditors(nameof(GherkinEditor.UpdateRequireControlModifierForHyperlinkClick));
         }
 
         public void UpdateConvertTabsToSpaces()
         {
-            MainGherkinEditor?.UpdateConvertTabsToSpaces();
-            SubGherkinEditor?.UpdateConvertTabsToSpaces();
+            UpdateEditors(nameof(GherkinEditor.UpdateConvertTabsToSpaces));
         }
 
         public void UpdateIndentationSize()
         {
-            MainGherkinEditor?.UpdateIndentationSize();
-            SubGherkinEditor?.UpdateIndentationSize();
+            UpdateEditors(nameof(GherkinEditor.UpdateIndentationSize));
         }
 
         public void UpdateShowEndOfLine()
         {
-            MainGherkinEditor?.UpdateShowEndOfLine();
-            SubGherkinEditor?.UpdateShowEndOfLine();
+            UpdateEditors(nameof(GherkinEditor.UpdateShowEndOfLine));
         }
 
         public void UpdateShowSpaces()
         {
-            MainGherkinEditor?.UpdateShowSpaces();
-            SubGherkinEditor?.UpdateShowSpaces();
+            UpdateEditors(nameof(GherkinEditor.UpdateShowSpaces));
         }
 
         public void UpdateShowTabs()
         {
-            MainGherkinEditor?.UpdateShowTabs();
-            SubGherkinEditor?.UpdateShowTabs();
+            UpdateEditors(nameof(GherkinEditor.UpdateShowTabs));
         }
 
         public void UpdateWordWrap()
         {
-            MainGherkinEditor?.UpdateWordWrap();
-            SubGherkinEditor?.UpdateWordWrap();
+            UpdateEditors(nameof(GherkinEditor.UpdateWordWrap));
         }
 
         public bool HasSearchHighlightingTransformer()
         {
             return MainGherkinEditor.HasSearchHighlightingTransformer ||
-                   SubGherkinEditor.HasSearchHighlightingTransformer;
+                   SubGherkinEditor.HasSearchHighlightingTransformer ||
+                   ViewerGherkinEditor.HasSearchHighlightingTransformer;
         }
 
         public void ClearSearchHighlighting()
         {
-            MainGherkinEditor.ClearSearchHighlighting();
-            SubGherkinEditor.ClearSearchHighlighting();
+            UpdateEditors(nameof(GherkinEditor.ClearSearchHighlighting));
         }
 
         public FontFamily FontFamily
@@ -193,12 +220,7 @@ namespace Gherkin.ViewModel
                 if (value == null) return;
                 m_FontFamily = value;
                 m_AppSettings.UpdateFontFamilyName(CurrentFilePath, FontFamily.ToString());
-
-                if (IsEditorViewLoaded)
-                {
-                    MainGherkinEditor.FontFamily = value;
-                    SubGherkinEditor.FontFamily = value;
-                }
+                UpdateEditorProperty(nameof(GherkinEditor.FontFamily), value);
             }
         }
 
@@ -210,43 +232,23 @@ namespace Gherkin.ViewModel
                 if (value == null) return;
                 m_FontSize = value;
                 m_AppSettings.UpdateFontSize(CurrentFilePath, FontSize);
-
-                if (IsEditorViewLoaded)
-                {
-                    MainGherkinEditor.FontSize = value;
-                    SubGherkinEditor.FontSize = value;
-                }
+                UpdateEditorProperty(nameof(GherkinEditor.FontSize), value);
             }
         }
 
         public bool HighlightCurrentLine
         {
-            set
-            {
-                if (IsEditorViewLoaded)
-                {
-                    MainGherkinEditor.HighlightCurrentLine = value;
-                    SubGherkinEditor.HighlightCurrentLine = value;
-                }
-            }
+            set { UpdateEditorProperty(nameof(GherkinEditor.HighlightCurrentLine), value); }
         }
 
         public bool ShowCurrentLineBorder
         {
-            set
-            {
-                if (IsEditorViewLoaded)
-                {
-                    MainGherkinEditor.ShowCurrentLineBorder = value;
-                    SubGherkinEditor.ShowCurrentLineBorder = value;
-                }
-            }
+            set { UpdateEditorProperty(nameof(GherkinEditor.ShowCurrentLineBorder), value); }
         }
 
         public void ChangeToEmptyFile()
         {
-            MainGherkinEditor.ChangeToEmptyFile();
-            SubGherkinEditor.ChangeToEmptyFile();
+            UpdateEditors(nameof(GherkinEditor.ChangeToEmptyFile));
             Keyboard.Focus(MainEditor);
 
             CurrentFilePath = null;
@@ -272,7 +274,8 @@ namespace Gherkin.ViewModel
                 GherkinFileInfo fileInfo = m_AppSettings.GetFileInfo(filePath);
                 MainEditor.Encoding = encoding ?? GetEncoding(fileInfo);
                 MainEditor.Load(filePath);
-                HideSplitView = !NeedShowSplitView(filePath);
+                HideHSplitView = !NeedShowHSplitView(filePath);
+                HideVSplitView = !NeedShowVSplitView(filePath);
                 m_AppSettings.UpdateCodePage(filePath, MainEditor.Encoding.CodePage);
                 ScrollCursorTo(fileInfo.CursorLine, fileInfo.CursorColumn);
                 EventAggregator<FileLoadedArg>.Instance.Publish(this, new FileLoadedArg());
@@ -337,8 +340,7 @@ namespace Gherkin.ViewModel
                 highlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(filePath));
             }
 
-            MainGherkinEditor.SyntaxHighlighting = highlighting;
-            SubGherkinEditor.SyntaxHighlighting = highlighting;
+            UpdateEditorProperty(nameof(GherkinEditor.SyntaxHighlighting), highlighting);
         }
 
         private string CurrentLanguage
@@ -367,9 +369,7 @@ namespace Gherkin.ViewModel
                 {
                     GherkinUtil.RegisterGherkinHighlighting(CurrentLanguage);
                     IHighlightingDefinition highlighting = GetHighlightingDefinition();
-
-                    MainGherkinEditor.SyntaxHighlighting = highlighting;
-                    SubGherkinEditor.SyntaxHighlighting = highlighting;
+                    UpdateEditorProperty(nameof(GherkinEditor.SyntaxHighlighting), highlighting);
 
                     if (installFolding && (FoldingExecutor != null))
                         FoldingExecutor.InstallFoldingManager(CurrentFilePath);
@@ -551,12 +551,22 @@ namespace Gherkin.ViewModel
             }
         }
 
-        public bool HideSplitView
+        public bool HideHSplitView
         {
-            get { return m_IsSplitViewHidden; }
+            get { return m_IsHSplitViewHidden; }
             set
             {
-                m_IsSplitViewHidden = value;
+                m_IsHSplitViewHidden = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        public bool HideVSplitView
+        {
+            get { return m_IsVSplitViewHidden; }
+            set
+            {
+                m_IsVSplitViewHidden = value;
                 base.OnPropertyChanged();
             }
         }
@@ -671,6 +681,54 @@ namespace Gherkin.ViewModel
             }
 
             return MessageBoxResult.Yes;
+        }
+
+        /// <summary>
+        /// Call method by reflection
+        /// </summary>
+        /// <param name="methodName"></param>
+        private void UpdateEditors(string methodName)
+        {
+            UpdateEditor(MainGherkinEditor, methodName);
+            UpdateEditor(SubGherkinEditor, methodName);
+            UpdateEditor(ViewerGherkinEditor, methodName);
+        }
+
+        /// <summary>
+        /// Call method by reflection
+        /// Implementation note:
+        /// Type thisType = <your object>.GetType();
+        /// MethodInfo theMethod = thisType.GetMethod(<The Method Name>); 
+        /// theMethod.Invoke(this, <an object [] of parameters or null>); 
+        /// </summary>
+        /// <param name="editor"></param>
+        /// <param name="methodName"></param>
+        private void UpdateEditor(GherkinEditor editor, string methodName)
+        {
+            if (editor == null) return;
+
+            Type thisType = editor.GetType();
+            System.Reflection.MethodInfo method = thisType.GetMethod(methodName);
+            method.Invoke(editor, null);
+        }
+
+        /// <summary>
+        /// Set property by reflection
+        /// </summary>
+        /// <param name="propertyName"></param>
+        private void UpdateEditorProperty(string propertyName, object value)
+        {
+            UpdateEditorProperty(MainGherkinEditor, propertyName, value);
+            UpdateEditorProperty(SubGherkinEditor, propertyName, value);
+            UpdateEditorProperty(ViewerGherkinEditor, propertyName, value);
+        }
+
+        private void UpdateEditorProperty(GherkinEditor editor, string propertyName, object value)
+        {
+            if (editor == null) return;
+
+            System.Reflection.PropertyInfo prop = editor.GetType().GetProperty(propertyName);
+            prop.SetValue(editor, value);
         }
     }
 }

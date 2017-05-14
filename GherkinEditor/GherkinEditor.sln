@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.AvalonEdit", "ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj", "{6C55B776-26D4-4DB3-A6AB-87E783B2F3D1}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfSharp.Xps", "PdfSharp.Xps\PdfSharp.Xps.csproj", "{0BC3964B-A3BC-49D5-9B7C-463299B5A166}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewHandlerFramework", "PreviewHandlerFramework\PreviewHandlerFramework.csproj", "{F27001C1-FE96-4268-BDD8-EC96AB50D2D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxyPlot", "OxyPlot\OxyPlot.csproj", "{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxyPlot.Wpf", "OxyPlot.Wpf\OxyPlot.Wpf.csproj", "{698CCD8E-ADCC-4565-8517-5EDD36F07155}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -189,6 +193,46 @@ Global
 		{F27001C1-FE96-4268-BDD8-EC96AB50D2D6}.Release|WithNRefactory.Build.0 = Release|Any CPU
 		{F27001C1-FE96-4268-BDD8-EC96AB50D2D6}.Release|x86.ActiveCfg = Release|Any CPU
 		{F27001C1-FE96-4268-BDD8-EC96AB50D2D6}.Release|x86.Build.0 = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Net35.ActiveCfg = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Net35.Build.0 = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Net40.ActiveCfg = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|Net40.Build.0 = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|WithNRefactory.ActiveCfg = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|WithNRefactory.Build.0 = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Debug|x86.Build.0 = Debug|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Net35.ActiveCfg = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Net35.Build.0 = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Net40.ActiveCfg = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|Net40.Build.0 = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|WithNRefactory.ActiveCfg = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|WithNRefactory.Build.0 = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|x86.ActiveCfg = Release|Any CPU
+		{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}.Release|x86.Build.0 = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Net35.ActiveCfg = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Net35.Build.0 = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Net40.ActiveCfg = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|Net40.Build.0 = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|WithNRefactory.ActiveCfg = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|WithNRefactory.Build.0 = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Debug|x86.Build.0 = Debug|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Net35.ActiveCfg = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Net35.Build.0 = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Net40.ActiveCfg = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|Net40.Build.0 = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|WithNRefactory.ActiveCfg = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|WithNRefactory.Build.0 = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|x86.ActiveCfg = Release|Any CPU
+		{698CCD8E-ADCC-4565-8517-5EDD36F07155}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

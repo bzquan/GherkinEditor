@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Funkcionalnost|Biznis\s+potreba|Mozhnost|Kontekst|Sodrzhina|Scenario|Na\s+primer|Pregled\s+na\s+scenarija|Skica|Koncept|Primeri|Scenaria)\s*:
+      ^\s*(Funkcionalnost|Biznis\s+potreba|Mozhnost|Kontekst|Sodrzhina|Scenario|Na\s+primer|Pregled\s+na\s+scenarija|Skica|Koncept|Primeri|Scenaria)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Dadeno </Word>
-      <Word>  Dadena </Word>
-      <Word>  Koga </Word>
-      <Word>  Togash </Word>
-      <Word>  I </Word>
-      <Word>  No </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Dadeno|Dadena|Koga|Togash|I|No)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

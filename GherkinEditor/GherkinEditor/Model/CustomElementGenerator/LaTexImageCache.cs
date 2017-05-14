@@ -15,7 +15,7 @@ namespace Gherkin.Model
         public BitmapImage BitmapImage { get; set; }
     }
 
-    class LaTexImageCache
+    class LaTexImageCache : CacheBase
     {
         private static readonly Lazy<LaTexImageCache> s_Singleton =
             new Lazy<LaTexImageCache>(() => new LaTexImageCache());
@@ -23,7 +23,6 @@ namespace Gherkin.Model
         private List<LaTexBitmapImage> m_BitmapImages = new List<LaTexBitmapImage>();
 
         public static LaTexImageCache Instance => s_Singleton.Value;
-        public static int CacheSizee { get; set; } = 50;
 
         private LaTexImageCache() { }
 
@@ -45,7 +44,7 @@ namespace Gherkin.Model
                 {
                     laTexBitmap = new LaTexBitmapImage() { Key = key, BitmapImage = bitmapImage };
                     m_BitmapImages.Insert(0, laTexBitmap);
-                    Util.Util.RemoveLastItems(m_BitmapImages, max_num: CacheSizee);
+                    Util.Util.RemoveLastItems(m_BitmapImages, max_num: CacheSize);
                 }
             }
 

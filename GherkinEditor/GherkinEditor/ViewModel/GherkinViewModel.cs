@@ -25,8 +25,8 @@ namespace Gherkin.ViewModel
     {
         // Example: (12:0): detailed error message 
         private Regex m_ErrorMsgRegex = new Regex(@"\s*\((\d+):(\d+)\):.*");
-
-        private string m_Status = "Ready";
+        private readonly static string READY_STATUS = "Ready";
+        private string m_Status = READY_STATUS;
         private int m_SelectedTabIndex;
         private EditorTabContentViewModel m_CurrentEditor;
         private IAppSettings m_AppSettings;
@@ -53,7 +53,7 @@ namespace Gherkin.ViewModel
         public ICommand ShowCodePageListCmd => new DelegateCommandNoArg(OnShowCodePageList);
         public ICommand ShowLaTeXSymbolsCmd => new DelegateCommandNoArg(OnShowLaTeXSymbols);
         public ICommand ShowHelpCmd => new DelegateCommandNoArg(OnShowHelp);
-        public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus);
+        public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus, CanClearStatus);
         public ICommand PreviewDocumentCmd => new DelegateCommandNoArg(OnPreviewDocument);
 
         public GherkinSettingViewModel GherkinSettings { get; private set; }
@@ -68,6 +68,8 @@ namespace Gherkin.ViewModel
         {
             m_AppSettings = appSettings;
             GherkinFormatUtil.AppSettings = appSettings;
+            m_AppSettings.SynchronizeCursorPositions = false;   // Do not synchronize at start up
+
             m_MultiFilesOpener = multiFilesOpener;
             m_MultiFilesOpener.OpeningTabEvent += OnOpeningTab;
             m_MultiFilesOpener.LoadFilesCompletedEvent += OnLoadFilesCompleted;
@@ -91,7 +93,8 @@ namespace Gherkin.ViewModel
             EventAggregator<OpenNewGherkinEditorRequestedArg>.Instance.Event += OnOpenNewGherkinEditorRequested;
             EventAggregator<EditorLoadedArg>.Instance.Event += OnEditorLoaded;
             EventAggregator<FileLoadedArg>.Instance.Event += OnFileLoaded;
-            EventAggregator<ShowSubEditorRequestArg>.Instance.Event += OnShowSplitViewRequested;
+            EventAggregator<ShowViewerEditorRequestArg>.Instance.Event += OnShowViewerEditorRequested;
+            EventAggregator<CustomImageClickedArg>.Instance.Event += OnCustomImageClicked;
 
             // register it to GherkinEditerCommand
             GherkinEditerCommand.GherkinViewModel = this;
@@ -177,7 +180,8 @@ namespace Gherkin.ViewModel
         private void UpdateViewByCurrentEditor()
         {
             ShowScenarioIndex = CurrentEditor?.HideScenarioIndex == false;
-            ShowSplitView = CurrentEditor?.HideSplitView == false;
+            ShowHSplitView = CurrentEditor?.HideHSplitView == false;
+            ShowVSplitView = CurrentEditor?.HideVSplitView == false;
 
             NotifyCurrentFilePathChanged();
             base.OnPropertyChanged(nameof(IsCloseTablesFolding));
@@ -248,7 +252,11 @@ namespace Gherkin.ViewModel
 
         private void OnClearStatus()
         {
-            Status = "Ready";
+            Status = READY_STATUS;
+        }
+        private bool CanClearStatus()
+        {
+            return !string.IsNullOrEmpty(m_Status) && (m_Status != READY_STATUS);
         }
 
         public string Codepage
@@ -351,14 +359,14 @@ namespace Gherkin.ViewModel
             }
         }
 
-        public bool ShowSplitView
+        public bool ShowHSplitView
         {
-            get { return CurrentEditor?.HideSplitView == false; }
+            get { return CurrentEditor?.HideHSplitView == false; }
             set
             {
                 if (HasEditorLoaded)
                 {
-                    CurrentEditor.HideSplitView = !value;
+                    CurrentEditor.HideHSplitView = !value;
                 }
                 base.OnPropertyChanged(nameof(HorizontalSplitIcon));
                 base.OnPropertyChanged();
@@ -368,16 +376,84 @@ namespace Gherkin.ViewModel
         {
             get
             {
-                if (ShowSplitView)
-                    return Util.Util.DrawingImageByOverlapping("HSplit.png", "Tick64.png");
+                if (ShowHSplitView)
+                    return Util.Util.DrawingImageByOverlapping("SplitHorizontal.png", "Tick64.png");
                 else
-                    return Util.Util.DrawingImageFromResource("HSplit.png");
+                    return Util.Util.DrawingImageFromResource("SplitHorizontal.png");
             }
         }
 
-        private void OnShowSplitViewRequested(object sender, ShowSubEditorRequestArg arg)
+        public bool ShowVSplitView
         {
-            if (!ShowSplitView) ShowSplitView = true;
+            get { return CurrentEditor?.HideVSplitView == false; }
+            set
+            {
+                if (HasEditorLoaded)
+                {
+                    CurrentEditor.HideVSplitView = !value;
+                }
+                base.OnPropertyChanged(nameof(VerticalSplitIcon));
+                base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage VerticalSplitIcon
+        {
+            get
+            {
+                if (ShowVSplitView)
+                    return Util.Util.DrawingImageByOverlapping("SplitVertical.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("SplitVertical.png");
+            }
+        }
+
+        private void OnShowViewerEditorRequested(object sender, ShowViewerEditorRequestArg arg)
+        {
+            if (!ShowVSplitView) ShowVSplitView = true;
+        }
+
+        public bool SynchronizeCursorPositions
+        {
+            get { return m_AppSettings.SynchronizeCursorPositions; }
+            set
+            {
+                m_AppSettings.SynchronizeCursorPositions = value;
+                base.OnPropertyChanged(nameof(SynchronizeCursorPositionsIcon));
+                base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage SynchronizeCursorPositionsIcon
+        {
+            get
+            {
+                if (SynchronizeCursorPositions)
+                    return Util.Util.DrawingImageByOverlapping("Synchronize.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("Synchronize.png");
+            }
+        }
+
+        public bool ShowCurvePlotMarker4GherkinTable
+        {
+            get { return m_AppSettings.ShowCurvePlotMarker4GherkinTable; }
+            set
+            {
+                m_AppSettings.ShowCurvePlotMarker4GherkinTable = value;
+
+                EventAggregator<ShowCurvePlotMarker4GherkinTableArg>.Instance.Publish(this, new ShowCurvePlotMarker4GherkinTableArg(value));
+                base.OnPropertyChanged(nameof(ShowCurvePlotMarker4GherkinTableIcon));
+                base.OnPropertyChanged();
+            }
+        }
+        public DrawingImage ShowCurvePlotMarker4GherkinTableIcon
+        {
+            get
+            {
+                if (ShowCurvePlotMarker4GherkinTable)
+                    return Util.Util.DrawingImageByOverlapping("PlotMarker.png", "Tick64.png");
+                else
+                    return Util.Util.DrawingImageFromResource("PlotMarker.png");
+            }
         }
 
         public Brush CurrentLineBackground
@@ -531,14 +607,14 @@ namespace Gherkin.ViewModel
 
         private void OnSaveAsPDFByWord()
         {
-            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.ViewerEditor);
             string filePath = pdfFileSaver.SaveAsPDFByWord();
             ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsPDFBySharpPDF()
         {
-            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            var pdfFileSaver = new FlowDocumentSaver(CurrentEditor.ViewerEditor);
             string filePath = pdfFileSaver.SaveAsPDFBySharpPDF();
             ShowPreviewWindow(filePath);
         }
@@ -546,21 +622,21 @@ namespace Gherkin.ViewModel
 
         private void OnSaveAsXPS()
         {
-            var xpsFileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            var xpsFileSaver = new FlowDocumentSaver(CurrentEditor.ViewerEditor);
             string filePath = xpsFileSaver.SaveAsXPS();
             ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsRTF()
         {
-            var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            var fileSaver = new FlowDocumentSaver(CurrentEditor.ViewerEditor);
             string filePath = fileSaver.SaveAsRTF();
             ShowPreviewWindow(filePath);
         }
 
         private void OnSaveAsWord()
         {
-            var fileSaver = new FlowDocumentSaver(CurrentEditor.SubEditor);
+            var fileSaver = new FlowDocumentSaver(CurrentEditor.ViewerEditor);
             string filePath = fileSaver.SaveAsDocx();
             ShowPreviewWindow(filePath);
         }
@@ -584,7 +660,7 @@ namespace Gherkin.ViewModel
         {
             if (string.IsNullOrEmpty(filePath)) return;
 
-            if (OpenDocumentByNativeApplication || GherkinUtil.IsPDFFile(filePath))
+            if (OpenDocumentByNativeApplication)
             {
                 ShowPreviewByNativeApplication(filePath);
             }
@@ -620,17 +696,17 @@ namespace Gherkin.ViewModel
 
         public void OnPrint()
         {
-            if (Printing.PageSetupDialog(CurrentEditor.SubEditor))
+            if (Printing.PageSetupDialog(CurrentEditor.ViewerEditor))
             {
-                Printing.PrintDialog(CurrentEditor.SubEditor, PrintTitle);
+                Printing.PrintDialog(CurrentEditor.ViewerEditor, PrintTitle);
             }
         }
 
         public void OnPrintPreview()
         {
-            if (Printing.PageSetupDialog(CurrentEditor.SubEditor))
+            if (Printing.PageSetupDialog(CurrentEditor.ViewerEditor))
             {
-                Printing.PrintPreviewDialog(CurrentEditor.SubEditor, PrintTitle);
+                Printing.PrintPreviewDialog(CurrentEditor.ViewerEditor, PrintTitle);
             }
         }
 
@@ -889,6 +965,16 @@ namespace Gherkin.ViewModel
         private void OnIndentationCompleted(object sender, IndentationCompletedArg arg)
         {
             Status = Properties.Resources.Message_PrettyFormatCompleted;
+        }
+
+        private void OnCustomImageClicked(object sender, CustomImageClickedArg arg)
+        {
+            var customImageControl = sender as CustomImageControl;
+            if ((customImageControl != null) &&
+                (customImageControl.TextEditor == CurrentEditor?.ViewerEditor))
+            {
+                CurrentEditor.MainGherkinEditor.ScrollCursorTo(customImageControl.CursorOffset, focus: false);
+            }
         }
     }
 }

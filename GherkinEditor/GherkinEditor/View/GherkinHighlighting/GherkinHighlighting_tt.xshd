@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,19 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Мөмкинлек|Үзенчәлеклелек|Кереш|Сценарий|Сценарийның\s+төзелеше|Үрнәкләр|Мисаллар)\s*:
+      ^\s*(Мөмкинлек|Үзенчәлеклелек|Кереш|Сценарий|Сценарийның\s+төзелеше|Үрнәкләр|Мисаллар)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Әйтик </Word>
-      <Word>  Әгәр </Word>
-      <Word>  Нәтиҗәдә </Word>
-      <Word>  Һәм </Word>
-      <Word>  Вә </Word>
-      <Word>  Ләкин </Word>
-      <Word>  Әмма </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Әйтик|Әгәр|Нәтиҗәдә|Һәм|Вә|Ләкин|Әмма)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

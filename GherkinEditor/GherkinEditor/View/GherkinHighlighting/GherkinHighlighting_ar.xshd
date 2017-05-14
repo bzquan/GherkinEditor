@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,19 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(خاصية|الخلفية|سيناريو|سيناريو\s+مخطط|امثلة)\s*:
+      ^\s*(خاصية|الخلفية|سيناريو|سيناريو\s+مخطط|امثلة)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  بفرض </Word>
-      <Word>  متى </Word>
-      <Word>  عندما </Word>
-      <Word>  اذاً </Word>
-      <Word>  ثم </Word>
-      <Word>  و </Word>
-      <Word>  لكن </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(بفرض|متى|عندما|اذاً|ثم|و|لكن)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

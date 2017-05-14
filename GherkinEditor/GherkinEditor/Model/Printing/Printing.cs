@@ -234,11 +234,11 @@ namespace Gherkin.Model
         static FlowDocument CreateFlowDocumentForEditor(TextEditor editor)
         {
             List<VisualLineElementGenerator> generators = new List<VisualLineElementGenerator>();
-            var imageElementGenerator = editor.TextArea.TextView.ElementGenerators.FirstOrDefault(x => x is ImageElementGenerator);
-            if (imageElementGenerator != null) generators.Add(imageElementGenerator);
-
-            var mathElementGenerator = editor.TextArea.TextView.ElementGenerators.FirstOrDefault(x => x is MathElementGenerator);
-            if (mathElementGenerator != null) generators.Add(mathElementGenerator);
+            foreach (var generator in editor.TextArea.TextView.ElementGenerators)
+            {
+                if (generator is CustomElementGenerator)
+                    generators.Add(generator);
+            }
 
             return ICSharpCode.AvalonEdit.Utils.DocumentPrinter.CreateFlowDocumentForEditor(editor, generators);
         }

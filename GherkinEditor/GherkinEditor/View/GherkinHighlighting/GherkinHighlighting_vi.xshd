@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,18 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Tính\s+năng|Bối\s+cảnh|Tình\s+huống|Kịch\s+bản|Khung\s+tình\s+huống|Khung\s+kịch\s+bản|Dữ\s+liệu)\s*:
+      ^\s*(Tính\s+năng|Bối\s+cảnh|Tình\s+huống|Kịch\s+bản|Khung\s+tình\s+huống|Khung\s+kịch\s+bản|Dữ\s+liệu)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Biết </Word>
-      <Word>  Cho </Word>
-      <Word>  Khi </Word>
-      <Word>  Thì </Word>
-      <Word>  Và </Word>
-      <Word>  Nhưng </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Biết|Cho|Khi|Thì|Và|Nhưng)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

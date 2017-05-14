@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows;
+using ICSharpCode.AvalonEdit;
 
 namespace Gherkin.Model
 {
@@ -23,18 +24,18 @@ namespace Gherkin.Model
     /// textEditor.TextArea.TextView.ElementGenerators.Add(new ImageElementGenerator());
     /// 
     /// Image must be specified by following mark down.
-    /// mark down syntax: ![IMAGE](image path), e.g. ![IMAGE](Gherkin.png)
+    /// mark down syntax: #[IMAGE scale description](image path), e.g. #[IMAGE 20 this is an image](Gherkin.png)
+    /// Description is optional.
     /// BasePath is the directory of document.FileName
-    /// 
     /// http://danielgrunwald.de/coding/AvalonEdit/rendering.php
     /// </summary>
     public class ImageElementGenerator : CustomElementGenerator
     {
-        public static readonly string ImagePrefix = "![IMAGE";
-        // mark down syntax: ![IMAGE](image path), e.g. ![IMAGE](Images/Gherkin.png)
-        private readonly static Regex s_ImageRegex = new Regex(@"!\[IMAGE\s*([0-9]*)\]\(([^)]+)\)", RegexOptions.IgnoreCase);
+        public static readonly string ImagePrefix = "#[IMAGE";
+        /// mark down syntax: #[IMAGE scale description](image path), e.g. #[IMAGE 20 this is an image](Gherkin.png)
+        private readonly static Regex s_ImageRegex = new Regex(@"#\[IMAGE\s*([0-9]*)[^\]]*\]\(([^)]+)\)", RegexOptions.IgnoreCase);
 
-        public ImageElementGenerator(TextDocument document) : base(document)
+        public ImageElementGenerator(TextEditor textEditor) : base(textEditor)
         {
         }
 
@@ -56,7 +57,7 @@ namespace Gherkin.Model
                 if (bitmap != null)
                 {
                     string scale = m.Groups[1].Value;
-                    uiElement = CreateImageControl(scale, bitmap);
+                    uiElement = CreateImageControl(offset, scale, bitmap);
                 }
                 else
                 {
@@ -80,9 +81,9 @@ namespace Gherkin.Model
             return null;
         }
 
-        private static Image CreateImageControl(string scale, BitmapImage bitmap)
+        private Image CreateImageControl(int offset, string scale, BitmapImage bitmap)
         {
-            Image image = new Image();
+            CustomImageControl image = new CustomImageControl(offset, TextEditor);
             image.Source = bitmap;
 
             double zoom = CalcZoom(bitmap, scale);

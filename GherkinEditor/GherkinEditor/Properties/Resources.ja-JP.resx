@@ -288,8 +288,8 @@
   <data name="MenuSetting_ShowScenarioIndexByDefault" xml:space="preserve">
     <value>デフォルトはシナリオ目次を表示</value>
   </data>
-  <data name="MenuSetting_SplitEditorByDefault" xml:space="preserve">
-    <value>デフォルトはウインドウズを分割</value>
+  <data name="MenuSetting_SplitHorizontalEditorByDefault" xml:space="preserve">
+    <value>デフォルトはウインドウズを上下分割</value>
   </data>
   <data name="MenuSetting_StepWordColor" xml:space="preserve">
     <value>ステップ色</value>
@@ -330,8 +330,8 @@
   <data name="MenuView_ShowScenarioIndex" xml:space="preserve">
     <value>シナリオ目次の表示</value>
   </data>
-  <data name="MenuView_SplitEditor" xml:space="preserve">
-    <value>ウインドウズ分割</value>
+  <data name="MenuView_SplitHorizontalEditor" xml:space="preserve">
+    <value>上下ウインドウズ分割</value>
   </data>
   <data name="MenuView_View" xml:space="preserve">
     <value>表示(_V)</value>
@@ -448,8 +448,8 @@
   <data name="Tooltip_ShowScenarioIndex" xml:space="preserve">
     <value>シナリオ目次の表示</value>
   </data>
-  <data name="Tooltip_SplitEditor" xml:space="preserve">
-    <value>ウインドウズ分割</value>
+  <data name="Tooltip_SplitHorizontalEditor" xml:space="preserve">
+    <value>ウインドウズの上下分割</value>
   </data>
   <data name="Message_RenameFailedTitle" xml:space="preserve">
     <value>ファイル名の変更失敗</value>
@@ -647,5 +647,32 @@
   </data>
   <data name="MenuTool_PreviewDocument" xml:space="preserve">
     <value>ドキュメントのプレビュー</value>
+  </data>
+  <data name="MenuView_SynchronizeCursorPositions" xml:space="preserve">
+    <value>カーソル位置の同期</value>
+  </data>
+  <data name="Tooltip_SynchronizeCursorPositions" xml:space="preserve">
+    <value>メインとサブエディターのカーソル位置の同期</value>
+  </data>
+  <data name="MenuView_ShowCurvePlotMarker" xml:space="preserve">
+    <value>プロットマーカーの表示</value>
+  </data>
+  <data name="Tooltip_ShowCurvePlotMarker" xml:space="preserve">
+    <value>Gherkinテーブルのプロットマーカーを表示する</value>
+  </data>
+  <data name="MenuSetting_SplitVerticalEditorByDefault" xml:space="preserve">
+    <value>デフォルトはウインドウズを左右分割</value>
+  </data>
+  <data name="MenuView_SplitVirticalEditor" xml:space="preserve">
+    <value>ウインドウズの左右分割</value>
+  </data>
+  <data name="Tooltip_HideViewerEditor" xml:space="preserve">
+    <value>ビューアの非表示</value>
+  </data>
+  <data name="Tooltip_ShowViewerEditor" xml:space="preserve">
+    <value>ビューアの表示</value>
+  </data>
+  <data name="Tooltip_SplitVerticalEditor" xml:space="preserve">
+    <value>ウインドウズの左右分割</value>
   </data>
 </root>

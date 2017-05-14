@@ -29,34 +29,50 @@
         <p>
             用如下MarkDown可在Gherkin文档中显示图像。放大率的范围是10到500。放大率可省略，缺省放大率是100。
             另外，图像的长宽将被调整到1024像素以内。不区分标识符”IMAGE”的大小写。<br />
+            MarkDown可有说明。<br />
             <b>
                 <font color="blue">
-                    ![IMAGE](图像文件名 放大率)，例如，<br />
-                    ![IMAGE 50](Gherkin.png)
+                    #[IMAGE 放大率 说明](图像文件名 放大率)，例如，<br />
+                    #[IMAGE 50 黄瓜](Gherkin.png)
                 </font>
             </b>
             <br />
             为了显示图像，需要把图像文件放在Gherkin文档所在的文件夹或其下属文件夹中。例如，Images/Gherkin.png。<br />
-            在分割窗口的状态下，副编辑器中显示包含图像的Gherkin文档。
+            在左右分割窗口的状态下，右边的编辑器中显示包含图像的Gherkin文档。右边的编辑器被称为浏览编辑器。
         </p>
 
         <h5>LaTex格式的数学公式</h5>
         <p>
             用如下MarkDown可在Gherkin文档中显示数学公式。放大率的范围是10到100。放大率可省略，缺省放大率是20。
             不区分标识符”LaTex”的大小写。<br />
+            MarkDown可有说明。<br />
             <b>
                 <font color="blue">
-                    ![LaTex 放大率](LaTeX格式的文本)，例如，<br />
-                    ![LaTex 20](\sqrt[3]{\frac{ax^2+bx+\pi}{x^3}})
+                    #[LaTex 放大率 说明](LaTeX格式的文本)，例如，<br />
+                    #[LaTex 20 数学公式](\sqrt[3]{\frac{ax^2+bx+\pi}{x^3}})
                 </font>
             </b><br />
-            数学式在副编辑器中被显示。通常在主编辑器种输入LaTex文本,在副编辑器中确认其数学公式.
+            数学式在浏览编辑器中被显示。通常在主编辑器种输入LaTex文本,在浏览编辑器中确认其数学公式。
         </p>
         <p>
             举例
             <ul>
                 <li>对求和表达式可指定上下界，例如，\sum_{下界}^{上界}</li>
             </ul>
+        </p>
+
+        <h5>Gherkin表格数据的绘制</h5>
+        <p>
+            用如下MarkDown可把Gherkin表格的数据绘制成图形。除了空行或注释之外，MarkDown的下一行应该是Gherkin表格的开始。
+            不区分标识符”Plot”的大小写。<br />
+            如果指定spline，那么自动显示Spline曲线。spline可省略。MarkDown的说明将成为图形的标题。如果省略说明，不显示图标标题。<br />
+            <b>
+                <font color="blue">
+                    #[Plot spline 说明](用作X轴的列名, 用作Y轴的列名)，例如，<br />
+                    #[Plot spline 这是一个曲线图形](第一列, 第二列)
+                </font>
+            </b><br />
+            プロット画面サイズは600 * 400であり、 サブエディタ上に表示されます。
         </p>
 
         <h5>拷贝自动生成的C++文件</h5>

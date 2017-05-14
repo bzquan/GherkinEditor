@@ -420,10 +420,18 @@ namespace Gherkin.Util
 
         [UserScopedSetting()]
         [DefaultSettingValueAttribute("False")]
-        public bool ShowSplitViewByDefault
+        public bool ShowSplitHorizontalViewByDefault
         {
-            get { return (bool)this["ShowSplitViewByDefault"]; }
-            set { this["ShowSplitViewByDefault"] = value; }
+            get { return (bool)this["ShowSplitHorizontalViewByDefault"]; }
+            set { this["ShowSplitHorizontalViewByDefault"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool ShowSplitVerticalViewByDefault
+        {
+            get { return (bool)this["ShowSplitVerticalViewByDefault"]; }
+            set { this["ShowSplitVerticalViewByDefault"] = value; }
         }
 
         [UserScopedSetting()]
@@ -561,6 +569,22 @@ namespace Gherkin.Util
         {
             get { return (bool)this["WordWrap"]; }
             set { this["WordWrap"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool SynchronizeCursorPositions
+        {
+            get { return (bool)this["SynchronizeCursorPositions"]; }
+            set { this["SynchronizeCursorPositions"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("False")]
+        public bool ShowCurvePlotMarker4GherkinTable
+        {
+            get { return (bool)this["ShowCurvePlotMarker4GherkinTable"]; }
+            set { this["ShowCurvePlotMarker4GherkinTable"] = value; }
         }
 
         [UserScopedSetting()]

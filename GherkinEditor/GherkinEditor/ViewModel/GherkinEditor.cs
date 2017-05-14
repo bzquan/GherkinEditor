@@ -99,8 +99,9 @@ namespace Gherkin.ViewModel
 
         private void InstallElementGenerators()
         {
-            TextEditor.TextArea.TextView.ElementGenerators.Add(new ImageElementGenerator(Document));
-            TextEditor.TextArea.TextView.ElementGenerators.Add(new MathElementGenerator(Document));
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new ImageElementGenerator(TextEditor));
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new MathElementGenerator(TextEditor));
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new CurveElementGenerator(TextEditor));
         }
 
         public TextEditor TextEditor { get; set; }
@@ -305,11 +306,14 @@ namespace Gherkin.ViewModel
             ScrollCursorTo(offset);
         }
 
-        public void ScrollCursorTo(int offset)
+        public void ScrollCursorTo(int offset, bool focus = true)
         {
             TextEditor.TextArea.Caret.Offset = offset;
             TextEditor.TextArea.Caret.BringCaretToView();
-            Keyboard.Focus(TextEditor);     // Display Cursor by focusing the editor
+            if (focus)
+            {
+                Keyboard.Focus(TextEditor);     // Display Cursor by focusing the editor
+            }
         }
 
         public IHighlightingDefinition SyntaxHighlighting

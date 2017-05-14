@@ -28,6 +28,7 @@ namespace Gherkin.View
             InitializeComponent();
             Width = 1024;
             Height = 768;
+            WindowState = WindowState.Maximized;
 
             viewModel.PreviewHandlerHostControl = previewHandlerHostControlInstance;
             this.DataContext = viewModel;
@@ -36,7 +37,7 @@ namespace Gherkin.View
 
         private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            previewHandlerHostControlInstance.CloseFileStream();
+            previewHandlerHostControlInstance.CleanupComInstance();
             this.Owner = null;
         }
     }

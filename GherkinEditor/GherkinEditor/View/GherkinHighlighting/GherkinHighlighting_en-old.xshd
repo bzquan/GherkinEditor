@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,27 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Hwaet|Hwæt|Aer|Ær|Swa|Swa\s+hwaer\s+swa|Swa\s+hwær\s+swa|Se\s+the|Se\s+þe|Se\s+ðe)\s*:
+      ^\s*(Hwaet|Hwæt|Aer|Ær|Swa|Swa\s+hwaer\s+swa|Swa\s+hwær\s+swa|Se\s+the|Se\s+þe|Se\s+ðe)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Thurh </Word>
-      <Word>  Þurh </Word>
-      <Word>  Ðurh </Word>
-      <Word>  Tha </Word>
-      <Word>  Þa </Word>
-      <Word>  Ða </Word>
-      <Word>  Tha </Word>
-      <Word>  Þa </Word>
-      <Word>  Ða </Word>
-      <Word>  Tha the </Word>
-      <Word>  Þa þe </Word>
-      <Word>  Ða ðe </Word>
-      <Word>  Ond </Word>
-      <Word>  7 </Word>
-      <Word>  Ac </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Thurh|Þurh|Ðurh|Tha|Þa|Ða|Tha|Þa|Ða|Tha\s+the|Þa\s+þe|Ða\s+ðe|Ond|7|Ac)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

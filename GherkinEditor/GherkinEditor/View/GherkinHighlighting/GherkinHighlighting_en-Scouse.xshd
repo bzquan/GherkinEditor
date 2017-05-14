@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,20 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Feature|Dis\s+is\s+what\s+went\s+down|The\s+thing\s+of\s+it\s+is|Wharrimean\s+is|Examples)\s*:
+      ^\s*(Feature|Dis\s+is\s+what\s+went\s+down|The\s+thing\s+of\s+it\s+is|Wharrimean\s+is|Examples)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Givun </Word>
-      <Word>  Youse know when youse got </Word>
-      <Word>  Wun </Word>
-      <Word>  Youse know like when </Word>
-      <Word>  Dun </Word>
-      <Word>  Den youse gotta </Word>
-      <Word>  An </Word>
-      <Word>  Buh </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Givun|Youse\s+know\s+when\s+youse\s+got|Wun|Youse\s+know\s+like\s+when|Dun|Den\s+youse\s+gotta|An|Buh)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

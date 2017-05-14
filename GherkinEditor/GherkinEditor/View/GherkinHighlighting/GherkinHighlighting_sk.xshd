@@ -11,11 +11,11 @@
 
 <!-- This is the main ruleset. -->
 	<RuleSet>
-		<Span color="Comment" begin="#" />
+		<Span color="Comment" begin="^\s*#" />
 		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
 
-    <Span color="Tag" begin="@" />
-    <Span color="Table" begin="\|" />
+    <Span color="Tag" begin="^\s*@" />
+    <Span color="Table" begin="^\s*\|" />
     <Span color="DocString" multiline="true" begin="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
 
     <Keywords color="Mock">
@@ -44,23 +44,13 @@
     </Rule>
 
     <Rule color="Keyword">
-      \s*(Požiadavka|Funkcia|Vlastnosť|Pozadie|Scenár|Náčrt\s+Scenáru|Náčrt\s+Scenára|Osnova\s+Scenára|Príklady)\s*:
+      ^\s*(Požiadavka|Funkcia|Vlastnosť|Pozadie|Scenár|Náčrt\s+Scenáru|Náčrt\s+Scenára|Osnova\s+Scenára|Príklady)\s*:
     </Rule>
 
 
-    <Keywords color="StepWord">
-      <Word>  Pokiaľ </Word>
-      <Word>  Za predpokladu </Word>
-      <Word>  Keď </Word>
-      <Word>  Ak </Word>
-      <Word>  Tak </Word>
-      <Word>  Potom </Word>
-      <Word>  A </Word>
-      <Word>  A tiež </Word>
-      <Word>  A taktiež </Word>
-      <Word>  A zároveň </Word>
-      <Word>  Ale </Word>
-    </Keywords>
+    <Rule color="StepWord">
+      ^\s*(Pokiaľ|Za\s+predpokladu|Keď|Ak|Tak|Potom|A|A\s+tiež|A\s+taktiež|A\s+zároveň|Ale)\s+
+    </Rule>
 
   </RuleSet>
 </SyntaxDefinition>

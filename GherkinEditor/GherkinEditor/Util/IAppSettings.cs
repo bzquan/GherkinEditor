@@ -59,7 +59,8 @@ namespace Gherkin.Util
         bool IsCloseTablesFoldingByDefault { get; set; }
         bool IsCloseScenarioFoldingByDefault { get; set; }
         bool ShowScenarioIndexByDefault { get; set; }
-        bool ShowSplitViewByDefault { get; set; }
+        bool ShowSplitHorizontalViewByDefault { get; set; }
+        bool ShowSplitVerticalViewByDefault { get; set; }
         bool HighlightCurrentLine { get; set; }
         bool ShowCurrentLineBorder { get; set; }
         bool GenerateGUIDforScenario { get; set; }
@@ -80,6 +81,8 @@ namespace Gherkin.Util
         bool ShowSpaces { get; set; }
         bool ShowTabs { get; set; }
         bool WordWrap { get; set; }
+        bool SynchronizeCursorPositions { get; set; }
+        bool ShowCurvePlotMarker4GherkinTable { get; set; }
 
         int ImageCacheSize { get; set; }
         bool OpenDocumentByNativeApplication { get; set; }

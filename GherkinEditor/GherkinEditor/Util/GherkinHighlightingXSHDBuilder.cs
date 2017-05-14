@@ -64,7 +64,7 @@ namespace Gherkin.Util
             StringBuilder sb = new StringBuilder();
             sb
               .AppendLine("    <Rule color=\"Keyword\">")
-              .Append("      \\s*(")
+              .Append("      ^\\s*(")
               .Append(Keyword(language.feature))
               .Append(Keyword(language.background))
               .Append(Keyword(language.scenario))
@@ -81,13 +81,16 @@ namespace Gherkin.Util
         {
             StringBuilder sb = new StringBuilder();
             sb
-              .AppendLine("    <Keywords color=\"StepWord\">")
-              .Append(StepKeyword(language.given))
-              .Append(StepKeyword(language.when))
-              .Append(StepKeyword(language.then))
-              .Append(StepKeyword(language.and))
-              .Append(StepKeyword(language.but))
-              .AppendLine("    </Keywords>");
+              .AppendLine("    <Rule color=\"StepWord\">")
+              .Append("      ^\\s*(")
+              .Append(Keyword(language.given))
+              .Append(Keyword(language.when))
+              .Append(Keyword(language.then))
+              .Append(Keyword(language.and))
+              .Append(Keyword(language.but));
+            sb.Remove(sb.Length - 1, 1); // remove last "|"
+            sb.AppendLine(")\\s+")
+              .AppendLine("    </Rule>");
 
             return sb.ToString();
         }

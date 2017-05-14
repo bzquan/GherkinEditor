@@ -118,10 +118,10 @@ namespace C4F.DevKit.PreviewHandler.PreviewHandlerFramework
             if (phwnd == IntPtr.Zero) throw new Win32Exception();
         }
 
-        uint IPreviewHandler.TranslateAccelerator(ref MSG pmsg)
+        int IPreviewHandler.TranslateAccelerator(ref MSG pmsg)
         {
-            if (_frame != null) return _frame.TranslateAccelerator(ref pmsg);
-            const uint S_FALSE = 1;
+            if (_frame != null) return (int)_frame.TranslateAccelerator(ref pmsg);
+            const int S_FALSE = 1;
             return S_FALSE;
         }
 
