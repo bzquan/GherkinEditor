@@ -65,14 +65,23 @@
         <p>
             用如下MarkDown可把Gherkin表格的数据绘制成图形。除了空行或注释之外，MarkDown的下一行应该是Gherkin表格的开始。
             不区分标识符”Plot”的大小写。<br />
-            如果指定spline，那么自动显示Spline曲线。spline可省略。MarkDown的说明将成为图形的标题。如果省略说明，不显示图标标题。<br />
+            如果指定spline等曲线种类，那么自动显示指定曲线。曲线种类可省略。MarkDown的说明将成为图形的标题。如果省略说明，不显示图标标题。<br />
             <b>
                 <font color="blue">
-                    #[Plot spline 说明](用作X轴的列名, 用作Y轴的列名)，例如，<br />
-                    #[Plot spline 这是一个曲线图形](第一列, 第二列)
+                    #[Plot(geo)? (spline|bspline|bezier|bcurvature|curvature|brcurvature) 说明](用作X轴的列名, 用作Y轴的列名) <br />
+                    例如，#[Plot spline 这是一个曲线图形](第一列, 第二列)
                 </font>
             </b><br />
-            プロット画面サイズは600 * 400であり、 サブエディタ上に表示されます。
+            <ul>
+                <li>Plot: 绘制指定曲线</li>
+                <li>Plotgeo: 把经纬度转换为平面坐标后绘制曲线</li>
+                <li>spline: 绘制Spline曲线</li>
+                <li>bspline: 绘制B-Spline曲线</li>
+                <li>bezier: 绘制Bezier曲线</li>
+                <li>curvature: 曲率曲线</li>
+                <li>bcurvature: 用Bezier调整曲率后绘制曲率曲线</li>
+            </ul>
+            图形大小为600 * 600。
         </p>
 
         <h5>拷贝自动生成的C++文件</h5>

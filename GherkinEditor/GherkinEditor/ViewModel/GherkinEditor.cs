@@ -33,6 +33,10 @@ namespace Gherkin.ViewModel
         private bool m_ShowCurrentLineBorder = true;
         private bool m_HighlightCurrentLine = true;
 
+        private ICommand EditTableByTableEditorCmd => new DelegateCommandNoArg(OnEditTableByTableEditor, CanEditTableByTableEditor);
+        private ICommand ReplaceTableFromGridCmd => new DelegateCommandNoArg(OnReplaceTableFromGrid, CanReplaceTableFromGrid);
+        private ICommand PasteTableFromGridCmd => new DelegateCommandNoArg(OnPasteTableFromGrid, CanPasteTableFromGrid);
+
         public GherkinEditor(TextEditor editor, TextEditor subEditor, TextDocument document, IAppSettings appSettings, FontFamily fontFamily, string fontSize, bool installElementGenerators)
         {
             TextEditor = editor;
@@ -60,13 +64,23 @@ namespace Gherkin.ViewModel
                 {
                     TextEditor.TextArea.IndentationStrategy = new GherkinIndentationStrategy(TextEditor, SubTextEditor);
                 }
+                TextEditor.TextArea.Options.EditTableByTableEditorCmd = EditTableByTableEditorCmd;
+                TextEditor.TextArea.Options.ReplaceTableFromGridCmd = ReplaceTableFromGridCmd;
+                TextEditor.TextArea.Options.PasteTableFromGridCmd = PasteTableFromGridCmd;
             }
-            else if (GherkinUtil.IsCSharpFile(Document.FileName))
+            else
             {
-                if (!(indentationStrategy is CSharpIndentationStrategy))
+                if (GherkinUtil.IsCSharpFile(Document.FileName))
                 {
-                    TextEditor.TextArea.IndentationStrategy =  new CSharpIndentationStrategy(TextEditor.Options);
+                    if (!(indentationStrategy is CSharpIndentationStrategy))
+                    {
+                        TextEditor.TextArea.IndentationStrategy = new CSharpIndentationStrategy(TextEditor.Options);
+                    }
                 }
+
+                TextEditor.TextArea.Options.EditTableByTableEditorCmd = null;
+                TextEditor.TextArea.Options.ReplaceTableFromGridCmd = null;
+                TextEditor.TextArea.Options.PasteTableFromGridCmd = null;
             }
         }
 
@@ -360,6 +374,46 @@ namespace Gherkin.ViewModel
                 int column = Math.Min(arg.Column, line.Length);
                 ScrollCursorTo(lineNo, column);
             }
+        }
+
+        private void OnEditTableByTableEditor()
+        {
+            EventAggregator<StartEditTableRequestArg>.Instance.Publish(this, new StartEditTableRequestArg(TextEditor));
+        }
+
+        private bool CanEditTableByTableEditor()
+        {
+            return GherkinUtil.IsFeatureFile(Document.FileName) && IsCurrentLineTableRow();
+        }
+
+        private bool IsCurrentLineTableRow()
+        {
+            int offset = TextEditor.TextArea.Caret.Offset;
+            DocumentLine line = Document.GetLineByOffset(offset);
+            GherkinSimpleParser parser = new GherkinSimpleParser(Document);
+            Token token = parser.ParseToken(GherkinFormatUtil.GetText(Document, line));
+
+            return (token.MatchedType == TokenType.TableRow);
+        }
+
+        private void OnReplaceTableFromGrid()
+        {
+            EventAggregator<ReplaceTableFromGridArg>.Instance.Publish(this, new ReplaceTableFromGridArg(TextEditor));
+        }
+
+        private bool CanReplaceTableFromGrid()
+        {
+            return GherkinUtil.IsFeatureFile(Document.FileName) && IsCurrentLineTableRow();
+        }
+
+        private void OnPasteTableFromGrid()
+        {
+            EventAggregator<PasteTableFromGridArg>.Instance.Publish(this, new PasteTableFromGridArg(TextEditor));
+        }
+
+        private bool CanPasteTableFromGrid()
+        {
+            return GherkinUtil.IsFeatureFile(Document.FileName);
         }
     }
 }

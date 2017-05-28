@@ -12,6 +12,9 @@ namespace Gherkin.Model
 {
     class CurveViewItem
     {
+        const int WIDTH = 600;
+        const int HEIGHT = WIDTH;
+
         private CurvePlotModel m_CurvePlotModel;
         private OxyPlot.Wpf.PlotView m_PlotView;
         private BitmapImage m_BitmapImage;
@@ -50,7 +53,7 @@ namespace Gherkin.Model
 
         private void MakeBitmapImage()
         {
-            var bitmapSource = OxyPlot.Wpf.PngExporter.ExportToBitmap(m_CurvePlotModel, 600, 400, OxyPlot.OxyColors.White);
+            var bitmapSource = OxyPlot.Wpf.PngExporter.ExportToBitmap(m_CurvePlotModel, WIDTH, HEIGHT, OxyPlot.OxyColors.White);
             m_BitmapImage = Util.DrawingVisualUtil.ToPNGImage(bitmapSource);
         }
 
@@ -58,7 +61,7 @@ namespace Gherkin.Model
         {
             var thread = new System.Threading.Thread(() =>
             {
-                OxyPlot.Wpf.PngExporter.Export(m_CurvePlotModel, filePath, 600, 400, OxyPlot.OxyColors.White);
+                OxyPlot.Wpf.PngExporter.Export(m_CurvePlotModel, filePath, WIDTH, HEIGHT, OxyPlot.OxyColors.White);
             });
             thread.SetApartmentState(System.Threading.ApartmentState.STA);
             thread.Start();
@@ -69,8 +72,8 @@ namespace Gherkin.Model
         {
             m_PlotView = new OxyPlot.Wpf.PlotView();
             m_PlotView.Model = m_CurvePlotModel;
-            m_PlotView.Width = 600;
-            m_PlotView.Height = 400;
+            m_PlotView.Width = WIDTH;
+            m_PlotView.Height = HEIGHT;
             m_PlotView.ActualController.UnbindMouseWheel();
 
             m_PlotView.Cursor = Cursors.Arrow;

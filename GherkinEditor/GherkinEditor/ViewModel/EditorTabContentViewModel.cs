@@ -293,12 +293,16 @@ namespace Gherkin.ViewModel
 
         private void UpdateEditor(string filePath)
         {
+            bool isOldFileFeatureFile = GherkinUtil.IsFeatureFile(Document.FileName);
             SetSyntaxHighlighting(filePath);
             FoldingExecutor?.InstallFoldingManager(filePath);
             CurrentFilePath = filePath;
             Document.FileName = filePath;
             FileNameChangedEvent?.Invoke(filePath);
-            HideScenarioIndex = !IsFeatureFile;
+            if (isOldFileFeatureFile != IsFeatureFile)
+            {
+                HideScenarioIndex = !IsFeatureFile;
+            }
 
             if (CurrentFilePath != filePath)
             {
@@ -308,17 +312,7 @@ namespace Gherkin.ViewModel
 
         public bool IsFeatureFile
         {
-            get
-            {
-                try
-                {
-                    return (CurrentFilePath != null) && Path.GetExtension(CurrentFilePath) == ".feature";
-                }
-                catch
-                {
-                    return false;
-                }
-            }
+            get { return GherkinUtil.IsFeatureFile(CurrentFilePath); }
         }
 
         private void UpdateFoldingsByDefault()

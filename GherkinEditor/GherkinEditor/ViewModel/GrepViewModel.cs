@@ -16,7 +16,7 @@ namespace Gherkin.ViewModel
 {
     public class GrepViewModel : AbstractFindViewModel
     {
-        private WorkAreaEditorViewModel m_WorkArea;
+        private GherkinViewModel m_GherkinViewModel;
         private MultiFileOpener m_MultiFilesOpener;
 
         private string m_Folder;
@@ -27,10 +27,10 @@ namespace Gherkin.ViewModel
 
         private bool IsGrepping { get; set; }
 
-        public GrepViewModel(WorkAreaEditorViewModel workArea, MultiFileOpener multiFilesOpener, IAppSettings appSettings, string default_grep_text) :
+        public GrepViewModel(GherkinViewModel gherkinViewModel, MultiFileOpener multiFilesOpener, IAppSettings appSettings, string default_grep_text) :
             base(appSettings)
         {
-            m_WorkArea = workArea;
+            m_GherkinViewModel = gherkinViewModel;
             m_MultiFilesOpener = multiFilesOpener;
             SetDefaultGrepConditions(default_grep_text);
         }
@@ -143,7 +143,7 @@ namespace Gherkin.ViewModel
             BackupLastUsedText();
             GrepCompletedPercent = 0;
             ShowStatus = true;
-            m_WorkArea.OnGrepStarted();
+            m_GherkinViewModel.OnGrepStarted();
 
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
 
@@ -153,7 +153,7 @@ namespace Gherkin.ViewModel
 
             Mouse.OverrideCursor = Mouse.OverrideCursor = null;
             GrepDiaglog?.Close();
-            m_WorkArea.OnGrepFinished();
+            m_GherkinViewModel.WorkAreaEditor.OnGrepFinished();
         }
 
         private void BackupLastUsedText()
@@ -173,7 +173,7 @@ namespace Gherkin.ViewModel
 
         private void SetSearchHighlightingTransformer()
         {
-            m_WorkArea.SetSearchHighlightingTransformer(m_SearchCondition.GetRegEx(isForHighlighting: true));
+            m_GherkinViewModel.WorkAreaEditor.SetSearchHighlightingTransformer(m_SearchCondition.GetRegEx(isForHighlighting: true));
         }
 
         private void OnFindFolder()
@@ -254,7 +254,7 @@ namespace Gherkin.ViewModel
                              new Action(() =>
                              {
                                  var line_text = string.Format("{0}({1}){2}{3}\n", file, line_no, GreppedFileOpener.SPACES_AFTER_FILENAME, line);
-                                 m_WorkArea.AppendText(line_text);
+                                 m_GherkinViewModel.WorkAreaEditor.AppendText(line_text);
                              }
                              ));
                     }

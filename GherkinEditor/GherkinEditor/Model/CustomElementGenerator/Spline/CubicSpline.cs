@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-
-/// <summary>
-/// Simple cubic spline interpolation library without external dependencies
-/// http://kluge.in-chemnitz.de/opensource/spline/
-/// https://www.tangiblesoftwaresolutions.com/free_editions.html
-/// </summary>
 namespace Gherkin.Model
 {
     /// <summary>
     /// spline interpolation
+    /// Simple cubic spline interpolation library without external dependencies
+    /// http://kluge.in-chemnitz.de/opensource/spline/
+    /// https://www.tangiblesoftwaresolutions.com/free_editions.html
+    /// https://www.codeproject.com/Articles/25237/Bezier-Curves-Made-Simple
     /// </summary>
     public class CubicSpline
     {
@@ -22,7 +20,7 @@ namespace Gherkin.Model
             second_deriv = 2
         }
 
-        private enum XYOrder { OriginalX, ReverseX, OriginalY, ReverseY }
+        private enum XYOrder { OriginalX, ReverseX, OriginalY, ReverseY, None }
 
         private List<double> m_x = new List<double>(); // x,y coordinates of points
         private List<double> m_y = new List<double>();
@@ -63,7 +61,6 @@ namespace Gherkin.Model
         /// <param name="left_value"></param>
         /// <param name="right"></param>
         /// <param name="right_value"></param>
-        /// <param name="force_linear_extrapolation"></param>
         public void SetBoundary(CubicSpline.bd_type left, double left_value, CubicSpline.bd_type right, double right_value)
         {
             Debug.Assert(m_x.Count == 0); // PreparePoints() must not have happened yet
@@ -83,32 +80,30 @@ namespace Gherkin.Model
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void PreparePoints(List<double> x, List<double> y)
+        public bool PreparePoints(List<double> x, List<double> y)
         {
-            if (IsOriginal(x))
+            m_XYOrder = CheckXYOrder(x, y);
+            switch (m_XYOrder)
             {
-                m_XYOrder = XYOrder.OriginalX;
-                SetPoints(x, y);
+                case XYOrder.OriginalX:
+                    SetPoints(x, y);
+                    break;
+                case XYOrder.ReverseX:
+                    x.Reverse();
+                    y.Reverse();
+                    SetPoints(x, y);
+                    break;
+                case XYOrder.OriginalY:
+                    SetPoints(y, x);
+                    break;
+                case XYOrder.ReverseY:
+                    x.Reverse();
+                    y.Reverse();
+                    SetPoints(y, x);
+                    break;
             }
-            else if (IsReverse(x))
-            {
-                m_XYOrder = XYOrder.ReverseX;
-                x.Reverse();
-                y.Reverse();
-                SetPoints(x, y);
-            }
-            else if (IsOriginal(y))
-            {
-                m_XYOrder = XYOrder.OriginalY;
-                SetPoints(y, x);
-            }
-            else
-            {
-                m_XYOrder = XYOrder.ReverseY;
-                x.Reverse();
-                y.Reverse();
-                SetPoints(y, x);
-            }
+
+            return (m_XYOrder != XYOrder.None);
         }
 
         /// <summary>
@@ -119,7 +114,7 @@ namespace Gherkin.Model
         /// </summary>
         /// <param name="p">candidate point </param>
         /// <returns></returns>
-        public OxyPlot.DataPoint CalculateY(OxyPlot.DataPoint p)
+        public OxyPlot.DataPoint CalcXorY(GPoint p)
         {
             int n = m_x.Count;
             // find the closest point m_x[idx] < x, idx=0 even if x<m_x[0]
@@ -152,21 +147,58 @@ namespace Gherkin.Model
             return spline_point;
         }
 
-        private bool IsOriginal(List<double> x)
+        /// <summary>
+        /// Calculate curvature at x on spline
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public double CalculateCurvature(double x)
         {
-            for (int i = 0; i < x.Count - 1; i++)
+            int n = m_x.Count;
+            // find the closest point m_x[idx] < x, idx=0 even if x<m_x[0]
+            //std::vector<double>::const_iterator it;
+            //it = std::lower_bound(m_x.begin(), m_x.end(), x);
+            //int idx = std::max(int(it - m_x.begin()) - 1, 0);
+            int idx = LowerBound(m_x, x);
+            if (x < m_x[0])
             {
-                if (x[i] >= x[i + 1]) return false;
+                // use left most equation
+                return CalcCurvature(0, m_b0, m_c0, x);
             }
-            return true;
+            else if (x > m_x[n - 1])
+            {
+                // use right most equation
+                return CalcCurvature(0, m_b[n - 1], m_c[n - 1], x);
+            }
+            else
+            {
+                return CalcCurvature(m_a[idx], m_b[idx], m_c[idx], x);
+            }
         }
-        private bool IsReverse(List<double> x)
+
+        private XYOrder CheckXYOrder(List<double> x, List<double> y)
         {
-            for (int i = 0; i < x.Count - 1; i++)
+            if ((x.Count == 0) || (x.Count != y.Count)) return XYOrder.None;
+
+            bool IsOriginalX = true;
+            bool IsReverseX = true;
+            bool IsOriginalY = true;
+            bool IsReverseY = true;
+            
+            for (int i = 0; i < x.Count -1; i++)
             {
-                if (x[i] <= x[i + 1]) return false;
+                IsOriginalX = IsOriginalX && (x[i] < x[i + 1]);
+                IsReverseX = IsReverseX && (x[i] > x[i + 1]);
+                IsOriginalY = IsOriginalY && (y[i] < y[i + 1]);
+                IsReverseY = IsReverseY && (y[i] > y[i + 1]);
             }
-            return true;
+
+            if (IsOriginalX) return XYOrder.OriginalX;
+            if (IsReverseX) return XYOrder.ReverseX;
+            if (IsOriginalY) return XYOrder.OriginalY;
+            if (IsReverseY) return XYOrder.ReverseY;
+
+            return XYOrder.None;
         }
 
         private void SetPoints(List<double> x, List<double> y)
@@ -177,9 +209,6 @@ namespace Gherkin.Model
             m_x = new List<double>(x);
             m_y = new List<double>(y);
             int n = x.Count;
-
-            // This is precondition for this algorithm
-            // Debug.Assert(IsStrictlyOrdered(m_x));
 
             // cubic spline interpolation
             // setting up the matrix and right hand side of the equation system
@@ -271,6 +300,26 @@ namespace Gherkin.Model
             }
 
             return lower_bound;
+        }
+
+        /// <summary>
+        /// Calculate curvature at x for cubic equation
+        /// f(x) = a*x^3 + b*x^2 + c*x + d
+        /// Note:
+        ///  curvature = f''(x) / (1 + f'(x) ^ 2) ^(3/2)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        private static double CalcCurvature(double a, double b, double c, double x)
+        {
+            double numer = 6.0 * a * x + 2.0 * b;
+            double f = 3.0 * a * Math.Pow(x, 2) + 2.0 * b * x + c;
+            double denom = Math.Pow(1.0 + Math.Pow(f, 2), 1.5);
+
+            return (-1 * (numer / denom) / 100.0);  // 正は右曲り
         }
     }
 }

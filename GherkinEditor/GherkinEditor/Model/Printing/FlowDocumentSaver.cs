@@ -19,6 +19,7 @@ using System.Windows.Documents;
 using Word = NetOffice.WordApi;
 using NetOffice.WordApi.Enums;
 using System.Windows.Xps;
+using NetOffice.WordApi;
 
 namespace Gherkin.Model
 {
@@ -197,7 +198,24 @@ namespace Gherkin.Model
             {
                 DisplayAlerts = WdAlertLevel.wdAlertsNone
             };
+
             var currentDoc = wordApplication.Documents.Open(fromFilePath);
+            //var currentDoc = wordApplication.Documents.Add();
+            //Range _range = currentDoc.Range();
+            //_range.Text = @"Celsius = \sqrt(x+y) + sin(5/9 \times (Fahrenheit – 23 (\delta)^2))";
+            //foreach( var ac in wordApplication.OMathAutoCorrect.Entries)
+            //{
+            //    if (_range.Text.Contains(ac.Name))
+            //    {
+            //        _range.Text = _range.Text.Replace(ac.Name, ac.Value);
+            //    }
+            //}
+
+            //currentDoc.OMaths.Add(_range);
+            //var oMaths = _range.OMaths[1];
+            //oMaths.BuildUp();
+            //currentDoc.SaveAs(@"d:\temp\test\test.html", WdSaveFormat.wdFormatHTML, Type.Missing, Type.Missing, false, Type.Missing, null, false);
+
             currentDoc.SaveAs(toFilePath, format);
 
             currentDoc.Close();

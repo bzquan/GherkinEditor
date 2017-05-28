@@ -675,4 +675,46 @@
   <data name="Tooltip_SplitVerticalEditor" xml:space="preserve">
     <value>ウインドウズの左右分割</value>
   </data>
+  <data name="Tooltip_ExchangeTableEditorAndWorkAreaEditor" xml:space="preserve">
+    <value>テーブルエディターと作業領域画面の切替</value>
+  </data>
+  <data name="MenuReoGrid_DeleteColumn" xml:space="preserve">
+    <value>列の削除</value>
+  </data>
+  <data name="MenuReoGrid_DeleteRow" xml:space="preserve">
+    <value>行の削除</value>
+  </data>
+  <data name="MenuReoGrid_InsertColumn" xml:space="preserve">
+    <value>列の挿入</value>
+  </data>
+  <data name="MenuReoGrid_InsertRow" xml:space="preserve">
+    <value>行の挿入</value>
+  </data>
+  <data name="MenuEdit_ContextEditGherkinTable" xml:space="preserve">
+    <value>テーブルの編集</value>
+  </data>
+  <data name="MenuEdit_ContextPasteTableFromGrid" xml:space="preserve">
+    <value>テーブルの貼付</value>
+  </data>
+  <data name="MenuEdit_ContextReplaceTableFromGrid" xml:space="preserve">
+    <value>テーブルの置換</value>
+  </data>
+  <data name="MenuReoGrid_InsertCopiedColumns" xml:space="preserve">
+    <value>コピーした列の挿入</value>
+  </data>
+  <data name="MenuReoGrid_InsertCopiedRows" xml:space="preserve">
+    <value>コピーした行の挿入</value>
+  </data>
+  <data name="MenuHelp_TableGridFormula" xml:space="preserve">
+    <value>テーブルエディター用数式</value>
+  </data>
+  <data name="MenuReoGrid_CalcCurvatureFromLonLat" xml:space="preserve">
+    <value>Lon/Lat⇒曲率</value>
+  </data>
+  <data name="MenuReoGrid_CalcCurvatureFromXY" xml:space="preserve">
+    <value>X/Y⇒曲率</value>
+  </data>
+  <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
+    <value>Lon/Lat⇒X/Y</value>
+  </data>
 </root>

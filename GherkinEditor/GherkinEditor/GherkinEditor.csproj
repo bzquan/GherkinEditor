@@ -129,6 +129,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\CustomElementGenerator\Bezier\BezierCurve.cs" />
+    <Compile Include="Model\CustomElementGenerator\Bezier\BSplineSegmentMatrix.cs" />
+    <Compile Include="Model\CustomElementGenerator\Bezier\CachedUniformCubicBSpline.cs" />
+    <Compile Include="Model\CustomElementGenerator\Bezier\BSplineSegment.cs" />
+    <Compile Include="Model\CustomElementGenerator\Bezier\IBSpline.cs" />
+    <Compile Include="Model\CustomElementGenerator\Bezier\UniformCubicBSpline.cs" />
     <Compile Include="Model\CustomElementGenerator\CacheBase.cs" />
     <Compile Include="Model\CustomElementGenerator\CurveElementGenerator.cs" />
     <Compile Include="Model\CustomElementGenerator\CurveViewCache.cs" />
@@ -138,11 +144,14 @@
     <Compile Include="Model\CustomElementGenerator\CustomImageControl.cs" />
     <Compile Include="Model\CustomElementGenerator\ErrorMessageDrawingVisual.cs" />
     <Compile Include="Model\CustomElementGenerator\LaTexImageCache.cs" />
+    <Compile Include="Model\CustomElementGenerator\GPoint.cs" />
     <Compile Include="Model\CustomElementGenerator\Spline\BandMatrix.cs" />
     <Compile Include="Model\CustomElementGenerator\Spline\CubicSpline.cs" />
+    <Compile Include="Model\CustomElementGenerator\WGS8GeoCoordinate.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
     <Compile Include="Model\GherkinIndentationStrategy\CursorPosInTable.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
+    <Compile Include="Model\GridCustomFunctions.cs" />
     <Compile Include="Model\HtmlConverter\HtmlCssParser.cs" />
     <Compile Include="Model\HtmlConverter\HtmlFromXamlConverter.cs" />
     <Compile Include="Model\HtmlConverter\HtmlLexicalAnalyzer.cs" />
@@ -155,6 +164,8 @@
     <Compile Include="Model\CustomElementGenerator\BitmapImageCache.cs" />
     <Compile Include="Model\Printing\PrintSettings.cs" />
     <Compile Include="Model\Printing\FlowDocumentSaver.cs" />
+    <Compile Include="Model\TableManipulator\TableExtractorFromGrid.cs" />
+    <Compile Include="Model\TableManipulator\TableExtractorFromTextEditor.cs" />
     <Compile Include="Util\CurrentGherkinLanguageArg.cs" />
     <Compile Include="Util\CustomImageClickedArg.cs" />
     <Compile Include="Util\DrawingVisualUtil.cs" />
@@ -167,6 +178,13 @@
     <Compile Include="Util\GherkinKeywordGenerator.cs" />
     <Compile Include="Util\HideScenarioIndexArg.cs" />
     <Compile Include="Util\ForEachUtil.cs" />
+    <Compile Include="Util\LaTex2PNG.cs" />
+    <Compile Include="Util\Matrix\CholeskyDecomposition.cs" />
+    <Compile Include="Util\Matrix\EigenvalueDecomposition.cs" />
+    <Compile Include="Util\Matrix\GeneralMatrix.cs" />
+    <Compile Include="Util\Matrix\LUDecomposition.cs" />
+    <Compile Include="Util\Matrix\QRDecomposition.cs" />
+    <Compile Include="Util\Matrix\SingularValueDecomposition.cs" />
     <Compile Include="Util\ProcessInterop.cs" />
     <Compile Include="Util\IndentationCompletedArg.cs" />
     <Compile Include="Util\ShowCurvePlotMarker4GherkinTableArg.cs" />
@@ -181,8 +199,11 @@
     <Compile Include="ViewModel\CodePageListPopupViewModel.cs" />
     <Compile Include="ViewModel\DeleteAllEditorTabsRequestedArg.cs" />
     <Compile Include="ViewModel\DocumentPreviewViewModel.cs" />
+    <Compile Include="ViewModel\ExchangeTableWithGridTableArg.cs" />
     <Compile Include="ViewModel\GherkinEditerCommand.cs" />
     <Compile Include="ViewModel\HelpViewModel.cs" />
+    <Compile Include="ViewModel\PasteTableFromGridArg.cs" />
+    <Compile Include="ViewModel\ReplaceTableFromGridArg.cs" />
     <Compile Include="ViewModel\SettingPropertyGridViewModel.cs" />
     <Compile Include="ViewModel\EditorTabHeaderViewModel.cs" />
     <Compile Include="ViewModel\EditorTabContentViewModel.cs" />
@@ -210,6 +231,8 @@
     <Compile Include="ViewModel\EditorLoadedArg.cs" />
     <Compile Include="ViewModel\SearchCondition.cs" />
     <Compile Include="ViewModel\SearchPanelLocalization.cs" />
+    <Compile Include="ViewModel\StartEditTableRequestArg.cs" />
+    <Compile Include="ViewModel\TableEditViewModel.cs" />
     <Compile Include="ViewModel\WindowDeactivatedArg.cs" />
     <Compile Include="ViewModel\WorkAreaEditorViewModel.cs" />
     <Compile Include="View\AboutControlView.xaml.cs">
@@ -239,6 +262,9 @@
     <Compile Include="View\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\InputCurvatureNum.xaml.cs">
+      <DependentUpon>InputCurvatureNum.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
     </Compile>
@@ -246,6 +272,9 @@
     <Compile Include="View\PrintPreviewDocumentViewer.cs" />
     <Compile Include="View\PrintPreview.xaml.cs">
       <DependentUpon>PrintPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReoGridWrapper.xaml.cs">
+      <DependentUpon>ReoGridWrapper.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RichTextBlockHtml\BrowserBehavior.cs" />
     <Compile Include="View\RichTextBlockHtml\HtmlRichTextBoxBehavior.cs" />
@@ -282,6 +311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InputCurvatureNum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,8 +357,8 @@
     <Compile Include="Model\GherkinFolding\GherkinFoldingStrategy.cs" />
     <Compile Include="Model\GherkinFormatUtil.cs" />
     <Compile Include="Model\GherkinIndentationStrategy\GherkinIndentationStrategy.cs" />
-    <Compile Include="Model\GherkinIndentationStrategy\GherkinTable.cs" />
-    <Compile Include="Model\GherkinIndentationStrategy\GherkinTableBuilder.cs" />
+    <Compile Include="Model\TableManipulator\GherkinTable.cs" />
+    <Compile Include="Model\TableManipulator\GherkinTableBuilder.cs" />
     <Compile Include="Model\GherkinSimpleParser.cs" />
     <Compile Include="Util\AppSettings.cs" />
     <Compile Include="ContainerBootstrapper.cs" />
@@ -347,6 +380,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\PrintPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReoGridWrapper.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -505,6 +542,10 @@
     <ProjectReference Include="..\PreviewHandlerFramework\PreviewHandlerFramework.csproj">
       <Project>{f27001c1-fe96-4268-bdd8-ec96ab50d2d6}</Project>
       <Name>PreviewHandlerFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ReoGrid\ReoGrid.csproj">
+      <Project>{8b62357a-abbc-4db0-8633-f1d6a6c1ea53}</Project>
+      <Name>ReoGrid</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfMath\WpfMath.csproj">
       <Project>{010a34f1-1f3e-4528-99b4-95054dd45729}</Project>
@@ -748,6 +789,32 @@
   <ItemGroup>
     <Resource Include="View\Images\SplitHorizontal.png" />
     <Resource Include="View\Images\SplitVertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Exchange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\TableEditor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\BDDSplash.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Replace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\TableGridFormula.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\TableGridFormula_ja.html" />
+    <EmbeddedResource Include="ViewModel\ReleaseNote\TableGridFormula_zh-CN.html" />
+    <Resource Include="View\Images\Function.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\LaTex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\K.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

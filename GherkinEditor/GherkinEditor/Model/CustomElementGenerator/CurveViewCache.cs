@@ -18,6 +18,7 @@ namespace Gherkin.Model
             new Lazy<CurveViewCache>(() => new CurveViewCache());
 
         private List<CurveViewItem> m_CurveViewItems = new List<CurveViewItem>();
+        private CurvatureUnit m_CurvatureUnit = CurvatureUnit.Meter;
         private bool ShowPlotMarker { get; set; }
 
         public static CurveViewCache Instance => s_Singleton.Value;
@@ -25,57 +26,63 @@ namespace Gherkin.Model
         private CurveViewCache()
         {
             var setting = new AppSettings();
+            bool isCentimeter = setting.CurvatureUnit.Equals("1/cm", StringComparison.InvariantCultureIgnoreCase);
+            m_CurvatureUnit = isCentimeter ? CurvatureUnit.Centimeter : CurvatureUnit.Meter;
             ShowPlotMarker = setting.ShowCurvePlotMarker4GherkinTable;
 
             EventAggregator<ShowCurvePlotMarker4GherkinTableArg>.Instance.Event += OnShowPlotMarker;
         }
 
-        private void OnShowPlotMarker(object sender, ShowCurvePlotMarker4GherkinTableArg arg)
+        public CurvatureUnit CurvatureUnit
         {
-            if ( ShowPlotMarker != arg.ShowMarker)
+            get { return m_CurvatureUnit; }
+            set
             {
-                ShowPlotMarker = arg.ShowMarker;
-                m_CurveViewItems.Clear();
+                m_CurvatureUnit = value;
+                ClearCache();
             }
         }
 
-        public OxyPlot.Wpf.PlotView LoadPlotView(TextDocument document, int offset, string description, string xColumn, string yColumn, string spline)
+        public void ClearCache()
         {
-            CurveViewItem curveViewItem = LoadCurveViewItem(document, offset, description, xColumn, yColumn, spline);
+            m_CurveViewItems.Clear();
+        }
+
+        public OxyPlot.Wpf.PlotView LoadPlotView(TextDocument document, int offset, CurveInfo curveInfo)
+        {
+            CurveViewItem curveViewItem = LoadCurveViewItem(document, offset, curveInfo);
 
             return curveViewItem?.PlotView;
         }
 
-        public BitmapImage LoadImage(TextDocument document, int offset, string description, string xColumn, string yColumn, string spline)
+        public BitmapImage LoadImage(TextDocument document, int offset, CurveInfo curveInfo)
         {
-            CurveViewItem curveViewItem = LoadCurveViewItem(document, offset, description, xColumn, yColumn, spline);
+            CurveViewItem curveViewItem = LoadCurveViewItem(document, offset, curveInfo);
 
             return curveViewItem?.BitmapImage;
         }
 
-        private CurveViewItem LoadCurveViewItem(TextDocument document, int offset, string description, string xColumn, string yColumn, string spline)
+        private CurveViewItem LoadCurveViewItem(TextDocument document, int offset, CurveInfo curveInfo)
         {
-            var tableHeader = GetTableHeaderLine(document, offset, description, xColumn, yColumn);
+            var tableHeader = GetTableHeaderLine(document, offset, curveInfo);
             if (tableHeader == null) return null;
 
-            tableHeader.XTitle = xColumn;
-            tableHeader.YTitle = yColumn;
-
-            var curveModel = CreateModel(document, tableHeader, spline);
-
-            CurveViewItem curveViewItem = m_CurveViewItems.FirstOrDefault(x => x.Key == curveModel.Key);
-            if (curveViewItem != null)
-                m_CurveViewItems.Remove(curveViewItem);
-            else
+            List<GPoint> points = ExtractPoints(document, tableHeader, curveInfo.IsGeoCoordinate);
+            string key = CurvePlotModel.MakeKey(points, curveInfo);
+            CurveViewItem curveViewItem = m_CurveViewItems.FirstOrDefault(x => x.Key == key);
+            if (curveViewItem == null)
+            {
+                var curveModel = new CurvePlotModel(points, ShowPlotMarker, curveInfo);
                 curveViewItem = new CurveViewItem(curveModel);
+                m_CurveViewItems.Insert(0, curveViewItem);
+            }
 
-            m_CurveViewItems.Insert(0, curveViewItem);
             Util.Util.RemoveLastItems(m_CurveViewItems, max_num: CacheSize);
 
             return curveViewItem;
         }
 
-        private TableHeader GetTableHeaderLine(TextDocument document, int offset, string description, string xColumn, string yColumn)
+        private TableHeader GetTableHeaderLine(TextDocument document, int offset, CurveInfo curveInfo)
         {
             var line = document.GetLineByOffset(offset)?.NextLine;
             while (line != null)
@@ -88,15 +95,14 @@ namespace Gherkin.Model
                 else
                 {
                     var tableRow = ToRow(tableHeader);
-                    int xColumnIndex = tableRow.IndexOf(xColumn);
-                    int yColumnIndex = tableRow.IndexOf(yColumn);
+                    int xColumnIndex = tableRow.IndexOf(curveInfo.XColumn);
+                    int yColumnIndex = tableRow.IndexOf(curveInfo.YColumn);
 
                     if ((xColumnIndex >= 0) && (yColumnIndex >= 0))
                     {
                         return new TableHeader
                         {
                             HeaderLine = line,
-                            Description = description,
                             XColumn = xColumnIndex,
                             YColumn = yColumnIndex
                         };
@@ -127,17 +133,17 @@ namespace Gherkin.Model
             return columns;
         }
 
-        CurvePlotModel CreateModel(TextDocument document, TableHeader tableHeader, string spline)
+        private List<GPoint> ExtractPoints(TextDocument document, TableHeader tableHeader, bool isGeoCoordinate)
         {
             var line = tableHeader.HeaderLine.NextLine;
-            List<OxyPlot.DataPoint> points = new List<OxyPlot.DataPoint>();
+            List<GPoint> points = new List<GPoint>();
             while (line != null)
             {
                 string rowText = document.GetText(line);
                 var point = MakePoint(rowText, tableHeader.XColumn, tableHeader.YColumn);
                 if (point != null)
                 {
-                    OxyPlot.DataPoint p = (OxyPlot.DataPoint)point;
+                    GPoint p = (GPoint)point;
                     points.Add(p);
                     line = line.NextLine;
                 }
@@ -145,12 +151,64 @@ namespace Gherkin.Model
                     break;
             }
 
-            var plotModel = new CurvePlotModel(points, tableHeader.Description, tableHeader.XTitle, tableHeader.YTitle, ShowPlotMarker, spline);
+            ThinOut(points);    // 間引き処理
+            if (isGeoCoordinate)
+            {
+                points = LonLat2XY(points);
+            }
 
-            return plotModel;
+            return points;
         }
 
-        private OxyPlot.DataPoint? MakePoint(string rowText, int XColumn, int YColumn)
+        /// <summary>
+        /// 200以内になるように間引く
+        /// </summary>
+        private void ThinOut(List<GPoint> points)
+        {
+            const int N = 200;
+            int TOTAL = points.Count;
+
+            if (TOTAL <= N) return;
+
+            if (TOTAL >= N * 2)
+            {
+                int pos = 0;
+                int interval = TOTAL / N;
+                for (int i = 0; i < TOTAL; i += interval, pos++)
+                {
+                    points[pos] = points[i];
+                }
+                points.RemoveRange(pos, TOTAL - pos);
+            }
+            else
+            {
+                int pos = 0;
+                int extraCount = TOTAL - N;
+                int interval = TOTAL / extraCount;
+                for (int i = 0; i < TOTAL; i++)
+                {
+                    if ((i == 0) || (i == TOTAL - 1) || (i % interval != 0))
+                    {
+                        points[pos] = points[i];
+                        pos++;
+                    }
+                }
+                points.RemoveRange(pos, points.Count - pos);
+            }
+        }
+
+        public static List<GPoint> LonLat2XY(List<GPoint> points)
+        {
+            List<WGS8LonLat> posList = new List<WGS8LonLat>(points.Count);
+            foreach (var p in points)
+            {
+                posList.Add(new WGS8LonLat(p.X, p.Y));
+            }
+
+            return WGS8GeoCoordinate.ToPlaneCoordinate(posList);
+        }
+
+        private GPoint MakePoint(string rowText, int XColumn, int YColumn)
         {
             var tableRow = ToRow(rowText);
             if ((tableRow.Count <= XColumn) || (tableRow.Count <= YColumn)) return null;
@@ -159,11 +217,20 @@ namespace Gherkin.Model
             {
                 double x = double.Parse(tableRow[XColumn]);
                 double y = double.Parse(tableRow[YColumn]);
-                return new OxyPlot.DataPoint(x, y);
+                return new GPoint(x, y);
             }
             catch
             {
                 return null;
+            }
+        }
+
+        private void OnShowPlotMarker(object sender, ShowCurvePlotMarker4GherkinTableArg arg)
+        {
+            if (ShowPlotMarker != arg.ShowMarker)
+            {
+                ShowPlotMarker = arg.ShowMarker;
+                m_CurveViewItems.Clear();
             }
         }
     }

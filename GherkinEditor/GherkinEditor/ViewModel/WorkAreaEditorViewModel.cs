@@ -19,7 +19,7 @@ namespace Gherkin.ViewModel
         private IAppSettings m_AppSettings;
         private MultiFileOpener m_MultiFilesOpener;
         private bool m_ShowCppCodeGenResultUsagePopup;
-        private bool m_ShowMessageWindow;
+        private bool m_ShowWorkAreaEditor;
 
         public event Action MessageWindowHiddenEvent;
 
@@ -43,8 +43,6 @@ namespace Gherkin.ViewModel
             EventAggregator<WindowDeactivatedArg>.Instance.Event += OnWindowDeactivatedEvent;
         }
 
-        public ICommand ShowMessageWindowCmd => new DelegateCommandNoArg(OnShowMessageWindow, CanShowMessageWindow);
-        public ICommand HideMessageWindowCmd => new DelegateCommandNoArg(OnHideMessageWindow, CanHideMessageWindow);
         public ICommand CloseCPPCodeGenResultUagePopupCmd => new DelegateCommandNoArg(OnCloseCPPCodeGenResultUsagePopup);
 
         private bool ContainOpenableFilePath(string text, out int start_offset, out int lenth)
@@ -57,45 +55,24 @@ namespace Gherkin.ViewModel
             GreppedFileOpener.TryOpenGreppedFile(m_MultiFilesOpener, filePath);
         }
 
-        public bool HideMessageWindow
+        public bool ShowWorkAreaEditor
         {
-            get { return !ShowMessageWindow; }
-        }
-
-        public bool ShowMessageWindow
-        {
-            get { return m_ShowMessageWindow; }
+            get { return m_ShowWorkAreaEditor; }
             set
             {
-                m_ShowMessageWindow = value;
-                if (m_ShowMessageWindow)
+                m_ShowWorkAreaEditor = value;
+                if (m_ShowWorkAreaEditor)
                     m_WorkAreaEditor.TextEditor.Focus();
                 else
                     MessageWindowHiddenEvent?.Invoke();
 
-                base.OnPropertyChanged(nameof(HideMessageWindow));
                 base.OnPropertyChanged();
             }
         }
 
-        private void OnShowMessageWindow()
-        {
-            ShowMessageWindow = true;
-        }
-
-        private void OnHideMessageWindow()
-        {
-            ShowCPPCodeGenResultUsagePopup = false;
-            ShowMessageWindow = false;
-        }
-
-        private bool CanShowMessageWindow() => HideMessageWindow;
-
-        private bool CanHideMessageWindow() => ShowMessageWindow;
-
         public void ShowSearchPanel()
         {
-            if (ShowMessageWindow)
+            if (ShowWorkAreaEditor)
             {
                 m_WorkAreaEditor.ShowSearchPanel();
             }
@@ -107,17 +84,12 @@ namespace Gherkin.ViewModel
             searchHighlightingTransformer.SearchRegex = regex;
         }
 
-        public void ShowMessageOfGenCPPTestCode(string message, bool IsCodeGenerationSuccess)
+        public void ShowMessageOfGenCPPTestCode(string message)
         {
             Clear();
-            ShowMessageWindow = true;
+            ShowWorkAreaEditor = true;
             m_WorkAreaEditor.TextEditor.Options.RequireControlModifierForHyperlinkClick = true;
             m_WorkAreaEditor.AppendText(message);
-
-            if (IsCodeGenerationSuccess)
-            {
-                ShowCPPCodeGenResultUsagePopup = true;
-            }
         }
 
         private void Clear()
@@ -153,7 +125,7 @@ namespace Gherkin.ViewModel
         public void OnGrepStarted()
         {
             Clear();
-            ShowMessageWindow = true;
+            ShowWorkAreaEditor = true;
         }
 
         public void OnGrepFinished()

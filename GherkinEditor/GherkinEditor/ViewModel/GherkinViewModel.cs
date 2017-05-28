@@ -18,6 +18,7 @@ using ICSharpCode.AvalonEdit;
 using Gherkin.Util;
 using Gherkin.Model;
 using Gherkin.View;
+using unvell.ReoGrid;
 
 namespace Gherkin.ViewModel
 {
@@ -28,6 +29,7 @@ namespace Gherkin.ViewModel
         private readonly static string READY_STATUS = "Ready";
         private string m_Status = READY_STATUS;
         private int m_SelectedTabIndex;
+        private bool m_ShowWorkArea;
         private EditorTabContentViewModel m_CurrentEditor;
         private IAppSettings m_AppSettings;
         private TabControl m_EditorTabControl;
@@ -53,12 +55,18 @@ namespace Gherkin.ViewModel
         public ICommand ShowCodePageListCmd => new DelegateCommandNoArg(OnShowCodePageList);
         public ICommand ShowLaTeXSymbolsCmd => new DelegateCommandNoArg(OnShowLaTeXSymbols);
         public ICommand ShowHelpCmd => new DelegateCommandNoArg(OnShowHelp);
+        public ICommand ShowTableGridFormulaCmd => new DelegateCommandNoArg(OnShowTableGridFormula);
         public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus, CanClearStatus);
         public ICommand PreviewDocumentCmd => new DelegateCommandNoArg(OnPreviewDocument);
+        public ICommand ShowWorkAreaCmd => new DelegateCommandNoArg(OnShowWorkArea, CanShowWorkArea);
+        public ICommand HideWorkAreaCmd => new DelegateCommandNoArg(OnHideWorkArea, CanHideWorkArea);
+        public ICommand ExchangeWorkAreaCmd => new DelegateCommandNoArg(OnExchangeWorkArea, CanHideWorkArea);
 
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
         public CodePageListPopupViewModel CodePageListPopupViewModel { get; private set; }
+        public WorkAreaEditorViewModel WorkAreaEditor { get; set; }
+        //public TableEditViewModel TableEditViewModel { get; private set; }
 
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
@@ -79,6 +87,7 @@ namespace Gherkin.ViewModel
             AboutViewModel = aboutViewModel;
             CodePageListPopupViewModel = codePageListPopupViewModel;
             CodePageListPopupViewModel.CodePageChangedEvent += delegate { base.OnPropertyChanged(nameof(Codepage)); };
+            //TableEditViewModel = tableEditViewModel;
 
             GherkinSettings.ChangeFoldingTextColorOfAvalonEdit();
             EventAggregator<DeleteEditorTabRequestedArg>.Instance.Event += OnDeleteEditorTab;
@@ -95,6 +104,7 @@ namespace Gherkin.ViewModel
             EventAggregator<FileLoadedArg>.Instance.Event += OnFileLoaded;
             EventAggregator<ShowViewerEditorRequestArg>.Instance.Event += OnShowViewerEditorRequested;
             EventAggregator<CustomImageClickedArg>.Instance.Event += OnCustomImageClicked;
+            EventAggregator<StartEditTableRequestArg>.Instance.Event += OnStartEditTableRequested;
 
             // register it to GherkinEditerCommand
             GherkinEditerCommand.GherkinViewModel = this;
@@ -110,8 +120,6 @@ namespace Gherkin.ViewModel
                 CreateEmptyTab(); // Create initial editor
             }
         }
-
-        public WorkAreaEditorViewModel WorkAreaEditor { get; set; }
 
         public void SetMessageTextEditor(TextEditor editor)
         {
@@ -282,7 +290,13 @@ namespace Gherkin.ViewModel
 
         private void OnShowHelp()
         {
-            var window = new HelpWindow(new HelpViewModel(m_AppSettings));
+            var window = new HelpWindow(new HelpViewModel(m_AppSettings, HelpViewModel.HelpKind.BasicHelp));
+            window.Show();
+        }
+
+        private void OnShowTableGridFormula()
+        {
+            var window = new HelpWindow(new HelpViewModel(m_AppSettings, HelpViewModel.HelpKind.TableGridFormulaHelp));
             window.Show();
         }
 
@@ -542,10 +556,16 @@ namespace Gherkin.ViewModel
                 default_grep_text = CurrentEditor.MainEditor.TextArea.Selection.GetText();
             }
 
-            GrepViewModel vm = new GrepViewModel(WorkAreaEditor, m_MultiFilesOpener, m_AppSettings, default_grep_text);
+            GrepViewModel vm = new GrepViewModel(this, m_MultiFilesOpener, m_AppSettings, default_grep_text);
             var dialog = new GrepDialog(vm);
             vm.GrepDiaglog = dialog;
             dialog.ShowDialog();
+        }
+
+        public void OnGrepStarted()
+        {
+            WorkAreaEditor.OnGrepStarted();
+            ShowWorkArea = true;
         }
 
         private EditorTabItem CreateEmptyTab()
@@ -890,7 +910,9 @@ namespace Gherkin.ViewModel
                     CucumberCpp.BDDCucumber.GeneratedFiles generated_file_names = GenerateCPPTestCode(reader);
                     var message = BuildCPPTestCodeResultMessage(ref generated_file_names);
 
-                    WorkAreaEditor.ShowMessageOfGenCPPTestCode(message, IsCodeGenerationSuccess: true);
+                    WorkAreaEditor.ShowMessageOfGenCPPTestCode(message);
+                    ShowWorkArea = true;
+                    WorkAreaEditor.ShowCPPCodeGenResultUsagePopup = true;
                     m_MultiFilesOpener.OpenFileByReloading(generated_file_names.StepImplFilePath);
                 }
             }
@@ -929,7 +951,8 @@ namespace Gherkin.ViewModel
                 stringBuilder.AppendLine(stackTrace);
             }
 
-            WorkAreaEditor.ShowMessageOfGenCPPTestCode(stringBuilder.ToString(), IsCodeGenerationSuccess: false);
+            WorkAreaEditor.ShowMessageOfGenCPPTestCode(stringBuilder.ToString());
+            ShowWorkArea = true;
             MoveCursorToErrorLine(errorMsg);
         }
 
@@ -976,5 +999,70 @@ namespace Gherkin.ViewModel
                 CurrentEditor.MainGherkinEditor.ScrollCursorTo(customImageControl.CursorOffset, focus: false);
             }
         }
+
+        #region Work area
+
+        public bool ShowWorkArea
+        {
+            get { return m_ShowWorkArea; }
+            set
+            {
+                m_ShowWorkArea = value;
+                base.OnPropertyChanged();
+
+                base.OnPropertyChanged(nameof(ShowWorkAreaEditor));
+                base.OnPropertyChanged(nameof(ShowTableEditor));
+            }
+        }
+
+        public bool ShowWorkAreaEditor
+        {
+            get { return !ShowTableEditor; }
+        }
+
+        public bool ShowTableEditor
+        {
+            get
+            {
+                return ShowWorkArea && (WorkAreaEditor.ShowWorkAreaEditor == false);
+            }
+            set
+            {
+                WorkAreaEditor.ShowWorkAreaEditor = !value;
+                if (value)
+                {
+                    WorkAreaEditor.ShowCPPCodeGenResultUsagePopup = false;
+                }
+                base.OnPropertyChanged(nameof(ShowWorkAreaEditor));
+                base.OnPropertyChanged();
+            }
+        }
+
+        private void OnStartEditTableRequested(object sender, StartEditTableRequestArg arg)
+        {
+            ShowTableEditor = true;
+            ShowWorkArea = true;
+        }
+
+        private void OnShowWorkArea()
+        {
+            ShowWorkArea = true;
+        }
+
+        private void OnHideWorkArea()
+        {
+            WorkAreaEditor.ShowCPPCodeGenResultUsagePopup = false;
+            ShowWorkArea = false;
+        }
+
+        private void OnExchangeWorkArea()
+        {
+            ShowTableEditor = !ShowTableEditor;
+        }
+
+        private bool CanShowWorkArea() => !ShowWorkArea;
+
+        private bool CanHideWorkArea() => ShowWorkArea;
+        #endregion // work area
     }
 }

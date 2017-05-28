@@ -40,6 +40,9 @@ namespace Gherkin
                 return;
             }
 
+            SplashScreen splashScreen = new SplashScreen("View/Images/BDDSplash.jpg");
+            splashScreen.Show(true);
+
             // WPF has an interesting bug (or "feature" as you want it):
             // YOU CAN`T SHOW ANY MESSAGE BOXES UNTIL YOU OPEN AT LEAST ONE WPF WINDOW.
             // As a workaround we need to open one hidden window at the beginning of application startup.

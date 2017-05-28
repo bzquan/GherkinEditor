@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Gherkin.View"
         xmlns:p="clr-namespace:Gherkin.Properties"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.MenuHelp_GherkinHelp}"
+        Title="{Binding Path=HelpTitle}"
         WindowStartupLocation="CenterOwner"
         Height="500" Width="650">
 

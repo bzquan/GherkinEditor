@@ -536,6 +536,27 @@ namespace Gherkin.ViewModel
             }
         }
 
+        [DisplayName("Curvature unit")]
+        [ItemsSource(typeof(CurvatureUnitItemsSource))]
+        public string CurvatureUnit
+        {
+            get { return m_AppSettings.CurvatureUnit; }
+            set
+            {
+                m_AppSettings.CurvatureUnit = value;
+                if (value.Equals("1/cm", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Model.CurveViewCache.Instance.CurvatureUnit = Model.CurvatureUnit.Centimeter;
+                }
+                else
+                {
+                    Model.CurveViewCache.Instance.CurvatureUnit = Model.CurvatureUnit.Meter;
+                }
+
+                base.OnPropertyChanged();
+            }
+        }
+
         [LocalizedDisplayName("MenuView_UseNativeDocumentApplication", typeof(Resources))]
         [LocalizedDescription("Tooltip_UseNativeDocumentApplication", typeof(Resources))]
         public bool OpenDocumentByNativeApplication
@@ -663,11 +684,11 @@ namespace Gherkin.ViewModel
         }
     }
 
-    class MathFormulaScaleItemsSource : IItemsSource
+    class CurvatureUnitItemsSource : IItemsSource
     {
         public ItemCollection GetValues()
         {
-            ItemCollection sizes = new ItemCollection() { 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 100 };
+            ItemCollection sizes = new ItemCollection() { "1/m", "1/cm" };
             return sizes;
         }
     }

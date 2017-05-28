@@ -285,7 +285,7 @@ namespace ICSharpCode.AvalonEdit
         System.Windows.Input.ICommand showCodeCompletionCmd { get; set; }
 
         /// <summary>
-        /// Copy file to delegate. String is the file path to be copied.
+        /// Show code completion
         /// Note: bzquan@gmail.com
         /// The default value is null.
         /// </summary>
@@ -300,6 +300,67 @@ namespace ICSharpCode.AvalonEdit
                 OnPropertyChanged(nameof(ShowCodeCompletionCmd));
             }
         }
+        #endregion
+
+        #region Commands related to Table Editor -- added by bzquan@gmail
+
+        System.Windows.Input.ICommand editTableByTableEditorCmd { get; set; }
+
+        /// <summary>
+        /// Edit table by table editor..
+        /// Note: bzquan@gmail.com
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual System.Windows.Input.ICommand EditTableByTableEditorCmd
+        {
+            get { return editTableByTableEditorCmd; }
+            set
+            {
+                editTableByTableEditorCmd = value;
+                OnPropertyChanged(nameof(EditTableByTableEditorCmd));
+            }
+        }
+
+        System.Windows.Input.ICommand replaceTableFromGridCmd { get; set; }
+
+        /// <summary>
+        /// Edit table by table editor..
+        /// Note: bzquan@gmail.com
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual System.Windows.Input.ICommand ReplaceTableFromGridCmd
+        {
+            get { return replaceTableFromGridCmd; }
+            set
+            {
+                replaceTableFromGridCmd = value;
+                OnPropertyChanged(nameof(ReplaceTableFromGridCmd));
+            }
+        }
+
+        System.Windows.Input.ICommand pasteTableFromGridCmd { get; set; }
+
+        /// <summary>
+        /// Edit table by table editor..
+        /// Note: bzquan@gmail.com
+        /// The default value is null.
+        /// </summary>
+        /// <remarks>The default value is <c>null</c>.</remarks>
+        [DefaultValue(null)]
+        public virtual System.Windows.Input.ICommand PasteTableFromGridCmd
+        {
+            get { return pasteTableFromGridCmd; }
+            set
+            {
+                pasteTableFromGridCmd = value;
+                OnPropertyChanged(nameof(PasteTableFromGridCmd));
+            }
+        }
+
         #endregion
 
         #region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString

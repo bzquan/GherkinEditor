@@ -59,14 +59,23 @@
             You can use following markdown to plot curve by using Gherkin table data.
             The next line must be starting of Gherkin table except an empty line and comment line.
             The tag "Plot" is case insensitive.<br />
-            And the markdown can have an optional spline and description, which will be displayed as title of the plot.<br />
+            And the markdown can have an optional curve type(e.g. spline) and description, which will be displayed as title of the plot.<br />
             <b>
                 <font color="blue">
-                    #[Plot spline description](Table column name for X axis, Table column name for Y axis), e.g. <br />
-                    #[Plot spline this is sample graph](X Column, Y Column)
+                    #[Plot(geo)? (spline|bspline|bezier|bcurvature|curvature|brcurvature) description](Table column name for X axis, Table column name for Y axis) <br />
+                    For example, #[Plot spline this is sample graph](X Column, Y Column)
                 </font>
             </b><br />
-            The plot size is 600 * 400 and will be shown in viewer editor.
+            <ul>
+                <li>Plot: plot specified curve</li>
+                <li>Plotgeo: plot curve after converting geo-coordinates to 2D coordinates</li>
+                <li>spline: plotting Spline curve</li>
+                <li>bspline: plotting B-Spline curve</li>
+                <li>bezier: plotting Bezier curve</li>
+                <li>curvature: plotting curvature curve</li>
+                <li>bcurvature: plotting curvature curve after approximating it to Bezier curve</li>
+            </ul>
+            The plot size is 600 * 600 and will be shown in viewer editor.
         </p>
 
         <h5>Copying generated C++ code to a folder</h5>

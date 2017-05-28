@@ -66,14 +66,23 @@
         <p>
             下記MarkDownタグにてGherkinテーブルデータをプロットできます。MarkDownタグの次の行(空行とコメント行を除く)はGherkinテーブルの開始行である必要があります。
             タグ「Plot」は大小文字を区別しません。<br />
-            splineを指定すれば、スプライン曲線もプロットします。splineは省略可能です。タグの説明はプロット図のタイトルになります。<br />
+            splineなどの曲線種別を指定すれば、指定曲線もプロットします。曲線種別は省略可能です。タグの説明はプロット図のタイトルになります。<br />
             <b>
                 <font color="blue">
-                    #[Plot spline 説明](X軸とする列名, Y軸とする列名), 例えば、 <br />
-                    #[Plot spline これはタイトルです](私の列１, 私の列２)
+                    #[Plot(geo)? (spline|bspline|bezier|bcurvature|curvature|brcurvature) 説明](X軸とする列名, Y軸とする列名) <br />
+                    例えば、#[Plot spline これはタイトルです](私の列１, 私の列２)
                 </font>
             </b><br />
-            プロット画面サイズは600 * 400であり、 ビューアーエディタ上に表示されます。
+            <ul>
+                <li>Plot: 指定曲線をプロットする</li>
+                <li>Plotgeo: 経緯度を平面座標に変換後、指定曲線をプロットする</li>
+                <li>spline: Spline曲線をプロットする</li>
+                <li>bspline: B-Spline曲線をプロットする</li>
+                <li>bezier: Bezier曲線をプロットする</li>
+                <li>curvature: 曲率曲線をプロットする</li>
+                <li>bcurvature: Bezierにて曲率の調整後、曲率曲線をプロットする</li>
+            </ul>
+            プロット画面サイズは600 * 600であり、 ビューアーエディタ上に表示されます。
         </p>
 
         <h5>自動生成されたC++ファイルのコピー</h5>

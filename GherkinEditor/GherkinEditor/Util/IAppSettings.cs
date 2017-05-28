@@ -85,6 +85,7 @@ namespace Gherkin.Util
         bool ShowCurvePlotMarker4GherkinTable { get; set; }
 
         int ImageCacheSize { get; set; }
+        string CurvatureUnit { get; set; }
         bool OpenDocumentByNativeApplication { get; set; }
 
         void Save();

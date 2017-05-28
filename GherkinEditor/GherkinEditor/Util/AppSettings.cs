@@ -377,7 +377,7 @@ namespace Gherkin.Util
         }
 
         [UserScopedSetting()]
-        [DefaultSettingValueAttribute("True")]
+        [DefaultSettingValueAttribute("False")]
         public bool SupportUnicode
         {
             get { return (bool)this["SupportUnicode"]; }
@@ -593,6 +593,14 @@ namespace Gherkin.Util
         {
             get { return (int)this["ImageCacheSize"]; }
             set { this["ImageCacheSize"] = value; }
+        }
+
+        [UserScopedSetting()]
+        [DefaultSettingValueAttribute("1/m")]
+        public string CurvatureUnit
+        {
+            get { return (string)this["CurvatureUnit"]; }
+            set { this["CurvatureUnit"] = value; }
         }
 
         [UserScopedSetting()]

@@ -16,20 +16,34 @@ namespace Gherkin.Model
     class TableHeader
     {
         public DocumentLine HeaderLine { get; set; }
-
-        public string Description { get; set; }
-
-        public string XTitle { get; set; }
         public int XColumn { get; set; }
-
-        public string YTitle { get; set; }
         public int YColumn { get; set; }
+    }
+
+    public class CurveInfo
+    {
+        public bool IsGeoCoordinate;
+        public string Description;
+        public string XColumn;
+        public string YColumn;
+        public string Option = "";
+
+        public string Title
+        {
+            get
+            {
+                if (IsGeoCoordinate)
+                    return Description + "(Plane Coornidate)";
+                else
+                    return Description;
+            }
+        }
     }
 
     public class CurveElementGenerator : CustomElementGenerator
     {
         /// mark down syntax: #[Plot description](col1, col2), e.g. #[Plot this is an curve](Lon, Lat)
-        private readonly static Regex s_ImageRegex = new Regex(@"#\[Plot\s*(spline)?\s*([^\]]*)\]\(([^,]+),(.+)\)", RegexOptions.IgnoreCase);
+        private readonly static Regex s_ImageRegex = new Regex(@"#\[Plot(geo)?\s*(spline|bspline|bezier|bcurvature|brcurvature|curvature)?\s*([^\]]*)\]\(([^,]+),(.+)\)", RegexOptions.IgnoreCase);
 
         public CurveElementGenerator(TextEditor textEditor) : base(textEditor)
         {
@@ -46,12 +60,14 @@ namespace Gherkin.Model
             // check whether there's a match exactly at offset
             if (m.Success && m.Index == 0)
             {
-                string spline = m.Groups[1].Value.Trim();
-                string description = m.Groups[2].Value.Trim();
-                string xColumn = m.Groups[3].Value.Trim();
-                string yColumn = m.Groups[4].Value.Trim();
+                CurveInfo curveInfo = new CurveInfo();
+                curveInfo.IsGeoCoordinate = m.Groups[1].Value.Length > 0;
+                curveInfo.Option = m.Groups[2].Value;
+                curveInfo.Description = m.Groups[3].Value.Trim();
+                curveInfo.XColumn = m.Groups[4].Value.Trim();
+                curveInfo.YColumn = m.Groups[5].Value.Trim();
 
-                return CreateUIElement(m.Length, offset, description, xColumn, yColumn, spline);
+                return CreateUIElement(m.Length, offset, curveInfo);
             }
             return null;
         }
@@ -61,11 +77,11 @@ namespace Gherkin.Model
             return s_ImageRegex;
         }
 
-        InlineObjectElement CreateUIElement(int length, int offset, string description, string xColumn, string yColumn, string spline)
+        InlineObjectElement CreateUIElement(int length, int offset, CurveInfo curveInfo)
         {
             if (base.IsPrinting)
             {
-                BitmapImage bitmap = CurveViewCache.Instance.LoadImage(Document, offset, description, xColumn, yColumn, spline);
+                BitmapImage bitmap = CurveViewCache.Instance.LoadImage(Document, offset, curveInfo);
                 if (bitmap != null)
                 {
                     var image = new System.Windows.Controls.Image();
@@ -81,7 +97,7 @@ namespace Gherkin.Model
             }
             else
             {
-                OxyPlot.Wpf.PlotView view = CurveViewCache.Instance.LoadPlotView(Document, offset, description, xColumn, yColumn, spline);
+                OxyPlot.Wpf.PlotView view = CurveViewCache.Instance.LoadPlotView(Document, offset, curveInfo);
                 if (view != null)
                     return new InlineObjectElement(length, view);
             }

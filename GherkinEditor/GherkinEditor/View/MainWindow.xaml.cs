@@ -30,7 +30,7 @@ namespace Gherkin.View
         private GherkinKeywordsViewModel m_GherkinKeywordsViewModel;
         private BetterWpfControls.MenuButton m_ShowQuickLinksButton;
 
-        public MainWindow(IAppSettings appSettings, GherkinViewModel viewModel, GherkinKeywordsViewModel gherkinKeywordsViewModel)
+        public MainWindow(IAppSettings appSettings, GherkinViewModel viewModel, GherkinKeywordsViewModel gherkinKeywordsViewModel, TableEditViewModel tableEditViewModel)
         {
             InitializeComponent();
 
@@ -42,6 +42,8 @@ namespace Gherkin.View
             m_GherkinKeywordsViewModel = gherkinKeywordsViewModel;
             m_ViewModel.EditorTabControl = this.editorTabControl;
             m_ViewModel.SetMessageTextEditor(this.messageTextEditor);
+            this.tableEditorGrid.SetTableEditViewModel(tableEditViewModel);
+
             InitWindowSize();
 
             this.Deactivated += OnWindowDeactivated;

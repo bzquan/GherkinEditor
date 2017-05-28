@@ -313,6 +313,33 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit table.
+        /// </summary>
+        public static string MenuEdit_ContextEditGherkinTable {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextEditGherkinTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste table.
+        /// </summary>
+        public static string MenuEdit_ContextPasteTableFromGrid {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextPasteTableFromGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace table.
+        /// </summary>
+        public static string MenuEdit_ContextReplaceTableFromGrid {
+            get {
+                return ResourceManager.GetString("MenuEdit_ContextReplaceTableFromGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show IntelliSense.
         /// </summary>
         public static string MenuEdit_ContextShowCodeCompletion {
@@ -597,6 +624,96 @@ namespace Gherkin.Properties {
         public static string MenuHelp_LaTeXSymbols {
             get {
                 return ResourceManager.GetString("MenuHelp_LaTeXSymbols", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formulas for table editor .
+        /// </summary>
+        public static string MenuHelp_TableGridFormula {
+            get {
+                return ResourceManager.GetString("MenuHelp_TableGridFormula", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lon/Lat ⇒Curvature.
+        /// </summary>
+        public static string MenuReoGrid_CalcCurvatureFromLonLat {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_CalcCurvatureFromLonLat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X/Y⇒Curvature.
+        /// </summary>
+        public static string MenuReoGrid_CalcCurvatureFromXY {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_CalcCurvatureFromXY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete column.
+        /// </summary>
+        public static string MenuReoGrid_DeleteColumn {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_DeleteColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete row.
+        /// </summary>
+        public static string MenuReoGrid_DeleteRow {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_DeleteRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert column.
+        /// </summary>
+        public static string MenuReoGrid_InsertColumn {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_InsertColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert copied columns.
+        /// </summary>
+        public static string MenuReoGrid_InsertCopiedColumns {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_InsertCopiedColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert copied rows.
+        /// </summary>
+        public static string MenuReoGrid_InsertCopiedRows {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_InsertCopiedRows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert row.
+        /// </summary>
+        public static string MenuReoGrid_InsertRow {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_InsertRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lon/Lat ⇒XY.
+        /// </summary>
+        public static string MenuReoGrid_LonLat2XY {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_LonLat2XY", resourceCulture);
             }
         }
         
@@ -1464,6 +1581,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_DefaultHighlighingColor {
             get {
                 return ResourceManager.GetString("Tooltip_DefaultHighlighingColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange table editor and work area window.
+        /// </summary>
+        public static string Tooltip_ExchangeTableEditorAndWorkAreaEditor {
+            get {
+                return ResourceManager.GetString("Tooltip_ExchangeTableEditorAndWorkAreaEditor", resourceCulture);
             }
         }
         

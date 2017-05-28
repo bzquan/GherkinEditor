@@ -95,6 +95,9 @@ namespace ICSharpCode.AvalonEdit.Editing
             // Note: added by bzquan@gmail.com
             CommandBindings.Add(new CommandBinding(AvalonEditCommands.CopyFileTo, OnCopyFileTo, CanCopyFileTo));
             CommandBindings.Add(new CommandBinding(AvalonEditCommands.ShowCodeCompletion, OnShowCodeCompletion, CanShowCodeCompletion));
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.EditTableByTableEditor, OnEditTableByTableEditor, CanEditTableByTableEditor));
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.ReplaceTableFromGrid, OnReplaceTableFromGrid, CanReplaceTableFromGrid));
+            CommandBindings.Add(new CommandBinding(AvalonEditCommands.PasteTableFromGrid, OnPasteTableFromGrid, CanPasteTableFromGrid));
 
             TextAreaDefaultInputHandler.WorkaroundWPFMemoryLeak(InputBindings);
 		}
@@ -770,6 +773,76 @@ namespace ICSharpCode.AvalonEdit.Editing
                 args.Handled = true;
             }
         }
+        #endregion
+
+        #region Commands related to Table Editor
+
+        static void OnEditTableByTableEditor(object target, ExecutedRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                textArea.Options.EditTableByTableEditorCmd?.Execute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Check if table editor exits
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="args"></param>
+        static void CanEditTableByTableEditor(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if ((textArea != null) && (textArea.Options.EditTableByTableEditorCmd != null))
+            {
+                args.CanExecute = textArea.Options.EditTableByTableEditorCmd.CanExecute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        static void OnReplaceTableFromGrid(object target, ExecutedRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                textArea.Options.ReplaceTableFromGridCmd?.Execute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        static void CanReplaceTableFromGrid(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if ((textArea != null) && (textArea.Options.ReplaceTableFromGridCmd != null))
+            {
+                args.CanExecute = textArea.Options.ReplaceTableFromGridCmd.CanExecute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        static void OnPasteTableFromGrid(object target, ExecutedRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if (textArea != null)
+            {
+                textArea.Options.PasteTableFromGridCmd?.Execute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
+        static void CanPasteTableFromGrid(object target, CanExecuteRoutedEventArgs args)
+        {
+            TextArea textArea = GetTextArea(target);
+            if ((textArea != null) && (textArea.Options.PasteTableFromGridCmd != null))
+            {
+                args.CanExecute = textArea.Options.PasteTableFromGridCmd.CanExecute(parameter: null);
+                args.Handled = true;
+            }
+        }
+
         #endregion
     }
 }

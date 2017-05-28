@@ -251,5 +251,18 @@ namespace Gherkin.Util
                 list.RemoveRange(max_num, list.Count - max_num);
             }
         }
+
+        public static bool IsDigitsOnly(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return false;
+
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -127,5 +127,26 @@ namespace ICSharpCode.AvalonEdit
             new InputGestureCollection {
                 new KeyGesture(Key.Space, ModifierKeys.Control)
             });
+
+        /// <summary>
+        /// Edit table by table editor.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        public static readonly RoutedCommand EditTableByTableEditor = new RoutedCommand(
+            "EditTableByTableEditor", typeof(TextEditor));
+
+        /// <summary>
+        /// Replace table from table editor.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        public static readonly RoutedCommand PasteTableFromGrid = new RoutedCommand(
+            "PasteTableFromGrid", typeof(TextEditor));
+
+        /// <summary>
+        /// Paste table from table editor.
+        /// Note: added by bzquan@gmail.com
+        /// </summary>
+        public static readonly RoutedCommand ReplaceTableFromGrid = new RoutedCommand(
+            "ReplaceTableFromGrid", typeof(TextEditor));
     }
 }

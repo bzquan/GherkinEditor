@@ -42,5 +42,6 @@ Examples_Description := Description_Helper
 
 // we need to explicitly mention comment, to avoid merging it into the description line's #Other token
 // we also eat the leading empty lines, the tailing lines are not removed by the parser to avoid lookahead, this has to be done by the AST builder
-Description_Helper := #Empty* Description? #Comment*
-Description! := #Other+
+// Note: merging comment to decription is OK, because comment within description has meaningless.
+Description_Helper := #Empty* Description
+Description! := (#Other | #Comment)*

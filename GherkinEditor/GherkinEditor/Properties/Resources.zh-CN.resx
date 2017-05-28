@@ -675,4 +675,46 @@
   <data name="Tooltip_SplitVerticalEditor" xml:space="preserve">
     <value>左右分割窗口</value>
   </data>
+  <data name="Tooltip_ExchangeTableEditorAndWorkAreaEditor" xml:space="preserve">
+    <value>切换表格编辑器和工作区窗口</value>
+  </data>
+  <data name="MenuReoGrid_DeleteColumn" xml:space="preserve">
+    <value>删除列</value>
+  </data>
+  <data name="MenuReoGrid_DeleteRow" xml:space="preserve">
+    <value>删除行</value>
+  </data>
+  <data name="MenuReoGrid_InsertColumn" xml:space="preserve">
+    <value>插入列</value>
+  </data>
+  <data name="MenuReoGrid_InsertRow" xml:space="preserve">
+    <value>插入行</value>
+  </data>
+  <data name="MenuEdit_ContextEditGherkinTable" xml:space="preserve">
+    <value>编辑表格</value>
+  </data>
+  <data name="MenuEdit_ContextPasteTableFromGrid" xml:space="preserve">
+    <value>粘贴表格</value>
+  </data>
+  <data name="MenuEdit_ContextReplaceTableFromGrid" xml:space="preserve">
+    <value>替换表格</value>
+  </data>
+  <data name="MenuReoGrid_InsertCopiedColumns" xml:space="preserve">
+    <value>插入已拷贝的列</value>
+  </data>
+  <data name="MenuReoGrid_InsertCopiedRows" xml:space="preserve">
+    <value>插入已拷贝的行</value>
+  </data>
+  <data name="MenuHelp_TableGridFormula" xml:space="preserve">
+    <value>表格编辑器的公式</value>
+  </data>
+  <data name="MenuReoGrid_CalcCurvatureFromLonLat" xml:space="preserve">
+    <value>Lon/Lat⇒曲率</value>
+  </data>
+  <data name="MenuReoGrid_CalcCurvatureFromXY" xml:space="preserve">
+    <value>X/Y⇒曲率</value>
+  </data>
+  <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
+    <value>Lon/Lat⇒X/Y</value>
+  </data>
 </root>
