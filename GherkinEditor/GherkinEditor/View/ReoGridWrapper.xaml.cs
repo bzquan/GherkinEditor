@@ -38,7 +38,6 @@ namespace Gherkin.View
 
         public void SetTableEditViewModel(TableEditViewModel tableEditViewModel)
         {
-            this.DataContext = tableEditViewModel;
             m_TableEditViewModel = tableEditViewModel;
             m_TableEditViewModel.TableGridControl = reoGridControl;
 

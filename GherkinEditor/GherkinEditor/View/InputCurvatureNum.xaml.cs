@@ -20,7 +20,7 @@ namespace Gherkin.View
     /// </summary>
     public partial class InputCurvatureNum : Window
     {
-        public List<string> CurvatureCounts { get; private set; } = new List<string>() { "Same as input", "100" };
+        private List<string> CurvatureCounts { get; set; } = new List<string>() { "Same as input", "100" };
 
         public InputCurvatureNum()
         {

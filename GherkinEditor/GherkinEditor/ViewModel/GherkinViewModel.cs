@@ -66,7 +66,6 @@ namespace Gherkin.ViewModel
         public AboutViewModel AboutViewModel { get; private set; }
         public CodePageListPopupViewModel CodePageListPopupViewModel { get; private set; }
         public WorkAreaEditorViewModel WorkAreaEditor { get; set; }
-        //public TableEditViewModel TableEditViewModel { get; private set; }
 
         public GherkinViewModel(IAppSettings appSettings,
                                 MultiFileOpener multiFilesOpener,
@@ -87,7 +86,6 @@ namespace Gherkin.ViewModel
             AboutViewModel = aboutViewModel;
             CodePageListPopupViewModel = codePageListPopupViewModel;
             CodePageListPopupViewModel.CodePageChangedEvent += delegate { base.OnPropertyChanged(nameof(Codepage)); };
-            //TableEditViewModel = tableEditViewModel;
 
             GherkinSettings.ChangeFoldingTextColorOfAvalonEdit();
             EventAggregator<DeleteEditorTabRequestedArg>.Instance.Event += OnDeleteEditorTab;
