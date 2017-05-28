@@ -723,4 +723,10 @@
   <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
     <value>同于输入数据</value>
   </data>
+  <data name="Calculator_Title" xml:space="preserve">
+    <value>计算器</value>
+  </data>
+  <data name="MenuExport_ExportTitle" xml:space="preserve">
+    <value>输出</value>
+  </data>
 </root>

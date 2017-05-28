@@ -723,4 +723,10 @@ Any change of the file would be discarded.</value>
   <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
     <value>Same as input</value>
   </data>
+  <data name="Calculator_Title" xml:space="preserve">
+    <value>Calculator</value>
+  </data>
+  <data name="MenuExport_ExportTitle" xml:space="preserve">
+    <value>Export</value>
+  </data>
 </root>

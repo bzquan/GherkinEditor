@@ -1,0 +1,50 @@
+﻿<Window x:Class="Gherkin.View.Calculator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Gherkin.View"
+        xmlns:p="clr-namespace:Gherkin.Properties"
+        WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d"
+        Title="{x:Static p:Resources.Calculator_Title}"
+        Icon="Images/Calculator.ico"
+        Height="300" Width="300">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static ApplicationCommands.Copy}"
+                        CanExecute="CanCopy"
+                        Executed="Copy" />
+        <CommandBinding Command="{x:Static ApplicationCommands.Paste}"
+                        CanExecute="CanPaste"
+                        Executed="Paste" />
+    </Window.CommandBindings>
+
+    <Window.Resources>
+        <ContextMenu x:Key="calculatorContextMenu">
+            <MenuItem Command="Copy"
+                      Header="{x:Static p:Resources.MenuEdit_Copy}"
+                      InputGestureText="Ctrl+C">
+                <MenuItem.Icon>
+                    <Image Source="Images/Copy.png"
+                           Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="Paste"
+                      Header="{x:Static p:Resources.MenuEdit_Paste}"
+                      InputGestureText="Ctrl+V">
+                <MenuItem.Icon>
+                    <Image Source="Images/Paste.png"
+                           Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    
+    <Grid>
+        <xctk:Calculator x:Name="calculator"
+                         ContextMenu="{StaticResource calculatorContextMenu}">
+        </xctk:Calculator>
+    </Grid>
+</Window>

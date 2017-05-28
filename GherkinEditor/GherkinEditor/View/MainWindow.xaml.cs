@@ -221,5 +221,12 @@ namespace Gherkin.View
             help.Owner = this;
             help.Show();
         }
+
+        private void OnShwoCalculator(object sender, RoutedEventArgs e)
+        {
+            var calculator = new Calculator();
+            calculator.Owner = this;
+            calculator.Show();
+        }
     }
 }

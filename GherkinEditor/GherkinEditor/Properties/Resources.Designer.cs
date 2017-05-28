@@ -61,6 +61,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculator.
+        /// </summary>
+        public static string Calculator_Title {
+            get {
+                return ResourceManager.GetString("Calculator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find.
         /// </summary>
         public static string DlgFind_Find {
@@ -453,6 +462,15 @@ namespace Gherkin.Properties {
         public static string MenuEdit_Undo {
             get {
                 return ResourceManager.GetString("MenuEdit_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string MenuExport_ExportTitle {
+            get {
+                return ResourceManager.GetString("MenuExport_ExportTitle", resourceCulture);
             }
         }
         

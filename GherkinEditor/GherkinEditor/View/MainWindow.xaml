@@ -631,7 +631,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{x:Static p:Resources.MenuTool_Tools}">
+            <MenuItem Header="{x:Static p:Resources.MenuExport_ExportTitle}">
                 <MenuItem Header="{x:Static p:Resources.MenuTool_SaveAsPDF}">
                     <MenuItem.Icon>
                         <Image Source="Images/PDF.png"
@@ -665,6 +665,14 @@
                                Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem IsCheckable="True"
+                          Header="{x:Static p:Resources.MenuView_UseNativeDocumentApplication}"
+                          ToolTip="{x:Static p:Resources.Tooltip_UseNativeDocumentApplication}"
+                          StaysOpenOnClick="true"
+                          IsChecked="{Binding OpenDocumentByNativeApplication}">
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static p:Resources.MenuTool_Tools}">
                 <MenuItem Header="{x:Static p:Resources.MenuTool_PreviewDocument}"
                           Command="{Binding PreviewDocumentCmd}">
                     <MenuItem.Icon>
@@ -672,11 +680,12 @@
                                Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsCheckable="True"
-                          Header="{x:Static p:Resources.MenuView_UseNativeDocumentApplication}"
-                          ToolTip="{x:Static p:Resources.Tooltip_UseNativeDocumentApplication}"
-                          StaysOpenOnClick="true"
-                          IsChecked="{Binding OpenDocumentByNativeApplication}">
+                <MenuItem Header="{x:Static p:Resources.Calculator_Title}"
+                          Click="OnShwoCalculator">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Calculator.png"
+                               Height="16" />
+                    </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="{x:Static p:Resources.MenuSetting_Setting}">
