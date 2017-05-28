@@ -717,4 +717,10 @@ Any change of the file would be discarded.</value>
   <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
     <value>Lon/Lat ⇒XY</value>
   </data>
+  <data name="InputCurvatureNum_Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
+    <value>Same as input</value>
+  </data>
 </root>

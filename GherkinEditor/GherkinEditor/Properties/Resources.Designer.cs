@@ -277,6 +277,24 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string InputCurvatureNum_Count {
+            get {
+                return ResourceManager.GetString("InputCurvatureNum_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same as input.
+        /// </summary>
+        public static string InputCurvatureNum_SameAsInput {
+            get {
+                return ResourceManager.GetString("InputCurvatureNum_SameAsInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Compile.
         /// </summary>
         public static string MenuCompile_Comple {

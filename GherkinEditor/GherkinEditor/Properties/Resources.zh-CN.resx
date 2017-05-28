@@ -717,4 +717,10 @@
   <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
     <value>Lon/Lat⇒X/Y</value>
   </data>
+  <data name="InputCurvatureNum_Count" xml:space="preserve">
+    <value>曲率数目</value>
+  </data>
+  <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
+    <value>同于输入数据</value>
+  </data>
 </root>
