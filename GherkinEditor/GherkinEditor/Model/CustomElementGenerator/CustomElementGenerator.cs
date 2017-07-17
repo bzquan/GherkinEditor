@@ -51,7 +51,7 @@ namespace Gherkin.Model
 
         protected virtual bool CanApplyGenerator()
         {
-            return true;
+            return GherkinUtil.IsFeatureFile(Document.FileName);
         }
 
         protected abstract Regex GetRegex();

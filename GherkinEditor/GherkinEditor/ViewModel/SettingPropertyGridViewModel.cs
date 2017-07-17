@@ -112,10 +112,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuCompile_SupportUnicode", typeof(Resources))]
         public bool SupportUnicode
         {
-            get { return m_AppSettings.SupportUnicode; }
+            get { return m_AppSettings.EditorSettings.SupportUnicode; }
             set
             {
-                m_AppSettings.SupportUnicode = value;
+                m_AppSettings.EditorSettings.SupportUnicode = value;
                 base.OnPropertyChanged(nameof(SupportUnicodeIcon));
                 base.OnPropertyChanged();
             }
@@ -148,10 +148,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_HighlightCurrentLine", typeof(Resources))]
         public bool HighlightCurrentLine
         {
-            get { return m_AppSettings.HighlightCurrentLine; }
+            get { return m_AppSettings.EditorSettings.HighlightCurrentLine; }
             set
             {
-                m_AppSettings.HighlightCurrentLine = value;
+                m_AppSettings.EditorSettings.HighlightCurrentLine = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.HighlightCurrentLine = value);
                 base.OnPropertyChanged();
             }
@@ -161,10 +161,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowCurrentLineBorder", typeof(Resources))]
         public bool ShowCurrentLineBorder
         {
-            get { return m_AppSettings.ShowCurrentLineBorder; }
+            get { return m_AppSettings.EditorSettings.ShowCurrentLineBorder; }
             set
             {
-                m_AppSettings.ShowCurrentLineBorder = value;
+                m_AppSettings.EditorSettings.ShowCurrentLineBorder = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.ShowCurrentLineBorder = value);
                 base.OnPropertyChanged();
             }
@@ -175,10 +175,10 @@ namespace Gherkin.ViewModel
         [LocalizedDescription("Tooltip_RequireControlModifierForHyperlinkClick", typeof(Resources))]
         public bool RequireControlModifierForHyperlinkClick
         {
-            get { return m_AppSettings.RequireControlModifierForHyperlinkClick; }
+            get { return m_AppSettings.EditorSettings.RequireControlModifierForHyperlinkClick; }
             set
             {
-                m_AppSettings.RequireControlModifierForHyperlinkClick = value;
+                m_AppSettings.EditorSettings.RequireControlModifierForHyperlinkClick = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateRequireControlModifierForHyperlinkClick());
                 base.OnPropertyChanged();
             }
@@ -188,10 +188,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowColumnRuler", typeof(Resources))]
         public bool ShowColumnRuler
         {
-            get { return m_AppSettings.ShowColumnRuler; }
+            get { return m_AppSettings.EditorSettings.ShowColumnRuler; }
             set
             {
-                m_AppSettings.ShowColumnRuler = value;
+                m_AppSettings.EditorSettings.ShowColumnRuler = value;
                 UpdateColumnRuler();
                 base.OnPropertyChanged();
             }
@@ -201,12 +201,12 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ColumnRulerPosition", typeof(Resources))]
         public int ColumnRulerPositon
         {
-            get { return m_AppSettings.ColumnRulerPositon; }
+            get { return m_AppSettings.EditorSettings.ColumnRulerPositon; }
             set
             {
                 int v = Math.Max(60, value);
                 int pos = Math.Min(300, v);
-                m_AppSettings.ColumnRulerPositon = pos;
+                m_AppSettings.EditorSettings.ColumnRulerPositon = pos;
                 UpdateColumnRuler();
                 base.OnPropertyChanged();
             }
@@ -225,10 +225,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("Tooltip_FontForGherkin", typeof(Resources))]
         public FontFamily FontFamily4Gherkin
         {
-            get { return GetFontFamily(m_AppSettings.FontFamilyName); }
+            get { return GetFontFamily(m_AppSettings.Fonts.FontFamilyName); }
             set
             {
-                m_AppSettings.FontFamilyName = value.ToString();
+                m_AppSettings.Fonts.FontFamilyName = value.ToString();
                 base.OnPropertyChanged();
             }
         }
@@ -237,12 +237,12 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("Tooltip_FontSizeForGherkin", typeof(Resources))]
         public int FontSize4Gherkin
         {
-            get { return int.Parse(m_AppSettings.FontSize); }
+            get { return int.Parse(m_AppSettings.Fonts.FontSize); }
             set
             {
                 if ((value >= 10) && (value <= 28))
                 {
-                    m_AppSettings.FontSize = value.ToString();
+                    m_AppSettings.Fonts.FontSize = value.ToString();
                 }
                 base.OnPropertyChanged();
             }
@@ -253,10 +253,10 @@ namespace Gherkin.ViewModel
         [ItemsSource(typeof(FontFamilyItemsSource))]
         public FontFamily FontFamily4NonGherkin
         {
-            get { return GetFontFamily(m_AppSettings.FontFamilyName4NonGherkin); }
+            get { return GetFontFamily(m_AppSettings.Fonts.FontFamilyName4NonGherkin); }
             set
             {
-                m_AppSettings.FontFamilyName4NonGherkin = value.ToString();
+                m_AppSettings.Fonts.FontFamilyName4NonGherkin = value.ToString();
                 base.OnPropertyChanged();
             }
         }
@@ -265,13 +265,29 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("Tooltip_FontSizeForNonGherkin", typeof(Resources))]
         public int FontSize4NonGherkin
         {
-            get { return int.Parse(m_AppSettings.FontSize4NonGherkin); }
+            get { return int.Parse(m_AppSettings.Fonts.FontSize4NonGherkin); }
             set
             {
                 if ((value >= 10) && (value <= 28))
                 {
-                    m_AppSettings.FontSize4NonGherkin = value.ToString();
+                    m_AppSettings.Fonts.FontSize4NonGherkin = value.ToString();
                 }
+                base.OnPropertyChanged();
+            }
+        }
+
+        [Category("Font")]
+        [DisplayName("Font name for Graphviz unicode")]
+        [ItemsSource(typeof(FontFamilyItemsSource))]
+        public FontFamily FontFamilyName4GraphvizUnicode
+        {
+            get { return GetFontFamily(m_AppSettings.Fonts.FontFamilyName4GraphvizUnicode); }
+            set
+            {
+                var fontname = value.ToString();
+                m_AppSettings.Fonts.FontFamilyName4GraphvizUnicode = fontname;
+
+                EventAggregator<GraphvizFontnameChangedArg>.Instance.Publish(this, new GraphvizFontnameChangedArg(fontname));
                 base.OnPropertyChanged();
             }
         }
@@ -280,10 +296,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_KeywordColor", typeof(Resources))]
         public Color HighlightingKeywordColor
         {
-            get { return m_AppSettings.ColorOfHighlightingKeyword.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingKeyword.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingKeyword), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingKeyword), value);
             }
         }
 
@@ -291,10 +307,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_StepWordColor", typeof(Resources))]
         public Color HighlightingStepWordColor
         {
-            get { return m_AppSettings.ColorOfHighlightingStepWord.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingStepWord.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingStepWord), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingStepWord), value);
             }
         }
 
@@ -302,10 +318,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_TableColor", typeof(Resources))]
         public Color HighlightingTableColor
         {
-            get { return m_AppSettings.ColorOfHighlightingTable.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingTable.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingTable), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingTable), value);
             }
         }
 
@@ -313,10 +329,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_TagColor", typeof(Resources))]
         public Color HighlightingTagColor
         {
-            get { return m_AppSettings.ColorOfHighlightingTag.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingTag.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingTag), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingTag), value);
             }
         }
 
@@ -324,10 +340,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_DocStringColor", typeof(Resources))]
         public Color HighlightingDocStringColor
         {
-            get { return m_AppSettings.ColorOfHighlightingDocString.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingDocString.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingDocString), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingDocString), value);
             }
         }
 
@@ -335,10 +351,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ConstantsColor", typeof(Resources))]
         public Color HighlightingConstantsColor
         {
-            get { return m_AppSettings.ColorOfHighlightingConstants.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingConstants.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingConstants), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingConstants), value);
             }
         }
 
@@ -346,10 +362,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_MockColor", typeof(Resources))]
         public Color HighlightingMockAttributeColor
         {
-            get { return m_AppSettings.ColorOfHighlightingMockAttribute.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfHighlightingMockAttribute.ToColor(); }
             set
             {
-                SetHighlightingColor(nameof(m_AppSettings.ColorOfHighlightingMockAttribute), value);
+                SetHighlightingColor(nameof(m_AppSettings.Colors.ColorOfHighlightingMockAttribute), value);
             }
         }
 
@@ -357,10 +373,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_DefaultTableFolding", typeof(Resources))]
         public bool IsCloseTablesFoldingByDefault
         {
-            get { return m_AppSettings.IsCloseTablesFoldingByDefault; }
+            get { return m_AppSettings.EditorSettings.IsCloseTablesFoldingByDefault; }
             set
             {
-                m_AppSettings.IsCloseTablesFoldingByDefault = value;
+                m_AppSettings.EditorSettings.IsCloseTablesFoldingByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -369,10 +385,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_DefaultScenarioFolding", typeof(Resources))]
         public bool IsCloseScenarioFoldingByDefault
         {
-            get { return m_AppSettings.IsCloseScenarioFoldingByDefault; }
+            get { return m_AppSettings.EditorSettings.IsCloseScenarioFoldingByDefault; }
             set
             {
-                m_AppSettings.IsCloseScenarioFoldingByDefault = value;
+                m_AppSettings.EditorSettings.IsCloseScenarioFoldingByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -381,11 +397,11 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_FoldTextColor", typeof(Resources))]
         public Color FoldingTextColor
         {
-            get { return m_AppSettings.ColorOfFoldingText.ToColor(); }
+            get { return m_AppSettings.Colors.ColorOfFoldingText.ToColor(); }
             set
             {
                 ChangeFoldingTextColorOfAvalonEdit(value);
-                m_AppSettings.ColorOfFoldingText = value.ToName();
+                m_AppSettings.Colors.ColorOfFoldingText = value.ToName();
                 RefreshFolding4AllEditors();
                 base.OnPropertyChanged();
             }
@@ -410,10 +426,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowScenarioIndexByDefault", typeof(Resources))]
         public bool ShowScenarioIndexByDefault
         {
-            get { return m_AppSettings.ShowScenarioIndexByDefault; }
+            get { return m_AppSettings.EditorSettings.ShowScenarioIndexByDefault; }
             set
             {
-                m_AppSettings.ShowScenarioIndexByDefault = value;
+                m_AppSettings.EditorSettings.ShowScenarioIndexByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -422,10 +438,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_SplitHorizontalEditorByDefault", typeof(Resources))]
         public bool ShowSplitHorizontalViewByDefault
         {
-            get { return m_AppSettings.ShowSplitHorizontalViewByDefault; }
+            get { return m_AppSettings.EditorSettings.ShowSplitHorizontalViewByDefault; }
             set
             {
-                m_AppSettings.ShowSplitHorizontalViewByDefault = value;
+                m_AppSettings.EditorSettings.ShowSplitHorizontalViewByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -434,10 +450,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_SplitVerticalEditorByDefault", typeof(Resources))]
         public bool ShowSplitVertiViewByDefault
         {
-            get { return m_AppSettings.ShowSplitVerticalViewByDefault; }
+            get { return m_AppSettings.EditorSettings.ShowSplitVerticalViewByDefault; }
             set
             {
-                m_AppSettings.ShowSplitVerticalViewByDefault = value;
+                m_AppSettings.EditorSettings.ShowSplitVerticalViewByDefault = value;
                 base.OnPropertyChanged();
             }
         }
@@ -446,10 +462,10 @@ namespace Gherkin.ViewModel
         [DisplayName("Word wrap")]
         public bool WordWrap
         {
-            get { return m_AppSettings.WordWrap; }
+            get { return m_AppSettings.EditorSettings.WordWrap; }
             set
             {
-                m_AppSettings.WordWrap = value;
+                m_AppSettings.EditorSettings.WordWrap = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateWordWrap());
                 base.OnPropertyChanged();
             }
@@ -459,10 +475,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ConvertTabsToSpaces", typeof(Resources))]
         public bool ConvertTabsToSpaces
         {
-            get { return m_AppSettings.ConvertTabsToSpaces; }
+            get { return m_AppSettings.EditorSettings.ConvertTabsToSpaces; }
             set
             {
-                m_AppSettings.ConvertTabsToSpaces = value;
+                m_AppSettings.EditorSettings.ConvertTabsToSpaces = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateConvertTabsToSpaces());
                 base.OnPropertyChanged();
             }
@@ -473,10 +489,10 @@ namespace Gherkin.ViewModel
         [ItemsSource(typeof(IndentationSizeItemsSource))]
         public int IndentionSize
         {
-            get { return m_AppSettings.IndentationSize; }
+            get { return m_AppSettings.EditorSettings.IndentationSize; }
             set
             {
-                m_AppSettings.IndentationSize = value;
+                m_AppSettings.EditorSettings.IndentationSize = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateIndentationSize());
                 base.OnPropertyChanged();
             }
@@ -486,10 +502,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowEndOfLine", typeof(Resources))]
         public bool ShowEndOfLine
         {
-            get { return m_AppSettings.ShowEndOfLine; }
+            get { return m_AppSettings.EditorSettings.ShowEndOfLine; }
             set
             {
-                m_AppSettings.ShowEndOfLine = value;
+                m_AppSettings.EditorSettings.ShowEndOfLine = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateShowEndOfLine());
                 base.OnPropertyChanged();
             }
@@ -499,10 +515,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowSpaces", typeof(Resources))]
         public bool ShowSpaces
         {
-            get { return m_AppSettings.ShowSpaces; }
+            get { return m_AppSettings.EditorSettings.ShowSpaces; }
             set
             {
-                m_AppSettings.ShowSpaces = value;
+                m_AppSettings.EditorSettings.ShowSpaces = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateShowSpaces());
                 base.OnPropertyChanged();
             }
@@ -512,10 +528,10 @@ namespace Gherkin.ViewModel
         [LocalizedDisplayName("MenuSetting_ShowTabs", typeof(Resources))]
         public bool ShowTabs
         {
-            get { return m_AppSettings.ShowTabs; }
+            get { return m_AppSettings.EditorSettings.ShowTabs; }
             set
             {
-                m_AppSettings.ShowTabs = value;
+                m_AppSettings.EditorSettings.ShowTabs = value;
                 m_TabPanels.ForEach(tab => tab.EditorTabContentViewModel.UpdateShowTabs());
                 base.OnPropertyChanged();
             }
@@ -536,27 +552,6 @@ namespace Gherkin.ViewModel
             }
         }
 
-        [DisplayName("Curvature unit")]
-        [ItemsSource(typeof(CurvatureUnitItemsSource))]
-        public string CurvatureUnit
-        {
-            get { return m_AppSettings.CurvatureUnit; }
-            set
-            {
-                m_AppSettings.CurvatureUnit = value;
-                if (value.Equals("1/cm", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Model.CurveViewCache.Instance.CurvatureUnit = Model.CurvatureUnit.Centimeter;
-                }
-                else
-                {
-                    Model.CurveViewCache.Instance.CurvatureUnit = Model.CurvatureUnit.Meter;
-                }
-
-                base.OnPropertyChanged();
-            }
-        }
-
         [LocalizedDisplayName("MenuView_UseNativeDocumentApplication", typeof(Resources))]
         [LocalizedDescription("Tooltip_UseNativeDocumentApplication", typeof(Resources))]
         public bool OpenDocumentByNativeApplication
@@ -567,6 +562,114 @@ namespace Gherkin.ViewModel
                 m_AppSettings.OpenDocumentByNativeApplication = value;
                 base.OnPropertyChanged();
             }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("1.Curvature unit")]
+        [ItemsSource(typeof(CurvatureUnitItemsSource))]
+        public string CurvatureUnit
+        {
+            get
+            {
+                if (m_AppSettings.CurveManeuverParameter.Unit == Util.CurvatureUnit.Meter)
+                    return "1/m";
+                else
+                    return "1/cm";
+            }
+            set
+            {
+                if (value.Equals("1/m", StringComparison.InvariantCultureIgnoreCase))
+                    m_AppSettings.CurveManeuverParameter.Unit = Util.CurvatureUnit.Meter;
+                else
+                    m_AppSettings.CurveManeuverParameter.Unit = Util.CurvatureUnit.Centimeter;
+
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("2.Curve minimum distance")]
+        public double CurveMinDistance
+        {
+            get { return m_AppSettings.CurveManeuverParameter.CurveMinDistance; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.CurveMinDistance = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("3.Douglas-Peucker tolerance")]
+        public double DouglasPeuckerTolerance
+        {
+            get { return m_AppSettings.CurveManeuverParameter.DouglasPeuckerTolerance; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.DouglasPeuckerTolerance = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("4.Curve curvature threshold")]
+        public double CurveCurvatureThreshold
+        {
+            get { return m_AppSettings.CurveManeuverParameter.CurveCurvatureThreshold; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.CurveCurvatureThreshold = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("5.YTolerance")]
+        public double YTolerance
+        {
+            get { return m_AppSettings.CurveManeuverParameter.YTolerance; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.YTolerance = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("6.Thin out By Douglas-Peucker")]
+        public bool ThinoutByDouglasPeuckerN
+        {
+            get { return m_AppSettings.CurveManeuverParameter.ThinoutByDouglasPeuckerN; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.ThinoutByDouglasPeuckerN = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        [Category("Curve Maneuver Parameter")]
+        [DisplayName("7.NURBS Degree")]
+        public int NURBSDegree
+        {
+            get { return m_AppSettings.CurveManeuverParameter.NURBSDegree; }
+            set
+            {
+                m_AppSettings.CurveManeuverParameter.NURBSDegree = value;
+                base.OnPropertyChanged();
+                PublishCurveManeuverParameterChangedEvent();
+            }
+        }
+
+        private void PublishCurveManeuverParameterChangedEvent()
+        {
+            var arg = new CurveManeuverParameterArg(m_AppSettings.CurveManeuverParameter);
+            EventAggregator<CurveManeuverParameterArg>.Instance.Publish(this, arg);
         }
 
         /// <summary>
@@ -599,7 +702,6 @@ namespace Gherkin.ViewModel
         private FontFamily GetFontFamily(string name)
         {
             return new FontFamily(name);
-//            return FontFamilyItemsSource.GetLocalizedFontFamily(new FontFamily(name));
         }
 
         private void OnResetHighlightingColors()
@@ -657,7 +759,7 @@ namespace Gherkin.ViewModel
 
         private void LoadSystemFonts()
         {
-            s_SystemFonts = Fonts.SystemFontFamilies.OrderBy(f => f.ToString()).ToList();
+            s_SystemFonts = System.Windows.Media.Fonts.SystemFontFamilies.OrderBy(f => f.ToString()).ToList();
         }
 
         /// <summary>

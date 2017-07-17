@@ -46,7 +46,13 @@ namespace Gherkin.View
 
             InitWindowSize();
 
+            this.Loaded += OnLoaded;
             this.Deactivated += OnWindowDeactivated;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            m_ViewModel.OnWindowLoaded();
         }
 
         private void OnWindowDeactivated(object sender, EventArgs e)
@@ -56,7 +62,7 @@ namespace Gherkin.View
 
         public string OpenFeatureFile
         {
-            set { m_ViewModel.StartupFile(value); }
+            set { m_ViewModel.StartupFile = value; }
         }
 
         private void InitWindowSize()

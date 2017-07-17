@@ -286,20 +286,20 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Count.
-        /// </summary>
-        public static string InputCurvatureNum_Count {
-            get {
-                return ResourceManager.GetString("InputCurvatureNum_Count", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Same as input.
         /// </summary>
         public static string InputCurvatureNum_SameAsInput {
             get {
                 return ResourceManager.GetString("InputCurvatureNum_SameAsInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string InputPointsNum {
+            get {
+                return ResourceManager.GetString("InputPointsNum", resourceCulture);
             }
         }
         
@@ -646,6 +646,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drawing sketch.
+        /// </summary>
+        public static string MenuHelp_Graphviz {
+            get {
+                return ResourceManager.GetString("MenuHelp_Graphviz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string MenuHelp_Help {
@@ -750,6 +759,15 @@ namespace Gherkin.Properties {
         public static string MenuReoGrid_LonLat2XY {
             get {
                 return ResourceManager.GetString("MenuReoGrid_LonLat2XY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify points.
+        /// </summary>
+        public static string MenuReoGrid_SimplifyPoints {
+            get {
+                return ResourceManager.GetString("MenuReoGrid_SimplifyPoints", resourceCulture);
             }
         }
         
@@ -1602,6 +1620,15 @@ namespace Gherkin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment out selected lines.
+        /// </summary>
+        public static string Tooltip_CommentOut {
+            get {
+                return ResourceManager.GetString("Tooltip_CommentOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1. Copy file by &quot;Copy file to&quot; context menu.
         ///2. Use Ctr key to open a file..
         /// </summary>
@@ -1878,6 +1905,15 @@ namespace Gherkin.Properties {
         public static string Tooltip_SynchronizeCursorPositions {
             get {
                 return ResourceManager.GetString("Tooltip_SynchronizeCursorPositions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uncomment out selected lines.
+        /// </summary>
+        public static string Tooltip_UncommentOut {
+            get {
+                return ResourceManager.GetString("Tooltip_UncommentOut", resourceCulture);
             }
         }
         

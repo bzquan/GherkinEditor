@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-using Microsoft.Practices.Unity;
 using System.Windows.Markup;
 using System.Globalization;
 using System.IO;
@@ -24,7 +23,7 @@ namespace Gherkin
     {
         string m_FeatureFilePath;
 
-        IUnityContainer m_Container;
+        DIContainer m_Container;
         bool IsStartingUp { get; set; } = true;
 
         public App(string featureFilePath)
@@ -52,9 +51,8 @@ namespace Gherkin
 
             try
             {
-                m_Container = new UnityContainer();
-                ContainerBootstrapper.Resiger(m_Container);
-
+                m_Container = new Util.DIContainer();
+                m_Container.Register<IAppSettings, AppSettings>();
                 ConfigLocalizations();
 
                 var mainWindow = m_Container.Resolve<View.MainWindow>();
@@ -73,6 +71,13 @@ namespace Gherkin
             }
         }
 
+        private void ConfigLocalizations()
+        {
+            var appSetting = m_Container.Resolve<IAppSettings>();
+            Util.Util.SetLanguage(appSetting.Language);
+            Util.EnumUtil.CurrentLanguage = appSetting.Language;
+        }
+
         private bool IsAlreadyRunning()
         {
             AppSettings setting = new AppSettings();
@@ -83,13 +88,6 @@ namespace Gherkin
             }
 
             return ProcessInterop.SendFilePathToApp(m_FeatureFilePath);
-        }
-
-        private void ConfigLocalizations()
-        {
-            var appSetting = m_Container.Resolve<Util.IAppSettings>();
-            Util.Util.SetLanguage(appSetting.Language);
-            Util.EnumUtil.CurrentLanguage = appSetting.Language;
         }
 
         Window DummyWindow => new Window()

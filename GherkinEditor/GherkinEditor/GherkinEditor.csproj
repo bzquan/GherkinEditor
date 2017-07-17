@@ -74,22 +74,6 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NetOffice">
       <HintPath>..\packages\NetOffice 1.7.3\NetOffice.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -123,18 +107,34 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WPFFolderBrowser\WPFFolderBrowser.dll</HintPath>
     </Reference>
+    <Reference Include="WpfMath, Version=0.3.1.18489, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WPF.Math\WpfMath.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\CustomElementGenerator\Bezier\BezierCurve.cs" />
-    <Compile Include="Model\CustomElementGenerator\Bezier\BSplineSegmentMatrix.cs" />
-    <Compile Include="Model\CustomElementGenerator\Bezier\CachedUniformCubicBSpline.cs" />
-    <Compile Include="Model\CustomElementGenerator\Bezier\BSplineSegment.cs" />
-    <Compile Include="Model\CustomElementGenerator\Bezier\IBSpline.cs" />
-    <Compile Include="Model\CustomElementGenerator\Bezier\UniformCubicBSpline.cs" />
+    <Compile Include="Model\GherkinIndentationStrategy\TableFormatter.cs" />
+    <Compile Include="Util\Setting\CurveManeuverParameter.cs" />
+    <Compile Include="Model\CustomElementGenerator\GraphvizCache.cs" />
+    <Compile Include="Model\Graphviz\GraphvizDotGenerator.cs" />
+    <Compile Include="Model\Graphviz\GraphvizDotModel.cs" />
+    <Compile Include="Model\CustomElementGenerator\GraphvizElementGenerator.cs" />
+    <Compile Include="Model\Graphviz\GraphvizTable.cs" />
+    <Compile Include="Model\Graphviz\GraphvizTableGenerator.cs" />
+    <Compile Include="Util\Bezier\BezierCurveLength2DQuadratic.cs" />
+    <Compile Include="Util\Bezier\BezierCurveLength3DQuadratic.cs" />
+    <Compile Include="Util\Bezier\BezierCurveLength3DCubic.cs" />
+    <Compile Include="Util\Bezier\BezierCurve.cs" />
+    <Compile Include="Util\Bezier\BezierCurveLength.cs" />
+    <Compile Include="Util\Bezier\BSplineSegmentMatrix.cs" />
+    <Compile Include="Util\Bezier\CachedUniformCubicBSpline.cs" />
+    <Compile Include="Util\Bezier\BSplineSegment.cs" />
+    <Compile Include="Util\Bezier\IBSpline.cs" />
+    <Compile Include="Util\Bezier\UniformCubicBSpline.cs" />
     <Compile Include="Model\CustomElementGenerator\CacheBase.cs" />
     <Compile Include="Model\CustomElementGenerator\CurveElementGenerator.cs" />
     <Compile Include="Model\CustomElementGenerator\CurveViewCache.cs" />
@@ -144,10 +144,22 @@
     <Compile Include="Model\CustomElementGenerator\CustomImageControl.cs" />
     <Compile Include="Model\CustomElementGenerator\ErrorMessageDrawingVisual.cs" />
     <Compile Include="Model\CustomElementGenerator\LaTexImageCache.cs" />
-    <Compile Include="Model\CustomElementGenerator\GPoint.cs" />
-    <Compile Include="Model\CustomElementGenerator\Spline\BandMatrix.cs" />
-    <Compile Include="Model\CustomElementGenerator\Spline\CubicSpline.cs" />
-    <Compile Include="Model\CustomElementGenerator\WGS8GeoCoordinate.cs" />
+    <Compile Include="Util\Setting\CurveManeuverParameterArg.cs" />
+    <Compile Include="Util\DIContainer.cs" />
+    <Compile Include="Util\EditorClosedArg.cs" />
+    <Compile Include="Util\Geometric\GPoint.cs" />
+    <Compile Include="Util\Geometric\PolylineSimplication.cs" />
+    <Compile Include="Util\Geometric\V3D.cs" />
+    <Compile Include="Util\Setting\EditorSettings.cs" />
+    <Compile Include="Util\Setting\GherkinColors.cs" />
+    <Compile Include="Util\Setting\GherkinFileInfo.cs" />
+    <Compile Include="Util\Setting\GherkinFonts.cs" />
+    <Compile Include="Util\Setting\GraphvizFontnameChangedArg.cs" />
+    <Compile Include="Util\PriorityQueue.cs" />
+    <Compile Include="Util\Setting\LastStatus.cs" />
+    <Compile Include="Util\Spline\BandMatrix.cs" />
+    <Compile Include="Util\Spline\CubicSpline.cs" />
+    <Compile Include="Util\Geometric\WGS8GeoCoordinate.cs" />
     <Compile Include="Model\GherkinDialectProviderExtention.cs" />
     <Compile Include="Model\GherkinIndentationStrategy\CursorPosInTable.cs" />
     <Compile Include="Model\GherkinKeyword.cs" />
@@ -173,6 +185,9 @@
     <Compile Include="Util\FailedToFindEditorControlArg.cs" />
     <Compile Include="Util\FileSavedAsArg.cs" />
     <Compile Include="Util\FileUtil.cs" />
+    <Compile Include="Util\Geometric\LinearRegression.cs" />
+    <Compile Include="Util\NURBS\NURBS.cs" />
+    <Compile Include="Util\NURBS\NURBSCurve.cs" />
     <Compile Include="Util\GherkinHighlightingXSHDBuilder.cs" />
     <Compile Include="Model\GherkinUtil.cs" />
     <Compile Include="Util\GherkinKeywordGenerator.cs" />
@@ -189,8 +204,9 @@
     <Compile Include="Util\IndentationCompletedArg.cs" />
     <Compile Include="Util\ShowCurvePlotMarker4GherkinTableArg.cs" />
     <Compile Include="Util\ShowViewerEditorRequestArg.cs" />
-    <Compile Include="Model\CustomElementGenerator\Spline\VectorHelper.cs" />
+    <Compile Include="Util\Spline\VectorHelper.cs" />
     <Compile Include="Util\StatusChangedArg.cs" />
+    <Compile Include="Util\StringUtil.cs" />
     <Compile Include="ViewModel\AboutControlViewModel.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\AbstractFindViewModel.cs" />
@@ -265,8 +281,8 @@
     <Compile Include="View\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\InputCurvatureNum.xaml.cs">
-      <DependentUpon>InputCurvatureNum.xaml</DependentUpon>
+    <Compile Include="View\InputExpectedPointsNum.xaml.cs">
+      <DependentUpon>InputExpectedPointsNum.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\InteropMessageReceiver.xaml.cs">
       <DependentUpon>InteropMessageReceiver.xaml</DependentUpon>
@@ -321,7 +337,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\InputCurvatureNum.xaml">
+    <Page Include="View\InputExpectedPointsNum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -354,7 +370,7 @@
     <Compile Include="Model\BDD\BDDStepImplCppBuilder.cs" />
     <Compile Include="Model\BDD\BDDUtil.cs" />
     <Compile Include="Model\GherkinFolding\GherkinFoldingBuilder.cs" />
-    <Compile Include="Util\ConfigReader.cs" />
+    <Compile Include="Util\Setting\ConfigReader.cs" />
     <Compile Include="Util\EventAggregator.cs" />
     <Compile Include="Util\StringBuilderExtension.cs" />
     <Compile Include="ViewModel\DeleteEditorTabRequestedArg.cs" />
@@ -367,12 +383,10 @@
     <Compile Include="Model\TableManipulator\GherkinTable.cs" />
     <Compile Include="Model\TableManipulator\GherkinTableBuilder.cs" />
     <Compile Include="Model\GherkinSimpleParser.cs" />
-    <Compile Include="Util\AppSettings.cs" />
-    <Compile Include="ContainerBootstrapper.cs" />
-    <Compile Include="Util\ContainerExtension4Util.cs" />
+    <Compile Include="Util\Setting\AppSettings.cs" />
     <Compile Include="Util\EnumUtil.cs" />
-    <Compile Include="Util\GherkinDefinitions.cs" />
-    <Compile Include="Util\IAppSettings.cs" />
+    <Compile Include="Util\Setting\Languages.cs" />
+    <Compile Include="Util\Setting\IAppSettings.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="Util\DelegateCommand.cs" />
     <Compile Include="Util\DelegateCommandNoArg.cs" />
@@ -498,6 +512,7 @@
     <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_uz.xshd" />
     <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_vi.xshd" />
     <EmbeddedResource Include="View\GherkinHighlighting\GherkinHighlighting_zh-TW.xshd" />
+    <Resource Include="View\Images\BDDSplash.jpg" />
     <Resource Include="View\Images\Gherkin.png" />
   </ItemGroup>
   <ItemGroup>
@@ -526,6 +541,10 @@
       <Project>{370982b4-9938-4533-8ea1-6f9044b84130}</Project>
       <Name>Gherkin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GraphVizWrapper\GraphVizWrapper.csproj">
+      <Project>{cfec60dc-14e0-47e4-a60e-8919fb5fef5d}</Project>
+      <Name>GraphVizWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
@@ -553,10 +572,6 @@
     <ProjectReference Include="..\ReoGrid\ReoGrid.csproj">
       <Project>{8b62357a-abbc-4db0-8633-f1d6a6c1ea53}</Project>
       <Name>ReoGrid</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WpfMath\WpfMath.csproj">
-      <Project>{010a34f1-1f3e-4528-99b4-95054dd45729}</Project>
-      <Name>WpfMath</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -804,9 +819,6 @@
     <Resource Include="View\Images\TableEditor.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\BDDSplash.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\Replace.png" />
   </ItemGroup>
   <ItemGroup>
@@ -828,6 +840,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\Calculator.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\CommentAdd.png" />
+    <Resource Include="View\Images\CommentDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Graphviz.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Graphviz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Graphviz_zh-CN.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ViewModel\ReleaseNote\Graphviz_ja.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

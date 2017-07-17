@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Linq;
+using System.Diagnostics;
 
 namespace Gherkin.Util
 {
@@ -188,6 +191,22 @@ namespace Gherkin.Util
             return bitmapImage;
         }
 
+        public static BitmapImage BitmapImageFromImage(byte[] imageBytes)
+        {
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(imageBytes);
+            bitmapImage.EndInit();
+            return bitmapImage;
+        }
+
+        public static System.Drawing.Image ByteArrayToImage(byte[] b)
+        {
+            System.Drawing.ImageConverter imgconv = new System.Drawing.ImageConverter();
+            System.Drawing.Image img = (System.Drawing.Image)imgconv.ConvertFrom(b);
+            return img;
+        }
+
         /// <summary>
         /// Usage sample :  obj.IfNotNull(x => statements);
         /// </summary>
@@ -252,17 +271,45 @@ namespace Gherkin.Util
             }
         }
 
-        public static bool IsDigitsOnly(string str)
+        /// <summary>
+        /// Measure exeecution time of action
+        /// </summary>
+        /// <param name="action">action to be measured</param>
+        /// <returns></returns>
+        public static double MeasureExecTime(Action action)
         {
-            if (string.IsNullOrEmpty(str)) return false;
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
-            foreach (char c in str)
+            action();
+
+            stopwatch.Stop();
+            return stopwatch.Elapsed.TotalMilliseconds;
+        }
+
+        /// <summary>
+        /// Check whether the type is system simple type, e.g, int, double.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsSimpleType(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                if (c < '0' || c > '9')
-                    return false;
+                // nullable type, check if the nested type is simple.
+                return IsSimpleTypeHelp(type.GetGenericArguments()[0]);
             }
+            else
+            {
+                return IsSimpleTypeHelp(type);
+            }
+        }
 
-            return true;
+        private static bool IsSimpleTypeHelp(Type type)
+        {
+            return type.IsPrimitive
+              || type.IsEnum
+              || type.Equals(typeof(string))
+              || type.Equals(typeof(decimal));
         }
     }
 }

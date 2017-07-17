@@ -92,7 +92,8 @@ namespace Gherkin.Model
             try
             {
                 var formula = s_FormulaParser.Value.Parse(m_LaTex);
-                var renderer = formula.GetRenderer(TexStyle.Display, m_scale);
+                //var renderer = formula.GetRenderer(TexStyle.Display, m_scale);
+                var renderer = formula.GetRenderer(TexStyle.Display, m_scale, systemTextFontName: "Arial");   // for VS2017 version
                 var bitmapsource = renderer.RenderToBitmap(0, 0);
 
                 return bitmapsource.ToPNGImage();

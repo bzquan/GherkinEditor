@@ -717,8 +717,8 @@
   <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
     <value>Lon/Lat⇒X/Y</value>
   </data>
-  <data name="InputCurvatureNum_Count" xml:space="preserve">
-    <value>曲率数</value>
+  <data name="InputPointsNum" xml:space="preserve">
+    <value>件数</value>
   </data>
   <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
     <value>入力と同じ</value>
@@ -728,5 +728,17 @@
   </data>
   <data name="MenuExport_ExportTitle" xml:space="preserve">
     <value>出力</value>
+  </data>
+  <data name="Tooltip_CommentOut" xml:space="preserve">
+    <value>選択した行をコメントアウトする</value>
+  </data>
+  <data name="Tooltip_UncommentOut" xml:space="preserve">
+    <value>選択した行のコメントアウトを解除する</value>
+  </data>
+  <data name="MenuHelp_Graphviz" xml:space="preserve">
+    <value>スケッチの描画</value>
+  </data>
+  <data name="MenuReoGrid_SimplifyPoints" xml:space="preserve">
+    <value>点列の間引き</value>
   </data>
 </root>

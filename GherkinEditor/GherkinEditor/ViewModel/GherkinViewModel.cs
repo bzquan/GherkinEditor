@@ -56,11 +56,16 @@ namespace Gherkin.ViewModel
         public ICommand ShowLaTeXSymbolsCmd => new DelegateCommandNoArg(OnShowLaTeXSymbols);
         public ICommand ShowHelpCmd => new DelegateCommandNoArg(OnShowHelp);
         public ICommand ShowTableGridFormulaCmd => new DelegateCommandNoArg(OnShowTableGridFormula);
+        public ICommand ShowGraphvizHelpCmd => new DelegateCommandNoArg(OnShowGraphvizHelp);
+        
         public ICommand ClearStatusCmd => new DelegateCommandNoArg(OnClearStatus, CanClearStatus);
         public ICommand PreviewDocumentCmd => new DelegateCommandNoArg(OnPreviewDocument);
         public ICommand ShowWorkAreaCmd => new DelegateCommandNoArg(OnShowWorkArea, CanShowWorkArea);
         public ICommand HideWorkAreaCmd => new DelegateCommandNoArg(OnHideWorkArea, CanHideWorkArea);
         public ICommand ExchangeWorkAreaCmd => new DelegateCommandNoArg(OnExchangeWorkArea, CanHideWorkArea);
+        public ICommand CommentOutSelectedLinesCmd => new DelegateCommandNoArg(OnCommentOutSelectedLines, CanCommentOutSelectedLines);
+        public ICommand UncommentSelectedLinesCmd => new DelegateCommandNoArg(OnUncommentSelectedLines, CanCommentOutSelectedLines);
+
 
         public GherkinSettingViewModel GherkinSettings { get; private set; }
         public AboutViewModel AboutViewModel { get; private set; }
@@ -108,6 +113,17 @@ namespace Gherkin.ViewModel
             GherkinEditerCommand.GherkinViewModel = this;
         }
 
+        public string StartupFile { get; set; }
+
+        public void OnWindowLoaded()
+        {
+            StartFoldingUpdateTimer();
+            if (StartupFile != null)
+                OpenFiles(StartupFile);
+            else
+                OpenFiles(m_AppSettings.LastOpenedFiles.ToArray());
+        }
+
         public TabControl EditorTabControl
         {
             get { return m_EditorTabControl; }
@@ -132,7 +148,7 @@ namespace Gherkin.ViewModel
 
         public void SaveLastSelectedFile()
         {
-            m_AppSettings.LastSelectedFile = CurrentEditor?.CurrentFilePath;
+            m_AppSettings.LastStatus.LastSelectedFile = CurrentEditor?.CurrentFilePath;
         }
 
         public void SaveLastOpenedFileInfo()
@@ -212,7 +228,7 @@ namespace Gherkin.ViewModel
 
         public FontFamily CurrentFontFamily
         {
-            get { return CurrentEditor?.FontFamily ?? new FontFamily(m_AppSettings.FontFamilyName); }
+            get { return CurrentEditor?.FontFamily ?? new FontFamily(m_AppSettings.Fonts.FontFamilyName); }
             set
             {
                 string name = value.ToString();
@@ -235,7 +251,7 @@ namespace Gherkin.ViewModel
 
         public string CurrentFontSize
         {
-            get { return CurrentEditor?.FontSize ?? m_AppSettings.FontSize; }
+            get { return CurrentEditor?.FontSize ?? m_AppSettings.Fonts.FontSize; }
             set
             {
                 if (HasEditorLoaded)
@@ -295,6 +311,12 @@ namespace Gherkin.ViewModel
         private void OnShowTableGridFormula()
         {
             var window = new HelpWindow(new HelpViewModel(m_AppSettings, HelpViewModel.HelpKind.TableGridFormulaHelp));
+            window.Show();
+        }
+        
+        private void OnShowGraphvizHelp()
+        {
+            var window = new HelpWindow(new HelpViewModel(m_AppSettings, HelpViewModel.HelpKind.GraphvizHelp));
             window.Show();
         }
 
@@ -473,23 +495,6 @@ namespace Gherkin.ViewModel
             get { return Brushes.Red; }
         }
 
-        public void StartupFile(string path)
-        {
-            StartFoldingUpdateTimer();
-
-            List<string> lastOpenedFiles = null;
-            if (path != null)
-            {
-                lastOpenedFiles = new List<string>() { path };
-            }
-            else
-            {
-                lastOpenedFiles = m_AppSettings.LastOpenedFiles;
-            }
-
-            OpenFiles(lastOpenedFiles.ToArray());
-        }
-
         public void OnOpenFile()
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -532,7 +537,7 @@ namespace Gherkin.ViewModel
 
         private void SelectLastSelectedFile()
         {
-            string lastSelectedFile = m_AppSettings.LastSelectedFile;
+            string lastSelectedFile = m_AppSettings.LastStatus.LastSelectedFile;
             if (!string.IsNullOrEmpty(lastSelectedFile))
             {
                 var tab = TabPanels.FirstOrDefault(x => x.FilePath == lastSelectedFile);
@@ -736,6 +741,8 @@ namespace Gherkin.ViewModel
             MessageBoxResult result = GherkinSettings.SaveCurrentFileWithRequesting(editorViewModel);
             if (result == MessageBoxResult.Cancel) return;
 
+            EventAggregator<EditorClosedArg>.Instance.Publish(this, new EditorClosedArg(editorViewModel.CurrentFilePath));
+
             if (TabPanels.Count == 1)
             {
                 CurrentEditor?.ChangeToEmptyFile();
@@ -776,6 +783,7 @@ namespace Gherkin.ViewModel
             {
                 for (int i = TabPanels.Count - 1; i > 0; i--)
                 {
+                    EventAggregator<EditorClosedArg>.Instance.Publish(this, new EditorClosedArg(TabPanels[i].EditorTabContentViewModel.CurrentFilePath));
                     TabPanels.RemoveAt(i);
                 }
                 TabPanels[0].EditorTabContentViewModel.ChangeToEmptyFile();
@@ -786,6 +794,7 @@ namespace Gherkin.ViewModel
                 {
                     if (TabPanels[i].EditorTabContentViewModel != arg.ExcludedEditorViewModel)
                     {
+                        EventAggregator<EditorClosedArg>.Instance.Publish(this, new EditorClosedArg(TabPanels[i].EditorTabContentViewModel.CurrentFilePath));
                         TabPanels.RemoveAt(i);
                     }
                 }
@@ -922,7 +931,7 @@ namespace Gherkin.ViewModel
 
         private CucumberCpp.BDDCucumber.GeneratedFiles GenerateCPPTestCode(TextReader reader)
         {
-            CucumberCpp.BDDUtil.SupportUnicode = m_AppSettings.SupportUnicode;
+            CucumberCpp.BDDUtil.SupportUnicode = m_AppSettings.EditorSettings.SupportUnicode;
             CucumberCpp.BDDCucumber gen = new CucumberCpp.BDDCucumber();
             return gen.GenCucumberTestCode(reader, Path.GetDirectoryName(CurrentFilePath));
         }
@@ -1062,5 +1071,20 @@ namespace Gherkin.ViewModel
 
         private bool CanHideWorkArea() => ShowWorkArea;
         #endregion // work area
+
+        private void OnCommentOutSelectedLines()
+        {
+            CurrentEditor.CommentOutSelectedLines();
+        }
+
+        private void OnUncommentSelectedLines()
+        {
+            CurrentEditor.UncommentSelectedLines();
+        }
+
+        private bool CanCommentOutSelectedLines()
+        {
+            return GherkinUtil.IsFeatureFile(CurrentEditor?.Document?.FileName);
+        }
     }
 }

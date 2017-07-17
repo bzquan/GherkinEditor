@@ -386,7 +386,13 @@ namespace unvell.ReoGrid
 						int rows = Math.Max(selectionRange.Rows, arrayData.GetLength(0));
 						int cols = Math.Max(selectionRange.Cols, arrayData.GetLength(1));
 
-						var targetRange = new RangePosition(selectionRange.Row, selectionRange.Col, rows, cols);
+                        // by bzquan expand rows of worksheet
+                        if (this.RowCount < rows)
+                        {
+                            this.RowCount = rows + 1;
+                        }
+
+                        var targetRange = new RangePosition(selectionRange.Row, selectionRange.Col, rows, cols);
 						if (!RaiseBeforePasteEvent(targetRange))
 						{
 							return false;

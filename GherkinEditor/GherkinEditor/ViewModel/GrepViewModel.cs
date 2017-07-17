@@ -37,10 +37,10 @@ namespace Gherkin.ViewModel
 
         private void SetDefaultGrepConditions(string default_grep_text)
         {
-            m_SearchCondition.IsCaseSensitive = m_AppSettings.IsCaseSensitiveInFind;
-            m_SearchCondition.IsMatchWholeWord = m_AppSettings.IsMatchWholeWordInFind;
-            m_SearchCondition.IsUseRegex = m_AppSettings.IsUseRegexInFind;
-            m_SearchCondition.IsUseWildcards = m_AppSettings.IsUseWildcardsInFind;
+            m_SearchCondition.IsCaseSensitive = m_AppSettings.LastStatus.IsCaseSensitiveInFind;
+            m_SearchCondition.IsMatchWholeWord = m_AppSettings.LastStatus.IsMatchWholeWordInFind;
+            m_SearchCondition.IsUseRegex = m_AppSettings.LastStatus.IsUseRegexInFind;
+            m_SearchCondition.IsUseWildcards = m_AppSettings.LastStatus.IsUseWildcardsInFind;
 
             if (!string.IsNullOrEmpty(default_grep_text))
             {
@@ -71,7 +71,7 @@ namespace Gherkin.ViewModel
         }
         public List<string> RecentGreppedTexts
         {
-            get { return m_AppSettings.LastGreppedTexts; }
+            get { return m_AppSettings.LastStatus.LastGreppedTexts; }
         }
 
         public string FileExtension
@@ -85,7 +85,7 @@ namespace Gherkin.ViewModel
         }
         public List<string> RecentFileExtensions
         {
-            get { return m_AppSettings.LastFileExtensions; }
+            get { return m_AppSettings.LastStatus.LastFileExtensions; }
         }
 
         public string Folder
@@ -100,7 +100,7 @@ namespace Gherkin.ViewModel
 
         public List<string> RecentFolders
         {
-            get { return m_AppSettings.LastGreppedFolders; }
+            get { return m_AppSettings.LastStatus.LastGreppedFolders; }
         }
 
         public bool ShowStatus
@@ -158,9 +158,9 @@ namespace Gherkin.ViewModel
 
         private void BackupLastUsedText()
         {
-            m_AppSettings.LastGreppedText = TextToFind;
-            m_AppSettings.LastUsedFileExtension = FileExtension;
-            m_AppSettings.LastGreppedFolder = Folder;
+            m_AppSettings.LastStatus.LastGreppedText = TextToFind;
+            m_AppSettings.LastStatus.LastUsedFileExtension = FileExtension;
+            m_AppSettings.LastStatus.LastGreppedFolder = Folder;
         }
 
         private bool CanGrep()
@@ -180,7 +180,7 @@ namespace Gherkin.ViewModel
         {
 
             var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog();
-            dialog.FileName = m_AppSettings.LastGreppedFolder;
+            dialog.FileName = m_AppSettings.LastStatus.LastGreppedFolder;
 
             if (dialog.ShowDialog() == true)
             {

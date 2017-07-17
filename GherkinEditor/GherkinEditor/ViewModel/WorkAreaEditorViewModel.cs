@@ -29,8 +29,8 @@ namespace Gherkin.ViewModel
                                                  null, // subEditor,
                                                  editor.Document,
                                                  appSettings,
-                                                 new FontFamily(appSettings.FontFamilyName),
-                                                 appSettings.FontSize,
+                                                 new FontFamily(appSettings.Fonts.FontFamilyName),
+                                                 appSettings.Fonts.FontSize,
                                                  installElementGenerators: false);
             editor.Options.CopyFileToHandler = CopyFileTo;
             editor.Options.RequireControlModifierForHyperlinkClick = false;     // Directly open web browser for work area instead of using Ctrl key
@@ -138,11 +138,11 @@ namespace Gherkin.ViewModel
         {
             try
             {
-                string defaultDestPath = Path.Combine(m_AppSettings.LastFolderToCopyFile, Path.GetFileName(filePath));
+                string defaultDestPath = Path.Combine(m_AppSettings.LastStatus.LastFolderToCopyFile, Path.GetFileName(filePath));
                 string destPath = GetSavingFilePath(defaultDestPath);
                 if (string.IsNullOrWhiteSpace(destPath)) return;
 
-                m_AppSettings.LastFolderToCopyFile = Path.GetDirectoryName(destPath);
+                m_AppSettings.LastStatus.LastFolderToCopyFile = Path.GetDirectoryName(destPath);
                 File.Copy(filePath, destPath, overwrite: true);
 
                 string copyResultMsg = string.Format(Properties.Resources.Message_CopyFileToResult, destPath);

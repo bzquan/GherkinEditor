@@ -182,7 +182,7 @@
             </MenuItem>
             <MenuItem Command="cmd:AvalonEditCommands.ShowCodeCompletion"
                       Header="{x:Static p:Resources.MenuEdit_ContextShowCodeCompletion}"
-                      InputGestureText="Ctrl+Space"
+                      InputGestureText="Alt+Q"
                       Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibility}}">
             </MenuItem>
             <MenuItem Command="cmd:AvalonEditCommands.CopyFileTo"
@@ -756,6 +756,13 @@
                                Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.MenuHelp_Graphviz}"
+                          Command="{Binding ShowGraphvizHelpCmd}">
+                    <MenuItem.Icon>
+                        <Image Source="Images/Graphviz.png"
+                               Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.MenuHelp_About}"
                           Command="{Binding AboutViewModel.AboutGherkinCmd}" />
             </MenuItem>
@@ -831,6 +838,16 @@
             <Button Command="Redo"
                     ToolTip="{x:Static p:Resources.MenuEdit_Redo}">
                 <Image Source="Images/Redo.png"
+                       Height="16" />
+            </Button>
+            <Button Command="{Binding CommentOutSelectedLinesCmd}"
+                    ToolTip="{x:Static p:Resources.Tooltip_CommentOut}">
+                <Image Source="Images/CommentAdd.png"
+                       Height="16" />
+            </Button>
+            <Button Command="{Binding UncommentSelectedLinesCmd}"
+                    ToolTip="{x:Static p:Resources.Tooltip_UncommentOut}">
+                <Image Source="Images/CommentDelete.png"
                        Height="16" />
             </Button>
             <Button Command="cmd:AvalonEditCommands.IndentSelection"

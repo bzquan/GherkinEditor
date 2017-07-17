@@ -9,6 +9,9 @@ using ICSharpCode.AvalonEdit.Document;
 using Gherkin.Util;
 using System.IO;
 using System.Windows.Input;
+using Gherkin.Util.Geometric;
+using Gherkin.Util.Bezier;
+using System.Diagnostics;
 
 namespace Gherkin.Model
 {
@@ -18,7 +21,7 @@ namespace Gherkin.Model
             new Lazy<CurveViewCache>(() => new CurveViewCache());
 
         private List<CurveViewItem> m_CurveViewItems = new List<CurveViewItem>();
-        private CurvatureUnit m_CurvatureUnit = CurvatureUnit.Meter;
+        private CurveManeuverParameter m_CurveManeuverParameter;
         private bool ShowPlotMarker { get; set; }
 
         public static CurveViewCache Instance => s_Singleton.Value;
@@ -26,26 +29,12 @@ namespace Gherkin.Model
         private CurveViewCache()
         {
             var setting = new AppSettings();
-            bool isCentimeter = setting.CurvatureUnit.Equals("1/cm", StringComparison.InvariantCultureIgnoreCase);
-            m_CurvatureUnit = isCentimeter ? CurvatureUnit.Centimeter : CurvatureUnit.Meter;
+            m_CurveManeuverParameter = setting.CurveManeuverParameter;
             ShowPlotMarker = setting.ShowCurvePlotMarker4GherkinTable;
 
             EventAggregator<ShowCurvePlotMarker4GherkinTableArg>.Instance.Event += OnShowPlotMarker;
-        }
-
-        public CurvatureUnit CurvatureUnit
-        {
-            get { return m_CurvatureUnit; }
-            set
-            {
-                m_CurvatureUnit = value;
-                ClearCache();
-            }
-        }
-
-        public void ClearCache()
-        {
-            m_CurveViewItems.Clear();
+            EventAggregator<CurveManeuverParameterArg>.Instance.Event += OnCurveManeuverParameterChanged;
+            EventAggregator<EditorClosedArg>.Instance.Event += OnEditorClosed;
         }
 
         public OxyPlot.Wpf.PlotView LoadPlotView(TextDocument document, int offset, CurveInfo curveInfo)
@@ -62,17 +51,39 @@ namespace Gherkin.Model
             return curveViewItem?.BitmapImage;
         }
 
+        private void OnCurveManeuverParameterChanged(object sender, CurveManeuverParameterArg arg)
+        {
+            m_CurveManeuverParameter = arg.CurveManeuverParameter;
+            m_CurveViewItems.Clear();
+        }
+
+        private void OnEditorClosed(object sender, EditorClosedArg arg)
+        {
+            if (string.IsNullOrEmpty(arg.FileName)) return;
+
+            for (int i = m_CurveViewItems.Count - 1; i >= 0; i--)
+            {
+                if (m_CurveViewItems[i].Key.StartsWith(arg.FileName, StringComparison.Ordinal))
+                {
+                    m_CurveViewItems.RemoveAt(i);
+                }
+            }
+        }
+
         private CurveViewItem LoadCurveViewItem(TextDocument document, int offset, CurveInfo curveInfo)
         {
             var tableHeader = GetTableHeaderLine(document, offset, curveInfo);
             if (tableHeader == null) return null;
 
-            List<GPoint> points = ExtractPoints(document, tableHeader, curveInfo.IsGeoCoordinate);
-            string key = CurvePlotModel.MakeKey(points, curveInfo);
+            double duration;
+            List<GPoint> points = ExtractPoints(document, tableHeader, curveInfo.IsGeoCoordinate, out duration);
+            if (points.Count < 3) return null;
+
+            string key = CurvePlotModel.MakeKey(document.FileName, points, curveInfo);
             CurveViewItem curveViewItem = m_CurveViewItems.FirstOrDefault(x => x.Key == key);
             if (curveViewItem == null)
             {
-                var curveModel = new CurvePlotModel(points, ShowPlotMarker, curveInfo);
+                var curveModel = new CurvePlotModel(document.FileName, points, ShowPlotMarker, curveInfo, m_CurveManeuverParameter, duration);
                 curveViewItem = new CurveViewItem(curveModel);
                 m_CurveViewItems.Insert(0, curveViewItem);
             }
@@ -133,7 +144,7 @@ namespace Gherkin.Model
             return columns;
         }
 
-        private List<GPoint> ExtractPoints(TextDocument document, TableHeader tableHeader, bool isGeoCoordinate)
+        private List<GPoint> ExtractPoints(TextDocument document, TableHeader tableHeader, bool isGeoCoordinate, out double duration)
         {
             var line = tableHeader.HeaderLine.NextLine;
             List<GPoint> points = new List<GPoint>();
@@ -151,7 +162,7 @@ namespace Gherkin.Model
                     break;
             }
 
-            ThinOut(points);    // 間引き処理
+            points = Thinout(points, maxPointsCount: 500, duration: out duration); // 500以内になるように間引く
             if (isGeoCoordinate)
             {
                 points = LonLat2XY(points);
@@ -161,40 +172,27 @@ namespace Gherkin.Model
         }
 
         /// <summary>
-        /// 200以内になるように間引く
+        /// maxCount以内になるように間引く
         /// </summary>
-        private void ThinOut(List<GPoint> points)
+        /// <param name="points">input</param>
+        /// <param name="maxPointsCount">expected max number of points</param>
+        /// <returns></returns>
+        private List<GPoint> Thinout(List<GPoint> points, int maxPointsCount, out double duration)
         {
-            const int N = 200;
-            int TOTAL = points.Count;
-
-            if (TOTAL <= N) return;
-
-            if (TOTAL >= N * 2)
+            duration = 0.0;
+            if (points.Count <= maxPointsCount)
             {
-                int pos = 0;
-                int interval = TOTAL / N;
-                for (int i = 0; i < TOTAL; i += interval, pos++)
-                {
-                    points[pos] = points[i];
-                }
-                points.RemoveRange(pos, TOTAL - pos);
+                return points;
             }
-            else
-            {
-                int pos = 0;
-                int extraCount = TOTAL - N;
-                int interval = TOTAL / extraCount;
-                for (int i = 0; i < TOTAL; i++)
-                {
-                    if ((i == 0) || (i == TOTAL - 1) || (i % interval != 0))
-                    {
-                        points[pos] = points[i];
-                        pos++;
-                    }
-                }
-                points.RemoveRange(pos, points.Count - pos);
-            }
+
+            List<GPoint> simplified = null;
+            duration = Util.Util.MeasureExecTime(() => {
+                if (m_CurveManeuverParameter.ThinoutByDouglasPeuckerN)
+                    simplified = PolylineSimplication.SimplifyByDouglasPeuckerN(points.ToArray(), maxPointsCount);
+                else
+                    simplified = PolylineSimplication.SimplifyPointsN(points.ToArray(), maxPointsCount);
+            });
+            return simplified;
         }
 
         public static List<GPoint> LonLat2XY(List<GPoint> points)

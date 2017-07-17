@@ -33,7 +33,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_SearchCondition.IsCaseSensitive = value;
-                m_AppSettings.IsCaseSensitiveInFind = value;
+                m_AppSettings.LastStatus.IsCaseSensitiveInFind = value;
                 base.OnPropertyChanged();
             }
         }
@@ -44,7 +44,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_SearchCondition.IsMatchWholeWord = value;
-                m_AppSettings.IsMatchWholeWordInFind = value;
+                m_AppSettings.LastStatus.IsMatchWholeWordInFind = value;
                 base.OnPropertyChanged();
             }
         }
@@ -55,7 +55,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_SearchCondition.IsUseRegex = value;
-                m_AppSettings.IsUseRegexInFind = value;
+                m_AppSettings.LastStatus.IsUseRegexInFind = value;
                 base.OnPropertyChanged();
             }
         }
@@ -66,7 +66,7 @@ namespace Gherkin.ViewModel
             set
             {
                 m_SearchCondition.IsUseWildcards = value;
-                m_AppSettings.IsUseWildcardsInFind = value;
+                m_AppSettings.LastStatus.IsUseWildcardsInFind = value;
                 base.OnPropertyChanged();
             }
         }

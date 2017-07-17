@@ -28,10 +28,10 @@ namespace Gherkin.ViewModel
             base(appSettings)
         {
             GherkinEditor = editor;
-            m_SearchCondition.IsCaseSensitive = m_AppSettings.IsCaseSensitiveInFind;
-            m_SearchCondition.IsMatchWholeWord = m_AppSettings.IsMatchWholeWordInFind;
-            m_SearchCondition.IsUseRegex = m_AppSettings.IsUseRegexInFind;
-            m_SearchCondition.IsUseWildcards = m_AppSettings.IsUseWildcardsInFind;
+            m_SearchCondition.IsCaseSensitive = m_AppSettings.LastStatus.IsCaseSensitiveInFind;
+            m_SearchCondition.IsMatchWholeWord = m_AppSettings.LastStatus.IsMatchWholeWordInFind;
+            m_SearchCondition.IsUseRegex = m_AppSettings.LastStatus.IsUseRegexInFind;
+            m_SearchCondition.IsUseWildcards = m_AppSettings.LastStatus.IsUseWildcardsInFind;
         }
 
         public ICommand FindNextCmd => new DelegateCommandNoArg(OnFindNext, CanExecFindReplaceCmd);
@@ -65,7 +65,7 @@ namespace Gherkin.ViewModel
         }
         public List<string> RecentTextsToFind
         {
-            get { return m_AppSettings.LastSearchedTexts; }
+            get { return m_AppSettings.LastStatus.LastSearchedTexts; }
         }
 
         public bool IsSearchUp
@@ -163,7 +163,7 @@ namespace Gherkin.ViewModel
 
         private void BackupLastUsedText()
         {
-            m_AppSettings.LastSearchedText = TextToFind;
+            m_AppSettings.LastStatus.LastSearchedText = TextToFind;
         }
 
         private bool FindNext()

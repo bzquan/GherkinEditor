@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
+using GraphVizWrapper;
+using GraphVizWrapper.Commands;
+using GraphVizWrapper.Queries;
+
 namespace Gherkin.Model
 {
     public class BitmapImageCache : CacheBase
@@ -29,7 +33,6 @@ namespace Gherkin.Model
 
             m_BitmapImages.Insert(0, bitmapFile);
             Util.Util.RemoveLastItems(m_BitmapImages, max_num: CacheSize);
-
             return bitmapFile.LoadImage();
         }
     }

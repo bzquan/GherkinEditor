@@ -59,11 +59,11 @@ namespace Gherkin.ViewModel
         {
             CurrentFilePath = filePath;
             m_AppSettings = appSettings;
-            m_IsCloseTablesFolding = m_AppSettings.IsCloseTablesFoldingByDefault;
-            m_IsCloseScenarioFolding = m_AppSettings.IsCloseScenarioFoldingByDefault;
-            m_IsScenarioIndexHidden = !m_AppSettings.ShowScenarioIndexByDefault;
+            m_IsCloseTablesFolding = m_AppSettings.EditorSettings.IsCloseTablesFoldingByDefault;
+            m_IsCloseScenarioFolding = m_AppSettings.EditorSettings.IsCloseScenarioFoldingByDefault;
+            m_IsScenarioIndexHidden = !m_AppSettings.EditorSettings.ShowScenarioIndexByDefault;
             LoadFileInfo(filePath);
-            HideScenarioIndex = !m_AppSettings.ShowScenarioIndexByDefault;
+            HideScenarioIndex = !m_AppSettings.EditorSettings.ShowScenarioIndexByDefault;
             HideHSplitView = !NeedShowHSplitView(filePath);
             HideVSplitView = !NeedShowVSplitView(filePath);
         }
@@ -72,8 +72,8 @@ namespace Gherkin.ViewModel
         public ICommand HideScenarioIndexCmd => new DelegateCommandNoArg(OnHideScenarioIndex);
 
         private bool IsEditorViewLoaded => MainEditor != null;
-        private bool NeedShowHSplitView(string filePath) => m_AppSettings.ShowSplitHorizontalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
-        private bool NeedShowVSplitView(string filePath) => m_AppSettings.ShowSplitVerticalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
+        private bool NeedShowHSplitView(string filePath) => m_AppSettings.EditorSettings.ShowSplitHorizontalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
+        private bool NeedShowVSplitView(string filePath) => m_AppSettings.EditorSettings.ShowSplitVerticalViewByDefault && GherkinUtil.IsFeatureFile(filePath);
 
         public void InitializeEditorView(TextEditor mainEditor, TextEditor subEditor, TextEditor viewerEditor)
         {
@@ -317,8 +317,8 @@ namespace Gherkin.ViewModel
 
         private void UpdateFoldingsByDefault()
         {
-            m_IsCloseTablesFolding = m_AppSettings.IsCloseTablesFoldingByDefault;
-            m_IsCloseScenarioFolding = m_AppSettings.IsCloseScenarioFoldingByDefault;
+            m_IsCloseTablesFolding = m_AppSettings.EditorSettings.IsCloseTablesFoldingByDefault;
+            m_IsCloseScenarioFolding = m_AppSettings.EditorSettings.IsCloseScenarioFoldingByDefault;
             UpdateFoldings(false);   // update folding by manually at the beginning
         }
 
@@ -393,25 +393,25 @@ namespace Gherkin.ViewModel
             switch (name)
             {
                 case "Keyword":
-                    color_name = m_AppSettings.ColorOfHighlightingKeyword;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingKeyword;
                     break;
                 case "StepWord":
-                    color_name = m_AppSettings.ColorOfHighlightingStepWord;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingStepWord;
                     break;
                 case "Table":
-                    color_name = m_AppSettings.ColorOfHighlightingTable;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingTable;
                     break;
                 case "Tag":
-                    color_name = m_AppSettings.ColorOfHighlightingTag;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingTag;
                     break;
                 case "DocString":
-                    color_name = m_AppSettings.ColorOfHighlightingDocString;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingDocString;
                     break;
                 case "Constants":
-                    color_name = m_AppSettings.ColorOfHighlightingConstants;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingConstants;
                     break;
                 case "Mock":
-                    color_name = m_AppSettings.ColorOfHighlightingMockAttribute;
+                    color_name = m_AppSettings.Colors.ColorOfHighlightingMockAttribute;
                     break;
             }
 
@@ -723,6 +723,16 @@ namespace Gherkin.ViewModel
 
             System.Reflection.PropertyInfo prop = editor.GetType().GetProperty(propertyName);
             prop.SetValue(editor, value);
+        }
+
+        public void CommentOutSelectedLines()
+        {
+            LastUsedGherkinEditor?.CommentOutSelectedLines();
+        }
+
+        public void UncommentSelectedLines()
+        {
+            LastUsedGherkinEditor?.UncommentSelectedLines();
         }
     }
 }

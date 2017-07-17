@@ -1,0 +1,98 @@
+﻿<meta charset="UTF-8">
+<font face="Courier New">
+    <h3><font size="5">Gherkinテーブルにてスケッチを描く</font></h3>
+    Gherkinテーブルにて様々なスケッチを描けます。スケッチの描画で、<a href="http://www.graphviz.org/">Graphviz</a>が使用されます。
+    <p>
+        そのため、Graphvizのインストールが必要です。また、GherkinEditor.exe.configにGraphvizパスを設定する必要があります。例えば、<br />
+        &lt;add key="graphVizLocation" value="C:\Program Files\Graphviz2.38\bin" /&gt;
+        <br />
+    </p>
+    下記はスケッチ描画のサンプルです。<br />
+    <br />
+    <font color="green">#[Graphviz]</font><br />
+    <table border="1">
+        <tr align="center">
+            <th nowrap>Node and Edge</th>
+            <th nowrap>Label</th>
+            <th nowrap>Color</th>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub10->stub11</td>
+            <td>route 8</td>
+            <td>blue</td>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub11->stub20</td>
+            <td>route 9</td>
+            <td>green</td>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub11->stub12</td>
+            <td>route 8</td>
+            <td>green</td>
+        </tr>
+     </table>
+
+    <p>
+        #[Graphviz scale direction]はスケッチ描画用のGherkinコメント行です。ここで、scaleとdirectionは省略可能です。
+        例えば、下記Gherkinコメントは、上下方向にて、サイズが80%のスケッチを描画します。<br />
+        <font color="green">
+           #[Graphviz 80 TB]<br />
+        </font>
+    </p>
+
+    <h3>描画方向</h3>
+    <p>
+        四種類の描画方向があります。LR(左から右、これは規定方式)、RL(右から左)、TB(上から下)、BT(下から上)
+    </p>
+
+    <h3>スケッチ描画用のGherkinテーブル</h3>
+    <table border="1">
+        <tr align="center">
+            <th nowrap>Node and Edge</th>
+            <th nowrap>Shape</th>
+            <th nowrap>Label</th>
+            <th nowrap>Color</th>
+            <th nowrap>Connections</th>
+        </tr>
+        <tr align="left">
+            <td>n0</td>
+            <td>box</td>
+            <td>ラベル</td>
+            <td>yellow</td>
+            <td>n1, n2, n3</td>
+        </tr>
+    </table><br />
+    ノードのラベルを省略すると、ノード名がノードに表示されます。連結線のラベルを省略すると、連結線にラベルが表示されません。複数行のラベルは可能です。例えば、一行目\n 二行目。
+
+    <h3>よく使うノード形状</h3>
+    <p>box, polygon, ellipse, point, oval, circle, doublecircle, triangle,
+        tab, plaintext, diamond, trapezium, parallelogram, invtriangle, square, note, folder, rarrow, larrow, box3d
+     </p>
+
+    <h3>連結線の方向定義</h3>
+    <table border="1">
+        <tr align="center">
+            <th nowrap>連結線サンプル</th>
+            <th nowrap>説明</th>
+        </tr>
+        <tr align="left">
+            <td>n1-&gt;n2</td>
+            <td>n1からn2の矢印(n1→n2)</td>
+        </tr>
+        <tr align="left">
+            <td>n1&lt;-&gt;n2</td>
+            <td>n1とn2の双方向矢印(n1←→n2)</td>
+        </tr>
+        <tr align="left">
+            <td>n1--n2</td>
+            <td>n1とn2線(n1－n2)</td>
+        </tr>
+    </table><br />
+
+    <h3>よく使う連結線形状</h3>
+    <p>
+        diamond, crow, vee, dot, odot, onormal
+    </p>
+
+</font>

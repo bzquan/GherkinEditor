@@ -43,7 +43,7 @@ namespace Gherkin.Model
     public class CurveElementGenerator : CustomElementGenerator
     {
         /// mark down syntax: #[Plot description](col1, col2), e.g. #[Plot this is an curve](Lon, Lat)
-        private readonly static Regex s_ImageRegex = new Regex(@"#\[Plot(geo)?\s*(spline|bspline|bezier|bcurvature|brcurvature|curvature)?\s*([^\]]*)\]\(([^,]+),(.+)\)", RegexOptions.IgnoreCase);
+        private readonly static Regex s_ImageRegex = new Regex(@"#\[Plot(geo)?\s*(bspline|bezier|bcurvature|brcurvature|curvature|tangent|degtangent|simplify_cm|simplify|linreg)?\s*([^\]]*)\]\(([^,]+),(.+)\)", RegexOptions.IgnoreCase);
 
         public CurveElementGenerator(TextEditor textEditor) : base(textEditor)
         {

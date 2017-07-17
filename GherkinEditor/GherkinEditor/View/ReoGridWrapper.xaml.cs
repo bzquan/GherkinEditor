@@ -29,6 +29,8 @@ namespace Gherkin.View
         private System.Windows.Forms.ToolStripMenuItem m_LonLat2XYColToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_LonLat2CurvatureColToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_XY2CurvatureColToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem m_PolylinSimplificationColToolStripMenuItem;
+
         private bool ShowADASMenus => ConfigReader.GetValue<bool>("showADASMenusForTableEditor", false);
 
         public ReoGridWrapper()
@@ -90,10 +92,14 @@ namespace Gherkin.View
                 m_XY2CurvatureColToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem() { Text = Properties.Resources.MenuReoGrid_CalcCurvatureFromXY };
                 m_XY2CurvatureColToolStripMenuItem.Click += XY2CurvatureColToolStripMenuItem_Click;
 
+                m_PolylinSimplificationColToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem() { Text = Properties.Resources.MenuReoGrid_SimplifyPoints };
+                m_PolylinSimplificationColToolStripMenuItem.Click += PolylinSimplificationColToolStripMenuItem_Click;
+
                 colContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 m_LonLat2XYColToolStripMenuItem,
                 m_LonLat2CurvatureColToolStripMenuItem,
-                m_XY2CurvatureColToolStripMenuItem
+                m_XY2CurvatureColToolStripMenuItem,
+                m_PolylinSimplificationColToolStripMenuItem
                 });
             }
 
@@ -103,19 +109,27 @@ namespace Gherkin.View
 
         private void XY2CurvatureColToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var input = GetCurvatureCount();
+            var input = GetExpectedPointsCount(ExpectedPointsNumSelections);
             m_TableEditViewModel.CalcCurvatureFromXY(input);
         }
 
+        private void PolylinSimplificationColToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> expectedPointsNumSelections = new List<string>() { "500" };
+            var expectedPointsNum = GetExpectedPointsCount(expectedPointsNumSelections);
+            m_TableEditViewModel.SimplifyPoints(expectedPointsNum);
+        }
+
+        private List<string> ExpectedPointsNumSelections => new List<string>() { Properties.Resources.InputCurvatureNum_SameAsInput, "100" };
         private void LonLat2CurvatureColToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var input = GetCurvatureCount();
+            var input = GetExpectedPointsCount(ExpectedPointsNumSelections);
             m_TableEditViewModel.CalcCurvatureFromLonLat(input);
         }
 
-        private string GetCurvatureCount()
+        private string GetExpectedPointsCount(List<string> expectedPointsNumSelections)
         {
-            var input = new InputCurvatureNum();
+            var input = new InputExpectedPointsNum(expectedPointsNumSelections);
 
             input.Left = this.reoGridControl.ColumnHeaderContextMenuStrip.Left;
             input.Top = this.reoGridControl.ColumnHeaderContextMenuStrip.Top + 20;
@@ -132,6 +146,7 @@ namespace Gherkin.View
                 bool hasMoreThan4Points = m_TableEditViewModel.HasEnoughPoints(minRows: 4);
                 m_LonLat2CurvatureColToolStripMenuItem.Enabled = hasMoreThan4Points;
                 m_XY2CurvatureColToolStripMenuItem.Enabled = hasMoreThan4Points;
+                m_PolylinSimplificationColToolStripMenuItem.Enabled = hasMoreThan4Points;
             }
         }
 

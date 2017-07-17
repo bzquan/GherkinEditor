@@ -1,0 +1,98 @@
+﻿<meta charset="UTF-8">
+<font face="Courier New">
+    <h3><font size="5">用Gherkin表格绘制草图</font></h3>
+    我们可用Gherkin表格绘制各种草图。Gherkin editor使用<a href="http://www.graphviz.org/">Graphviz</a>来绘制草图。
+    <p>
+        为此，我们需要安装Graphviz。并且为GherkinEditor.exe.config配置文件增加Graphviz的路径设定。例如，<br />
+        &lt;add key="graphVizLocation" value="C:\Program Files\Graphviz2.38\bin" /&gt;
+        <br />
+    </p>
+    如下是绘制草图的一个例子。<br />
+    <br />
+    <font color="green">#[Graphviz]</font><br />
+    <table border="1">
+        <tr align="center">
+            <th nowrap>Node and Edge</th>
+            <th nowrap>Label</th>
+            <th nowrap>Color</th>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub10->stub11</td>
+            <td>route 8</td>
+            <td>blue</td>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub11->stub20</td>
+            <td>route 9</td>
+            <td>green</td>
+        </tr>
+        <tr align="left">
+            <td nowrap>stub11->stub12</td>
+            <td>route 8</td>
+            <td>green</td>
+        </tr>
+     </table>
+
+    <p>
+        绘制草图的Gherkin注释行的一般格式为#[Graphviz scale direction]。这里，可省略scale和direction。
+        例如，如下注释行将根据Gherkin表格，以从上到下方式绘制比例为80%的草图。<br />
+        <font color="green">
+           #[Graphviz 80 TB]<br />
+        </font>
+    </p>
+
+    <h3>绘制方向</h3>
+    <p>
+        有四种绘制方式。LR(从左到右，是缺省方式)，RL(从右到左)，TB(从上到下)，BT(从下到上)
+    </p>
+
+    <h3>绘制草图的完整Gherkin表格</h3>
+    <table border="1">
+        <tr align="center">
+            <th nowrap>Node and Edge</th>
+            <th nowrap>Shape</th>
+            <th nowrap>Label</th>
+            <th nowrap>Color</th>
+            <th nowrap>Connections</th>
+        </tr>
+        <tr align="left">
+            <td>n0</td>
+            <td>box</td>
+            <td>标签</td>
+            <td>yellow</td>
+            <td>n1, n2, n3</td>
+        </tr>
+    </table><br />
+    如果省略结点的标签，那么用结点名显示标签。如果省略连线的标签，那么不显示连线的标签。标签可以是多行文本，例如，第一行\n 第二行。
+
+    <h3>常用结点形状</h3>
+    <p>box, polygon, ellipse, point, oval, circle, doublecircle, triangle,
+        tab, plaintext, diamond, trapezium, parallelogram, invtriangle, square, note, folder, rarrow, larrow, box3d
+     </p>
+
+    <h3>连线方向的定义</h3>
+    <table border="1">
+        <tr align="center">
+            <th nowrap>连线例子</th>
+            <th nowrap>说明</th>
+        </tr>
+        <tr align="left">
+            <td>n1-&gt;n2</td>
+            <td>绘制从n1到n2的箭头(n1→n2)</td>
+        </tr>
+        <tr align="left">
+            <td>n1&lt;-&gt;n2</td>
+            <td>为n1和n2绘制双箭头(n1←→n2)</td>
+        </tr>
+        <tr align="left">
+            <td>n1--n2</td>
+            <td>用线连接n1和n2(n1－n2)</td>
+        </tr>
+    </table><br />
+
+    <h3>常用线连接形状</h3>
+    <p>
+        diamond, crow, vee, dot, odot, onormal
+    </p>
+
+</font>

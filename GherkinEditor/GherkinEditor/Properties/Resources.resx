@@ -717,7 +717,7 @@ Any change of the file would be discarded.</value>
   <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
     <value>Lon/Lat ⇒XY</value>
   </data>
-  <data name="InputCurvatureNum_Count" xml:space="preserve">
+  <data name="InputPointsNum" xml:space="preserve">
     <value>Count</value>
   </data>
   <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
@@ -728,5 +728,17 @@ Any change of the file would be discarded.</value>
   </data>
   <data name="MenuExport_ExportTitle" xml:space="preserve">
     <value>Export</value>
+  </data>
+  <data name="Tooltip_CommentOut" xml:space="preserve">
+    <value>Comment out selected lines</value>
+  </data>
+  <data name="Tooltip_UncommentOut" xml:space="preserve">
+    <value>Uncomment out selected lines</value>
+  </data>
+  <data name="MenuHelp_Graphviz" xml:space="preserve">
+    <value>Drawing sketch</value>
+  </data>
+  <data name="MenuReoGrid_SimplifyPoints" xml:space="preserve">
+    <value>Simplify points</value>
   </data>
 </root>

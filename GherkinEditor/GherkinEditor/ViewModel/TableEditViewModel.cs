@@ -12,15 +12,18 @@ using static Gherkin.Model.GherkinFormatUtil;
 using System.Windows;
 using unvell.ReoGrid.Actions;
 using unvell.ReoGrid.Formula;
+using Gherkin.Util.Geometric;
 
 namespace Gherkin.ViewModel
 {
     public class TableEditViewModel : NotifyPropertyChangedBase
     {
+        private IAppSettings m_Appsetting;
         private ReoGridControl m_TableGridControl;
 
-        public TableEditViewModel()
+        public TableEditViewModel(IAppSettings appsetting)
         {
+            m_Appsetting = appsetting;
             EventAggregator<StartEditTableRequestArg>.Instance.Event += OnStartEditTableRequested;
             EventAggregator<ReplaceTableFromGridArg>.Instance.Event += OnReplaceTableFromGrid;
             EventAggregator<PasteTableFromGridArg>.Instance.Event += OnPasteTableFromGrid;
@@ -163,15 +166,32 @@ namespace Gherkin.ViewModel
         public void CalcCurvatureFromLonLat(string curvatureCount)
         {
             List<GPoint> XY = CurveViewCache.LonLat2XY(ExtractCoordinates());
-            int expectedCurvatureCount = Util.Util.IsDigitsOnly(curvatureCount) ? int.Parse(curvatureCount) : XY.Count;
+            int expectedCurvatureCount = Util.StringUtil.IsDigitsOnly(curvatureCount) ? int.Parse(curvatureCount) : XY.Count;
             InsertCurvature(XY, expectedCurvatureCount);
         }
 
         public void CalcCurvatureFromXY(string curvatureCount)
         {
             List<GPoint> XY = ExtractCoordinates();
-            int expectedCurvatureCount = Util.Util.IsDigitsOnly(curvatureCount) ? int.Parse(curvatureCount) : XY.Count;
+            int expectedCurvatureCount = Util.StringUtil.IsDigitsOnly(curvatureCount) ? int.Parse(curvatureCount) : XY.Count;
             InsertCurvature(XY, expectedCurvatureCount);
+        }
+
+        public void SimplifyPoints(string expectedPointsNum)
+        {
+            List<GPoint> XY = ExtractCoordinates();
+            int expectedPointsCount = Util.StringUtil.IsDigitsOnly(expectedPointsNum) ? int.Parse(expectedPointsNum) : 500;
+            List<GPoint> simpfiledXY;
+            if (m_Appsetting.CurveManeuverParameter.ThinoutByDouglasPeuckerN)
+                simpfiledXY = PolylineSimplication.SimplifyByDouglasPeuckerN(XY.ToArray(), expectedPointsCount);
+            else
+                simpfiledXY = PolylineSimplication.SimplifyPointsN(XY.ToArray(), maxPoints: expectedPointsCount);
+
+            var col1 = this.CurrentSelectionRange.Col;
+            var col2 = this.CurrentSelectionRange.EndCol;
+            string newCol1Name = "new" + CurrentWorksheet[0, col1];
+            string newCol2Name = "new" + CurrentWorksheet[0, col2];
+            InsertXY(simpfiledXY, newCol1Name, newCol2Name);
         }
 
         private bool IsCellDouble(int row, int col) => CurrentWorksheet[row, col] is double;
@@ -279,7 +299,7 @@ namespace Gherkin.ViewModel
                     name.StartsWith(GherkinTableName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     string numText = name.Substring(GherkinTableNameLenth).Trim();
-                    if (Util.Util.IsDigitsOnly(numText))
+                    if (Util.StringUtil.IsDigitsOnly(numText))
                     {
                         int num = int.Parse(numText);
                         maxWorkSheetNo = Math.Max(num, maxWorkSheetNo);
@@ -375,11 +395,10 @@ namespace Gherkin.ViewModel
         private void InsertCurvature(List<GPoint> XY, int expectedCurvatureCount)
         {
             int additionalNum = 3;
-            List<GPoint> curvaturePoints = CachedUniformCubicBSpline.CalcCurvature(XY, expectedCurvatureCount + additionalNum);
-            CachedUniformCubicBSpline.DetectNoiseCurvatures(curvaturePoints);
+            List<GPoint> curvaturePoints = Util.NURBS.NURBSCurve.CalcCurvature(XY, expectedCurvatureCount + additionalNum);
 
             string curvatureTitle;
-            if ((CurveViewCache.Instance.CurvatureUnit == CurvatureUnit.Meter))
+            if ((m_Appsetting.CurveManeuverParameter.Unit == CurvatureUnit.Meter))
                 curvatureTitle = "Curvature(1/m)";
             else
                 curvatureTitle = "Curvature(1/cm)";

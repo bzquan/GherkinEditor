@@ -18,11 +18,12 @@ namespace Gherkin.Model
     {
         private TextEditor MainEditor { get; set; }
         private TextEditor ViewerEditor { get; set; }
-
+        private TableFormatter TableFormatter { get; set; }
         public GherkinIndentationStrategy(TextEditor editor, TextEditor viewerEditor)
         {
             MainEditor = editor;
             ViewerEditor = viewerEditor;
+            TableFormatter = new TableFormatter(editor);
             editor.TextArea.TextEntered += OnTextEntered;
             editor.TextArea.KeyUp += OnKeyUp;
             editor.TextArea.TextPasted += OnTextPasted;
@@ -70,7 +71,10 @@ namespace Gherkin.Model
                                      MakeThreeLines(guid_tag, result.Item2, GherkinSimpleParser.IDENT2));
                     break;
                 case TokenType.TableRow:
-                    FormatTable(document, line, isEnteredNewLine: true);
+                    if (!TableFormatter.FormatTable(line, isEnteredNewLine: true, isColumnInserted: false))
+                    {
+                        base.IndentLine(Document, line);
+                    }
                     break;
                 default:
                     base.IndentLine(document, line);
@@ -135,7 +139,8 @@ namespace Gherkin.Model
             // Do nothing because IndentLine would be called by textArea.
             if (e.Text == "\n" || e.Text == "\r" || e.Text == "\r\n") return;
 
-            TryFormatTable();
+            bool isColumnInserted = e.Text == "|";
+            TryFormatTable(isColumnInserted);
         }
 
         private void OnKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -153,94 +158,15 @@ namespace Gherkin.Model
             TryFormatTable();
         }
 
-        private void TryFormatTable()
+        private void TryFormatTable(bool isColumnInserted = false)
         {
             var line_no = MainEditor.TextArea.Caret.Line;
             var line = Document.GetLineByNumber(line_no);
 
-            if (!FormatTable(Document, line, isEnteredNewLine: false))
+            if (!TableFormatter.FormatTable(line, isEnteredNewLine: false, isColumnInserted: isColumnInserted))
             {
                 TryMoveCursorToImageOrLaTex(line);
             }
-        }
-
-        private bool FormatTable(TextDocument document, DocumentLine line, bool isEnteredNewLine)
-        {
-            if (isEnteredNewLine || CanFormatTable(document, line))
-            {
-                CursorPosInTable pos = new CursorPosInTable(MainEditor.TextArea, document, line);
-                if (MakeFormattedTable(document, line, isEnteredNewLine))
-                {
-                    MoveCursorToTableRow(pos);
-                    return true;
-                }
-            }
-
-            if (isEnteredNewLine)
-            {
-                base.IndentLine(document, line);
-            }
-
-            return false;
-        }
-
-        private bool MakeFormattedTable(TextDocument document, DocumentLine line, bool isEnteredNewLine)
-        {
-            GherkinTableBuilder builder = new GherkinTableBuilder(document, line, isEnteredNewLine);
-            GherkinTable table = builder.Build();
-            if (table == null) return false;
-
-            string table_text = table.Format();
-            if (!table_text.EndsWith(Environment.NewLine, StringComparison.Ordinal))
-            {
-                table_text += Environment.NewLine;
-            }
-
-            // We need to replace newly entered new line when formatting table by entering new line
-            // New line length is 2 because it is "\r\n"
-            int new_line_length = isEnteredNewLine ? 2 : 0;
-            document.Replace(builder.Offset, builder.Length + new_line_length, table_text);
-
-            return true;
-        }
-
-        private bool CanFormatTable(TextDocument document, DocumentLine line)
-        {
-            if (!GherkinUtil.IsFeatureFile(Document.FileName)) return false;
-
-            GherkinSimpleParser parser = new GherkinSimpleParser(document);
-            Tuple<TokenType, string> lineType = parser.Format(GetText(document, line));
-            if (lineType.Item1 != TokenType.TableRow) return false;
-
-            var previousLine = line?.PreviousLine;
-            if (previousLine == null) return false;
-
-            Tuple<TokenType, string> previousLineType = parser.Format(GetText(document, previousLine));
-            if (previousLineType.Item1 == TokenType.TableRow)
-                return true;
-            else
-            {
-                Tuple<TokenType, string> currentLineType = parser.Format(GetText(document, line));
-                return (currentLineType.Item1 == TokenType.TableRow);
-            }
-        }
-
-        private void MoveCursorToTableRow(CursorPosInTable previousPos)
-        {
-            DocumentLine line = Document.GetLineByNumber(previousPos.LineNo);
-
-            string line_text = GetText(Document, line);
-            int cell_counter = 0;
-            int pos = 0;
-            foreach (var c in line_text)
-            {
-                if (c == '|') cell_counter++;
-                if (cell_counter >= previousPos.CellNo) break;
-                pos++;
-            }
-
-            int offset = line.Offset + pos + previousPos.PosInCell;
-            MainEditor.TextArea.Caret.Offset = offset;
         }
 
         private void TryMoveCursorToImageOrLaTex(DocumentLine line)

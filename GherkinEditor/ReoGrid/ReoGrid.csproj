@@ -57,7 +57,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\unvell.ReoGrid.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Minimum|AnyCPU' ">
@@ -217,14 +218,15 @@
     <Reference Include="System.Windows.Forms" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
     <Reference Include="System.Windows.Forms" Condition=" '$(Configuration)|$(Platform)' == 'ReleasePro|AnyCPU' " />
     <Reference Include="System.Xml" />
-    <Reference Include="unvell.ReoScript" Condition=" '$(Configuration)|$(Platform)' == 'Extension|AnyCPU' ">
-      <HintPath>..\Ref\unvell.ReoScript.dll</HintPath>
-    </Reference>
     <Reference Include="unvell.ReoScript" Condition=" '$(Configuration)|$(Platform)' == 'WPFExtension|AnyCPU' ">
       <HintPath>..\Ref\unvell.ReoScript.dll</HintPath>
     </Reference>
     <Reference Include="unvell.ReoScript">
       <HintPath>..\Ref\unvell.ReoScript.dll</HintPath>
+    </Reference>
+    <Reference Include="unvell.ReoScript, Version=1.5.0.0, Culture=neutral, PublicKeyToken=85339a558a3a0c58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ReoGrid\unvell.ReoScript.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
     <Reference Include="WindowsBase" Condition=" '$(Configuration)|$(Platform)' == 'DebugPro|AnyCPU' " />

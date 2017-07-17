@@ -65,9 +65,9 @@ namespace Gherkin.Model
             if (Keyword.IsLanguage)
                 colorName = "Green";
             else if (Keyword.IsKeyword)
-                colorName = AppSettings.ColorOfHighlightingKeyword;
+                colorName = AppSettings.Colors.ColorOfHighlightingKeyword;
             else if (Keyword.IsStepKeyword())
-                colorName = AppSettings.ColorOfHighlightingStepWord;
+                colorName = AppSettings.Colors.ColorOfHighlightingStepWord;
 
             contentTextBlock.Foreground = new SolidColorBrush(colorName.ToColor());
             contentTextBlock.Background = Brushes.White;

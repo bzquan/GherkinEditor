@@ -717,8 +717,8 @@
   <data name="MenuReoGrid_LonLat2XY" xml:space="preserve">
     <value>Lon/Lat⇒X/Y</value>
   </data>
-  <data name="InputCurvatureNum_Count" xml:space="preserve">
-    <value>曲率数目</value>
+  <data name="InputPointsNum" xml:space="preserve">
+    <value>数目</value>
   </data>
   <data name="InputCurvatureNum_SameAsInput" xml:space="preserve">
     <value>同于输入数据</value>
@@ -728,5 +728,17 @@
   </data>
   <data name="MenuExport_ExportTitle" xml:space="preserve">
     <value>输出</value>
+  </data>
+  <data name="Tooltip_CommentOut" xml:space="preserve">
+    <value>注释掉所选行</value>
+  </data>
+  <data name="Tooltip_UncommentOut" xml:space="preserve">
+    <value>取消所选行的注释</value>
+  </data>
+  <data name="MenuHelp_Graphviz" xml:space="preserve">
+    <value>画草图</value>
+  </data>
+  <data name="MenuReoGrid_SimplifyPoints" xml:space="preserve">
+    <value>缩减点坐标</value>
   </data>
 </root>

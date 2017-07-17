@@ -93,13 +93,13 @@ namespace Gherkin.ViewModel
             editor.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             editor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             editor.Options.EnableRectangularSelection = true;
-            editor.Options.HighlightCurrentLine = m_AppSettings.HighlightCurrentLine;
+            editor.Options.HighlightCurrentLine = m_AppSettings.EditorSettings.HighlightCurrentLine;
             editor.Options.ConvertTabsToSpaces = true;
             editor.Options.AllowToggleOverstrikeMode = true;
             editor.FontFamily = fontFamily;
             editor.FontSize = Util.Util.ToFontSizeByPoint(fontSize);
-            HighlightCurrentLine = m_AppSettings.HighlightCurrentLine;
-            ShowCurrentLineBorder = m_AppSettings.ShowCurrentLineBorder;
+            HighlightCurrentLine = m_AppSettings.EditorSettings.HighlightCurrentLine;
+            ShowCurrentLineBorder = m_AppSettings.EditorSettings.ShowCurrentLineBorder;
 
             UpdateColumnRuler();
             UpdateRequireControlModifierForHyperlinkClick();
@@ -116,6 +116,7 @@ namespace Gherkin.ViewModel
             TextEditor.TextArea.TextView.ElementGenerators.Add(new ImageElementGenerator(TextEditor));
             TextEditor.TextArea.TextView.ElementGenerators.Add(new MathElementGenerator(TextEditor));
             TextEditor.TextArea.TextView.ElementGenerators.Add(new CurveElementGenerator(TextEditor));
+            TextEditor.TextArea.TextView.ElementGenerators.Add(new GraphvizElementGenerator(TextEditor));
         }
 
         public TextEditor TextEditor { get; set; }
@@ -129,43 +130,43 @@ namespace Gherkin.ViewModel
 
         public void UpdateColumnRuler()
         {
-            TextEditor.Options.ColumnRulerPosition = m_AppSettings.ColumnRulerPositon;
-            TextEditor.Options.ShowColumnRuler = m_AppSettings.ShowColumnRuler;
+            TextEditor.Options.ColumnRulerPosition = m_AppSettings.EditorSettings.ColumnRulerPositon;
+            TextEditor.Options.ShowColumnRuler = m_AppSettings.EditorSettings.ShowColumnRuler;
         }
 
         public void UpdateRequireControlModifierForHyperlinkClick()
         {
-            TextEditor.Options.RequireControlModifierForHyperlinkClick = m_AppSettings.RequireControlModifierForHyperlinkClick;
+            TextEditor.Options.RequireControlModifierForHyperlinkClick = m_AppSettings.EditorSettings.RequireControlModifierForHyperlinkClick;
         }
 
         public void UpdateConvertTabsToSpaces()
         {
-            TextEditor.Options.ConvertTabsToSpaces = m_AppSettings.ConvertTabsToSpaces;
+            TextEditor.Options.ConvertTabsToSpaces = m_AppSettings.EditorSettings.ConvertTabsToSpaces;
         }
 
         public void UpdateIndentationSize()
         {
-            TextEditor.Options.IndentationSize = m_AppSettings.IndentationSize;
+            TextEditor.Options.IndentationSize = m_AppSettings.EditorSettings.IndentationSize;
         }
 
         public void UpdateShowEndOfLine()
         {
-            TextEditor.Options.ShowEndOfLine = m_AppSettings.ShowEndOfLine;
+            TextEditor.Options.ShowEndOfLine = m_AppSettings.EditorSettings.ShowEndOfLine;
         }
 
         public void UpdateShowSpaces()
         {
-            TextEditor.Options.ShowSpaces = m_AppSettings.ShowSpaces;
+            TextEditor.Options.ShowSpaces = m_AppSettings.EditorSettings.ShowSpaces;
         }
 
         public void UpdateShowTabs()
         {
-            TextEditor.Options.ShowTabs = m_AppSettings.ShowTabs;
+            TextEditor.Options.ShowTabs = m_AppSettings.EditorSettings.ShowTabs;
         }
 
         public void UpdateWordWrap()
         {
-            TextEditor.WordWrap = m_AppSettings.WordWrap;
+            TextEditor.WordWrap = m_AppSettings.EditorSettings.WordWrap;
         }
 
         public void ShowSearchPanel()
@@ -183,24 +184,24 @@ namespace Gherkin.ViewModel
 
         private void OnSearchPanelClosed()
         {
-            m_AppSettings.LastSearchedText = m_SearchPanel.SearchPattern;
-            m_AppSettings.IsCaseSensitiveInFind = m_SearchPanel.MatchCase;
-            m_AppSettings.IsMatchWholeWordInFind = m_SearchPanel.WholeWords;
-            m_AppSettings.IsUseWildcardsInFind = m_SearchPanel.UseWildCards;
-            m_AppSettings.IsUseRegexInFind = m_SearchPanel.UseRegex;
+            m_AppSettings.LastStatus.LastSearchedText = m_SearchPanel.SearchPattern;
+            m_AppSettings.LastStatus.IsCaseSensitiveInFind = m_SearchPanel.MatchCase;
+            m_AppSettings.LastStatus.IsMatchWholeWordInFind = m_SearchPanel.WholeWords;
+            m_AppSettings.LastStatus.IsUseWildcardsInFind = m_SearchPanel.UseWildCards;
+            m_AppSettings.LastStatus.IsUseRegexInFind = m_SearchPanel.UseRegex;
         }
 
         private void SetDefaults()
         {
-            m_SearchPanel.MatchCase = m_AppSettings.IsCaseSensitiveInFind;
-            m_SearchPanel.WholeWords = m_AppSettings.IsMatchWholeWordInFind;
-            m_SearchPanel.UseWildCards = m_AppSettings.IsUseWildcardsInFind;
-            m_SearchPanel.UseRegex = m_AppSettings.IsUseRegexInFind;
+            m_SearchPanel.MatchCase = m_AppSettings.LastStatus.IsCaseSensitiveInFind;
+            m_SearchPanel.WholeWords = m_AppSettings.LastStatus.IsMatchWholeWordInFind;
+            m_SearchPanel.UseWildCards = m_AppSettings.LastStatus.IsUseWildcardsInFind;
+            m_SearchPanel.UseRegex = m_AppSettings.LastStatus.IsUseRegexInFind;
         }
 
         private void SetInitialSearchText()
         {
-            m_SearchPanel.RecentSearchPatterns = m_AppSettings.LastSearchedTexts;
+            m_SearchPanel.RecentSearchPatterns = m_AppSettings.LastStatus.LastSearchedTexts;
             if (TextEditor.TextArea.Selection.IsMultiline == false)
             {
                 var text = TextEditor.TextArea.Selection.GetText();
@@ -352,6 +353,85 @@ namespace Gherkin.ViewModel
             {
                 FoldingManager.Uninstall(FoldingManager);
                 FoldingManager = null;
+            }
+        }
+
+        public void CommentOutSelectedLines()
+        {
+            using (Document.RunUpdate())
+            {
+                int start, end;
+                GetSelection(out start, out end);
+                StringBuilder sb = new StringBuilder();
+
+                for (int lineNo = start; lineNo <= end; lineNo++)
+                {
+                    DocumentLine line = Document.GetLineByNumber(lineNo);
+                    string line_text = GherkinFormatUtil.GetText(Document, line);
+                    sb.Append("#").Append(line_text);
+                }
+                var commented_lines = sb.ToString();
+
+                DocumentLine startLine = Document.GetLineByNumber(start);
+                DocumentLine endLine = Document.GetLineByNumber(end);
+                int length = endLine.Offset - startLine.Offset + endLine.TotalLength;
+                Document.Replace(startLine.Offset, length, commented_lines);
+            }
+        }
+   
+        public void UncommentSelectedLines()
+        {
+            using (Document.RunUpdate())
+            {
+                int start, end;
+                GetSelection(out start, out end);
+                StringBuilder sb = new StringBuilder();
+
+                for (int lineNo = start; lineNo <= end; lineNo++)
+                {
+                    DocumentLine line = Document.GetLineByNumber(lineNo);
+                    string line_text = GherkinFormatUtil.GetText(Document, line);
+                    sb.Append(RemoveBeginningChar(line_text, '#'));
+                }
+                var uncommented_lines = sb.ToString();
+
+                DocumentLine startLine = Document.GetLineByNumber(start);
+                DocumentLine endLine = Document.GetLineByNumber(end);
+                int length = endLine.Offset - startLine.Offset + endLine.TotalLength;
+                Document.Replace(startLine.Offset, length, uncommented_lines);
+            }
+        }
+
+        private string RemoveBeginningChar(string str, char ch)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                var c = str[i];
+                if (c == ch)
+                {
+                    return str.Remove(i, 1);
+                }
+                else if (!Char.IsWhiteSpace(c))
+                {
+                    return str;
+                }
+            }
+
+            return str;
+        }
+
+        private void GetSelection(out int start, out int end)
+        {
+            var textArea = TextEditor.TextArea;
+            if (textArea.Selection.IsEmpty)
+            {
+                start = textArea.Caret.Line;
+                end = start;
+            }
+            else
+            {
+                start = textArea.Document.GetLineByOffset(textArea.Selection.SurroundingSegment.Offset).LineNumber;
+                end = textArea.Document.GetLineByOffset(textArea.Selection.SurroundingSegment.EndOffset).LineNumber;
             }
         }
 

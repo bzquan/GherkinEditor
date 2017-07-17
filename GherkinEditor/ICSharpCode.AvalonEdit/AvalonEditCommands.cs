@@ -125,7 +125,7 @@ namespace ICSharpCode.AvalonEdit
         public static readonly RoutedCommand ShowCodeCompletion = new RoutedCommand(
             "ShowCodeCompletion", typeof(TextEditor),
             new InputGestureCollection {
-                new KeyGesture(Key.Space, ModifierKeys.Control)
+                new KeyGesture(Key.Q, ModifierKeys.Alt)
             });
 
         /// <summary>

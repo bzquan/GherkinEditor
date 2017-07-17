@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Gherkin.Util;
 
 namespace Gherkin.ViewModel
@@ -12,10 +8,12 @@ namespace Gherkin.ViewModel
     {
         static Lazy<string> s_HelpHTML = new Lazy<string>(() => LoadHelpHTML());
         static Lazy<string> s_TableGridFormulaHTML = new Lazy<string>(() => LoadTableGridFormulaHTML());
+        static Lazy<string> s_GraphvizHTML = new Lazy<string>(() => LoadGraphvizHTML());
+
         private static IAppSettings s_AppSettings;
         private HelpKind m_HelpKind;
 
-        public enum HelpKind { BasicHelp, TableGridFormulaHelp }
+        public enum HelpKind { BasicHelp, TableGridFormulaHelp, GraphvizHelp }
 
         public HelpViewModel(IAppSettings appSettings, HelpKind helpKind)
         {
@@ -33,6 +31,8 @@ namespace Gherkin.ViewModel
                         return Properties.Resources.MenuHelp_GherkinHelp;
                     case HelpKind.TableGridFormulaHelp:
                         return Properties.Resources.MenuHelp_TableGridFormula;
+                    case HelpKind.GraphvizHelp:
+                        return Properties.Resources.MenuHelp_Graphviz;
                     default:
                         return Properties.Resources.MenuHelp_GherkinHelp;
                 }
@@ -49,21 +49,17 @@ namespace Gherkin.ViewModel
                         return s_HelpHTML.Value;
                     case HelpKind.TableGridFormulaHelp:
                         return s_TableGridFormulaHTML.Value;
+                    case HelpKind.GraphvizHelp:
+                        return s_GraphvizHTML.Value;
                     default:
                         return s_HelpHTML.Value;
                 }
             }
         }
 
-        private static string LoadHelpHTML()
-        {
-            return LoadHTML(GetHelpHTMLFileName());
-        }
-
-        private static string LoadTableGridFormulaHTML()
-        {
-            return LoadHTML(GetTableGridFormulaHTMLFileName());
-        }
+        private static string LoadHelpHTML() => LoadHTML(GetHelpHTMLFileName());
+        private static string LoadTableGridFormulaHTML() => LoadHTML(GetTableGridFormulaHTMLFileName());
+        private static string LoadGraphvizHTML() => LoadHTML(GetGraphvizHTMLFileName());
 
         private static string LoadHTML(string filename)
         {
@@ -77,29 +73,20 @@ namespace Gherkin.ViewModel
             }
         }
 
-        private static string GetHelpHTMLFileName()
-        {
-            switch (s_AppSettings.Language)
-            {
-                case Languages.Chinese:
-                    return "Help_zh-CN.html";
-                case Languages.Japanese:
-                    return "Help_ja.html";
-                default:
-                    return "Help.html";
-            }
-        }
+        private static string GetHelpHTMLFileName() => "Help" + LanguageSuffix() + ".html";
+        private static string GetTableGridFormulaHTMLFileName() => "TableGridFormula" + LanguageSuffix() + ".html";
+        private static string GetGraphvizHTMLFileName() => "Graphviz" + LanguageSuffix() + ".html";
 
-        private static string GetTableGridFormulaHTMLFileName()
+        private static string LanguageSuffix()
         {
             switch (s_AppSettings.Language)
             {
                 case Languages.Chinese:
-                    return "TableGridFormula_zh-CN.html";
+                    return "_zh-CN";
                 case Languages.Japanese:
-                    return "TableGridFormula_ja.html";
+                    return "_ja";
                 default:
-                    return "TableGridFormula.html";
+                    return "";
             }
         }
     }

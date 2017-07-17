@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="{x:Static p:Resources.Calculator_Title}"
         Icon="Images/Calculator.ico"
-        Height="300" Width="300">
+        Height="340" Width="230">
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static ApplicationCommands.Copy}"
